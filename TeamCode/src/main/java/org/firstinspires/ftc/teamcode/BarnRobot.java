@@ -25,7 +25,6 @@ public class BarnRobot extends Robot {
         return instance;
     }
 
-
     public void initBarnRobotSystems() {
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);

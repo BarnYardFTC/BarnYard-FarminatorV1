@@ -1,23 +1,17 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.drivebase.DifferentialDrive;
 import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
-import com.seattlesolvers.solverslib.hardware.motors.Motor.Encoder;
-import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import com.seattlesolvers.solverslib.drivebase.DifferentialDrive;
 
 public class DriveSubsystem extends SubsystemBase {
 
     public IMU imu;
-    public final MecanumDrive m_drive;
+    public final MecanumDriveComponent drive;
 
     // Define hub mounting orientation
     RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
@@ -42,11 +36,11 @@ public class DriveSubsystem extends SubsystemBase {
 //        m_right = rightMotor.encoder;
 
 //        WHEEL_DIAMETER = diameter;
-        m_drive = new MecanumDrive(
-                hw.get(Motor.class, "frontLeft"),
-                hw.get(Motor.class, "backLeft"),
-                hw.get(Motor.class, "frontRight"),
-                hw.get(Motor.class, "backRight")
+        drive = new MecanumDriveComponent(
+                hw.get(DcMotorEx.class, "leftFront"),
+                hw.get(DcMotorEx.class, "leftBack"),
+                hw.get(DcMotorEx.class, "rightFront"),
+                hw.get(DcMotorEx.class, "rightBack")
                 );
 
         imu = hw.get(IMU.class, "imu");
@@ -58,7 +52,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void drive(double x, double y, double turn) {
-        m_drive.driveFieldCentric(x, y, turn, getHeading());
+        drive.driveFieldCentric(x, y, turn, getHeading());
     }
 
 //    public double getLeftEncoderVal() {

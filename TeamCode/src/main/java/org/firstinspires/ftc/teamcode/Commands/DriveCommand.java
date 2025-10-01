@@ -6,10 +6,6 @@ import org.firstinspires.ftc.teamcode.SubSystems.DriveSubsystem;
 
 import java.util.function.DoubleSupplier;
 
-/**
- * A command to drive the robot with joystick input (passed in as {@link DoubleSupplier}s). Written
- * explicitly for pedagogical purposes.
- */
 public class DriveCommand extends CommandBase {
 
     private final DriveSubsystem m_drive;

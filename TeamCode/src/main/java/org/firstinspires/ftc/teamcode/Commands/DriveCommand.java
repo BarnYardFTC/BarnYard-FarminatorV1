@@ -4,27 +4,25 @@ import com.seattlesolvers.solverslib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.SubSystems.DriveSubsystem;
 
-import java.util.function.DoubleSupplier;
-
 public class DriveCommand extends CommandBase {
 
-    private final DriveSubsystem m_drive;
+    private final DriveSubsystem drive;
     private final double y;
     private final double x;
     private final double turn;
 
 
     public DriveCommand(DriveSubsystem subsystem, double x, double y, double turn) {
-        m_drive = subsystem;
+        drive = subsystem;
         this.x = x;
         this.y = y;
         this.turn = turn;
-        addRequirements(m_drive);
+        addRequirements(drive);
     }
 
     @Override
     public void execute() {
-        m_drive.drive(x,y,turn);
+        drive.drive(x,y,turn);
     }
 
 }

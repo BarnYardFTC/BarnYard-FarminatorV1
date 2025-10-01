@@ -13,11 +13,11 @@ public class MecanumDriveComponent extends RobotDrive {
 
     private DcMotorEx leftBack, leftFront, rightBack, rightFront;
 
-    private IMU imu;
-
-
     public MecanumDriveComponent(DcMotorEx leftFront, DcMotorEx leftBack, DcMotorEx rightBack, DcMotorEx rightFront) {
-
+        this.rightBack = rightBack;
+        this.rightFront = rightFront;
+        this.leftBack = leftBack;
+        this.leftFront = leftFront;
     }
 
 

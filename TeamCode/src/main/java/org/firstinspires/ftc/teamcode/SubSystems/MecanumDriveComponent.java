@@ -1,115 +1,150 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.seattlesolvers.solverslib.drivebase.RobotDrive;
-import com.seattlesolvers.solverslib.geometry.Vector2d;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class MecanumDriveComponent extends RobotDrive {
-    private double rightSideMultiplier;
+public class MecanumDriveComponent {
 
-    private DcMotorEx leftBack, leftFront, rightBack, rightFront;
+    /* =========================
+       HARDWARE REFERENCES
+       ========================= */
+    private final DcMotor leftFront;
+    private final DcMotor rightFront;
+    private final DcMotor leftBack;
+    private final DcMotor rightBack;
 
-    public MecanumDriveComponent(DcMotorEx leftFront, DcMotorEx leftBack, DcMotorEx rightBack, DcMotorEx rightFront) {
-        this.rightBack = rightBack;
+    /* =========================
+       MOVEMENT STATE
+       ========================= */
+    private double spdX;
+    private double spdY;
+    private double spdTurn;
+
+    private double speedModifier;
+
+    /* =========================
+       CONSTANTS
+       ========================= */
+    private static final double SLOW_SPEED = 0.3;
+    private static final double FAST_SPEED = 1.0;
+
+    /* =========================
+       CONSTRUCTOR
+       ========================= */
+    public MecanumDriveComponent(DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack) {
+        this.leftFront = leftFront;
         this.rightFront = rightFront;
         this.leftBack = leftBack;
-        this.leftFront = leftFront;
+        this.rightBack = rightBack;
+
+        initMotor(DcMotorSimple.Direction.REVERSE, leftFront);
+        initMotor(DcMotorSimple.Direction.FORWARD, rightFront);
+        initMotor(DcMotorSimple.Direction.REVERSE, leftBack);
+        initMotor(DcMotorSimple.Direction.FORWARD, rightBack);
+
+        initData();
+    }
+
+    /* =========================
+       INITIALIZATION HELPERS
+       ========================= */
+    private void initMotor(DcMotorSimple.Direction direction, DcMotor motor) {
+        motor.setDirection(direction);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    private void initData() {
+        spdX = 0;
+        spdY = 0;
+        spdTurn = 0;
+        activateFastMode();
+    }
+
+    /* =========================
+       SPEED MODE CONTROL
+       ========================= */
+    public void activateSlowMode() {
+        speedModifier = SLOW_SPEED;
+    }
+
+    public void activateFastMode() {
+        speedModifier = FAST_SPEED;
+    }
+
+    public void toggleSpeedMode() {
+        if (speedModifier == SLOW_SPEED) {
+            activateFastMode();
+        } else {
+            activateSlowMode();
+        }
+    }
+
+    /* =========================
+       MOVEMENT CONTROL
+       ========================= */
+    public void setSpeed(double spdX, double spdY, double spdTurn) {
+        this.spdX = spdX;
+        this.spdY = spdY;
+        this.spdTurn = spdTurn;
+    }
+
+    public void translateSpeedToPower() {
+        double lf = spdY + spdX + spdTurn;
+        double lb = spdY - spdX + spdTurn;
+        double rf = spdY - spdX - spdTurn;
+        double rb = spdY + spdX - spdTurn;
+
+//        // Normalize powers if needed
+        double maxPower = Math.max(Math.max(Math.abs(lf), Math.abs(lb)),
+                Math.max(Math.abs(rf), Math.abs(rb)));
+        if (maxPower > 1.0) {
+            lf /= maxPower;
+            lb /= maxPower;
+            rf /= maxPower;
+            rb /= maxPower;
+        }
+
+        // Apply speed modifier
+        lf *= speedModifier;
+        lb *= speedModifier;
+        rf *= speedModifier;
+        rb *= speedModifier;
+
+        // Set motor powers
+        leftFront.setPower(lf);
+        leftBack.setPower(lb);
+        rightFront.setPower(rf);
+        rightBack.setPower(rb);
+    }
+
+    public void adjustSpeedForHeading(double heading) {
+        double adjustedX = spdX * Math.cos(heading) + spdY * Math.sin(heading);
+        double adjustedY = - spdX * Math.sin(heading) + spdY * Math.cos(heading);
+
+        spdX = adjustedX;
+        spdY = adjustedY;
     }
 
 
 
-    public boolean isRightSideInverted() {
-        return rightSideMultiplier == -1.0;
+    public double getSpdX(){
+        return spdX;
     }
 
-
-    public void setRightSideInverted(boolean isInverted) {
-        rightSideMultiplier = isInverted ? -1.0 : 1.0;
+    public double getSpdY(){
+        return spdY;
     }
 
-    /**
-     * Sets the range of the input, see RobotDrive for more info.
-     *
-     * @param min The minimum value of the range.
-     * @param max The maximum value of the range.
-     */
-    public void setRange(double min, double max) {
-        super.setRange(min, max);
+    public double getSpdTurn(){
+        return spdTurn;
     }
 
-    /**
-     * Sets the max speed of the drivebase, see RobotDrive for more info.
-     *
-     * @param value The maximum output speed.
-     */
-    public void setMaxSpeed(double value) {
-        super.setMaxSpeed(value);
-    }
-
-
-    @Override
-    public void stop() {
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-    }
-
-
-    public void driveFieldCentric(double strafeSpeed, double forwardSpeed,
-                                  double turnSpeed, double gyroAngle) {
-        strafeSpeed = clipRange(strafeSpeed);
-        forwardSpeed = clipRange(forwardSpeed);
-        turnSpeed = clipRange(turnSpeed);
-
-        Vector2d input = new Vector2d(strafeSpeed, forwardSpeed);
-        input = input.rotateBy(-gyroAngle);
-
-        double theta = input.angle();
-
-        double[] wheelSpeeds = new double[4];
-        wheelSpeeds[MotorType.kFrontLeft.value] = Math.sin(theta + Math.PI / 4);
-        wheelSpeeds[MotorType.kFrontRight.value] = Math.sin(theta - Math.PI / 4);
-        wheelSpeeds[MotorType.kBackLeft.value] = Math.sin(theta - Math.PI / 4);
-        wheelSpeeds[MotorType.kBackRight.value] = Math.sin(theta + Math.PI / 4);
-
-        normalize(wheelSpeeds, input.magnitude());
-
-        wheelSpeeds[MotorType.kFrontLeft.value] += turnSpeed;
-        wheelSpeeds[MotorType.kFrontRight.value] -= turnSpeed;
-        wheelSpeeds[MotorType.kBackLeft.value] += turnSpeed;
-        wheelSpeeds[MotorType.kBackRight.value] -= turnSpeed;
-
-        normalize(wheelSpeeds);
-
-        driveWithMotorPowers(
-                wheelSpeeds[MotorType.kFrontLeft.value],
-                wheelSpeeds[MotorType.kFrontRight.value],
-                wheelSpeeds[MotorType.kBackLeft.value],
-                wheelSpeeds[MotorType.kBackRight.value]
-        );
-    }
-
-
-    public void driveFieldCentric(double xSpeed, double ySpeed, double turnSpeed, double gyroAngle, boolean squareInputs) {
-        xSpeed = squareInputs ? clipRange(squareInput(xSpeed)) : clipRange(xSpeed);
-        ySpeed = squareInputs ? clipRange(squareInput(ySpeed)) : clipRange(ySpeed);
-        turnSpeed = squareInputs ? clipRange(squareInput(turnSpeed)) : clipRange(turnSpeed);
-
-        driveFieldCentric(xSpeed, ySpeed, turnSpeed, gyroAngle);
-    }
-
-    public void driveWithMotorPowers(double frontLeftSpeed, double frontRightSpeed,
-                                     double backLeftSpeed, double backRightSpeed) {
-       leftBack.setPower(backLeftSpeed);
-       leftFront.setPower(frontLeftSpeed);
-       rightBack.setPower(backRightSpeed);
-       rightFront.setPower(frontRightSpeed);
+    public void driveFieldCentric(double x, double y, double turn, double heading) {
+        setSpeed(x, y, turn);
+        adjustSpeedForHeading(heading);
+        translateSpeedToPower();
 
     }
-
 }

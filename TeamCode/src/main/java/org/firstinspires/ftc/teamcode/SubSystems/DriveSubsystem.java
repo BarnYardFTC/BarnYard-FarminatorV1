@@ -1,44 +1,38 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
 
+    // IMU and heading
     public IMU imu;
-    public double headingOffset;
+    private double headingOffset;
 
+    // Mecanum drive component
     public final MecanumDriveComponent mecanumDriveComponent;
 
-    RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-            RevHubOrientationOnRobot.LogoFacingDirection.UP;       // Change if logo is not facing up
-    RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;   // Change if USB is not facing forward
+    // IMU orientation configuration
+    private static final RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING =
+            RevHubOrientationOnRobot.LogoFacingDirection.UP;
+    private static final RevHubOrientationOnRobot.UsbFacingDirection USB_FACING =
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
-    IMU.Parameters imuParameters = new IMU.Parameters(
-            new RevHubOrientationOnRobot(logoFacingDirection, usbFacingDirection)
-    );
+    private final IMU.Parameters imuParameters =
+            new IMU.Parameters(new RevHubOrientationOnRobot(LOGO_FACING, USB_FACING));
 
-
+    // Constructor with default heading offset = 0
     public DriveSubsystem(HardwareMap hw) {
-
-        mecanumDriveComponent = new MecanumDriveComponent(
-                hw.get(DcMotorEx.class, "leftFront"),
-                hw.get(DcMotorEx.class, "leftBack"),
-                hw.get(DcMotorEx.class, "rightFront"),
-                hw.get(DcMotorEx.class, "rightBack")
-                );
-
-        imu = hw.get(IMU.class, "imu");
-        imu.initialize(imuParameters);
-
-        headingOffset = 0;
+        this(hw, 0.0);
     }
-    public DriveSubsystem(HardwareMap hw, double headingOffset) {
 
+    // Constructor with custom heading offset
+    public DriveSubsystem(HardwareMap hw, double headingOffset) {
+        // Initialize mecanum motors
         mecanumDriveComponent = new MecanumDriveComponent(
                 hw.get(DcMotorEx.class, "leftFront"),
                 hw.get(DcMotorEx.class, "leftBack"),
@@ -46,21 +40,28 @@ public class DriveSubsystem extends SubsystemBase {
                 hw.get(DcMotorEx.class, "rightBack")
         );
 
+        // Initialize IMU
         imu = hw.get(IMU.class, "imu");
         imu.initialize(imuParameters);
+        imu.resetYaw();
 
+        // Set heading offset
         this.headingOffset = headingOffset;
     }
 
-
-
-
-    public double getHeading(){
-        return imu.getRobotYawPitchRollAngles().getYaw() + headingOffset;
+    // Reset IMU heading to zero
+    public void resetHeading() {
+        imu.resetYaw();
     }
 
+    // Get current robot heading in radians, including optional offset
+    public double getHeadingRadians() {
+        // IMU yaw is positive clockwise, negate if needed for field-centric math
+        return Math.toRadians(imu.getRobotYawPitchRollAngles().getYaw() + headingOffset);
+    }
+
+    // Drive the robot with field-centric controls
     public void drive(double x, double y, double turn) {
-        mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeading());
+        mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
     }
-
 }

@@ -6,7 +6,7 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.Commands.IntakeCommandGroup;
+import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 
 @TeleOp
 public class manualDrive extends CommandOpMode {

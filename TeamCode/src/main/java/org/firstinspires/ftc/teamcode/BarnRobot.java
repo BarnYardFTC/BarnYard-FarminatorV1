@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 
-
-
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -33,13 +32,13 @@ public class BarnRobot extends Robot {
         return instance;
     }
 
-    public void initBarnRobotSystems(HardwareMap hw, GamepadEx gamepad1, GamepadEx gamepad2) {
-        gamepadEx1 = gamepad1;
-        gamepadEx2 = gamepad2;
+    public void initBarnRobotSystems() {
+        gamepadEx1 = new GamepadEx(gamepad1);
+        gamepadEx2 = new GamepadEx(gamepad2);
 
-//        claw = new ClawTest();
-//        arm = new ArmTest();
-//        transfer = new Transfer();
+        claw = new ClawTest();
+        arm = new ArmTest();
+        transfer = new Transfer();
         drive = new DriveTrain();
     }
 

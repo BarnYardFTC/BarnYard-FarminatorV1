@@ -25,6 +25,14 @@ public class MecanumDriveComponent {
     /* =========================
        CONSTANTS
        ========================= */
+    public enum SpeedMode {
+        SLOW,
+        FAST
+    }
+
+    private SpeedMode speedMode;
+
+
     private static final double SLOW_SPEED = 0.3;
     private static final double FAST_SPEED = 1.0;
 
@@ -43,6 +51,14 @@ public class MecanumDriveComponent {
         initMotor(DcMotorSimple.Direction.FORWARD, rightBack);
 
         initData();
+    }
+
+    public SpeedMode getSpeedMode() {
+        return speedMode;
+    }
+
+    public void setSpeedMode(SpeedMode speedMode) {
+        this.speedMode = speedMode;
     }
 
     /* =========================
@@ -74,11 +90,19 @@ public class MecanumDriveComponent {
     }
 
     public void toggleSpeedMode() {
-        if (speedModifier == SLOW_SPEED) {
-            activateFastMode();
-        } else {
-            activateSlowMode();
+        switch(speedMode){
+            case FAST:
+                speedModifier = FAST_SPEED;
+                break;
+            case SLOW:
+                speedModifier = SLOW_SPEED;
+                break;
         }
+//        if (speedModifier == SLOW_SPEED) {
+//            activateFastMode();
+//        } else {
+//            activateSlowMode();
+//        }
     }
 
     /* =========================
@@ -107,6 +131,7 @@ public class MecanumDriveComponent {
         }
 
         // Apply speed modifier
+        toggleSpeedMode();
         lf *= speedModifier;
         lb *= speedModifier;
         rf *= speedModifier;

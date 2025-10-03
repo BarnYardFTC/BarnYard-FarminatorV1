@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
+
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -25,22 +29,22 @@ public class DriveTrain extends SubsystemBase {
             new IMU.Parameters(new RevHubOrientationOnRobot(LOGO_FACING, USB_FACING));
 
     // Constructor with default heading offset = 0
-    public DriveTrain(HardwareMap hw) {
-        this(hw, 0.0);
+    public DriveTrain() {
+        this(0.0);
     }
 
     // Constructor with custom heading offset
-    public DriveTrain(HardwareMap hw, double headingOffset) {
+    public DriveTrain(double headingOffset) {
         // Initialize mecanum motors
         mecanumDriveComponent = new MecanumDriveComponent(
-                hw.get(DcMotorEx.class, "leftFront"),
-                hw.get(DcMotorEx.class, "leftBack"),
-                hw.get(DcMotorEx.class, "rightFront"),
-                hw.get(DcMotorEx.class, "rightBack")
+                hardwareMap.get(DcMotorEx.class, "leftFront"),
+                hardwareMap.get(DcMotorEx.class, "leftBack"),
+                hardwareMap.get(DcMotorEx.class, "rightFront"),
+                hardwareMap.get(DcMotorEx.class, "rightBack")
         );
 
         // Initialize IMU
-        imu = hw.get(IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(imuParameters);
         imu.resetYaw();
 
@@ -62,5 +66,9 @@ public class DriveTrain extends SubsystemBase {
     // Drive the robot with field-centric controls
     public void drive(double x, double y, double turn) {
         mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
+    }
+
+    public void setSpeedMode(MecanumDriveComponent.SpeedMode mode){
+        mecanumDriveComponent.setSpeedMode(mode);
     }
 }

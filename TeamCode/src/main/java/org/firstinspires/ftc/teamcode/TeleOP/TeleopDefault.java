@@ -4,10 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.button.Button;
 import com.seattlesolvers.solverslib.command.button.GamepadButton;
+import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
+import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.Commands.DriveCommand;
+import org.firstinspires.ftc.teamcode.Commands.SpeedModeCommand;
 import org.firstinspires.ftc.teamcode.Commands.TransferArtifactCommand;
 import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.SubSystems.Transfer;
@@ -20,26 +23,25 @@ public class TeleopDefault extends CommandOpMode {
 
     // Subsystems
     private DriveTrain drive;
-    private Transfer transfer;
+//    private Transfer transfer;
 
     // Commands
     private DriveCommand driveCommand;
-    private TransferArtifactCommand transferCommand;
+//    private TransferArtifactCommand transferCommand;
+    private SpeedModeCommand speed;
 
     // Buttons
-    private Button speedModeButton,
-            headingResetButton,
-            startTransferButton;
+
 
     @Override
     public void initialize() {
         // Initialize gamepads
-        gamepadEx1 = new GamepadEx(gamepad1);
-        gamepadEx2 = new GamepadEx(gamepad2);
+        gamepadEx1 = BarnRobot.getInstance().gamepadEx1;
+        gamepadEx2 = BarnRobot.getInstance().gamepadEx2;
 
         // Initialize subsystems
-        drive = new DriveTrain(hardwareMap);
-        transfer = new Transfer(hardwareMap);
+        drive = new DriveTrain();
+//        transfer = new Transfer();
 
         // Initialize drive command (default teleop control)
         driveCommand = new DriveCommand(
@@ -51,18 +53,19 @@ public class TeleopDefault extends CommandOpMode {
         );
 
         // Button mappings
-        speedModeButton = new GamepadButton(gamepadEx1, GamepadKeys.Button.B)
-                .whenPressed(() -> drive.mecanumDriveComponent.toggleSpeedMode());
+        Trigger leftTriggerCondition = new Trigger(
+                () -> BarnRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05);
+        leftTriggerCondition.whenActive(speed);
 
-        headingResetButton = new GamepadButton(gamepadEx1, GamepadKeys.Button.X)
+
+        BarnRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> drive.resetHeading());
 
-        startTransferButton = new GamepadButton(gamepadEx1, GamepadKeys.Button.Y).whenPressed(transferCommand);
+//        BarnRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+//                .whenPressed(transferCommand);
 
-        // Register subsystems and commands
-        register(drive);
-        register(transfer);
-        drive.setDefaultCommand(driveCommand);
+        BarnRobot.getInstance().initDrivetrain();
+//        BarnRobot.getInstance().initTransfer();
     }
 
     @Override

@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -15,26 +18,21 @@ public class Transfer extends SubsystemBase {
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
 
-    public Transfer(HardwareMap hardwareMap){
+    public Transfer(){
         leftFrontTrans = hardwareMap.get(CRServo.class, "leftFrontTrans");
         leftBackTrans = hardwareMap.get(CRServo.class, "leftBackTrans");
         rightFrontTrans = hardwareMap.get(CRServo.class, "rightFrontTrans");
         rightBackTrans = hardwareMap.get(CRServo.class, "rightBackTrans");
     }
 
-    public void transfer(){
-        leftFrontTrans.setPower(1);
-        leftBackTrans.setPower(1);
-        rightFrontTrans.setPower(1);
-        rightBackTrans.setPower(1);
+    public void setPower(double power){
+        leftFrontTrans.setPower(power);
+        leftBackTrans.setPower(power);
+        rightFrontTrans.setPower(power);
+        rightBackTrans.setPower(power);
     }
 
-    public void stop(){
-        leftFrontTrans.setPower(0);
-        leftBackTrans.setPower(0);
-        rightFrontTrans.setPower(0);
-        rightBackTrans.setPower(0);
+    public Command transfer(double power){
+        return new InstantCommand(() -> setPower(power), this);
     }
-
-
 }

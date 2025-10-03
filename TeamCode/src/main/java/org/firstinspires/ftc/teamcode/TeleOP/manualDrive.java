@@ -6,7 +6,7 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
+import org.firstinspires.ftc.teamcode.Commands.IntakeCommandTest;
 
 @TeleOp
 public class manualDrive extends CommandOpMode {
@@ -20,11 +20,11 @@ public class manualDrive extends CommandOpMode {
         robotInstance.initBarnRobotSystems();
 
         robotInstance.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                IntakeCommandGroup.prepareIntake()
+                IntakeCommandTest.prepareIntake()
         );
 
         new Trigger(() -> robotInstance.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05).whileActiveOnce(
-                IntakeCommandGroup.Intake()
+                IntakeCommandTest.Intake()
         );
     }
 

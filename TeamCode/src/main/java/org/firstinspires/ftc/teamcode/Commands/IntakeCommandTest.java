@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CommandGroups;
+package org.firstinspires.ftc.teamcode.Commands;
 
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -8,7 +8,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.SubSystems.ArmSubSystem;
 
-public class IntakeCommandGroup {
+public class IntakeCommandTest {
     public static Command prepareIntake() {
         return new ParallelCommandGroup(
                 BarnRobot.getInstance().arm.setPositionCommand(ArmSubSystem.middle),

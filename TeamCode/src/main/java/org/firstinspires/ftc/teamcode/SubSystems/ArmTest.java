@@ -8,14 +8,14 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 
-public class ArmSubSystem extends SubsystemBase {
+public class ArmTest extends SubsystemBase {
     private final Servo rightServo;
     private final Servo leftServo;
     public static double up = 0.5;
     public static double middle = 0.25;
     public static double down = 0;
 
-    public ArmSubSystem() {
+    public ArmTest() {
         rightServo = hardwareMap.get(Servo.class, "armRightServo");
         leftServo = hardwareMap.get(Servo.class, "armLeftServo");
     }

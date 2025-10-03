@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.seattlesolvers.solverslib.command.CommandBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.SubSystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
 
 import java.util.function.DoubleSupplier;
 
 public class DriveCommand extends CommandBase {
 
     // Subsystem
-    private final DriveSubsystem drive;
+    private final DriveTrain drive;
 
     // Inputs from gamepad
     private final DoubleSupplier x;      // Strafe
@@ -20,7 +20,7 @@ public class DriveCommand extends CommandBase {
     private final Telemetry telemetry;
 
     // Constructor
-    public DriveCommand(DriveSubsystem drive, DoubleSupplier x, DoubleSupplier y, DoubleSupplier turn, Telemetry telemetry) {
+    public DriveCommand(DriveTrain drive, DoubleSupplier x, DoubleSupplier y, DoubleSupplier turn, Telemetry telemetry) {
         this.drive = drive;
         this.x = x;
         this.y = y;

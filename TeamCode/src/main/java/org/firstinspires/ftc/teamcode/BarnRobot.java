@@ -7,13 +7,13 @@ import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.SubSystems.ArmSubSystem;
-import org.firstinspires.ftc.teamcode.SubSystems.ClawSubSystem;
+import org.firstinspires.ftc.teamcode.SubSystems.ArmTest;
+import org.firstinspires.ftc.teamcode.SubSystems.ClawTest;
 
 public class BarnRobot extends Robot {
     public static BarnRobot instance;
-    public ClawSubSystem claw;
-    public ArmSubSystem arm;
+    public ClawTest claw;
+    public ArmTest arm;
     public GamepadEx gamepadEx1;
     public GamepadEx gamepadEx2;
     public Telemetry telemetry;
@@ -29,7 +29,7 @@ public class BarnRobot extends Robot {
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
-        claw = new ClawSubSystem();
-        arm = new ArmSubSystem();
+        claw = new ClawTest();
+        arm = new ArmTest();
     }
 }

@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
-public class DriveSubsystem extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
 
     // IMU and heading
     public IMU imu;
@@ -26,12 +25,12 @@ public class DriveSubsystem extends SubsystemBase {
             new IMU.Parameters(new RevHubOrientationOnRobot(LOGO_FACING, USB_FACING));
 
     // Constructor with default heading offset = 0
-    public DriveSubsystem(HardwareMap hw) {
+    public DriveTrain(HardwareMap hw) {
         this(hw, 0.0);
     }
 
     // Constructor with custom heading offset
-    public DriveSubsystem(HardwareMap hw, double headingOffset) {
+    public DriveTrain(HardwareMap hw, double headingOffset) {
         // Initialize mecanum motors
         mecanumDriveComponent = new MecanumDriveComponent(
                 hw.get(DcMotorEx.class, "leftFront"),

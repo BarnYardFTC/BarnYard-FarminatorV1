@@ -7,12 +7,12 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
-public class ClawSubSystem extends SubsystemBase {
+public class ClawTest extends SubsystemBase {
     private final Servo clawServo;
     public static double open = 0.5;
     public static double close = 0;
 
-    public ClawSubSystem() {
+    public ClawTest() {
         clawServo = hardwareMap.get(Servo.class, "claw");
     }
 

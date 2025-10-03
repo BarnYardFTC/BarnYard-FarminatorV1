@@ -8,22 +8,28 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Commands.DriveCommand;
-import org.firstinspires.ftc.teamcode.SubSystems.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.Commands.TransferArtifactCommand;
+import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.SubSystems.Transfer;
 
 @TeleOp
-public class DrivetrainManual extends CommandOpMode {
+public class TeleopDefault extends CommandOpMode {
 
     // Gamepads
     private GamepadEx gamepadEx1, gamepadEx2;
 
     // Subsystems
-    private DriveSubsystem drive;
+    private DriveTrain drive;
+    private Transfer transfer;
 
     // Commands
     private DriveCommand driveCommand;
+    private TransferArtifactCommand transferCommand;
 
     // Buttons
-    private Button speedModeButton, headingResetButton;
+    private Button speedModeButton,
+            headingResetButton,
+            startTransferButton;
 
     @Override
     public void initialize() {
@@ -32,7 +38,8 @@ public class DrivetrainManual extends CommandOpMode {
         gamepadEx2 = new GamepadEx(gamepad2);
 
         // Initialize subsystems
-        drive = new DriveSubsystem(hardwareMap);
+        drive = new DriveTrain(hardwareMap);
+        transfer = new Transfer(hardwareMap);
 
         // Initialize drive command (default teleop control)
         driveCommand = new DriveCommand(
@@ -50,8 +57,11 @@ public class DrivetrainManual extends CommandOpMode {
         headingResetButton = new GamepadButton(gamepadEx1, GamepadKeys.Button.X)
                 .whenPressed(() -> drive.resetHeading());
 
+        startTransferButton = new GamepadButton(gamepadEx1, GamepadKeys.Button.Y).whenPressed(transferCommand);
+
         // Register subsystems and commands
         register(drive);
+        register(transfer);
         drive.setDefaultCommand(driveCommand);
     }
 

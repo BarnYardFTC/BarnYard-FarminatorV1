@@ -22,8 +22,7 @@ public class TeleopDefault extends CommandOpMode {
     // ------------------------------------------------------------
     // Subsystems
     // ------------------------------------------------------------
-    private DriveTrain drive;
-    // private Transfer transfer;
+
 
     // ------------------------------------------------------------
     // Commands
@@ -60,7 +59,6 @@ public class TeleopDefault extends CommandOpMode {
         // Initialize Drivetrain
         // ------------------------
         farminator.initDrivetrain();
-        drive = farminator.drive;
 
         // ------------------------
         // Button Mappings
@@ -75,20 +73,13 @@ public class TeleopDefault extends CommandOpMode {
 
         // Reset heading with X
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(() -> drive.resetHeading());
+                .whenPressed(() -> farminator.drive.resetHeading());
 
         // Y for transfer (currently commented out)
         // farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
         //         .whenPressed(transferCommand);
 
-        // ------------------------
-        // Register Subsystems
-        // ------------------------
-        register(drive);
-        register(farminator.transfer);
 
-        // Set default drive command
-        drive.setDefaultCommand(drive.driveCommand());
     }
 
     @Override

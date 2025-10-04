@@ -62,11 +62,13 @@ public class BarnRobot extends Robot {
 
         // Initialize Subsystems
         transfer = new Transfer();
-        drive = new DriveTrain();
+
     }
 
     public void initDrivetrain() {
-        // This method can be expanded if future drivetrain setup is needed
+        drive = new DriveTrain();
+        register(drive);
+        drive.setDefaultCommand(drive.driveCommand());
     }
 
     public void initTransfer() {

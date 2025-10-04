@@ -39,16 +39,18 @@ public class TeleopDefault extends CommandOpMode {
         gamepadEx1 = BarnRobot.getInstance().gamepadEx1;
         gamepadEx2 = BarnRobot.getInstance().gamepadEx2;
         BarnRobot.getInstance().initDrivetrain();
+        drive = BarnRobot.getInstance().drive;
 
         // Initialize drive command (default teleop control)
         driveCommand = new DriveCommand(
+                drive,
                 gamepadEx1::getLeftX,
                 gamepadEx1::getLeftY,
                 gamepadEx1::getRightX,
                 telemetry
         );
 
-        drive = BarnRobot.getInstance().drive;
+
 
         // Button mappings
         Trigger leftTriggerCondition = new Trigger(
@@ -76,7 +78,7 @@ public class TeleopDefault extends CommandOpMode {
         super.run();
 
         // Telemetry for debugging joystick values
-        telemetry.addData("Left Stick X", gamepadEx1::getLeftX);
+        telemetry.addData("Left Stick X", gamepadEx1.getLeftX());
         telemetry.addData("Left Stick Y", gamepadEx1.getLeftY());
         telemetry.addData("Right Stick X", gamepadEx1.getRightX());
         telemetry.update();

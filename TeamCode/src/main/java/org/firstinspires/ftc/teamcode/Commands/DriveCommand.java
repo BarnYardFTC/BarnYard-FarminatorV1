@@ -21,8 +21,8 @@ public class DriveCommand extends CommandBase {
     private final Telemetry telemetry;
 
     // Constructor
-    public DriveCommand(DoubleSupplier x, DoubleSupplier y, DoubleSupplier turn, Telemetry telemetry) {
-        this.drive = BarnRobot.getInstance().drive;
+    public DriveCommand(DriveTrain drive, DoubleSupplier x, DoubleSupplier y, DoubleSupplier turn, Telemetry telemetry) {
+        this.drive = drive;
         this.x = x;
         this.y = y;
         this.turn = turn;

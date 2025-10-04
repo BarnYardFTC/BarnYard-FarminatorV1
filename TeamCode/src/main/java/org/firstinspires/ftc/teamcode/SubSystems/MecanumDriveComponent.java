@@ -89,21 +89,6 @@ public class MecanumDriveComponent {
         speedModifier = FAST_SPEED;
     }
 
-    public void toggleSpeedMode() {
-        switch(speedMode){
-            case FAST:
-                speedModifier = FAST_SPEED;
-                break;
-            case SLOW:
-                speedModifier = SLOW_SPEED;
-                break;
-        }
-//        if (speedModifier == SLOW_SPEED) {
-//            activateFastMode();
-//        } else {
-//            activateSlowMode();
-//        }
-    }
 
     /* =========================
        MOVEMENT CONTROL
@@ -131,7 +116,6 @@ public class MecanumDriveComponent {
         }
 
         // Apply speed modifier
-        toggleSpeedMode();
         lf *= speedModifier;
         lb *= speedModifier;
         rf *= speedModifier;

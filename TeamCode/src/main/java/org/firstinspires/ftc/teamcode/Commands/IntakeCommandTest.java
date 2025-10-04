@@ -9,20 +9,20 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.SubSystems.ArmTest;
 
 public class IntakeCommandTest {
-    public static Command prepareIntake() {
-        return new ParallelCommandGroup(
-                BarnRobot.getInstance().arm.setPositionCommand(ArmTest.middle),
-                BarnRobot.getInstance().claw.release()
-        );
-    }
-
-    public static Command Intake() {
-        return new SequentialCommandGroup(
-                BarnRobot.getInstance().arm.setPositionCommand(ArmTest.down),
-                new WaitCommand(200),
-                BarnRobot.getInstance().claw.grab(),
-                new WaitCommand(200),
-                BarnRobot.getInstance().arm.setPositionCommand(ArmTest.up)
-        );
-    }
+//    public static Command prepareIntake() {
+//        return new ParallelCommandGroup(
+//                BarnRobot.getInstance().arm.setPositionCommand(ArmTest.middle),
+//                BarnRobot.getInstance().claw.release()
+//        );
+//    }
+//
+//    public static Command Intake() {
+//        return new SequentialCommandGroup(
+//                BarnRobot.getInstance().arm.setPositionCommand(ArmTest.down),
+//                new WaitCommand(200),
+//                BarnRobot.getInstance().claw.grab(),
+//                new WaitCommand(200),
+//                BarnRobot.getInstance().arm.setPositionCommand(ArmTest.up)
+//        );
+//    }
 }

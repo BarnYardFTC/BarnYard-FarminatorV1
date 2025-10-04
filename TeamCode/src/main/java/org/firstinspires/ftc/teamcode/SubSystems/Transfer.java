@@ -18,11 +18,11 @@ public class Transfer extends SubsystemBase {
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
 
-    public Transfer(){
-        leftFrontTrans = hardwareMap.get(CRServo.class, "leftFrontTrans");
-        leftBackTrans = hardwareMap.get(CRServo.class, "leftBackTrans");
-        rightFrontTrans = hardwareMap.get(CRServo.class, "rightFrontTrans");
-        rightBackTrans = hardwareMap.get(CRServo.class, "rightBackTrans");
+    public Transfer(HardwareMap hw){
+//        leftFrontTrans = hw.get(CRServo.class, "leftFrontTrans");
+//        leftBackTrans = hw.get(CRServo.class, "leftBackTrans");
+//        rightFrontTrans = hw.get(CRServo.class, "rightFrontTrans");
+//        rightBackTrans = hw.get(CRServo.class, "rightBackTrans");
     }
 
     public void setPower(double power){

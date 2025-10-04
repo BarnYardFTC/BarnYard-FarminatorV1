@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.SubSystems;
 
 
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -29,22 +28,22 @@ public class DriveTrain extends SubsystemBase {
             new IMU.Parameters(new RevHubOrientationOnRobot(LOGO_FACING, USB_FACING));
 
     // Constructor with default heading offset = 0
-    public DriveTrain() {
-        this(0.0);
+    public DriveTrain(HardwareMap hw) {
+        this(hw, 0.0);
     }
 
     // Constructor with custom heading offset
-    public DriveTrain(double headingOffset) {
+    public DriveTrain(HardwareMap hw, double headingOffset) {
         // Initialize mecanum motors
         mecanumDriveComponent = new MecanumDriveComponent(
-                hardwareMap.get(DcMotorEx.class, "leftFront"),
-                hardwareMap.get(DcMotorEx.class, "leftBack"),
-                hardwareMap.get(DcMotorEx.class, "rightFront"),
-                hardwareMap.get(DcMotorEx.class, "rightBack")
+                hw.get(DcMotorEx.class, "leftFront"),
+                hw.get(DcMotorEx.class, "leftBack"),
+                hw.get(DcMotorEx.class, "rightFront"),
+                hw.get(DcMotorEx.class, "rightBack")
         );
 
         // Initialize IMU
-        imu = hardwareMap.get(IMU.class, "imu");
+        imu = hw.get(IMU.class, "imu");
         imu.initialize(imuParameters);
         imu.resetYaw();
 

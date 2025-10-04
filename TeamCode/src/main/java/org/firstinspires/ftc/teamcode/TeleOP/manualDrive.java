@@ -17,15 +17,15 @@ public class manualDrive extends CommandOpMode {
     public void initialize() {
         robotInstance = BarnRobot.getInstance();
 
-        robotInstance.initBarnRobotSystems();
+        robotInstance.initBarnRobotSystems(hardwareMap, gamepad1, gamepad2);
 
-        robotInstance.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                IntakeCommandTest.prepareIntake()
-        );
+//        robotInstance.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+//                IntakeCommandTest.prepareIntake()
+//        );
 
-        new Trigger(() -> robotInstance.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05).whileActiveOnce(
-                IntakeCommandTest.Intake()
-        );
+//        new Trigger(() -> robotInstance.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05).whileActiveOnce(
+//                IntakeCommandTest.Intake()
+//        );
     }
 
     @Override

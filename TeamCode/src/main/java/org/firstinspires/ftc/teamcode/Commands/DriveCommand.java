@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.seattlesolvers.solverslib.command.CommandBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
 
 import java.util.function.DoubleSupplier;
@@ -20,8 +21,8 @@ public class DriveCommand extends CommandBase {
     private final Telemetry telemetry;
 
     // Constructor
-    public DriveCommand(DriveTrain drive, DoubleSupplier x, DoubleSupplier y, DoubleSupplier turn, Telemetry telemetry) {
-        this.drive = drive;
+    public DriveCommand(DoubleSupplier x, DoubleSupplier y, DoubleSupplier turn, Telemetry telemetry) {
+        this.drive = BarnRobot.getInstance().drive;
         this.x = x;
         this.y = y;
         this.turn = turn;

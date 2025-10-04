@@ -73,6 +73,7 @@ public class BarnRobot extends Robot {
     }
 
     public void initTransfer() {
+        transfer = new Transfer();
         register(transfer);
     }
 }

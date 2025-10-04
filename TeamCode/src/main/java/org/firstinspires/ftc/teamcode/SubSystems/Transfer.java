@@ -9,6 +9,8 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
+import org.firstinspires.ftc.teamcode.BarnRobot;
+
 import java.util.Set;
 
 public class Transfer extends SubsystemBase {
@@ -18,11 +20,11 @@ public class Transfer extends SubsystemBase {
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
 
-    public Transfer(HardwareMap hw){
-//        leftFrontTrans = hw.get(CRServo.class, "leftFrontTrans");
-//        leftBackTrans = hw.get(CRServo.class, "leftBackTrans");
-//        rightFrontTrans = hw.get(CRServo.class, "rightFrontTrans");
-//        rightBackTrans = hw.get(CRServo.class, "rightBackTrans");
+    public Transfer(){
+        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
+        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
+        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
+        rightBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightBackTrans");
     }
 
     public void setPower(double power){

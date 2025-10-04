@@ -97,6 +97,7 @@ public class TeleopDefault extends CommandOpMode {
         // Register Subsystems
         // ------------------------
         register(drive);
+        register(farminator.transfer);
 
         // Set default drive command
         drive.setDefaultCommand(driveCommand);

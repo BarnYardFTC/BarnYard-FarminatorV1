@@ -61,8 +61,8 @@ public class BarnRobot extends Robot {
         gamepadEx2 = new GamepadEx(gamepad2);
 
         // Initialize Subsystems
-        transfer = new Transfer(hardwareMap);
-        drive = new DriveTrain(hardwareMap);
+        transfer = new Transfer();
+        drive = new DriveTrain();
     }
 
     public void initDrivetrain() {

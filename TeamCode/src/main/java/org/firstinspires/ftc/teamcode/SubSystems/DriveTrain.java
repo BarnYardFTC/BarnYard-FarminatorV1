@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
+import org.firstinspires.ftc.teamcode.BarnRobot;
+
 public class DriveTrain extends SubsystemBase {
 
     // IMU and heading
@@ -28,22 +30,22 @@ public class DriveTrain extends SubsystemBase {
             new IMU.Parameters(new RevHubOrientationOnRobot(LOGO_FACING, USB_FACING));
 
     // Constructor with default heading offset = 0
-    public DriveTrain(HardwareMap hw) {
-        this(hw, 0.0);
+    public DriveTrain() {
+        this(0.0);
     }
 
     // Constructor with custom heading offset
-    public DriveTrain(HardwareMap hw, double headingOffset) {
+    public DriveTrain(double headingOffset) {
         // Initialize mecanum motors
         mecanumDriveComponent = new MecanumDriveComponent(
-                hw.get(DcMotorEx.class, "leftFront"),
-                hw.get(DcMotorEx.class, "leftBack"),
-                hw.get(DcMotorEx.class, "rightFront"),
-                hw.get(DcMotorEx.class, "rightBack")
+                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "leftFront"),
+                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "leftBack"),
+                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "rightFront"),
+                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "rightBack")
         );
 
         // Initialize IMU
-        imu = hw.get(IMU.class, "imu");
+        imu = BarnRobot.getInstance().hardwareMap.get(IMU.class, "imu");
         imu.initialize(imuParameters);
         imu.resetYaw();
 

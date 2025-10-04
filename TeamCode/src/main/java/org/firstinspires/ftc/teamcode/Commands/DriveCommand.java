@@ -39,7 +39,7 @@ public class DriveCommand extends CommandBase {
         telemetry.addData("Y input", y.getAsDouble());
         telemetry.addData("Turn input", turn.getAsDouble());
         telemetry.addData("Heading (rad)", drive.getHeadingRadians());
-        telemetry.update();
+
 
         // Drive the robot
         drive.drive(x.getAsDouble(), y.getAsDouble(), turn.getAsDouble());

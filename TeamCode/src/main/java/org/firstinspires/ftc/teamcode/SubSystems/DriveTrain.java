@@ -67,7 +67,4 @@ public class DriveTrain extends SubsystemBase {
         mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
     }
 
-    public void setSpeedMode(MecanumDriveComponent.SpeedMode mode){
-        mecanumDriveComponent.setSpeedMode(mode);
-    }
 }

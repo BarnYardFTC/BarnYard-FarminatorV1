@@ -14,34 +14,58 @@ import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
 @TeleOp
 public class TeleopDefault extends CommandOpMode {
 
+    // ------------------------------------------------------------
     // Gamepads
+    // ------------------------------------------------------------
     private GamepadEx gamepadEx1, gamepadEx2;
 
+    // ------------------------------------------------------------
     // Subsystems
+    // ------------------------------------------------------------
     private DriveTrain drive;
-//    private Transfer transfer;
+    // private Transfer transfer;
 
+    // ------------------------------------------------------------
     // Commands
+    // ------------------------------------------------------------
     private DriveCommand driveCommand;
-//    private TransferArtifactCommand transferCommand;
+    // private TransferArtifactCommand transferCommand;
 
-
+    // ------------------------------------------------------------
+    // Robot
+    // ------------------------------------------------------------
     private BarnRobot farminator;
 
+    // ------------------------------------------------------------
     // Buttons
+    // ------------------------------------------------------------
+    private static final double SLOW_MODE_TRIGGER_THRESHOLD = 0.05;
 
 
     @Override
     public void initialize() {
+
+        // ------------------------
+        // Initialize Robot Systems
+        // ------------------------
         farminator = BarnRobot.getInstance();
         farminator.initBarnRobotSystems(hardwareMap, gamepad1, gamepad2);
-        // Initialize gamepads
-        gamepadEx1 = BarnRobot.getInstance().gamepadEx1;
-        gamepadEx2 = BarnRobot.getInstance().gamepadEx2;
-        BarnRobot.getInstance().initDrivetrain();
-        drive = BarnRobot.getInstance().drive;
 
-        // Initialize drive command (default teleop control)
+        // ------------------------
+        // Initialize Gamepads
+        // ------------------------
+        gamepadEx1 = farminator.gamepadEx1;
+        gamepadEx2 = farminator.gamepadEx2;
+
+        // ------------------------
+        // Initialize Drivetrain
+        // ------------------------
+        farminator.initDrivetrain();
+        drive = farminator.drive;
+
+        // ------------------------
+        // Initialize Drive Command
+        // ------------------------
         driveCommand = new DriveCommand(
                 drive,
                 gamepadEx1::getLeftX,
@@ -50,37 +74,37 @@ public class TeleopDefault extends CommandOpMode {
                 telemetry
         );
 
+        // ------------------------
+        // Button Mappings
+        // ------------------------
 
-
-        // Button mappings
+        // Left trigger toggles between slow and fast mode
         Trigger leftTriggerCondition = new Trigger(
-                () -> BarnRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05).whenActive(
-                    new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode())
-                ).whenInactive(
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
-                );
+                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > SLOW_MODE_TRIGGER_THRESHOLD
+        )
+                .whenActive(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
+                .whenInactive(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
 
-
-        BarnRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+        // Reset heading with X
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> drive.resetHeading());
 
-//        BarnRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-//                .whenPressed(transferCommand);
+        // Y for transfer (currently commented out)
+        // farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+        //         .whenPressed(transferCommand);
 
-//        BarnRobot.getInstance().initTransfer();
-
-        drive.setDefaultCommand(driveCommand);
+        // ------------------------
+        // Register Subsystems
+        // ------------------------
         register(drive);
+
+        // Set default drive command
+        drive.setDefaultCommand(driveCommand);
     }
 
     @Override
     public void run() {
         super.run();
-
-        // Telemetry for debugging joystick values
-        telemetry.addData("Left Stick X", gamepadEx1.getLeftX());
-        telemetry.addData("Left Stick Y", gamepadEx1.getLeftY());
-        telemetry.addData("Right Stick X", gamepadEx1.getRightX());
         telemetry.update();
     }
 }

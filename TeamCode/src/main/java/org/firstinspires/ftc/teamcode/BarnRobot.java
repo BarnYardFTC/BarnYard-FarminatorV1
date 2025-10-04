@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
@@ -12,16 +11,38 @@ import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.SubSystems.Transfer;
 
 public class BarnRobot extends Robot {
-    public static BarnRobot instance;
+
+    // ------------------------------------------------------------
+    // Singleton Instance
+    // ------------------------------------------------------------
+    private static BarnRobot instance;
+
+    // ------------------------------------------------------------
+    // Subsystems
+    // ------------------------------------------------------------
     public Transfer transfer;
     public DriveTrain drive;
+
+    // ------------------------------------------------------------
+    // Gamepads
+    // ------------------------------------------------------------
     public GamepadEx gamepadEx1;
     public GamepadEx gamepadEx2;
+
+    // ------------------------------------------------------------
+    // FTC SDK References
+    // ------------------------------------------------------------
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
 
+    // ------------------------------------------------------------
+    // Commands
+    // ------------------------------------------------------------
     public Command driveCommand;
 
+    // ------------------------------------------------------------
+    // Singleton Accessor
+    // ------------------------------------------------------------
     public static synchronized BarnRobot getInstance() {
         if (instance == null) {
             instance = new BarnRobot();
@@ -29,24 +50,26 @@ public class BarnRobot extends Robot {
         return instance;
     }
 
+    // ------------------------------------------------------------
+    // Initialization
+    // ------------------------------------------------------------
     public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2) {
         this.hardwareMap = hw;
+
+        // Initialize Gamepads
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
-        initTransfer();
-        initDrivetrain();
-    }
-
-    public void initDrivetrain(){
-        drive = new DriveTrain(hardwareMap);
-
-    }
-
-    public void initTransfer(){
+        // Initialize Subsystems
         transfer = new Transfer(hardwareMap);
-        register(transfer);
-
+        drive = new DriveTrain(hardwareMap);
     }
 
+    public void initDrivetrain() {
+        // This method can be expanded if future drivetrain setup is needed
+    }
+
+    public void initTransfer() {
+        register(transfer);
+    }
 }

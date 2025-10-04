@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
@@ -21,10 +23,10 @@ public class Transfer extends SubsystemBase {
     private CRServo rightBackTrans;
 
     public Transfer(){
-        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
-        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
-        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
-        rightBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightBackTrans");
+//        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
+//        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
+//        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
+//        rightBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightBackTrans");
     }
 
     public void setPower(double power){
@@ -36,5 +38,12 @@ public class Transfer extends SubsystemBase {
 
     public Command transfer(double power){
         return new InstantCommand(() -> setPower(power), this);
+    }
+
+    public Command transferCommand(){
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> setPower(1), this),
+                new WaitCommand(2000),
+                new InstantCommand(() -> setPower(0), this));
     }
 }

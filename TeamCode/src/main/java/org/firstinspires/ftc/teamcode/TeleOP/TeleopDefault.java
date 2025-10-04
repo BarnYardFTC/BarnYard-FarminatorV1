@@ -28,7 +28,6 @@ public class TeleopDefault extends CommandOpMode {
     // ------------------------------------------------------------
     // Commands
     // ------------------------------------------------------------
-    private DriveCommand driveCommand;
     // private TransferArtifactCommand transferCommand;
 
     // ------------------------------------------------------------
@@ -64,17 +63,6 @@ public class TeleopDefault extends CommandOpMode {
         drive = farminator.drive;
 
         // ------------------------
-        // Initialize Drive Command
-        // ------------------------
-        driveCommand = new DriveCommand(
-                drive,
-                gamepadEx1::getLeftX,
-                gamepadEx1::getLeftY,
-                gamepadEx1::getRightX,
-                telemetry
-        );
-
-        // ------------------------
         // Button Mappings
         // ------------------------
 
@@ -100,7 +88,7 @@ public class TeleopDefault extends CommandOpMode {
         register(farminator.transfer);
 
         // Set default drive command
-        drive.setDefaultCommand(driveCommand);
+        drive.setDefaultCommand(drive.driveCommand());
     }
 
     @Override

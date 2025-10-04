@@ -7,6 +7,8 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -68,5 +70,16 @@ public class DriveTrain extends SubsystemBase {
     public void drive(double x, double y, double turn) {
         mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
     }
+
+    public Command driveCommand(){
+        return new RunCommand(
+                () -> drive(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY(),
+                        BarnRobot.getInstance().gamepadEx1.getRightX()
+                ), this);
+    }
+
+
 
 }

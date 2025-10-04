@@ -3,13 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOP;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.button.Button;
-import com.seattlesolvers.solverslib.command.button.GamepadButton;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
-import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
-
-import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.Commands.TransferArtifactCommand;
-import org.firstinspires.ftc.teamcode.SubSystems.Transfer;
 
 @TeleOp
 public class TestTransTeleop extends CommandOpMode {

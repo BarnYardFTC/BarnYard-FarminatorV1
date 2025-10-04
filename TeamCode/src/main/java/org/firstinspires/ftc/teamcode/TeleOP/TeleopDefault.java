@@ -8,35 +8,14 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.Commands.DriveCommand;
-import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
 
 @TeleOp
 public class TeleopDefault extends CommandOpMode {
 
-    // ------------------------------------------------------------
-    // Gamepads
-    // ------------------------------------------------------------
     private GamepadEx gamepadEx1, gamepadEx2;
 
-    // ------------------------------------------------------------
-    // Subsystems
-    // ------------------------------------------------------------
-
-
-    // ------------------------------------------------------------
-    // Commands
-    // ------------------------------------------------------------
-    // private TransferArtifactCommand transferCommand;
-
-    // ------------------------------------------------------------
-    // Robot
-    // ------------------------------------------------------------
     private BarnRobot farminator;
 
-    // ------------------------------------------------------------
-    // Buttons
-    // ------------------------------------------------------------
     private static final double SLOW_MODE_TRIGGER_THRESHOLD = 0.05;
 
 
@@ -55,10 +34,6 @@ public class TeleopDefault extends CommandOpMode {
         gamepadEx1 = farminator.gamepadEx1;
         gamepadEx2 = farminator.gamepadEx2;
 
-        // ------------------------
-        // Initialize Drivetrain
-        // ------------------------
-        farminator.initDrivetrain();
 
         // ------------------------
         // Button Mappings
@@ -75,9 +50,9 @@ public class TeleopDefault extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> farminator.drive.resetHeading());
 
-        // Y for transfer (currently commented out)
-        // farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-        //         .whenPressed(transferCommand);
+        // Y for transfer
+         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                 .whenPressed(farminator.transfer.transferCommand());
 
 
     }

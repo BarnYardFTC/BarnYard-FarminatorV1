@@ -25,13 +25,6 @@ public class MecanumDriveComponent {
     /* =========================
        CONSTANTS
        ========================= */
-    public enum SpeedMode {
-        SLOW,
-        FAST
-    }
-
-    private SpeedMode speedMode;
-
 
     private static final double SLOW_SPEED = 0.3;
     private static final double FAST_SPEED = 1.0;
@@ -53,13 +46,6 @@ public class MecanumDriveComponent {
         initData();
     }
 
-    public SpeedMode getSpeedMode() {
-        return speedMode;
-    }
-
-    public void setSpeedMode(SpeedMode speedMode) {
-        this.speedMode = speedMode;
-    }
 
     /* =========================
        INITIALIZATION HELPERS

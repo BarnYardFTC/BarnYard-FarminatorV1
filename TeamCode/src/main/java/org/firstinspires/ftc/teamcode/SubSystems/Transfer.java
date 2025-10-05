@@ -42,8 +42,8 @@ public class Transfer extends SubsystemBase {
 
     public Command transferCommand(){
         return new SequentialCommandGroup(
-                new InstantCommand(() -> setPower(1), this),
+                transfer(1),
                 new WaitCommand(2000),
-                new InstantCommand(() -> setPower(0), this));
+                transfer(0));
     }
 }

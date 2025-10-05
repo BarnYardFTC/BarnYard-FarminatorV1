@@ -54,12 +54,16 @@ public class TeleopDefault extends CommandOpMode {
          farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                  .whenPressed(farminator.transfer.transferCommand());
 
+         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                 .toggleWhenPressed(farminator.drive.alignToTag());
+
 
     }
 
     @Override
     public void run() {
         super.run();
+        farminator.limelight.displayTelemetry();
         telemetry.update();
     }
 }

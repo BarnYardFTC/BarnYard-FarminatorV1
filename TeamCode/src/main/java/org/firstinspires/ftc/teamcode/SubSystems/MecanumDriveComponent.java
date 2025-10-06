@@ -140,6 +140,5 @@ public class MecanumDriveComponent {
         setSpeed(x, y, turn);
         adjustSpeedForHeading(heading);
         translateSpeedToPower();
-
     }
 }

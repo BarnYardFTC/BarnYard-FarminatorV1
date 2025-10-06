@@ -22,7 +22,7 @@ public class Transfer extends SubsystemBase {
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
 
-    public Transfer(){
+    public Transfer(){ //TODO: I think you need to reverse the two right servos
 //        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
 //        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
 //        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
@@ -36,7 +36,7 @@ public class Transfer extends SubsystemBase {
         rightBackTrans.setPower(power);
     }
 
-    public Command transfer(double power){
+    public Command transfer(double power){ //TODO: it's better to call the function setPowerCommand because transfer is an action
         return new InstantCommand(() -> setPower(power), this);
     }
 

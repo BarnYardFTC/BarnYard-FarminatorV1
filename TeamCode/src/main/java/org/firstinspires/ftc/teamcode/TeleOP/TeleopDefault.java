@@ -43,7 +43,7 @@ public class TeleopDefault extends CommandOpMode {
         // ------------------------
 
         // Left trigger toggles between slow and fast mode
-        Trigger leftTriggerCondition = new Trigger(
+        Trigger leftTriggerCondition = new Trigger( //TODO: remove the leftTriggerCondition var, it while never be used
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > SLOW_MODE_TRIGGER_THRESHOLD
         )
                 .whenActive(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))

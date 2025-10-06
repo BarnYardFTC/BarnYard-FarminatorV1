@@ -41,6 +41,7 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     // Commands
     // ------------------------------------------------------------
+    //TODO: remove the this command section, we don't use commands this way anymore
     public Command driveCommand;
 
 
@@ -70,7 +71,6 @@ public class BarnRobot extends Robot {
         initTransfer();
         initDrivetrain();
         initLimeLight();
-
     }
 
     public void initDrivetrain() {

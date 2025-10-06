@@ -75,7 +75,6 @@ public class LimeLight extends SubsystemBase {
                         (teamColor == GlobalData.Alliance.RED && fr.getFiducialId() == 24)){
                     calculateD(fr);
                 }
-
             }
         }
     }

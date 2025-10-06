@@ -75,18 +75,15 @@ public class BarnRobot extends Robot {
 
     public void initDrivetrain() {
         drive = new DriveTrain();
-        register(drive);
         drive.setDefaultCommand(drive.driveCommand());
     }
 
     public void initTransfer() {
         transfer = new Transfer();
-        register(transfer);
     }
 
     public void initLimeLight() {
         limelight = new LimeLight();
         limelight.start();
-        register(limelight);
     }
 }

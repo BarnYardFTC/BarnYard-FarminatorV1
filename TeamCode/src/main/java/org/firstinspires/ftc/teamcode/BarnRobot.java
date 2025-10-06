@@ -58,8 +58,9 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     // Initialization
     // ------------------------------------------------------------
-    public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2) {
+    public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2, GlobalData.Alliance teamColor) {
         this.hardwareMap = hw;
+        this.teamColor = teamColor;
 
         // Initialize Gamepads
         gamepadEx1 = new GamepadEx(gamepad1);

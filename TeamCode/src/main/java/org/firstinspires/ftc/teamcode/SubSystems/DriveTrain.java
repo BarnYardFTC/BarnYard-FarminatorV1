@@ -86,7 +86,7 @@ public class DriveTrain extends SubsystemBase {
 
     public void drive(double goalT) {
         double spdT = diffToSpeed(goalT);
-        mecanumDriveComponent.driveFieldCentric(0, 0, goalT, getHeadingRadians());
+        drive(0, 0, spdT);
     }
 
 

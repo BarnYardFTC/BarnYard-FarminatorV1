@@ -23,10 +23,10 @@ public class Transfer extends SubsystemBase {
     private CRServo rightBackTrans;
 
     public Transfer(){
-        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
-        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
-        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
-        rightBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightBackTrans");
+//        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
+//        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
+//        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
+//        rightBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightBackTrans");
     }
 
     public void setPower(double power){

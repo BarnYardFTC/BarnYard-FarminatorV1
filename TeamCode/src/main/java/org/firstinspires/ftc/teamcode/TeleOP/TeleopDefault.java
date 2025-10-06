@@ -8,6 +8,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.Utils.GlobalData;
 
 @TeleOp
 public class TeleopDefault extends CommandOpMode {
@@ -18,6 +19,8 @@ public class TeleopDefault extends CommandOpMode {
 
     private static final double SLOW_MODE_TRIGGER_THRESHOLD = 0.05;
 
+    private GlobalData.Alliance teamColor = GlobalData.Alliance.BLUE;
+
 
     @Override
     public void initialize() {
@@ -26,7 +29,7 @@ public class TeleopDefault extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.initBarnRobotSystems(hardwareMap, gamepad1, gamepad2);
+        farminator.initBarnRobotSystems(hardwareMap, gamepad1, gamepad2, teamColor);
 
         // ------------------------
         // Initialize Gamepads

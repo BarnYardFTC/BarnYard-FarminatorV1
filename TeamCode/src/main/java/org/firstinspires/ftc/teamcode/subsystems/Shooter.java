@@ -10,7 +10,7 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooter;
 
     public Shooter() {
-        shooter = BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "shooter");
+        shooter = BarnRobot.getInstance().farminatorHardware.shooter;
     }
 
     public void setPower(double power) {

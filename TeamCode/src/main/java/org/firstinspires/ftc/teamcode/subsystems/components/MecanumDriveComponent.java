@@ -2,16 +2,19 @@ package org.firstinspires.ftc.teamcode.subsystems.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.roboctopi.cuttlefishftcbridge.devices.CuttleMotor;
+
+import org.firstinspires.ftc.teamcode.BarnRobot;
 
 public class MecanumDriveComponent {
 
     /* =========================
        HARDWARE REFERENCES
        ========================= */
-    private final DcMotor leftFront;
-    private final DcMotor rightFront;
-    private final DcMotor leftBack;
-    private final DcMotor rightBack;
+    private final CuttleMotor leftFront;
+    private final CuttleMotor rightFront;
+    private final CuttleMotor leftBack;
+    private final CuttleMotor rightBack;
 
     /* =========================
        MOVEMENT STATE
@@ -32,11 +35,12 @@ public class MecanumDriveComponent {
     /* =========================
        CONSTRUCTOR
        ========================= */
-    public MecanumDriveComponent(DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack) {
-        this.leftFront = leftFront;
-        this.rightFront = rightFront;
-        this.leftBack = leftBack;
-        this.rightBack = rightBack;
+    public MecanumDriveComponent() {
+        this.leftFront = BarnRobot.getInstance().farminatorHardware.leftFrontDrivetrain;
+        this.rightFront = BarnRobot.getInstance().farminatorHardware.rightFrontDrivetrain;
+        this.leftBack = BarnRobot.getInstance().farminatorHardware.leftBackDrivetrain;
+        this.rightBack = BarnRobot.getInstance().farminatorHardware.rightBackDrivetrain;
+
 
         initMotor(DcMotorSimple.Direction.REVERSE, leftFront);
         initMotor(DcMotorSimple.Direction.FORWARD, rightFront);
@@ -50,8 +54,8 @@ public class MecanumDriveComponent {
     /* =========================
        INITIALIZATION HELPERS
        ========================= */
-    private void initMotor(DcMotorSimple.Direction direction, DcMotor motor) {
-        motor.setDirection(direction);
+    private void initMotor(Direction direction, CuttleMotor motor) {
+        motor.setDirection();
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

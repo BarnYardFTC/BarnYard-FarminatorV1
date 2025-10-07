@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
@@ -43,12 +42,7 @@ public class DriveTrain extends SubsystemBase {
     // Custom heading offset
     public DriveTrain(double headingOffset) {
         // Initialize mecanum motors
-        mecanumDriveComponent = new MecanumDriveComponent(
-                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "leftFront"),
-                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "leftBack"),
-                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "rightFront"),
-                BarnRobot.getInstance().hardwareMap.get(DcMotorEx.class, "rightBack")
-        );
+        mecanumDriveComponent = new MecanumDriveComponent();
 
         // Initialize IMU
         imu = BarnRobot.getInstance().hardwareMap.get(IMU.class, "imu");

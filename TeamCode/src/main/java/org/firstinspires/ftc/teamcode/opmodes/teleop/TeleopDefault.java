@@ -2,16 +2,12 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.gamepad.GamepadEx;
-import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.util.GlobalData;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp
 public class TeleopDefault extends CommandOpMode {
-
-    private GamepadEx gamepadEx1, gamepadEx2;
 
     private BarnRobot farminator;
 
@@ -22,19 +18,26 @@ public class TeleopDefault extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.initBarnRobotSystems(hardwareMap, gamepad1, gamepad2);
+        farminator.initBarnRobotSystems(this, new OpModeData());
 
-        // ------------------------
-        // Initialize Gamepads
-        // ------------------------
-        gamepadEx1 = farminator.gamepadEx1;
-        gamepadEx2 = farminator.gamepadEx2;
+
+        /* ----------------------
+              Gamepad Mapping
+           ----------------------*/
+
+        /*
+         example:
+         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                {RUN SOMETHING}
+            );
+         */
 
     }
 
     @Override
     public void run() {
         super.run();
+        farminator.periodic();
         telemetry.update();
     }
 }

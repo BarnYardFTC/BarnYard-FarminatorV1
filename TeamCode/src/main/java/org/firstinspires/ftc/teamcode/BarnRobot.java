@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.seattlesolvers.solverslib.command.Robot;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
+import com.seattlesolvers.solverslib.command.Robot;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
-import org.firstinspires.ftc.teamcode.util.GlobalData;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.RobotHardware;
 
 public class BarnRobot extends Robot {
 
@@ -32,10 +32,22 @@ public class BarnRobot extends Robot {
     public GamepadEx gamepadEx2;
 
     // ------------------------------------------------------------
-    // FTC SDK References
+    // Telemetry
     // ------------------------------------------------------------
     public Telemetry telemetry;
-    public HardwareMap hardwareMap;
+
+    // ------------------------------------------------------------
+    // Robot Hardware
+    // ------------------------------------------------------------
+
+    public RobotHardware farminatorHardware;
+
+    // ------------------------------------------------------------
+    // Robot Data
+    // ------------------------------------------------------------
+
+    public OpModeData opmodeData;
+
     // ------------------------------------------------------------
     // Singleton Accessor
     // ------------------------------------------------------------
@@ -49,12 +61,17 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     // Initialization
     // ------------------------------------------------------------
-    public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2) {
-        hardwareMap = hw;
+    public void initBarnRobotSystems(OpMode opMode, OpModeData opModeData) {
+        // initialize robot hardware
+        farminatorHardware = new RobotHardware(opMode.hardwareMap);
+
+        opmodeData = opModeData;
+
+        this.telemetry = opMode.telemetry;
 
         // Initialize Gamepads
-        gamepadEx1 = new GamepadEx(gamepad1);
-        gamepadEx2 = new GamepadEx(gamepad2);
+        gamepadEx1 = new GamepadEx(opMode.gamepad1);
+        gamepadEx2 = new GamepadEx(opMode.gamepad2);
 
         // Initialize Subsystems
         initTransfer();
@@ -73,5 +90,10 @@ public class BarnRobot extends Robot {
 
     public void initLimeLight() {
         limelight = new LimeLight();
+    }
+
+    public void periodic(){
+        farminatorHardware.periodic();
+        //TODO Add here code that needs to run in the while loop for the code to work
     }
 }

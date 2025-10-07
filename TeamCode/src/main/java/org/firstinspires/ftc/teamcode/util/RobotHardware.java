@@ -33,13 +33,13 @@ public class RobotHardware {
 
     private HardwareMap hw;
 
+    //TODO: set the correct port numbers when implementing cuttleFTCBridge
     private static final int LEFT_FRONT_DRIVETRAIN_PORT = 3;
     private static final int LEFT_BACK_DRIVETRAIN_PORT = 2;
 
     private static final int RIGHT_FRONT_DRIVETRAIN_PORT = 0;
     private static final int RIGHT_BACK_DRIVETRAIN_PORT = 1;
 
-    //TODO: set the port numbers for the hardware devices with -1
     private static final int SHOOTER_PORT = -1;
 
     private static final int INTAKE_PORT = -1;

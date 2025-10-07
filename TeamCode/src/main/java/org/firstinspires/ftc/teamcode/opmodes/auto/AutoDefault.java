@@ -26,6 +26,5 @@ public class AutoDefault extends CommandOpMode {
     public void run() {
         super.run();
         farminator.periodic();
-        telemetry.update();
     }
 }

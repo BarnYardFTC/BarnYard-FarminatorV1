@@ -93,7 +93,7 @@ public class BarnRobot extends Robot {
     }
 
     public void periodic(){
-        farminatorHardware.periodic();
-        //TODO Add here code that needs to run in the while loop for the code to work
+        //code that always needs to run in the while loop
+        telemetry.update();
     }
 }

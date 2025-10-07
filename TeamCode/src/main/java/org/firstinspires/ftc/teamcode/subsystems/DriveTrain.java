@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
@@ -17,6 +18,12 @@ public class DriveTrain extends SubsystemBase {
 
     // -------------------- Mecanum Drive --------------------
     public final MecanumDriveComponent mecanumDriveComponent;
+
+
+    private final PIDController pidControllerYaw;
+    public static double pYaw = 0.05, dYaw = 0; // ToDo: tune PID
+
+    private final double TARGET_RANGE = 0.1;
 
 
     // -------------------- Constructors --------------------
@@ -33,6 +40,7 @@ public class DriveTrain extends SubsystemBase {
 
         initialBotHeading = BarnRobot.getInstance().opmodeData.initialBotHeading;
 
+        pidControllerYaw = new PIDController(pYaw, 0, dYaw);
     }
 
 
@@ -54,6 +62,18 @@ public class DriveTrain extends SubsystemBase {
     }
 
 
+    public void alignToGoal(double yawDiff) {
+        double spdT = diffToSpeed(yawDiff);
+        drive(0, 0, spdT);
+    }
+
+
+
+    private double diffToSpeed(double yawDiff) {
+        double target = yawDiff > 0 ? TARGET_RANGE : -TARGET_RANGE;
+        return pidControllerYaw.calculate(yawDiff, target);
+    }
+
     // -------------------- Commands --------------------
     public Command driveCommand() {
         return new RunCommand(
@@ -61,6 +81,15 @@ public class DriveTrain extends SubsystemBase {
                         BarnRobot.getInstance().gamepadEx1.getLeftX(),
                         BarnRobot.getInstance().gamepadEx1.getLeftY(),
                         BarnRobot.getInstance().gamepadEx1.getRightX()
+                ),
+                this
+        );
+    }
+
+    public Command alignToTagCommand() {
+        return new RunCommand(
+                () -> alignToGoal(
+                        BarnRobot.getInstance().limelight.getDyaw()
                 ),
                 this
         );

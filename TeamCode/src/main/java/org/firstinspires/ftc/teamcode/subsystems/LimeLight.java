@@ -6,7 +6,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.util.GlobalData;
+import org.firstinspires.ftc.teamcode.util.OpModeData.AllianceColor;
 
 import java.util.List;
 
@@ -16,7 +16,6 @@ public class LimeLight extends SubsystemBase {
     private LLResult llResult;
     private double Dx, Dy, Dyaw, Dz;
     private final int PIPELINE = 7;
-    private GlobalData.Alliance teamColor;
 
 
     public LimeLight(){
@@ -28,8 +27,7 @@ public class LimeLight extends SubsystemBase {
     }
 
     public void init() {
-        teamColor = BarnRobot.getInstance().teamColor;
-        limelight = BarnRobot.getInstance().hardwareMap.get(Limelight3A.class, "limelight");
+        limelight = BarnRobot.getInstance().farminatorHardware.limelight;
         limelight.pipelineSwitch(PIPELINE);
     }
 
@@ -64,12 +62,13 @@ public class LimeLight extends SubsystemBase {
     }
     @Override
     public void periodic() {
+        AllianceColor allianceColor = BarnRobot.getInstance().opmodeData.allianceColor;
         llResult = limelight.getLatestResult();
         if (llResult.isValid()){
             List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                if((teamColor == GlobalData.Alliance.BLUE && fr.getFiducialId() == 20) ||
-                        (teamColor == GlobalData.Alliance.RED && fr.getFiducialId() == 24)){
+                if((allianceColor == AllianceColor.BLUE && fr.getFiducialId() == 20) ||
+                        (allianceColor == AllianceColor.RED && fr.getFiducialId() == 24)){
                     calculateD(fr);
                 }
             }

@@ -1,14 +1,11 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
-@TeleOp
-public class TeleopDefault extends CommandOpMode {
-
+public class TestingDefault extends CommandOpMode {
     private BarnRobot farminator;
 
     @Override

@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.roboctopi.cuttlefishftcbridge.devices.CuttleMotor;
-import com.roboctopi.cuttlefishftcbridge.devices.CuttleRevHub;
 
 public class RobotHardware {
 
@@ -16,17 +17,19 @@ public class RobotHardware {
 
     public IMU imu;
 
-    public CuttleRevHub ctrlHub;
-    public CuttleRevHub expHub;
+//    private RevCuttleHub ctrlHub;
+//    private RevCuttleHub expHub;
 
-    public CuttleMotor leftFrontDrivetrain;
-    public CuttleMotor rightFrontDrivetrain;
-    public CuttleMotor rightBackDrivetrain;
-    public CuttleMotor leftBackDrivetrain;
+    public DcMotorEx leftFrontDrivetrain;
+    public DcMotorEx rightFrontDrivetrain;
+    public DcMotorEx rightBackDrivetrain;
+    public DcMotorEx leftBackDrivetrain;
 
-    public CuttleMotor shooter;
+    public DcMotorEx shooter;
 
-    public CuttleMotor intake;
+    public DcMotorEx intake;
+
+    public Limelight3A limelight;
 
     private HardwareMap hw;
 
@@ -54,6 +57,14 @@ public class RobotHardware {
     private static final String LEFT_BACK_TRANSFER_CONFIG_NAME = "leftBackTransfer";
     private static final String RIGHT_BACK_TRANSFER_CONFIG_NAME = "rightBackTransfer";
 
+    private static final String LEFT_FRONT_DRIVETRAIN_CONFIG_NAME = "leftFrontDrivetrain";
+    private static final String RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME = "rightFrontDrivetrain";
+    private static final String LEFT_BACK_DRIVETRAIN_CONFIG_NAME = "leftBackDrivetrain";
+    private static final String RIGHT_BACK_DRIVETRAIN_CONFIG_NAME = "rightBackDrivetrain";
+
+    private static final String SHOOTER_CONFIG_NAME = "shooter";
+    private static final String INTAKE_CONFIG_NAME = "intake";
+
     public static final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
             new RevHubOrientationOnRobot(
                     RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
@@ -63,35 +74,31 @@ public class RobotHardware {
 
     public RobotHardware(HardwareMap hw){
         this.hw = hw;
-        initHubs();
         initMotors();
         initServos();
         initSensors();
     }
 
-    public void periodic(){
-        expHub.pullBulkData();
-        ctrlHub.pullBulkData();
+
+    private void periodic(){
+//        ctrlHub.pullBackData();
+//        expHub.pullBackData();
     }
 
-
     private void initHubs(){
-        ctrlHub = new CuttleRevHub(hw,CuttleRevHub.HubTypes.CONTROL_HUB);
-        expHub = new CuttleRevHub(hw,"Expansion Hub 1");
+//        ctrlHub = new CuttleRevHub(hw,CuttleRevHub.HubTypes.CONTROL_HUB);
+//        expHub = new CuttleRevHub(hw,"Expansion Hub 1");
     }
 
     private void initMotors(){
-        leftFrontDrivetrain  = expHub.getMotor(LEFT_FRONT_DRIVETRAIN_PORT);
-        leftBackDrivetrain = expHub.getMotor(LEFT_BACK_DRIVETRAIN_PORT);
+        leftFrontDrivetrain  = hw.get(DcMotorEx.class, LEFT_FRONT_DRIVETRAIN_CONFIG_NAME);
+        leftBackDrivetrain = hw.get(DcMotorEx.class, LEFT_BACK_DRIVETRAIN_CONFIG_NAME);
+        rightFrontDrivetrain = hw.get(DcMotorEx.class, RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME);
+        rightBackDrivetrain = hw.get(DcMotorEx.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
 
-        rightFrontDrivetrain = ctrlHub.getMotor(RIGHT_FRONT_DRIVETRAIN_PORT);
-        rightBackDrivetrain = ctrlHub.getMotor(RIGHT_BACK_DRIVETRAIN_PORT);
+        shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
 
-        // TODO: change if connected to expansion hub
-        shooter = ctrlHub.getMotor(SHOOTER_PORT);
-
-        // TODO: change if connected to expansion hub
-        intake = ctrlHub.getMotor(INTAKE_PORT);
+        intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
     }
 
     private void initServos(){
@@ -103,6 +110,7 @@ public class RobotHardware {
 
     private void initSensors(){
         imu = hw.get(IMU.class, "imu");
+        limelight = hw.get(Limelight3A.class, "limelight");
     }
 
 }

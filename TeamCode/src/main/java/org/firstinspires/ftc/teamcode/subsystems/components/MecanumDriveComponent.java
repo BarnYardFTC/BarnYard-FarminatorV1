@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.roboctopi.cuttlefishftcbridge.devices.CuttleMotor;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
@@ -11,10 +11,10 @@ public class MecanumDriveComponent {
     /* =========================
        HARDWARE REFERENCES
        ========================= */
-    private final CuttleMotor leftFront;
-    private final CuttleMotor rightFront;
-    private final CuttleMotor leftBack;
-    private final CuttleMotor rightBack;
+    private final DcMotorEx leftFront;
+    private final DcMotorEx rightFront;
+    private final DcMotorEx leftBack;
+    private final DcMotorEx rightBack;
 
     /* =========================
        MOVEMENT STATE
@@ -54,8 +54,8 @@ public class MecanumDriveComponent {
     /* =========================
        INITIALIZATION HELPERS
        ========================= */
-    private void initMotor(Direction direction, CuttleMotor motor) {
-        motor.setDirection();
+    private void initMotor(DcMotorSimple.Direction direction, DcMotorEx motor) {
+        motor.setDirection(direction);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

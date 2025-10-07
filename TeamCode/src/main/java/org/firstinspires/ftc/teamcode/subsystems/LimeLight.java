@@ -59,7 +59,7 @@ public class LimeLight extends SubsystemBase {
           you need to use getRoll and in order to get yaw
            you need to use getPitch. Don't change it
          */
-        Dx = fr.getTargetPoseCameraSpace().getPosition().x;
+        Dyaw = fr.getTargetXDegrees();
         Dy = fr.getTargetPoseCameraSpace().getPosition().y;
         Dz = fr.getTargetPoseCameraSpace().getPosition().z;
 

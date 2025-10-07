@@ -6,10 +6,10 @@ import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.SubSystems.DriveTrain;
-import org.firstinspires.ftc.teamcode.SubSystems.LimeLight;
-import org.firstinspires.ftc.teamcode.SubSystems.Transfer;
-import org.firstinspires.ftc.teamcode.Utils.GlobalData;
+import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.util.GlobalData;
 
 public class BarnRobot extends Robot {
 
@@ -36,8 +36,6 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
-
-    public GlobalData.Alliance teamColor;
     // ------------------------------------------------------------
     // Singleton Accessor
     // ------------------------------------------------------------
@@ -51,9 +49,8 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     // Initialization
     // ------------------------------------------------------------
-    public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2, GlobalData.Alliance teamColor) {
-        this.hardwareMap = hw;
-        this.teamColor = teamColor;
+    public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2) {
+        hardwareMap = hw;
 
         // Initialize Gamepads
         gamepadEx1 = new GamepadEx(gamepad1);
@@ -76,6 +73,5 @@ public class BarnRobot extends Robot {
 
     public void initLimeLight() {
         limelight = new LimeLight();
-        limelight.start();
     }
 }

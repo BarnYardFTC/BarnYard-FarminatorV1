@@ -11,8 +11,6 @@ import org.firstinspires.ftc.teamcode.util.GlobalData;
 @TeleOp
 public class TeleopDefault extends CommandOpMode {
 
-    private GamepadEx gamepadEx1, gamepadEx2;
-
     private BarnRobot farminator;
 
     @Override
@@ -23,12 +21,6 @@ public class TeleopDefault extends CommandOpMode {
         // ------------------------
         farminator = BarnRobot.getInstance();
         farminator.initBarnRobotSystems(hardwareMap, gamepad1, gamepad2);
-
-        // ------------------------
-        // Initialize Gamepads
-        // ------------------------
-        gamepadEx1 = farminator.gamepadEx1;
-        gamepadEx2 = farminator.gamepadEx2;
 
     }
 

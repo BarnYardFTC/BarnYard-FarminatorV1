@@ -65,7 +65,7 @@ public class RobotHardware {
     private static final String SHOOTER_CONFIG_NAME = "shooter";
     private static final String INTAKE_CONFIG_NAME = "intake";
 
-    public static final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
+    public final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
             new RevHubOrientationOnRobot(
                     RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                     RevHubOrientationOnRobot.UsbFacingDirection.UP

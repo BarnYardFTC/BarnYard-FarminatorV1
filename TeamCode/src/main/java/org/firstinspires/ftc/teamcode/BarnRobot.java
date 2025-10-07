@@ -62,10 +62,9 @@ public class BarnRobot extends Robot {
     // Initialization
     // ------------------------------------------------------------
     public void initBarnRobotSystems(OpMode opMode, OpModeData opModeData) {
-        // initialize robot hardware
-        farminatorHardware = new RobotHardware(opMode.hardwareMap);
+        opmodeData = opModeData; //has to be first thing in this function
 
-        opmodeData = opModeData;
+        farminatorHardware = new RobotHardware(opMode.hardwareMap);
 
         this.telemetry = opMode.telemetry;
 

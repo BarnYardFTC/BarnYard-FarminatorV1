@@ -18,6 +18,11 @@ public class DriveTrain extends SubsystemBase {
     public IMU imu;
     private double headingOffset;
 
+    private final PIDController pidControllerYaw;
+    public static double pYaw = 0.05, dYaw = 0; // ToDo: tune PID
+
+    private final double TARGET_RANGE = 0.1;
+
 
     // -------------------- Mecanum Drive --------------------
     public final MecanumDriveComponent mecanumDriveComponent;
@@ -25,9 +30,9 @@ public class DriveTrain extends SubsystemBase {
 
     // -------------------- IMU Orientation Configuration --------------------
     private static final RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING =
-            RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+            RevHubOrientationOnRobot.LogoFacingDirection.UP;
     private static final RevHubOrientationOnRobot.UsbFacingDirection USB_FACING =
-            RevHubOrientationOnRobot.UsbFacingDirection.UP;
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
     private final IMU.Parameters imuParameters =
             new IMU.Parameters(new RevHubOrientationOnRobot(LOGO_FACING, USB_FACING));
@@ -57,6 +62,8 @@ public class DriveTrain extends SubsystemBase {
 
         // Set heading offset
         this.headingOffset = headingOffset;
+
+        pidControllerYaw = new PIDController(pYaw, 0, dYaw);
     }
 
 
@@ -77,6 +84,11 @@ public class DriveTrain extends SubsystemBase {
         mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
     }
 
+    public void alignToGoal(double yawDiff) {
+        double spdT = diffToSpeed(yawDiff);
+        drive(0, 0, spdT);
+    }
+
 
     // -------------------- Commands --------------------
     public Command driveCommand() {
@@ -85,6 +97,20 @@ public class DriveTrain extends SubsystemBase {
                         BarnRobot.getInstance().gamepadEx1.getLeftX(),
                         BarnRobot.getInstance().gamepadEx1.getLeftY(),
                         BarnRobot.getInstance().gamepadEx1.getRightX()
+                ),
+                this
+        );
+    }
+
+    private double diffToSpeed(double yawDiff) {
+        double target = yawDiff > 0 ? TARGET_RANGE : -TARGET_RANGE;
+        return pidControllerYaw.calculate(yawDiff, target);
+    }
+
+    public Command alignToTag() {
+        return new RunCommand(
+                () -> alignToGoal(
+                        BarnRobot.getInstance().limelight.getDyaw()
                 ),
                 this
         );

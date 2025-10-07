@@ -36,6 +36,8 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
+
+    public GlobalData.Alliance teamColor;
     // ------------------------------------------------------------
     // Singleton Accessor
     // ------------------------------------------------------------
@@ -49,8 +51,9 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     // Initialization
     // ------------------------------------------------------------
-    public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2) {
-        hardwareMap = hw;
+    public void initBarnRobotSystems(HardwareMap hw, Gamepad gamepad1, Gamepad gamepad2, GlobalData.Alliance teamColor) {
+        this.hardwareMap = hw;
+        this.teamColor = teamColor;
 
         // Initialize Gamepads
         gamepadEx1 = new GamepadEx(gamepad1);
@@ -73,5 +76,6 @@ public class BarnRobot extends Robot {
 
     public void initLimeLight() {
         limelight = new LimeLight();
+        limelight.start();
     }
 }

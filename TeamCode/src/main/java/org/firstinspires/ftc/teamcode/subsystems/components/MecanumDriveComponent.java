@@ -11,10 +11,10 @@ public class MecanumDriveComponent {
     /* =========================
        HARDWARE REFERENCES
        ========================= */
-    private final DcMotorEx leftFront;
-    private final DcMotorEx rightFront;
-    private final DcMotorEx leftBack;
-    private final DcMotorEx rightBack;
+    private final DcMotor leftFront;
+    private final DcMotor rightFront;
+    private final DcMotor leftBack;
+    private final DcMotor rightBack;
 
     /* =========================
        MOVEMENT STATE
@@ -54,7 +54,7 @@ public class MecanumDriveComponent {
     /* =========================
        INITIALIZATION HELPERS
        ========================= */
-    private void initMotor(DcMotorSimple.Direction direction, DcMotorEx motor) {
+    private void initMotor(DcMotorSimple.Direction direction, DcMotor motor) {
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

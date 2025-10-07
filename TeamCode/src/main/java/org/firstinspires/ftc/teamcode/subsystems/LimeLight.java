@@ -44,7 +44,9 @@ public class LimeLight extends SubsystemBase {
         return Dy;
     }
 
-
+    public boolean isValid(){
+        return llResult.isValid();
+    }
 
     public double getDyaw() {
         return Dyaw;
@@ -57,7 +59,9 @@ public class LimeLight extends SubsystemBase {
           you need to use getRoll and in order to get yaw
            you need to use getPitch. Don't change it
          */
-        Dyaw = fr.getTargetPoseCameraSpace().getPosition().x;
+        Dx = fr.getTargetPoseCameraSpace().getPosition().x;
+        Dy = fr.getTargetPoseCameraSpace().getPosition().y;
+        Dz = fr.getTargetPoseCameraSpace().getPosition().z;
 
     }
     @Override
@@ -67,18 +71,24 @@ public class LimeLight extends SubsystemBase {
         if (llResult.isValid()){
             List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                if((allianceColor == AllianceColor.BLUE && fr.getFiducialId() == 20) ||
-                        (allianceColor == AllianceColor.RED && fr.getFiducialId() == 24)){
-                    calculateD(fr);
-                }
+                calculateD(fr);
+//                if((allianceColor ==   AllianceColor.BLUE && fr.getFiducialId() == 20) ||
+//                        (allianceColor == AllianceColor.RED && fr.getFiducialId() == 24)){
+//                    calculateD(fr);
+//                }
             }
         }
     }
 
-    public void displayTelemetry(){
-        BarnRobot.getInstance().telemetry.addData("Dx", Dx);
-        BarnRobot.getInstance().telemetry.addData("Dz", Dz);
-        BarnRobot.getInstance().telemetry.addData("Dyaw", Dyaw);
+    public void displayTelemetry() {
+        boolean valid = llResult != null && llResult.isValid();
+        BarnRobot.getInstance().telemetry.addData("Detected", valid);
+        if (valid) {
+            BarnRobot.getInstance().telemetry.addData("Dx", Dx);
+            BarnRobot.getInstance().telemetry.addData("Dy", Dy);
+            BarnRobot.getInstance().telemetry.addData("Dz", Dz);
+            BarnRobot.getInstance().telemetry.addData("Dyaw", Dyaw);
+        }
     }
 }
 

@@ -11,7 +11,7 @@ public class OpModeData {
         BLUE
     }
 
-    public static OpModeData defaultOpmodeData = new OpModeData(AllianceColor.RED, 0);
+    public static OpModeData defaultOpmodeData = new OpModeData(AllianceColor.BLUE, 0);
 
     public OpModeData(AllianceColor allianceColor, double initialBotHeading){
         this.allianceColor = allianceColor;

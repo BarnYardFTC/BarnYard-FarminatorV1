@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDController;
@@ -63,6 +64,7 @@ public class DriveTrain extends SubsystemBase {
 
 
     public void alignToGoal(double yawDiff) {
+        if(!BarnRobot.getInstance().limelight.isValid())return;
         double spdT = diffToSpeed(yawDiff);
         drive(0, 0, spdT);
     }
@@ -70,8 +72,8 @@ public class DriveTrain extends SubsystemBase {
 
 
     private double diffToSpeed(double yawDiff) {
-        double target = yawDiff > 0 ? TARGET_RANGE : -TARGET_RANGE;
-        return pidControllerYaw.calculate(yawDiff, target);
+//        double target = yawDiff > 0 ? TARGET_RANGE : -TARGET_RANGE;
+        return pidControllerYaw.calculate(yawDiff, 0);
     }
 
     // -------------------- Commands --------------------
@@ -93,5 +95,10 @@ public class DriveTrain extends SubsystemBase {
                 ),
                 this
         );
+    }
+    public void displayPower(){
+        BarnRobot.getInstance().telemetry.addData("spdX x:", mecanumDriveComponent.getSpdX());
+        BarnRobot.getInstance().telemetry.addData("spdX y:", mecanumDriveComponent.getSpdY());
+        BarnRobot.getInstance().telemetry.addData("spdX t:", mecanumDriveComponent.getSpdTurn());
     }
 }

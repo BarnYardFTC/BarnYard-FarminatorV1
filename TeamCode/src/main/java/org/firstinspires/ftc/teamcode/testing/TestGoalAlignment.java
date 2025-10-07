@@ -39,8 +39,8 @@ public class TestGoalAlignment extends CommandOpMode {
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> farminator.drive.resetHeading());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .toggleWhenPressed(farminator.drive.alignToTagCommand());
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .whileHeld(farminator.drive.alignToTagCommand());
 
     }
 
@@ -48,6 +48,7 @@ public class TestGoalAlignment extends CommandOpMode {
     public void run() {
         super.run();
         farminator.limelight.displayTelemetry();
+        farminator.drive.displayPower();
         telemetry.update();
     }
 }

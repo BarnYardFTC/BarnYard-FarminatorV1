@@ -80,6 +80,7 @@ public class BarnRobot extends Robot {
 
     public void initDrivetrain() {
         drive = new DriveTrain();
+        register(drive);
         drive.setDefaultCommand(drive.driveCommand());
     }
 
@@ -89,6 +90,7 @@ public class BarnRobot extends Robot {
 
     public void initLimeLight() {
         limelight = new LimeLight();
+        limelight.start();
     }
 
     public void periodic(){

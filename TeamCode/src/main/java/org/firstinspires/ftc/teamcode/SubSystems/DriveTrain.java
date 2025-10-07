@@ -9,7 +9,6 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.opencv.core.Mat;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -84,8 +83,8 @@ public class DriveTrain extends SubsystemBase {
         mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
     }
 
-    public void drive(double goalT) { //TODO: you should rename this function to something like "turn" because it can be confusing
-        double spdT = diffToSpeed(goalT);
+    public void alignToGoal(double yawDiff) {
+        double spdT = diffToSpeed(yawDiff);
         drive(0, 0, spdT);
     }
 
@@ -102,14 +101,14 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
-    private double diffToSpeed(double diff) {
-        double target = diff > 0 ? TARGET_RANGE : -TARGET_RANGE;
-        return pidControllerYaw.calculate(diff, target);
+    private double diffToSpeed(double yawDiff) {
+        double target = yawDiff > 0 ? TARGET_RANGE : -TARGET_RANGE;
+        return pidControllerYaw.calculate(yawDiff, target);
     }
 
     public Command alignToTag() {
         return new RunCommand(
-                () -> drive(
+                () -> alignToGoal(
                         BarnRobot.getInstance().limelight.getDyaw()
                 ),
                 this

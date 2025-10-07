@@ -38,13 +38,6 @@ public class BarnRobot extends Robot {
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
 
-    // ------------------------------------------------------------
-    // Commands
-    // ------------------------------------------------------------
-    //TODO: remove the this command section, we don't use commands this way anymore
-    public Command driveCommand;
-
-
     public GlobalData.Alliance teamColor;
     // ------------------------------------------------------------
     // Singleton Accessor

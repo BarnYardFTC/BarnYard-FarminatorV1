@@ -1,19 +1,14 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-
-import java.util.Set;
 
 public class Transfer extends SubsystemBase {
 
@@ -22,11 +17,13 @@ public class Transfer extends SubsystemBase {
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
 
-    public Transfer(){ //TODO: I think you need to reverse the two right servos
-//        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
-//        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
-//        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
-//        rightBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightBackTrans");
+    public Transfer(){
+        leftFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftFrontTrans");
+        leftBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "leftBackTrans");
+        rightFrontTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightFrontTrans");
+        rightBackTrans = BarnRobot.getInstance().hardwareMap.get(CRServo.class, "rightBackTrans");
+        rightBackTrans.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontTrans.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void setPower(double power){
@@ -36,14 +33,14 @@ public class Transfer extends SubsystemBase {
         rightBackTrans.setPower(power);
     }
 
-    public Command transfer(double power){ //TODO: it's better to call the function setPowerCommand because transfer is an action
+    public Command setPowerCommand(double power){
         return new InstantCommand(() -> setPower(power), this);
     }
 
     public Command transferCommand(){
         return new SequentialCommandGroup(
-                transfer(1),
+                setPowerCommand(1),
                 new WaitCommand(2000),
-                transfer(0));
+                setPowerCommand(0));
     }
 }

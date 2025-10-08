@@ -30,14 +30,25 @@ public class Transfer extends SubsystemBase {
         rightBackTrans.setPower(power);
     }
 
-    public Command setPowerCommand(double power){
-        return new InstantCommand(() -> setPower(power), this);
+    public void stopTransfer(){
+        setPower(0);
+    }
+
+    public void startTransfer(){
+        setPower(1);
+    }
+
+    public Command startTransferCommand(){
+        return new InstantCommand(() -> startTransfer(), this);
+    }
+    public Command stopTransferCommand(){
+        return new InstantCommand(() -> stopTransfer(), this);
     }
 
     public Command transferCommand(){
         return new SequentialCommandGroup(
-                new InstantCommand(() -> setPower(1), this),
+                startTransferCommand(),
                 new WaitCommand(2000),
-                new InstantCommand(() -> setPower(0), this));
+                stopTransferCommand());
     }
 }

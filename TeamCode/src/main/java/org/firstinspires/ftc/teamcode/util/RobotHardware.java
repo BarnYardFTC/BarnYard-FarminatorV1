@@ -75,7 +75,7 @@ public class RobotHardware {
     public RobotHardware(HardwareMap hw){
         this.hw = hw;
         initMotors();
-        initServos();
+//        initServos();
         initSensors();
     }
 
@@ -96,7 +96,7 @@ public class RobotHardware {
         rightFrontDrivetrain = hw.get(DcMotorEx.class, RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME);
         rightBackDrivetrain =  hw.get(DcMotorEx.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
 
-        shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
+//        shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
     }
@@ -110,7 +110,7 @@ public class RobotHardware {
 
     private void initSensors(){
         imu = hw.get(IMU.class, "imu");
-        limelight = hw.get(Limelight3A.class, "limelight");
+//        limelight = hw.get(Limelight3A.class, "limelight");
     }
 
 }

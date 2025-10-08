@@ -21,15 +21,15 @@ public class LimeLight extends SubsystemBase {
 
 
     public LimeLight(){
-        init();
+        switchPipeline(BLUE_PIPELINE);
+        limelight = BarnRobot.getInstance().farminatorHardware.limelight;
         Dyaw = 0;
-        limelight.pipelineSwitch();
     }
 
-    public void init() {
-        limelight = BarnRobot.getInstance().farminatorHardware.limelight;
-        limelight.pipelineSwitch();
+    public void switchPipeline(int pipeline) {
+        limelight.pipelineSwitch(pipeline);
     }
+
 
     // This function is required to execute right when the OpMode starts (after init)
     public void start(){

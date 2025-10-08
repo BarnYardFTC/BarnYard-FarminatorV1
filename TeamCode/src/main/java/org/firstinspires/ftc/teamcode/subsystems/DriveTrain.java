@@ -88,6 +88,12 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
+    public Command resetHeadingCommand() {
+        return new InstantCommand(
+                () -> resetHeading(), this
+        );
+    }
+
     public Command alignToTagCommand() {
         return new RunCommand(
                 () -> alignToGoal(

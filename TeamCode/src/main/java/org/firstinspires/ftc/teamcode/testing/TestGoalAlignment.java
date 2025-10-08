@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 @TeleOp
 public class TestGoalAlignment extends CommandOpMode {
 
-    private GamepadEx gamepadEx1, gamepadEx2;
 
     private BarnRobot farminator;
 
@@ -25,19 +24,12 @@ public class TestGoalAlignment extends CommandOpMode {
         farminator.initBarnRobotSystems(this, new OpModeData(OpModeData.AllianceColor.BLUE));
 
         // ------------------------
-        // Initialize Gamepads
-        // ------------------------
-        gamepadEx1 = farminator.gamepadEx1;
-        gamepadEx2 = farminator.gamepadEx2;
-
-
-        // ------------------------
         // Button Mappings
         // ------------------------
 
         // Reset heading with X
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(() -> farminator.drive.resetHeading());
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(farminator.drive.resetHeadingCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whileHeld(farminator.drive.alignToTagCommand());

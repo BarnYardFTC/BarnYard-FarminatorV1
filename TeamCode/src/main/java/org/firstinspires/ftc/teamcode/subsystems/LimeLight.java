@@ -14,34 +14,26 @@ public class LimeLight extends SubsystemBase {
 
     private Limelight3A limelight;
     private LLResult llResult;
-    private double Dx, Dy, Dyaw, Dz;
-    private final int PIPELINE = 7;
+    private double Dyaw;
+    private final int STANDART_PIPELINE = 0;
+    private final int BLUE_PIPELINE = 1;
+    private final int RED_PIPELINE = 2;
 
 
     public LimeLight(){
         init();
-        Dx = 0;
-        Dy = 0;
         Dyaw = 0;
-        limelight.pipelineSwitch(PIPELINE);
+        limelight.pipelineSwitch();
     }
 
     public void init() {
         limelight = BarnRobot.getInstance().farminatorHardware.limelight;
-        limelight.pipelineSwitch(PIPELINE);
+        limelight.pipelineSwitch();
     }
 
     // This function is required to execute right when the OpMode starts (after init)
     public void start(){
         limelight.start();
-    }
-
-    public double getDx() {
-        return Dx;
-    }
-
-    public double getDy(){
-        return Dy;
     }
 
     public boolean isValid(){
@@ -60,9 +52,6 @@ public class LimeLight extends SubsystemBase {
            you need to use getPitch. Don't change it
          */
         Dyaw = fr.getTargetXDegrees();
-        Dy = fr.getTargetPoseCameraSpace().getPosition().y;
-        Dz = fr.getTargetPoseCameraSpace().getPosition().z;
-
     }
     @Override
     public void periodic() {
@@ -84,9 +73,6 @@ public class LimeLight extends SubsystemBase {
         boolean valid = llResult != null && llResult.isValid();
         BarnRobot.getInstance().telemetry.addData("Detected", valid);
         if (valid) {
-            BarnRobot.getInstance().telemetry.addData("Dx", Dx);
-            BarnRobot.getInstance().telemetry.addData("Dy", Dy);
-            BarnRobot.getInstance().telemetry.addData("Dz", Dz);
             BarnRobot.getInstance().telemetry.addData("Dyaw", Dyaw);
         }
     }

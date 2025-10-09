@@ -39,7 +39,7 @@ public class TestingDefault extends CommandOpMode {
 //                        .whenActive(farminator.transfer.activateTransfer())
 //                        .whenInactive(farminator.transfer.activateTransfer());
 //
-//    }
+    }
 
     @Override
     public void run() {

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -31,7 +32,14 @@ public class TestingDefault extends CommandOpMode {
          */
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(farminator.transfer.transferCommand());
-    }
+
+//        Trigger leftTrigger = new Trigger(
+//                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05
+//
+//                        .whenActive(farminator.transfer.activateTransfer())
+//                        .whenInactive(farminator.transfer.activateTransfer());
+//
+//    }
 
     @Override
     public void run() {

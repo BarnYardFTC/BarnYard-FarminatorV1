@@ -15,6 +15,8 @@ public class Transfer extends SubsystemBase {
     private CRServo leftBackTrans;
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
+    private final double DEFAULT_POWER=1;
+    private final int COMMAND_WAIT_TIME =2000; //might need this? not entirely sure
 
     public Transfer(){
         leftFrontTrans = BarnRobot.getInstance().farminatorHardware.leftFrontTransfer;
@@ -35,20 +37,20 @@ public class Transfer extends SubsystemBase {
     }
 
     public void startTransfer(){
-        setPower(1);
+        setPower(DEFAULT_POWER);
     }
 
-    public Command startTransferCommand(){
+    public Command activateTransfer(){
         return new InstantCommand(() -> startTransfer(), this);
     }
-    public Command stopTransferCommand(){
+    public Command deactivateTransfer(){
         return new InstantCommand(() -> stopTransfer(), this);
     }
 
     public Command transferCommand(){
         return new SequentialCommandGroup(
-                startTransferCommand(),
-                new WaitCommand(2000),
-                stopTransferCommand());
+                activateTransfer(),
+                new WaitCommand(COMMAND_WAIT_TIME),
+                deactivateTransfer());
     }
 }

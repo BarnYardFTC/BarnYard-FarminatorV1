@@ -60,11 +60,10 @@ public class LimeLight extends SubsystemBase {
         if (llResult.isValid()){
             List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                calculateD(fr);
-//                if((allianceColor ==   AllianceColor.BLUE && fr.getFiducialId() == 20) ||
-//                        (allianceColor == AllianceColor.RED && fr.getFiducialId() == 24)){
-//                    calculateD(fr);
-//                }
+                if((allianceColor ==   AllianceColor.BLUE && fr.getFiducialId() == 20) ||
+                        (allianceColor == AllianceColor.RED && fr.getFiducialId() == 24)){
+                    calculateD(fr);
+                }
             }
         }
     }

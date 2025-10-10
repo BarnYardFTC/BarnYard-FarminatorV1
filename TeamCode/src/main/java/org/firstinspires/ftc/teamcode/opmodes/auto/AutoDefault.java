@@ -6,7 +6,10 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.ActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
+
+import java.util.Collections;
 
 public class AutoDefault extends CommandOpMode {
     private BarnRobot farminator;
@@ -25,7 +28,7 @@ public class AutoDefault extends CommandOpMode {
                 .strafeToLinearHeading(new Vector2d(10,10), Math.toRadians(90));
 
         new SequentialCommandGroup(
-
+                new ActionCommand(path1.build(), Collections.emptySet())
         ).schedule();
 
     }

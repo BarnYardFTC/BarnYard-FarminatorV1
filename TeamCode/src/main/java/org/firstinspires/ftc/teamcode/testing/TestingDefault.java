@@ -38,7 +38,7 @@ public class TestingDefault extends CommandOpMode {
 //        )
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.intake.intakeSequence());
+                .whenPressed(farminator.intake.activateIntake());
 
     }
 

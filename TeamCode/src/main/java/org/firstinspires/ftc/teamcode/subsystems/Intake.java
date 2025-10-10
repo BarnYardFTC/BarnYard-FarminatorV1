@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.seattlesolvers.solverslib.command.Command;
@@ -9,10 +10,12 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+
+@Config
 public class Intake extends SubsystemBase {
 
     private DcMotorEx intake;
-    private final double DEFAULT_POWER = 1;
+    private static double DEFAULT_POWER = 1;
 
     public Intake(){
         this.intake = BarnRobot.getInstance().farminatorHardware.intake;

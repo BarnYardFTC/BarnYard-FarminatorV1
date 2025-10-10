@@ -18,7 +18,7 @@ public class Transfer extends SubsystemBase {
     private CRServo leftBackTrans;
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
-    private final double DEFAULT_POWER = 1;
+    private static  double DEFAULT_POWER = 1;
     public static int TRANSFER_ONE_DURATION = 800;
     public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
 

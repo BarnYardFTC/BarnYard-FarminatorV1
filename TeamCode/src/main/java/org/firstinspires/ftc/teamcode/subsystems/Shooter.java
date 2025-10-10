@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -8,9 +9,10 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+@Config
 public class Shooter  extends SubsystemBase {
     private DcMotorEx shooter;
-    public final double DEFAULT_POWER = 0.6;
+    public static  double DEFAULT_POWER = 0.6;
 
     public Shooter() {
         shooter = BarnRobot.getInstance().farminatorHardware.shooter;

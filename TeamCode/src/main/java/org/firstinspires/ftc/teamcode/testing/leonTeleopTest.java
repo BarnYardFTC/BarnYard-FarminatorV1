@@ -25,8 +25,8 @@ public class leonTeleopTest extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
 
-            shooter.setPower(0.5);
-            intake.setPower(0.5);
+            shooter.setPower(0.7);
+            intake.setPower(1);
             leftBack.setPower(1);
             leftFront.setPower(1);
             rightBack.setPower(1);

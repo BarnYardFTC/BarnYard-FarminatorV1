@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -9,20 +11,26 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+@Config //Needed if we want to tune out values in dashboard
 public class Transfer extends SubsystemBase {
 
     private CRServo leftFrontTrans;
     private CRServo leftBackTrans;
     private CRServo rightFrontTrans;
     private CRServo rightBackTrans;
-    private final double DEFAULT_POWER=1;
-    private final int COMMAND_WAIT_TIME =2000; //might need this? not entirely sure
+    private final double DEFAULT_POWER = 1;
+    public static int TRANSFER_ONE_DURATION = 800;
+    public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
 
     public Transfer(){
         leftFrontTrans = BarnRobot.getInstance().farminatorHardware.leftFrontTransfer;
         leftBackTrans = BarnRobot.getInstance().farminatorHardware.leftBackTransfer;
         rightFrontTrans = BarnRobot.getInstance().farminatorHardware.rightFrontTransfer;
         rightBackTrans = BarnRobot.getInstance().farminatorHardware.rightBackTransfer;
+
+        // Needed so that positive power = transfer
+        leftFrontTrans.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackTrans.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void setPower(double power){
@@ -32,25 +40,73 @@ public class Transfer extends SubsystemBase {
         rightBackTrans.setPower(power);
     }
 
-    public void stopTransfer(){
+    public void setBackPower(double power){
+        leftBackTrans.setPower(power);
+        rightBackTrans.setPower(power);
+    }
+
+    public void setFrontPower(double power){
+        leftFrontTrans.setPower(power);
+        rightFrontTrans.setPower(power);
+    }
+
+    public void deactivateTransfer(){
         setPower(0);
     }
 
-    public void startTransfer(){
+    public void activateTransfer(){
         setPower(DEFAULT_POWER);
     }
 
-    public Command activateTransfer(){
-        return new InstantCommand(() -> startTransfer(), this);
+    public void activateBackTransfer(){
+        setBackPower(DEFAULT_POWER);
     }
-    public Command deactivateTransfer(){
-        return new InstantCommand(() -> stopTransfer(), this);
+    public void deactivateBackTransfer(){
+        setBackPower(0);
     }
 
-    public Command transferCommand(){
+    public void activateFrontTransfer(){
+        setFrontPower(DEFAULT_POWER);
+    }
+    public void deactivateFrontTransfer(){
+        setFrontPower(0);
+    }
+
+
+    public Command activateTransferCommand(){
+        return new InstantCommand(() -> activateTransfer(), this);
+    }
+    public Command deactivateTransferCommand(){
+        return new InstantCommand(() -> deactivateTransfer(), this);
+    }
+
+    public Command activateBackTransferCommand(){
+        return new InstantCommand(() -> activateBackTransfer(), this);
+    }
+
+    public Command activateFrontTransferCommand(){
+        return new InstantCommand(() -> activateFrontTransfer(), this);
+    }
+
+    public Command deactivateBackTransferCommand(){
+        return new InstantCommand(() -> deactivateBackTransfer(), this);
+    }
+
+    public Command deactivateFrontTransferCommand(){
+        return new InstantCommand(() -> deactivateFrontTransfer(), this);
+    }
+
+    public Command transferOneCommand(){
         return new SequentialCommandGroup(
-                activateTransfer(),
-                new WaitCommand(COMMAND_WAIT_TIME),
-                deactivateTransfer());
+                activateTransferCommand(),
+                new WaitCommand(TRANSFER_ONE_DURATION),
+                deactivateTransferCommand());
+    }
+
+    public Command transferAllCommand(){
+        return new SequentialCommandGroup(
+                activateTransferCommand(),
+                new WaitCommand(TRANSFER_ALL_DURATION),
+                deactivateTransferCommand());
     }
 }

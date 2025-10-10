@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.roadrunner.Pose2d;
+
 public class OpModeData {
 
     public AllianceColor allianceColor;
 
     public double initialBotHeading;
+
+    public Pose2d startPose;
 
     public enum AllianceColor {
         RED,
@@ -16,6 +20,12 @@ public class OpModeData {
     public OpModeData(AllianceColor allianceColor, double initialBotHeading){
         this.allianceColor = allianceColor;
         this.initialBotHeading = initialBotHeading;
+    }
+
+    public OpModeData(AllianceColor allianceColor, Pose2d startPose){
+        this.allianceColor = allianceColor;
+        this.initialBotHeading = initialBotHeading;
+        this.startPose = startPose;
     }
 
     public OpModeData(AllianceColor allianceColor){

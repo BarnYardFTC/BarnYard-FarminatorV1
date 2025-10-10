@@ -15,7 +15,7 @@ public class TestingDefault extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.initBarnRobotSystems(this, new OpModeData());
+        farminator.initBarnRobotSystemsTeleop(this, new OpModeData());
 
 
         /* ----------------------

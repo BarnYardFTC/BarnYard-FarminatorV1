@@ -18,15 +18,15 @@ public class ThreePlusZeroTraj {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-37, -53, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-46, -23), 180)
+                .strafeToLinearHeading(new Vector2d(-11, -11), 180)
                 .waitSeconds(1)
                 .strafeToLinearHeading(new Vector2d(-12, -23), Math.toRadians(270))
                 .strafeToLinearHeading(new Vector2d(-11, -51), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(-46, -23), 180)
+                .strafeToLinearHeading(new Vector2d(-11, -11), 180)
                 .waitSeconds(1)
                 .strafeToLinearHeading(new Vector2d(10.6, -23.1), Math.toRadians(270))
                 .strafeToLinearHeading(new Vector2d(10.6, -51), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(-46, -23), 180)
+                .strafeToLinearHeading(new Vector2d(-11, -11), 180)
 
                 .build());
 

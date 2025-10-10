@@ -96,11 +96,6 @@ public class Transfer extends SubsystemBase {
         return new InstantCommand(() -> deactivateFrontTransfer(), this);
     }
 
-    public Command transferOneCommand(){
-        return new SequentialCommandGroup(
-                activateTransferCommand(),
-                new WaitCommand(TRANSFER_ONE_DURATION),
-                deactivateTransferCommand());
-    }
+
 
 }

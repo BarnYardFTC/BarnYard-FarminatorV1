@@ -103,10 +103,4 @@ public class Transfer extends SubsystemBase {
                 deactivateTransferCommand());
     }
 
-    public Command transferAllCommand(){
-        return new SequentialCommandGroup(
-                activateTransferCommand(),
-                new WaitCommand(TRANSFER_ALL_DURATION),
-                deactivateTransferCommand());
-    }
 }

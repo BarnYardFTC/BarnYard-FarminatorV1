@@ -5,9 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
@@ -25,19 +23,12 @@ public class Intake extends SubsystemBase {
         intake.setPower(power);
     }
 
-    public Command intakeCommand(double power){
+    public Command customIntakeCommand(double power){
         return new RunCommand(() -> setPower(power), this);
     }
 
     public Command activateIntake(){
         return new RunCommand(()-> setPower(DEFAULT_POWER), this);
-    }
-
-    public Command intakeSequence(){
-        return new SequentialCommandGroup(
-                activateIntake(),
-                new WaitCommand(4000),
-                deactivateIntake());
     }
 
     public Command deactivateIntake(){

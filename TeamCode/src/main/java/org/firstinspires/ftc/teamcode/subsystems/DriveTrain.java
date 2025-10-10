@@ -17,6 +17,8 @@ public class DriveTrain extends SubsystemBase {
     // -------------------- Constants --------------------
     public static double pYaw = 0.05, dYaw = 0; // TODO: Tune PID
 
+    private final double ALIGNMENT_TURNING_SPEED = 0.5;
+
     // -------------------- Hardware --------------------
     private final IMU imu;
     private final MecanumDriveComponent mecanumDriveComponent;
@@ -90,7 +92,7 @@ public class DriveTrain extends SubsystemBase {
     private double determineDirection() {
         double upperPointDistance = Math.abs(getHeadingDegrees() - upperPointData());
         double sidePointDistance = Math.abs(getHeadingDegrees());
-        return upperPointDistance > sidePointDistance ? 1 : -1;
+        return upperPointDistance > sidePointDistance ? ALIGNMENT_TURNING_SPEED : -ALIGNMENT_TURNING_SPEED;
     }
 
     /** Aligns robot to the AprilTag or approximate field direction */

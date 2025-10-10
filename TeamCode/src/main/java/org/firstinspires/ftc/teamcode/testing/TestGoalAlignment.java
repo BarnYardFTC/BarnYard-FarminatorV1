@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -40,7 +39,7 @@ public class TestGoalAlignment extends CommandOpMode {
     public void run() {
         super.run();
         farminator.limelight.displayTelemetry();
-        farminator.drive.displayPower();
+        farminator.drive.displaySpd();
         telemetry.update();
     }
 }

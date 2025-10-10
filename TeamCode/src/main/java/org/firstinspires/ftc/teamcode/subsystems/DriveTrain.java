@@ -68,7 +68,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /** Displays current drivetrain power output on telemetry */
-    public void displayPower() {
+    public void displaySpd() {
         BarnRobot.getInstance().telemetry.addData("spdX x", mecanumDriveComponent.getSpdX());
         BarnRobot.getInstance().telemetry.addData("spdY y", mecanumDriveComponent.getSpdY());
         BarnRobot.getInstance().telemetry.addData("spdTurn t", mecanumDriveComponent.getSpdTurn());
@@ -88,9 +88,9 @@ public class DriveTrain extends SubsystemBase {
 
     /** Determines turn direction when Limelight is invalid */
     private double determineDirection() {
-        double upperPoint = Math.abs(getHeadingDegrees() - upperPointData());
-        double sidePoint = Math.abs(getHeadingDegrees());
-        return upperPoint > sidePoint ? 1 : -1;
+        double upperPointDistance = Math.abs(getHeadingDegrees() - upperPointData());
+        double sidePointDistance = Math.abs(getHeadingDegrees());
+        return upperPointDistance > sidePointDistance ? 1 : -1;
     }
 
     /** Aligns robot to the AprilTag or approximate field direction */
@@ -99,6 +99,7 @@ public class DriveTrain extends SubsystemBase {
 
         if (!BarnRobot.getInstance().limelight.isValid()) {
             turnSpeed = determineDirection(); // fallback turn direction
+            // TODO: You determined the turningDirection, but what about the turning speed? you just assume the speed needs to be 1... Add a variable "TURNING_SPEED"
         } else {
             double yawDiff = BarnRobot.getInstance().limelight.getDyaw();
             turnSpeed = diffToSpeed(yawDiff);
@@ -141,6 +142,12 @@ public class DriveTrain extends SubsystemBase {
     /** Continuously aligns robot to the target (using Limelight or fallback) */
     public Command alignToTagCommand() {
         return new RunCommand(this::alignToGoal, this);
+
+        /* TODO:
+            Whenever this Command executes it TestGoalAlignment, it will run the method "alignToGoal" continuously non-stop until the end the OpMode. Not Good.
+            You don't need to change this command. just add another RunCommand called "stopAligningCommand()" and use the two RunCommands in a Conditional Command.
+            The Condition is that the robot is aligned to the goal (difference < tolerance)
+         */
     }
 
     public void periodic() {

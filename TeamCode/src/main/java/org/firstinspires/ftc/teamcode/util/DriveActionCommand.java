@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.seattlesolvers.solverslib.command.CommandBase;
 
 public class DriveActionCommand extends CommandBase {
@@ -10,8 +11,8 @@ public class DriveActionCommand extends CommandBase {
     private final Action action;
     private boolean finished = false;
 
-    public DriveActionCommand(Action action) {
-        this.action = action;
+    public DriveActionCommand(TrajectoryActionBuilder action) {
+        this.action = action.build();
     }
 
     @Override

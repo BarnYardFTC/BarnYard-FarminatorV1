@@ -11,10 +11,24 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 public class IntakeCommandGroup extends SequentialCommandGroup {
     public static int INTAKE_TIME = 4000;
 
-    public Command IntakeCommand() {
+    public Command autoIntakeCommand() {
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().intake.activateIntake(),
-                new WaitCommand(4000),
+                BarnRobot.getInstance().transfer.activateFrontTransferCommand(),
+                new WaitCommand(INTAKE_TIME),
+                BarnRobot.getInstance().transfer.deactivateTransferCommand(),
                 BarnRobot.getInstance().intake.deactivateIntake());
+    }
+
+    public Command activateIntakeCommand(){
+        return new SequentialCommandGroup(
+                BarnRobot.getInstance().intake.activateIntake(),
+                BarnRobot.getInstance().transfer.activateFrontTransferCommand());
+    }
+
+    public Command deactivateIntakeCommand(){
+        return new SequentialCommandGroup(
+                BarnRobot.getInstance().intake.deactivateIntake(),
+                BarnRobot.getInstance().transfer.deactivateTransferCommand());
     }
 }

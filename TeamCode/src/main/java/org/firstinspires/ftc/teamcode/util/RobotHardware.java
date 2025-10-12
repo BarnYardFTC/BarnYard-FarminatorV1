@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -75,7 +76,7 @@ public class RobotHardware {
     public RobotHardware(HardwareMap hw){
         this.hw = hw;
         initMotors();
-//        initServos();
+        initServos();
         initSensors();
     }
 
@@ -96,9 +97,10 @@ public class RobotHardware {
         rightFrontDrivetrain = hw.get(DcMotorEx.class, RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME);
         rightBackDrivetrain =  hw.get(DcMotorEx.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
 
-//        shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
+        shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void initServos(){
@@ -106,6 +108,9 @@ public class RobotHardware {
         rightFrontTransfer = hw.get(CRServo.class, RIGHT_FRONT_TRANSFER_CONFIG_NAME);
         leftBackTransfer =   hw.get(CRServo.class, LEFT_BACK_TRANSFER_CONFIG_NAME);
         rightBackTransfer =  hw.get(CRServo.class, RIGHT_BACK_TRANSFER_CONFIG_NAME);
+
+        leftFrontTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void initSensors(){

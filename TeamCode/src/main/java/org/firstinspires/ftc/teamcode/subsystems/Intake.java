@@ -31,7 +31,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command activateIntake(){
-        return new RunCommand(()-> setPower(DEFAULT_POWER), this);
+        return new InstantCommand(()-> setPower(DEFAULT_POWER), this);
     }
 
     public Command deactivateIntake(){

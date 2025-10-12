@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 
 @Config
 public class ShootSequenceCommandGroup extends SequentialCommandGroup {
-    public static int SHOOT_PREP_TIME = 1000;
+    public static int SHOOT_PREP_TIME = 4000;
     public Command shootAllCommand(){
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().shooter.activateShooterCommand(),

@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -52,15 +53,15 @@ public class RobotHardware {
             RIGHT_BACK_TRANSFER_PORT = -1;
      */
 
-    private static final String LEFT_FRONT_TRANSFER_CONFIG_NAME = "leftFrontTransfer";
+    private static final String LEFT_FRONT_TRANSFER_CONFIG_NAME =  "leftFrontTransfer";
     private static final String RIGHT_FRONT_TRANSFER_CONFIG_NAME = "rightFrontTransfer";
-    private static final String LEFT_BACK_TRANSFER_CONFIG_NAME = "leftBackTransfer";
-    private static final String RIGHT_BACK_TRANSFER_CONFIG_NAME = "rightBackTransfer";
+    private static final String LEFT_BACK_TRANSFER_CONFIG_NAME =   "leftBackTransfer";
+    private static final String RIGHT_BACK_TRANSFER_CONFIG_NAME =  "rightBackTransfer";
 
-    private static final String LEFT_FRONT_DRIVETRAIN_CONFIG_NAME = "leftFrontDrivetrain";
+    private static final String LEFT_FRONT_DRIVETRAIN_CONFIG_NAME =  "leftFrontDrivetrain";
     private static final String RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME = "rightFrontDrivetrain";
-    private static final String LEFT_BACK_DRIVETRAIN_CONFIG_NAME = "leftBackDrivetrain";
-    private static final String RIGHT_BACK_DRIVETRAIN_CONFIG_NAME = "rightBackDrivetrain";
+    private static final String LEFT_BACK_DRIVETRAIN_CONFIG_NAME =   "leftBackDrivetrain";
+    private static final String RIGHT_BACK_DRIVETRAIN_CONFIG_NAME =  "rightBackDrivetrain";
 
     private static final String SHOOTER_CONFIG_NAME = "shooter";
     private static final String INTAKE_CONFIG_NAME = "intake";
@@ -92,25 +93,29 @@ public class RobotHardware {
 
     private void initMotors(){
         leftFrontDrivetrain  = hw.get(DcMotorEx.class, LEFT_FRONT_DRIVETRAIN_CONFIG_NAME);
-        leftBackDrivetrain = hw.get(DcMotorEx.class, LEFT_BACK_DRIVETRAIN_CONFIG_NAME);
+        leftBackDrivetrain =   hw.get(DcMotorEx.class, LEFT_BACK_DRIVETRAIN_CONFIG_NAME);
         rightFrontDrivetrain = hw.get(DcMotorEx.class, RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME);
-        rightBackDrivetrain = hw.get(DcMotorEx.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
+        rightBackDrivetrain =  hw.get(DcMotorEx.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
 
         shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void initServos(){
-        leftFrontTransfer = hw.get(CRServo.class, LEFT_FRONT_TRANSFER_CONFIG_NAME);
+        leftFrontTransfer =  hw.get(CRServo.class, LEFT_FRONT_TRANSFER_CONFIG_NAME);
         rightFrontTransfer = hw.get(CRServo.class, RIGHT_FRONT_TRANSFER_CONFIG_NAME);
-        leftBackTransfer = hw.get(CRServo.class, LEFT_BACK_TRANSFER_CONFIG_NAME);
-        rightBackTransfer = hw.get(CRServo.class, RIGHT_BACK_TRANSFER_CONFIG_NAME);
+        leftBackTransfer =   hw.get(CRServo.class, LEFT_BACK_TRANSFER_CONFIG_NAME);
+        rightBackTransfer =  hw.get(CRServo.class, RIGHT_BACK_TRANSFER_CONFIG_NAME);
+
+        leftFrontTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     private void initSensors(){
         imu = hw.get(IMU.class, "imu");
-        limelight = hw.get(Limelight3A.class, "limelight");
+//        limelight = hw.get(Limelight3A.class, "limelight");
     }
 
 }

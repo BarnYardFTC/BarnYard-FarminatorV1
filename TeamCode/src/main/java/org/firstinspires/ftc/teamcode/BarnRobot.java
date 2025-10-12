@@ -6,7 +6,9 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.command.Robot;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.RobotHardware;
@@ -24,6 +26,8 @@ public class BarnRobot extends Robot {
     public Transfer transfer;
     public DriveTrain drive;
     public LimeLight limelight;
+    public Shooter shooter;
+    public Intake intake;
 
     // ------------------------------------------------------------
     // Gamepads
@@ -76,6 +80,12 @@ public class BarnRobot extends Robot {
         initTransfer();
         initDrivetrain();
         initLimeLight();
+        initShooter();
+        initIntake();
+    }
+
+    public void initShooter() {
+        shooter = new Shooter();
     }
 
     public void initDrivetrain() {
@@ -89,6 +99,10 @@ public class BarnRobot extends Robot {
 
     public void initLimeLight() {
         limelight = new LimeLight();
+    }
+
+    public void initIntake(){
+        intake = new Intake();
     }
 
     public void periodic(){

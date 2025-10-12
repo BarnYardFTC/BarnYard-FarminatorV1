@@ -38,20 +38,18 @@ public class RobotHardware {
     private static final int LEFT_FRONT_DRIVETRAIN_PORT = 3;
     private static final int LEFT_BACK_DRIVETRAIN_PORT = 2;
 
-    private static final int RIGHT_FRONT_DRIVETRAIN_PORT = 0;
-    private static final int RIGHT_BACK_DRIVETRAIN_PORT = 1;
+    private static final int RIGHT_FRONT_DRIVETRAIN_PORT = 1;
+    private static final int RIGHT_BACK_DRIVETRAIN_PORT = 0;
 
-    private static final int SHOOTER_PORT = -1;
+    private static final int SHOOTER_PORT = 2;
 
-    private static final int INTAKE_PORT = -1;
+    private static final int INTAKE_PORT = 1;
 
-    /*
-    Written in here just so we can remember the ports. No usage.
-            LEFT_FRONT_TRANSFER_PORT = -1;
-            RIGHT_FRONT_TRANSFER_PORT = -1;
-            LEFT_BACK_TRANSFER_PORT = -1;
-            RIGHT_BACK_TRANSFER_PORT = -1;
-     */
+    private static final int LEFT_FRONT_TRANSFER_PORT = 0;
+    private static final int RIGHT_FRONT_TRANSFER_PORT = 5;
+    private static final int LEFT_BACK_TRANSFER_PORT = 1;
+    private static final int RIGHT_BACK_TRANSFER_PORT = 4;
+
 
     private static final String LEFT_FRONT_TRANSFER_CONFIG_NAME =  "leftFrontTransfer";
     private static final String RIGHT_FRONT_TRANSFER_CONFIG_NAME = "rightFrontTransfer";

@@ -46,9 +46,9 @@ public class RobotHardware {
     private static final int INTAKE_PORT = 1;
 
     private static final int LEFT_FRONT_TRANSFER_PORT = 0;
-    private static final int RIGHT_FRONT_TRANSFER_PORT = 5;
+    private static final int RIGHT_FRONT_TRANSFER_PORT = 4;
     private static final int LEFT_BACK_TRANSFER_PORT = 1;
-    private static final int RIGHT_BACK_TRANSFER_PORT = 4;
+    private static final int RIGHT_BACK_TRANSFER_PORT = 5;
 
 
     private static final String LEFT_FRONT_TRANSFER_CONFIG_NAME =  "leftFrontTransfer";

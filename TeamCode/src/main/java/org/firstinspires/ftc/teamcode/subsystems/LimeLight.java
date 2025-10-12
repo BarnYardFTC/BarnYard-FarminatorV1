@@ -12,69 +12,132 @@ import java.util.List;
 
 public class LimeLight extends SubsystemBase {
 
-    private Limelight3A limelight;
+    // Hardware
+    private final Limelight3A limelight;
+
+    // Latest vision results
     private LLResult llResult;
+    private List<LLResultTypes.FiducialResult> frs;
+
+    // Vision calculations
     private double Dyaw;
-    private final int STANDART_PIPELINE = 0;
-    private final int BLUE_PIPELINE = 1;
-    private final int RED_PIPELINE = 2;
+    public Pattern obeliskPattern;
 
+    // Pipelines
+    private int currentPipeline;
+    private static final int STANDARD_PIPELINE = 0;
+    private static final int BLUE_PIPELINE = 1;
+    private static final int RED_PIPELINE = 2;
+    private static final int OBELISK_PIPELINE = 3;
 
-    public LimeLight(){
-        switchPipeline(BLUE_PIPELINE);
+    // Staleness tolerances
+    public static final long STANDARD_STALENESS_TOLERANCE = 100;
+    public static final long LOCALIZATION_STALENESS_TOLERANCE = 100;
+
+    // Obelisk patterns
+    public enum Pattern {
+        PPG,
+        PGP,
+        GPP
+    }
+
+    // Constructor
+    public LimeLight() {
         limelight = BarnRobot.getInstance().farminatorHardware.limelight;
+        switchPipeline(STANDARD_PIPELINE);
         Dyaw = 0;
     }
 
+    // --- Pipeline Switching ---
     public void switchPipeline(int pipeline) {
         limelight.pipelineSwitch(pipeline);
+        currentPipeline = pipeline;
+        llResult = null;
+        frs = null;
     }
 
+    public void switchToLocalizationPipeline() {
+        if (BarnRobot.getInstance().opmodeData.allianceColor == AllianceColor.BLUE) {
+            switchPipeline(BLUE_PIPELINE);
+        } else {
+            switchPipeline(RED_PIPELINE);
+        }
+    }
 
-    // This function is required to execute right when the OpMode starts (after init)
-    public void start(){
+    public void switchToObeliskPipeline() {
+        switchPipeline(OBELISK_PIPELINE);
+    }
+
+    // --- Initialization ---
+    public void start() {
         limelight.start();
     }
 
-    public boolean isValid(){
+    // --- Validity Checks ---
+    public boolean isValid() {
         return llResult.isValid();
+    }
+
+    private boolean isDataValid() {
+        if (currentPipeline == OBELISK_PIPELINE) return llResult != null;
+        if (currentPipeline == STANDARD_PIPELINE) return llResult != null && llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
+        if (currentPipeline == BLUE_PIPELINE || currentPipeline == RED_PIPELINE)
+            return llResult != null && llResult.getStaleness() < LOCALIZATION_STALENESS_TOLERANCE;
+        return false;
+    }
+
+    public boolean isPatternFound() {
+        return obeliskPattern != null;
+    }
+
+    // --- Vision Processing ---
+    public void findPattern() {
+        if (isDataValid() && !isPatternFound()) {
+            LLResultTypes.FiducialResult obeliskFr = findLargestAreaFr(frs);
+            obeliskPattern = getObeliskPattern(obeliskFr.getFiducialId());
+        }
+    }
+
+    private LLResultTypes.FiducialResult findLargestAreaFr(List<LLResultTypes.FiducialResult> frs) {
+        LLResultTypes.FiducialResult largestAreaFr = frs.get(0);
+        for (LLResultTypes.FiducialResult fr : frs) {
+            if (fr.getTargetArea() > largestAreaFr.getTargetArea()) {
+                largestAreaFr = fr;
+            }
+        }
+        return largestAreaFr;
+    }
+
+    private Pattern getObeliskPattern(int id) {
+        switch (id) {
+            case 21: return Pattern.GPP;
+            case 22: return Pattern.PGP;
+            case 23: return Pattern.PPG;
+            default: return null;
+        }
+    }
+
+    public void calculateD(LLResultTypes.FiducialResult fr) {
+        Dyaw = fr.getTargetXDegrees();
     }
 
     public double getDyaw() {
         return Dyaw;
     }
 
-    private void calculateD(LLResultTypes.FiducialResult fr){
-
-        /*
-         There is an issue that in order to get pitch
-          you need to use getRoll and in order to get yaw
-           you need to use getPitch. Don't change it
-         */
-        Dyaw = fr.getTargetXDegrees();
-    }
+    // --- Periodic Updates ---
     @Override
     public void periodic() {
-        AllianceColor allianceColor = BarnRobot.getInstance().opmodeData.allianceColor;
         llResult = limelight.getLatestResult();
-        if (llResult.isValid()){
-            List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
-            for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                if((allianceColor ==   AllianceColor.BLUE && fr.getFiducialId() == 20) ||
-                        (allianceColor == AllianceColor.RED && fr.getFiducialId() == 24)){
-                    calculateD(fr);
-                }
-            }
+        if (llResult.isValid() && !llResult.getFiducialResults().isEmpty()) {
+            frs = llResult.getFiducialResults();
         }
     }
 
+    // --- Telemetry ---
     public void displayTelemetry() {
         boolean valid = llResult != null && llResult.isValid();
         BarnRobot.getInstance().telemetry.addData("Detected", valid);
-        if (valid) {
-            BarnRobot.getInstance().telemetry.addData("Dyaw", Dyaw);
-        }
+        BarnRobot.getInstance().telemetry.addData("Pattern", obeliskPattern);
     }
 }
-
-

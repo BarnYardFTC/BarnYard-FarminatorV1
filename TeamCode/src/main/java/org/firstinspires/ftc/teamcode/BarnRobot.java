@@ -27,7 +27,6 @@ public class BarnRobot extends Robot {
     public Transfer transfer;
     public DriveTrain drive;
     public LimeLight limelight;
-    public MecanumDrive autoDrive;
 
     // ------------------------------------------------------------
     // Gamepads
@@ -82,30 +81,9 @@ public class BarnRobot extends Robot {
         initLimeLight();
     }
 
-    public void initBarnRobotSystemsAuto(OpMode opMode, OpModeData opModeData) {
-        opmodeData = opModeData; //has to be first thing in this function
-
-        farminatorHardware = new RobotHardware(opMode.hardwareMap);
-
-        this.telemetry = opMode.telemetry;
-
-        // Initialize Gamepads
-        gamepadEx1 = new GamepadEx(opMode.gamepad1);
-        gamepadEx2 = new GamepadEx(opMode.gamepad2);
-
-        // Initialize Subsystems
-        initTransfer();
-        initAutoDrive(opModeData.startPose, opMode.hardwareMap);
-        initLimeLight();
-    }
-
     public void initDrivetrain() {
         drive = new DriveTrain();
         drive.setDefaultCommand(drive.driveCommand());
-    }
-
-    public void initAutoDrive(Pose2d startPose, HardwareMap hardwareMap){
-        autoDrive = new MecanumDrive(hardwareMap, startPose);
     }
 
     public void initTransfer() {

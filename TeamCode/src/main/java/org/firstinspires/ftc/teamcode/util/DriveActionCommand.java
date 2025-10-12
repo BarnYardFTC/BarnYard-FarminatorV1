@@ -2,26 +2,21 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.Subsystem;
-
-import java.util.Set;
 import com.acmerobotics.roadrunner.Action;
+import com.seattlesolvers.solverslib.command.CommandBase;
 
+public class DriveActionCommand extends CommandBase {
 
-public class ActionCommand implements Command {
     private final Action action;
-    private final Set<Subsystem> requirements;
     private boolean finished = false;
 
-    public ActionCommand(Action action, Set<Subsystem> requirements) {
+    public DriveActionCommand(Action action) {
         this.action = action;
-        this.requirements = requirements;
     }
 
     @Override
-    public Set<Subsystem> getRequirements() {
-        return requirements;
+    public void initialize() {
+        finished = false;
     }
 
     @Override

@@ -118,7 +118,10 @@ public class MecanumDriveComponent {
         rightBack.setPower(rb);
     }
 
-    public void adjustSpeedForHeading(double heading) {
+    public void adjustSpeedForHeading() {
+        double heading = Math.toRadians(
+                (BarnRobot.getInstance().drive.getHeading() - BarnRobot.getInstance().opmodeData.fieldReferenceHeading + 540) % 360 -180
+        );
         double adjustedX = spdX * Math.cos(heading) + spdY * Math.sin(heading);
         double adjustedY = - spdX * Math.sin(heading) + spdY * Math.cos(heading);
 
@@ -140,9 +143,9 @@ public class MecanumDriveComponent {
         return spdTurn;
     }
 
-    public void driveFieldCentric(double x, double y, double turn, double heading) {
+    public void driveFieldCentric(double x, double y, double turn) {
         setSpeed(x, y, turn);
-        adjustSpeedForHeading(heading);
+        adjustSpeedForHeading();
         translateSpeedToPower();
     }
 }

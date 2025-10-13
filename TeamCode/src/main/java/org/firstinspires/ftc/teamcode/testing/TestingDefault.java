@@ -28,7 +28,7 @@ public class TestingDefault extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.initBarnRobotSystems(this, new OpModeData());
+        farminator.initBarnRobotSystems(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270));
 
         intakeCommand = new IntakeCommandGroup();
         shootCommand = new ShootSequenceCommandGroup();

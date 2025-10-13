@@ -42,15 +42,16 @@ public class DriveTrain extends SubsystemBase {
     }
 
     // Get current robot heading in radians (with offset)
-    public double getHeadingRadians() {
+    public double getHeading() {
         // IMU yaw is positive clockwise — negate if needed for field-centric math
-        return Math.toRadians(imu.getRobotYawPitchRollAngles().getYaw() + initialBotHeading);
+        return ((imu.getRobotYawPitchRollAngles().getYaw() + 360) % 360 + initialBotHeading) % 360;
+
     }
 
 
     // -------------------- Drive Methods --------------------
     public void drive(double x, double y, double turn) {
-        mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
+        mecanumDriveComponent.driveFieldCentric(x, y, turn);
     }
 
 

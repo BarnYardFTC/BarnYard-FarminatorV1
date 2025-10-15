@@ -39,14 +39,14 @@ public class TestPatternRecognition extends CommandOpMode {
     @Override
     public void initialize_loop(){
         farminator.limelight.findPattern();
-        telemetry.addData("pattern: ", farminator.limelight.getObeliskPattern());
-        telemetry.update();
+        BarnRobot.getInstance().limelight.periodic();
+        BarnRobot.getInstance().limelight.displayTelemetry();
+        farminator.periodic();
     }
 
     @Override
     public void run() {
         super.run();
-        farminator.limelight.displayTelemetry();
         farminator.periodic();
     }
 }

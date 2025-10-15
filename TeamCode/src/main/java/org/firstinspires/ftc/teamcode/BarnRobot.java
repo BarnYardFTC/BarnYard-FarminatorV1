@@ -90,7 +90,6 @@ public class BarnRobot extends Robot {
 
     public void initLimeLight() {
         limelight = new LimeLight();
-        limelight.start();
     }
 
     public void periodic(){

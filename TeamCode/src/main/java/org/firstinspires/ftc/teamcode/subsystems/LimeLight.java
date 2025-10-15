@@ -51,7 +51,7 @@ public class LimeLight extends SubsystemBase {
     private List<LLResultTypes.FiducialResult> frs;
 
     // Vision data
-    private Pattern obeliskPattern;
+    public static Pattern obeliskPattern;
     private double Dyaw;
     private double goalRange;
 
@@ -108,7 +108,7 @@ public class LimeLight extends SubsystemBase {
 
     public boolean isDataValid() {
         if (currentPipeline == OBELISK_PIPELINE) {
-            return llResult != null;
+            return llResult != null && llResult.isValid() && !llResult.getFiducialResults().isEmpty();
         } else {
             return llResult != null && llResult.isValid() &&
                     llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
@@ -206,6 +206,7 @@ public class LimeLight extends SubsystemBase {
         }
 
         robot.telemetry.addData("Range", goalRange);
+        robot.telemetry.addData("pattern: ", robot.limelight.getObeliskPattern());
     }
 
     // ------------------------------------------------------------

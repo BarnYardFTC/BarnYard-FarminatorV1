@@ -6,31 +6,28 @@ public class OpModeData {
 
     public double initialBotHeading;
 
-    public double fieldReferenceHeading;
-
     public enum AllianceColor {
         RED,
         BLUE
     }
 
-    public static OpModeData defaultOpmodeData = new OpModeData(AllianceColor.RED, 0, 0);
+    public static OpModeData defaultOpmodeData = new OpModeData(AllianceColor.RED, 0);
 
-    public OpModeData(AllianceColor allianceColor, double initialBotHeading, double fieldReferenceHeading) {
+    public OpModeData(AllianceColor allianceColor, double initialBotHeading){
         this.allianceColor = allianceColor;
         this.initialBotHeading = initialBotHeading;
-        this.fieldReferenceHeading = fieldReferenceHeading;
     }
 
     public OpModeData(AllianceColor allianceColor){
-        this(allianceColor, defaultOpmodeData.initialBotHeading, defaultOpmodeData.fieldReferenceHeading);
+        this(allianceColor, defaultOpmodeData.initialBotHeading);
     }
 
     public OpModeData(double initialBotHeading){
-        this(defaultOpmodeData.allianceColor, initialBotHeading, defaultOpmodeData.fieldReferenceHeading);
+        this(defaultOpmodeData.allianceColor, initialBotHeading);
     }
 
     public OpModeData(){
-        this(defaultOpmodeData.allianceColor, defaultOpmodeData.initialBotHeading, defaultOpmodeData.fieldReferenceHeading);
+        this(defaultOpmodeData.allianceColor, defaultOpmodeData.initialBotHeading);
     }
 
 }

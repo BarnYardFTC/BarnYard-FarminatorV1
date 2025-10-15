@@ -18,7 +18,7 @@ public class TestPatternRecognition extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.initBarnRobotSystems(this, new OpModeData());
+        farminator.init(this, new OpModeData());
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
 

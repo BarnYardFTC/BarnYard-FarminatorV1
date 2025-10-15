@@ -18,7 +18,7 @@ public class TeleopMain extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.initBarnRobotSystemsTeleop(this, new OpModeData());
+        farminator.init(this, new OpModeData());
 
 
         /* ----------------------
@@ -31,6 +31,8 @@ public class TeleopMain extends CommandOpMode {
                 {RUN SOMETHING}
             );
          */
+
+
 
     }
 

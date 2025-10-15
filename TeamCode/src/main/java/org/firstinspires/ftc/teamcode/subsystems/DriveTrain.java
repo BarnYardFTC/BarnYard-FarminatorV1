@@ -51,14 +51,14 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /** Get current robot heading in radians (with initial offset) */
-    public double getHeadingRadians() {
+    public double getHeading() {
         // IMU yaw is positive clockwise — negate if needed for field-centric math
         return Math.toRadians(imu.getRobotYawPitchRollAngles().getYaw() + initialBotHeading);
     }
 
     /** Get current robot heading in degrees */
     public double getHeadingDegrees() {
-        return Math.toDegrees(getHeadingRadians());
+        return Math.toDegrees(getHeading());
     }
 
     // ============================================================
@@ -66,7 +66,7 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     public void drive(double x, double y, double turn) {
-        mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeadingRadians());
+        mecanumDriveComponent.driveFieldCentric(x, y, turn, getHeading());
     }
 
     /** Displays current drivetrain power output on telemetry */
@@ -99,7 +99,7 @@ public class DriveTrain extends SubsystemBase {
     private void alignToGoal() {
         double turnSpeed;
 
-        if (!BarnRobot.getInstance().limelight.isValid()) {
+        if (!BarnRobot.getInstance().limelight.isGoalTagDetected()) {
             turnSpeed = determineDirection(); // fallback turn direction
             // TODO: You determined the turningDirection, but what about the turning speed? you just assume the speed needs to be 1... Add a variable "TURNING_SPEED"
         } else {

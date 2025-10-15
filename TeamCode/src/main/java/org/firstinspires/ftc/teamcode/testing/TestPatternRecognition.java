@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name="pattern recognition", group="test")
@@ -18,7 +19,7 @@ public class TestPatternRecognition extends CommandOpMode {
         // ------------------------
         farminator = BarnRobot.getInstance();
         farminator.initBarnRobotSystems(this, new OpModeData());
-        farminator.limelight.switchToObeliskPipeline();
+        farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
 
         /* ----------------------
@@ -38,7 +39,8 @@ public class TestPatternRecognition extends CommandOpMode {
     @Override
     public void initialize_loop(){
         farminator.limelight.findPattern();
-        if (farminator.limelight.isPatternFound()) farminator.limelight.switchToLocalizationPipeline();
+        telemetry.addData("pattern: ", farminator.limelight.getObeliskPattern());
+        telemetry.update();
     }
 
     @Override

@@ -18,10 +18,10 @@ public class LimeLight extends SubsystemBase {
     // ------------------------------------------------------------
 
     // Pipelines
-    private static final int STANDARD_PIPELINE = 0;
-    private static final int BLUE_PIPELINE = 1;
-    private static final int RED_PIPELINE = 2;
-    private static final int OBELISK_PIPELINE = 3;
+    public static final int STANDARD_PIPELINE = 0;
+    public static final int BLUE_PIPELINE = 1;
+    public static final int RED_PIPELINE = 2;
+    public static final int OBELISK_PIPELINE = 3;
 
     // Polling and staleness
     public static final int STANDARD_STALENESS_TOLERANCE = 100;
@@ -46,7 +46,7 @@ public class LimeLight extends SubsystemBase {
     // Hardware & State
     // ------------------------------------------------------------
 
-    private final Limelight3A limelight;
+    private Limelight3A limelight;
     private LLResult llResult;
     private List<LLResultTypes.FiducialResult> frs;
 
@@ -63,15 +63,24 @@ public class LimeLight extends SubsystemBase {
     // ------------------------------------------------------------
 
     public LimeLight() {
-        limelight = BarnRobot.getInstance().farminatorHardware.limelight;
-        limelight.setPollRateHz(POLL_RATE_HZ);
+        init();
         switchPipeline(STANDARD_PIPELINE);
-        Dyaw = 0;
+    }
+    private void init(){
+        limelight = BarnRobot.getInstance().farminatorHardware.limelight;
+        resetData();
+        limelight.setPollRateHz(POLL_RATE_HZ);
         start();
     }
 
     public void start() {
         limelight.start();
+    }
+
+    private void resetData(){
+        llResult = null;
+        frs = null;
+        Dyaw = 0;
     }
 
     // ------------------------------------------------------------
@@ -81,8 +90,7 @@ public class LimeLight extends SubsystemBase {
     public void switchPipeline(int pipeline) {
         limelight.pipelineSwitch(pipeline);
         currentPipeline = pipeline;
-        llResult = null;
-        frs = null;
+
     }
 
     public void switchToLocalizationPipeline() {

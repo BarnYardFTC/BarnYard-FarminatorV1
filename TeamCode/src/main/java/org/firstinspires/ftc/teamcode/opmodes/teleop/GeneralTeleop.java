@@ -6,8 +6,8 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
-@TeleOp
-public class TeleopMain extends CommandOpMode {
+@TeleOp(name="General Teleop", group = "main")
+public class GeneralTeleop extends CommandOpMode {
 
     private BarnRobot farminator;
 

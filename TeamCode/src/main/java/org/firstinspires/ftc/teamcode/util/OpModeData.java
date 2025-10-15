@@ -3,42 +3,32 @@ package org.firstinspires.ftc.teamcode.util;
 public class OpModeData {
 
     public AllianceColor allianceColor;
-
+    public double fieldReferenceHeading;
     public double initialBotHeading;
-
-    public OpModeType opModeType;
 
     public enum AllianceColor {
         RED,
         BLUE
     }
 
-    public enum OpModeType {
-        AUTONOMOUS, TELEOP
-    }
+    public static OpModeData defaultOpmodeData = new OpModeData(AllianceColor.RED, 0, 0);
 
-    public static OpModeData defaultOpmodeData = new OpModeData(AllianceColor.BLUE, 0, OpModeType.TELEOP);
-
-    public OpModeData(AllianceColor allianceColor, double initialBotHeading, OpModeType opModeType){
+    public OpModeData(AllianceColor allianceColor, double initialBotHeading, double fieldReferenceHeading) {
         this.allianceColor = allianceColor;
         this.initialBotHeading = initialBotHeading;
-        this.opModeType = opModeType;
-    }
-
-    public OpModeData(AllianceColor allianceColor, double initialBotHeading){
-        this(allianceColor, initialBotHeading, defaultOpmodeData.opModeType);
+        this.fieldReferenceHeading = fieldReferenceHeading;
     }
 
     public OpModeData(AllianceColor allianceColor){
-        this(allianceColor, defaultOpmodeData.initialBotHeading);
+        this(allianceColor, defaultOpmodeData.initialBotHeading, defaultOpmodeData.fieldReferenceHeading);
     }
 
     public OpModeData(double initialBotHeading){
-        this(defaultOpmodeData.allianceColor, initialBotHeading);
+        this(defaultOpmodeData.allianceColor, initialBotHeading, defaultOpmodeData.fieldReferenceHeading);
     }
 
     public OpModeData(){
-        this(defaultOpmodeData.allianceColor, defaultOpmodeData.initialBotHeading);
+        this(defaultOpmodeData.allianceColor, defaultOpmodeData.initialBotHeading, defaultOpmodeData.fieldReferenceHeading);
     }
 
 }

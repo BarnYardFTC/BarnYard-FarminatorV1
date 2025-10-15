@@ -20,10 +20,10 @@ public class RobotHardware {
 //    private RevCuttleHub ctrlHub;
 //    private RevCuttleHub expHub;
 
-    public DcMotor leftFrontDrivetrain;
-    public DcMotor rightFrontDrivetrain;
-    public DcMotor rightBackDrivetrain;
-    public DcMotor leftBackDrivetrain;
+    public DcMotorEx leftFrontDrivetrain;
+    public DcMotorEx rightFrontDrivetrain;
+    public DcMotorEx rightBackDrivetrain;
+    public DcMotorEx leftBackDrivetrain;
 
     public DcMotorEx shooter;
 
@@ -44,13 +44,12 @@ public class RobotHardware {
 
     private static final int INTAKE_PORT = -1;
 
-    /*
-    Written in here just so we can remember the ports. No usage.
-            LEFT_FRONT_TRANSFER_PORT = -1;
-            RIGHT_FRONT_TRANSFER_PORT = -1;
-            LEFT_BACK_TRANSFER_PORT = -1;
-            RIGHT_BACK_TRANSFER_PORT = -1;
-     */
+
+    private static final int LEFT_FRONT_TRANSFER_PORT = -1;
+    private static final int RIGHT_FRONT_TRANSFER_PORT = -1;
+    private static final int LEFT_BACK_TRANSFER_PORT = -1;
+    private static final int RIGHT_BACK_TRANSFER_PORT = -1;
+
 
     private static final String LEFT_FRONT_TRANSFER_CONFIG_NAME = "leftFrontTransfer";
     private static final String RIGHT_FRONT_TRANSFER_CONFIG_NAME = "rightFrontTransfer";
@@ -91,10 +90,10 @@ public class RobotHardware {
     }
 
     private void initMotors(){
-        leftFrontDrivetrain  = hw.get(DcMotor.class, LEFT_FRONT_DRIVETRAIN_CONFIG_NAME);
-        leftBackDrivetrain = hw.get(DcMotor.class, LEFT_BACK_DRIVETRAIN_CONFIG_NAME);
-        rightFrontDrivetrain = hw.get(DcMotor.class, RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME);
-        rightBackDrivetrain = hw.get(DcMotor.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
+        leftFrontDrivetrain  = hw.get(DcMotorEx.class, LEFT_FRONT_DRIVETRAIN_CONFIG_NAME);
+        leftBackDrivetrain = hw.get(DcMotorEx.class, LEFT_BACK_DRIVETRAIN_CONFIG_NAME);
+        rightFrontDrivetrain = hw.get(DcMotorEx.class, RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME);
+        rightBackDrivetrain = hw.get(DcMotorEx.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
 
 //        shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
 //

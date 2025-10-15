@@ -54,7 +54,7 @@ public class MecanumDriveComponent {
     /* =========================
        INITIALIZATION HELPERS
        ========================= */
-    private void initMotor(DcMotorSimple.Direction direction, DcMotorEx motor) {
+    private void initMotor(DcMotorSimple.Direction direction, DcMotor motor) {
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

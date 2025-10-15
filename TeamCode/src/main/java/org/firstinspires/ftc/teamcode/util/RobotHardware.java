@@ -113,7 +113,7 @@ public class RobotHardware {
 
     private void initSensors(){
         imu = hw.get(IMU.class, "imu");
-//        limelight = hw.get(Limelight3A.class, "limelight");
+        limelight = hw.get(Limelight3A.class, "limelight");
     }
 
 }

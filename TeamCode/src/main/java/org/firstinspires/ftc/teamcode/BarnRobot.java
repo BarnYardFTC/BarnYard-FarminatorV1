@@ -90,6 +90,7 @@ public class BarnRobot extends Robot {
 
     public void initDrivetrain() {
         drive = new DriveTrain();
+        register(drive);
         drive.setDefaultCommand(drive.driveCommand());
     }
 

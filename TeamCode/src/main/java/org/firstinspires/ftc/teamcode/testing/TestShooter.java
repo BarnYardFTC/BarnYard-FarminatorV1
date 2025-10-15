@@ -20,7 +20,7 @@ public class TestShooter extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.initBarnRobotSystems(this, new OpModeData());
+        farminator.initBarnRobotSystemsTeleop(this, new OpModeData());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenActive(farminator.shooter.activateShooterCommand())

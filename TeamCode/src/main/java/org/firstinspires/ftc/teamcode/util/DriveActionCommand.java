@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.command.CommandBase;
 public class DriveActionCommand extends CommandBase {
 
     private final Action action;
-    private boolean finished = false;
+    private boolean finished;
 
     public DriveActionCommand(TrajectoryActionBuilder action) {
         this.action = action.build();

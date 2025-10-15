@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp
-public class TeleopDefault extends CommandOpMode {
+public class TeleopMain extends CommandOpMode {
 
     private BarnRobot farminator;
 

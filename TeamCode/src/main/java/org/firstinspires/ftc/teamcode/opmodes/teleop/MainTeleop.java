@@ -14,14 +14,6 @@ public class MainTeleop extends CommandOpMode {
 
     private BarnRobot farminator;
 
-    /*
-    TODO
-    - A toggle button to activate/deactivate limelight yaw alignment
-    - Display to the telemetry bot's position on the field (based on limelight)
-    - Pattern Recognition implementation in init
-    - A button to activate shootAllCommand
-     */
-
     @Override
     public void initialize() {
 

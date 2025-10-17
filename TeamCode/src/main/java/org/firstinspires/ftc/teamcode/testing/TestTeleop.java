@@ -7,10 +7,20 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name="Test Teleop", group = "main")
 public class TestTeleop extends CommandOpMode {
+
+
+    /*
+    TODO
+    - A toggle button to activate/deactivate limelight yaw alignment v
+    - Display to the telemetry bot's position on the field (based on limelight) v
+    - Pattern Recognition implementation in init v
+    - A button to activate shootAllCommand v
+    */
 
     private BarnRobot farminator;
 
@@ -22,7 +32,6 @@ public class TestTeleop extends CommandOpMode {
         // ------------------------
         farminator = BarnRobot.getInstance();
         farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270));
-
 
         /* ----------------------
               Gamepad Mapping
@@ -65,10 +74,20 @@ public class TestTeleop extends CommandOpMode {
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
         );
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).toggleWhenActive(
-                farminator.drive.alignToTagCommand(),
-                farminator.drive.driveCommand()
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(
+                farminator.drive.alignToTagCommand()
         );
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(
+                ShootSequenceCommandGroup.shootAllCommand()
+        );
+    }
+
+    @Override
+    public void initialize_loop(){
+        farminator.limelight.findPattern();
+        BarnRobot.getInstance().limelight.periodic();
+        BarnRobot.getInstance().limelight.displayTelemetry();
+        farminator.periodic();
     }
 
     @Override

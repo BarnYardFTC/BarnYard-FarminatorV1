@@ -61,6 +61,10 @@ public class Transfer extends SubsystemBase {
     public void activateBackTransfer(){
         setBackPower(DEFAULT_POWER);
     }
+
+    public void activateBackTransfer(double power){
+        setBackPower(power);
+    }
     public void deactivateBackTransfer(){
         setBackPower(0);
     }
@@ -82,6 +86,9 @@ public class Transfer extends SubsystemBase {
 
     public Command activateBackTransferCommand(){
         return new InstantCommand(() -> activateBackTransfer(), this);
+    }
+    public Command activateBackTransferCommand(double power){
+        return new InstantCommand(() -> activateBackTransfer(power), this);
     }
 
     public Command activateFrontTransferCommand(){

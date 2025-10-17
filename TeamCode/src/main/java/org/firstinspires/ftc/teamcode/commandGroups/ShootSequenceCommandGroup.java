@@ -13,14 +13,16 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class ShootSequenceCommandGroup extends SequentialCommandGroup {
     public static int SHOOT_PREP_TIME = 4000;
-    public Command shootAllCommand(){
+    public static Command shootAllCommand(){
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().shooter.activateShooterCommand(),
                 new WaitCommand(SHOOT_PREP_TIME),
                 BarnRobot.getInstance().transfer.activateTransferCommand(),
+                BarnRobot.getInstance().intake.activateIntake(),
                 new WaitCommand(TRANSFER_ALL_DURATION),
                 BarnRobot.getInstance().transfer.deactivateTransferCommand(),
-                BarnRobot.getInstance().shooter.deactivateShooterCommand());
+                BarnRobot.getInstance().shooter.deactivateShooterCommand(),
+                BarnRobot.getInstance().intake.deactivateIntake());
     }
 
     public Command shootOneCommand(){

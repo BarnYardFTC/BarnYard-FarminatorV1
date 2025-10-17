@@ -27,7 +27,6 @@ public class ThreePlusZeroClose extends CommandOpMode {
     public static double POSE2_Y = -31;
     public static double POSE2_HEADING = Math.toRadians(235);
 
-
     @Override
     public void initialize() {
 
@@ -45,6 +44,14 @@ public class ThreePlusZeroClose extends CommandOpMode {
                 new DriveActionCommand(path1)
         ).schedule();
 
+    }
+
+    @Override
+    public void initialize_loop() {
+        farminator.limelight.findPattern();
+        BarnRobot.getInstance().limelight.periodic();
+        BarnRobot.getInstance().limelight.displayTelemetry();
+        farminator.periodic();
     }
 
     @Override

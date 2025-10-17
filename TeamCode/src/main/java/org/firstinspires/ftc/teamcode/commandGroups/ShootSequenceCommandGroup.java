@@ -22,7 +22,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
                 new WaitCommand(TRANSFER_ALL_DURATION),
                 BarnRobot.getInstance().transfer.deactivateTransferCommand(),
                 BarnRobot.getInstance().shooter.deactivateShooterCommand(),
-                BarnRobot.getInstance().intake.deactivateIntake());
+                BarnRobot.getInstance().intake.deactivateIntakeCommand());
     }
 
     public Command shootOneCommand(){

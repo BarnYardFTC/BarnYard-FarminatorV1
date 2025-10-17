@@ -17,7 +17,7 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
                 BarnRobot.getInstance().transfer.activateFrontTransferCommand(),
                 new WaitCommand(INTAKE_TIME),
                 BarnRobot.getInstance().transfer.deactivateTransferCommand(),
-                BarnRobot.getInstance().intake.deactivateIntake());
+                BarnRobot.getInstance().intake.deactivateIntakeCommand());
     }
 
     public Command activateIntakeCommand(){
@@ -28,7 +28,7 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
 
     public Command deactivateIntakeCommand(){
         return new SequentialCommandGroup(
-                BarnRobot.getInstance().intake.deactivateIntake(),
+                BarnRobot.getInstance().intake.deactivateIntakeCommand(),
                 BarnRobot.getInstance().transfer.deactivateTransferCommand());
     }
 }

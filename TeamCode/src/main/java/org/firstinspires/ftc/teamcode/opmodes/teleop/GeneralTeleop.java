@@ -3,14 +3,10 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.Subsystem;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
-import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name="General Teleop", group = "main")
@@ -32,41 +28,43 @@ public class GeneralTeleop extends CommandOpMode {
               Gamepad Mapping
            ----------------------*/
 
-
-
-
-
-         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                 ShootSequenceCommandGroup.shootAllCommand()
-            );
+         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+                 .whenPressed(farminator.shooter.activateShooterCommand())
+                 .whenInactive(farminator.shooter.deactivateShooterCommand())
+         ;
 
          farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 farminator.transfer.activateFrontTransferCommand()
-         );
+         ).whenInactive(farminator.transfer.deactivateFrontTransferCommand());
 
          farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                  farminator.transfer.activateBackTransferCommand()
-         );
+         ).whenInactive(farminator.transfer.deactivateBackTransferCommand());
+
+         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                 farminator.transfer.activateBackTransferCommand(-1)
+         ).whenInactive(farminator.transfer.activateBackTransferCommand(0));
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+                .whenActive(farminator.intake.activateIntake())
+                .whenInactive(farminator.intake.deactivateIntakeCommand());
+
          new Trigger(
                 () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0
         )
-                .whenActive(farminator.transfer.activateBackTransferCommand(-farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
-                .whenInactive(farminator.transfer.deactivateBackTransferCommand())
-                ;
-        new  Trigger(
+                 .whenActive(farminator.intake.customIntakeCommand(farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
+                 .whenInactive(farminator.intake.deactivateIntakeCommand());
+
+        new Trigger(
                 () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0
         )
-                .whenActive(farminator.intake.customIntakeCommand(farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)))
-                .whenInactive(farminator.intake.deactivateIntake())
-                ;
+                .whenActive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger pressed")))
+                .whenInactive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger not pressed")));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).toggleWhenActive(
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
         );
-
-
-
 
     }
 

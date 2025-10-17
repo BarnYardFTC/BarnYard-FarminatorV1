@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.subsystems.Transfer.TRANSFER_ONE_DU
 
 import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 
@@ -18,11 +19,25 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
                 BarnRobot.getInstance().shooter.activateShooterCommand(),
                 new WaitCommand(SHOOT_PREP_TIME),
                 BarnRobot.getInstance().transfer.activateTransferCommand(),
-                BarnRobot.getInstance().intake.activateIntake(),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
                 new WaitCommand(TRANSFER_ALL_DURATION),
                 BarnRobot.getInstance().transfer.deactivateTransferCommand(),
                 BarnRobot.getInstance().shooter.deactivateShooterCommand(),
                 BarnRobot.getInstance().intake.deactivateIntakeCommand());
+    }
+
+    public static Command activateTransferToShooter(){
+        return new ParallelCommandGroup(
+                BarnRobot.getInstance().transfer.activateTransferCommand(),
+                BarnRobot.getInstance().intake.activateIntakeCommand()
+        );
+    }
+
+    public static Command deactivateTransferToShooter(){
+        return new ParallelCommandGroup(
+                BarnRobot.getInstance().transfer.deactivateTransferCommand(),
+                BarnRobot.getInstance().intake.deactivateIntakeCommand()
+        );
     }
 
     public Command shootOneCommand(){

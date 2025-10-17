@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.commandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
@@ -37,16 +38,10 @@ public class TestTeleop extends CommandOpMode {
               Gamepad Mapping
            ----------------------*/
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.shooter.activateShooterCommand())
-                .whenInactive(farminator.shooter.deactivateShooterCommand())
-        ;
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .toggleWhenPressed(farminator.shooter.activateShooterCommand(), farminator.shooter.deactivateShooterCommand());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                farminator.transfer.activateFrontTransferCommand()
-        ).whenInactive(farminator.transfer.deactivateFrontTransferCommand());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 farminator.transfer.activateBackTransferCommand()
         ).whenInactive(farminator.transfer.deactivateBackTransferCommand());
 
@@ -54,32 +49,26 @@ public class TestTeleop extends CommandOpMode {
                 farminator.transfer.activateBackTransferCommand(-1)
         ).whenInactive(farminator.transfer.activateBackTransferCommand(0));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenActive(farminator.intake.activateIntake())
-                .whenInactive(farminator.intake.deactivateIntakeCommand());
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .whenActive(IntakeCommandGroup.activateIntakeCommand())
+                .whenInactive(IntakeCommandGroup.deactivateIntakeCommand());
 
-        new Trigger(
-                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0
-        )
-                .whenActive(farminator.intake.customIntakeCommand(farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
-                .whenInactive(farminator.intake.deactivateIntakeCommand());
+//        new Trigger(
+//                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0
+//        )
+//                .whenActive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger pressed")))
+//                .whenInactive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger not pressed")));
 
-        new Trigger(
-                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0
-        )
-                .whenActive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger pressed")))
-                .whenInactive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger not pressed")));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).toggleWhenActive(
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
         );
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(
                 farminator.drive.alignToTagCommand()
         );
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(
-                ShootSequenceCommandGroup.shootAllCommand()
-        );
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(ShootSequenceCommandGroup.activateTransferToShooter())
+                .whenInactive(ShootSequenceCommandGroup.deactivateTransferToShooter());
     }
 
     @Override

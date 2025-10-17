@@ -13,20 +13,20 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
 
     public Command autoIntakeCommand() {
         return new SequentialCommandGroup(
-                BarnRobot.getInstance().intake.activateIntake(),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
                 BarnRobot.getInstance().transfer.activateFrontTransferCommand(),
                 new WaitCommand(INTAKE_TIME),
                 BarnRobot.getInstance().transfer.deactivateTransferCommand(),
                 BarnRobot.getInstance().intake.deactivateIntakeCommand());
     }
 
-    public Command activateIntakeCommand(){
+    public static Command activateIntakeCommand(){
         return new SequentialCommandGroup(
-                BarnRobot.getInstance().intake.activateIntake(),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
                 BarnRobot.getInstance().transfer.activateFrontTransferCommand());
     }
 
-    public Command deactivateIntakeCommand(){
+    public static Command deactivateIntakeCommand(){
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().intake.deactivateIntakeCommand(),
                 BarnRobot.getInstance().transfer.deactivateTransferCommand());

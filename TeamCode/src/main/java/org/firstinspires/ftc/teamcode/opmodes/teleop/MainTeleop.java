@@ -46,7 +46,7 @@ public class MainTeleop extends CommandOpMode {
          ).whenInactive(farminator.transfer.activateBackTransferCommand(0));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenActive(farminator.intake.activateIntake())
+                .whenActive(farminator.intake.activateIntakeCommand())
                 .whenInactive(farminator.intake.deactivateIntakeCommand());
 
          new Trigger(

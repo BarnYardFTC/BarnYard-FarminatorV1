@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class Shooter  extends SubsystemBase {
     private DcMotorEx shooter;
-    public static  double DEFAULT_POWER = 0.6;
+    public static  double DEFAULT_POWER = 1;
 
     public Shooter() {
         shooter = BarnRobot.getInstance().farminatorHardware.shooter;

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
 
 @Config
-@Autonomous(name="3+0 close", group = "main")
+@Autonomous(name="3+0 far", group = "main")
 public class ThreePlusZeroFar extends CommandOpMode {
     private BarnRobot farminator;
     private MecanumDrive drive;

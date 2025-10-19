@@ -153,8 +153,10 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
-    public void findDyaw(LLResultTypes.FiducialResult fr) {
-        Dyaw = fr.getTargetXDegrees();
+    public void findDyaw() {
+        if (isDataValid() && isGoalTagDetected()){
+            Dyaw = frs.get(0).getTargetXDegrees();
+        }
     }
 
     public void findRange() {

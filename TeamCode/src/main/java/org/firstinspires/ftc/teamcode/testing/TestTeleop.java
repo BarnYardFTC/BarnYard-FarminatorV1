@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name="Test Teleop", group = "main")
@@ -33,6 +35,7 @@ public class TestTeleop extends CommandOpMode {
         // ------------------------
         farminator = BarnRobot.getInstance();
         farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270));
+        farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
 
         /* ----------------------
               Gamepad Mapping
@@ -63,9 +66,14 @@ public class TestTeleop extends CommandOpMode {
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
         );
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(
-                farminator.drive.alignToTagCommand()
-        );
+
+        new Trigger(
+                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05
+        )
+                .whenActive(farminator.drive.alignToTagCommand())
+                .whenInactive(farminator.drive.driveCommand());
+
+
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(ShootSequenceCommandGroup.activateTransferToShooter())
                 .whenInactive(ShootSequenceCommandGroup.deactivateTransferToShooter());
@@ -82,6 +90,7 @@ public class TestTeleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
+        farminator.limelight.findDyaw();
         farminator.periodic();
     }
 }

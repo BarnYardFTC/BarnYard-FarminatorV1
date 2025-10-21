@@ -46,12 +46,12 @@ public class LimeLight extends SubsystemBase {
     // Hardware & State
     // ------------------------------------------------------------
 
-    private Limelight3A limelight;
+    private final Limelight3A limelight;
     private LLResult llResult;
     private List<LLResultTypes.FiducialResult> frs;
 
     // Vision data
-    public static Pattern obeliskPattern;
+    private Pattern obeliskPattern;
     private double Dyaw;
     private double goalRange;
 
@@ -63,24 +63,15 @@ public class LimeLight extends SubsystemBase {
     // ------------------------------------------------------------
 
     public LimeLight() {
-        init();
-        switchPipeline(STANDARD_PIPELINE);
-    }
-    private void init(){
         limelight = BarnRobot.getInstance().farminatorHardware.limelight;
-        resetData();
         limelight.setPollRateHz(POLL_RATE_HZ);
+        switchPipeline(STANDARD_PIPELINE);
+        Dyaw = 0;
         start();
     }
 
     public void start() {
         limelight.start();
-    }
-
-    private void resetData(){
-        llResult = null;
-        frs = null;
-        Dyaw = 0;
     }
 
     // ------------------------------------------------------------
@@ -90,7 +81,8 @@ public class LimeLight extends SubsystemBase {
     public void switchPipeline(int pipeline) {
         limelight.pipelineSwitch(pipeline);
         currentPipeline = pipeline;
-
+        llResult = null;
+        frs = null;
     }
 
     public void switchToLocalizationPipeline() {
@@ -106,9 +98,9 @@ public class LimeLight extends SubsystemBase {
     // Data Validation
     // ------------------------------------------------------------
 
-    public boolean isDataValid() {
+    private boolean isDataValid() {
         if (currentPipeline == OBELISK_PIPELINE) {
-            return llResult != null && llResult.isValid() && !llResult.getFiducialResults().isEmpty();
+            return llResult != null;
         } else {
             return llResult != null && llResult.isValid() &&
                     llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
@@ -207,8 +199,7 @@ public class LimeLight extends SubsystemBase {
             robot.telemetry.addData("Location", "(" + pose.getPosition().x + ", " + pose.getPosition().y + ")");
         }
 
-        robot.telemetry.addData("Range", goalRange);
-        robot.telemetry.addData("pattern: ", robot.limelight.getObeliskPattern());
+        robot.telemetry.addData("Range", getGoalRange());
     }
 
     // ------------------------------------------------------------

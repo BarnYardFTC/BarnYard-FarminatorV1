@@ -42,15 +42,7 @@ public class TestTeleop extends CommandOpMode {
            ----------------------*/
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .toggleWhenPressed(farminator.shooter.shootAtRangeCommand(), farminator.shooter.deactivateShooterCommand());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                farminator.transfer.activateBackTransferCommand()
-        ).whenInactive(farminator.transfer.deactivateBackTransferCommand());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
-                farminator.transfer.activateBackTransferCommand(-1)
-        ).whenInactive(farminator.transfer.activateBackTransferCommand(0));
+                .toggleWhenPressed(farminator.shooter.activateShooterCommand(), farminator.shooter.deactivateShooterCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .whenActive(IntakeCommandGroup.activateIntakeCommand())
@@ -74,7 +66,7 @@ public class TestTeleop extends CommandOpMode {
                 .whenInactive(farminator.drive.driveCommand());
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(ShootSequenceCommandGroup.activateTransferToShooter())
                 .whenInactive(ShootSequenceCommandGroup.deactivateTransferToShooter());
     }
@@ -91,6 +83,7 @@ public class TestTeleop extends CommandOpMode {
     public void run() {
         super.run();
         farminator.limelight.findDyaw();
+        farminator.limelight.findRange();
         farminator.periodic();
     }
 }

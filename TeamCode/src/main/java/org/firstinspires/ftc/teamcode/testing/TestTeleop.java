@@ -42,7 +42,7 @@ public class TestTeleop extends CommandOpMode {
            ----------------------*/
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .toggleWhenPressed(farminator.shooter.activateShooterCommand(), farminator.shooter.deactivateShooterCommand());
+                .toggleWhenPressed(farminator.shooter.shootAtRangeCommand(), farminator.shooter.deactivateShooterCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 farminator.transfer.activateBackTransferCommand()

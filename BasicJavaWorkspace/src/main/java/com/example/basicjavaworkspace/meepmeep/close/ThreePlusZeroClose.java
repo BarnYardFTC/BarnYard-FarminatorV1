@@ -21,7 +21,6 @@ public class ThreePlusZeroClose {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-37, -53, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(-15.5, -15.5), 180)
-                .waitSeconds(1)
 
 
                 .build());

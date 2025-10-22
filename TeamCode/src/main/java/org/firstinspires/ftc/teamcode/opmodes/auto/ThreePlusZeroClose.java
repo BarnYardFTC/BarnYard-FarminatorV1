@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
@@ -19,12 +20,12 @@ public class ThreePlusZeroClose extends CommandOpMode {
     private BarnRobot farminator;
     private MecanumDrive drive;
 
-    public static double POSE1_X = -39;
+    public static double POSE1_X = -37;
     public static double POSE1_Y = -53;
     public static double POSE1_HEADING = Math.toRadians(90);
 
-    public static double POSE2_X = -45;
-    public static double POSE2_Y = -31;
+    public static double POSE2_X = 0;
+    public static double POSE2_Y = 0;
     public static double POSE2_HEADING = Math.toRadians(235);
 
     @Override
@@ -34,7 +35,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE));
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
         drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))

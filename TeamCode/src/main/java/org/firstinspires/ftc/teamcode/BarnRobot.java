@@ -78,7 +78,9 @@ public class BarnRobot extends Robot {
 
         // Initialize Subsystems
         initTransfer();
-        initDrivetrain();
+        if (opModeData.opModeType == OpModeData.OpModeType.TELEOP){
+            initDrivetrain();
+        }
         initLimeLight();
         initShooter();
         initIntake();

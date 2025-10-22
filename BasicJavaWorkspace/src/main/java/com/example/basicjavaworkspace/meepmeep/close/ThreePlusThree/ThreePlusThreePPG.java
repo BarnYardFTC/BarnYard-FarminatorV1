@@ -1,4 +1,4 @@
-package com.example.basicjavaworkspace.meepmeep.close;
+package com.example.basicjavaworkspace.meepmeep.close.ThreePlusThree;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -6,7 +6,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class ThreePlusThreeGPP {
+public class ThreePlusThreePPG {
 
 
     // The class name now matches the original filename
@@ -23,10 +23,9 @@ public class ThreePlusThreeGPP {
                 .strafeToLinearHeading(new Vector2d(-15.5, -15.5), 180)
                 .waitSeconds(1)
 
-                .strafeToLinearHeading(new Vector2d(34, -23.1), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(34, -51), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(34, -35), Math.toRadians(270))
-
+                .strafeToLinearHeading(new Vector2d(-12, -23.1), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(-11, -51), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(-11, -40), Math.toRadians(270))
                 .strafeToLinearHeading(new Vector2d(-15.5, -15.5), 180)
 
                 .build());

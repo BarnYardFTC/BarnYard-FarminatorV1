@@ -1,0 +1,70 @@
+package org.firstinspires.ftc.teamcode.opmodes.auto;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+
+import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
+
+@Config
+@Autonomous(name="DeBug", group = "main")
+public class DeBug extends CommandOpMode {
+    private BarnRobot farminator;
+    private MecanumDrive drive;
+
+    public static double POSE1_X = -37;
+    public static double POSE1_Y = -53;
+    public static double POSE1_HEADING = Math.toRadians(90);
+
+    public static double POSE2_X = -5;
+    public static double POSE2_Y = -5;
+    public static double POSE2_HEADING = Math.toRadians(90);
+    public static double POSE3_X = 0;
+    public static double POSE3_Y = 0;
+    public static double POSE3_HEADING = Math.toRadians(235);
+
+    @Override
+    public void initialize() {
+
+        // ------------------------
+        // Initialize Robot Systems
+        // ------------------------
+        farminator = BarnRobot.getInstance();
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
+        drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+
+        TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
+
+        TrajectoryActionBuilder turn1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING);
+
+
+        new SequentialCommandGroup(
+                new DriveActionCommand(path1),
+                new DriveActionCommand(turn1)
+        ).schedule();
+
+    }
+
+    @Override
+    public void initialize_loop() {
+        farminator.limelight.findPattern();
+        BarnRobot.getInstance().limelight.periodic();
+        BarnRobot.getInstance().limelight.displayTelemetry();
+        farminator.periodic();
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        farminator.periodic();
+    }
+}

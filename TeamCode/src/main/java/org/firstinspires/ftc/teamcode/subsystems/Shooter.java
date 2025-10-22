@@ -46,7 +46,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public Command activateShooterCommand() {
-        return new InstantCommand(() -> setSpeed(DEFAULT_SPEED), this);
+        return new InstantCommand(() -> shooter.setPower(1), this);
     }
 
     public Command deactivateShooterCommand() {

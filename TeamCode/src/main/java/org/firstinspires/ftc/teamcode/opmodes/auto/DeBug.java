@@ -43,13 +43,13 @@ public class DeBug extends CommandOpMode {
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
 
-        TrajectoryActionBuilder turn1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
+        TrajectoryActionBuilder path2 = path1.endTrajectory()
                 .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING);
 
 
         new SequentialCommandGroup(
                 new DriveActionCommand(path1),
-                new DriveActionCommand(turn1)
+                new DriveActionCommand(path2)
         ).schedule();
 
     }

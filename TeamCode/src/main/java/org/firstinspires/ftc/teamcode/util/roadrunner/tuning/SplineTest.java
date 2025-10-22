@@ -25,11 +25,11 @@ public final class SplineTest extends LinearOpMode {
 
             while (opModeIsActive()){
                 Actions.runBlocking(
-                        drive.actionBuilder(new Pose2d(30, 0, Math.PI/2))
-                                .splineTo(new Vector2d(0, 30), Math.PI)
-                                .splineTo(new Vector2d(-30, 0), Math.PI*1.5)
-                                .splineTo(new Vector2d(0, -30), Math.PI*2)
-                                .splineTo(new Vector2d(30, 0), Math.PI/2)
+                        drive.actionBuilder(new Pose2d(15, 0, Math.PI/2))
+                                .splineTo(new Vector2d(0, 15), Math.PI)
+                                .splineTo(new Vector2d(-15, 0), Math.PI*1.5)
+                                .splineTo(new Vector2d(0, -15), Math.PI*2)
+                                .splineTo(new Vector2d(15, 0), Math.PI/2)
                                 .build()
                 );
             }

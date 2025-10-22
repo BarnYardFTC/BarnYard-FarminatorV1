@@ -20,7 +20,7 @@ public class ThreePlusZeroClose {
                 .build();
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-37, -53, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-15.5, -15.5), 180)
+                .strafeToLinearHeading(new Vector2d(0, 0), Math.toRadians(235))
 
 
                 .build());

@@ -100,7 +100,7 @@ public class LimeLight extends SubsystemBase {
 
     public boolean isDataValid() {
         if (currentPipeline == OBELISK_PIPELINE) {
-            return llResult != null;
+            return llResult != null && llResult.isValid();
         } else {
             return llResult != null && llResult.isValid() &&
                     llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;

@@ -98,7 +98,7 @@ public class LimeLight extends SubsystemBase {
     // Data Validation
     // ------------------------------------------------------------
 
-    private boolean isDataValid() {
+    public boolean isDataValid() {
         if (currentPipeline == OBELISK_PIPELINE) {
             return llResult != null;
         } else {
@@ -198,6 +198,8 @@ public class LimeLight extends SubsystemBase {
         if (pose != null) {
             robot.telemetry.addData("Location", "(" + pose.getPosition().x + ", " + pose.getPosition().y + ")");
         }
+
+        robot.telemetry.addData("pattern: ", obeliskPattern);
 
         robot.telemetry.addData("Range", getGoalRange());
     }

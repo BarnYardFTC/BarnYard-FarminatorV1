@@ -11,16 +11,13 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class ThreePlusZeroClose {
 
-    // -----------------------------
-    // Pose Constants
-    // -----------------------------
-    public static final double START_X = -37;
-    public static final double START_Y = -53;
-    public static final double START_HEADING = Math.toRadians(90);
+    public static double POSE1_X = -37;
+    public static double POSE1_Y = -53;
+    public static double POSE1_HEADING = Math.toRadians(90);
 
-    public static final double TARGET_X = -15.5;
-    public static final double TARGET_Y = -15.5;
-    public static final double TARGET_HEADING = Math.toRadians(225);
+    public static double POSE2_X = -40;
+    public static double POSE2_Y = -15;
+    public static double POSE2_HEADING = Math.toRadians(250);
 
     // -----------------------------
     // Main Simulation
@@ -31,18 +28,18 @@ public class ThreePlusZeroClose {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(13.157, 18.03044)
                 .build();
 
-        // Build trajectory from start → target
-        TrajectoryActionBuilder trajectory = myBot.getDrive().actionBuilder(
-                        new Pose2d(START_X, START_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(TARGET_X, TARGET_Y), TARGET_HEADING);
+        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
+
+
 
         // Run the trajectory
         myBot.runAction(
                 new SequentialAction(
-                        trajectory.build(),
-                        new SleepAction(0.2) // small pause
+                        path1.build()
                 )
         );
 

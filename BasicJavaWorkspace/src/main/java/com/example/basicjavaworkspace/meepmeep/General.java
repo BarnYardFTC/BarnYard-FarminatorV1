@@ -1,6 +1,8 @@
 package com.example.basicjavaworkspace.meepmeep;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -8,6 +10,22 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 // The class name now matches the original filename
 public class General {
+
+    public static double POSE1_X = 0;
+    public static double POSE1_Y = 0;
+    public static double POSE1_HEADING = Math.toRadians(0);
+
+    public static double POSE2_X = 24;
+    public static double POSE2_Y = 0;
+    public static double POSE2_HEADING = Math.toRadians(0);
+    public static double POSE3_X = 24;
+    public static double POSE3_Y = 24;
+    public static double POSE3_HEADING = Math.toRadians(0);
+    public static double POSE4_X = 24;
+    public static double POSE4_Y = 24;
+    public static double POSE4_HEADING = Math.toRadians(90);
+
+
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
@@ -16,18 +34,15 @@ public class General {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-37, -53, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-11, -11), 180)
-                .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(-12, -23), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(-11, -51), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(-11, -11), 180)
-                .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(10.6, -23.1), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(10.6, -51), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(-11, -11), 180)
 
-                .build());
+        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
+                .turnTo(POSE4_HEADING);
+
+        myBot.runAction(
+                new SequentialAction(
+                        path3.build()
+                )
+        );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)

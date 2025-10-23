@@ -31,6 +31,11 @@ public class ThreePlusZeroClose extends CommandOpMode {
     public static double POSE2_Y = -15;
     public static double POSE2_HEADING = Math.toRadians(250);
 
+    public static LimeLight.Pattern OBELISK_PATTERN_PPG = LimeLight.Pattern.PPG;
+    public static LimeLight.Pattern OBELISK_PATTERN_GPP = LimeLight.Pattern.GPP;
+    public static LimeLight.Pattern OBELISK_PATTERN_PGP = LimeLight.Pattern.PGP;
+
+
     @Override
     public void initialize() {
 
@@ -47,8 +52,11 @@ public class ThreePlusZeroClose extends CommandOpMode {
 
 
         new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                    new DriveActionCommand(path1),
+                    BarnRobot.getInstance().shooter.activateShooterCommand()
+                ),
                 BarnRobot.getInstance().shooter.activateShooterCommand(),
-                new DriveActionCommand(path1),
                 farminator.transfer.activateTransferCommand(),
                 farminator.intake.activateIntakeCommand(),
                 new WaitCommand(2000),

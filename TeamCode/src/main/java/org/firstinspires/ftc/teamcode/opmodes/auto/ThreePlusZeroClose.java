@@ -10,7 +10,6 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
@@ -48,23 +47,14 @@ public class ThreePlusZeroClose extends CommandOpMode {
 
 
         new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                    new DriveActionCommand(path1),
-                    new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-                        farminator.shooter.calcAndShootCommand(),
-                        new WaitCommand(500),
-                        farminator.shooter.calcAndShootCommand()
-                    )
-                ),
-                new SequentialCommandGroup(
-                    farminator.transfer.activateTransferCommand(),
-                    farminator.intake.activateIntakeCommand(),
-                    new WaitCommand(2000),
-                    farminator.intake.deactivateIntakeCommand(),
-                    farminator.transfer.deactivateTransferCommand(),
-                    farminator.shooter.deactivateShooterCommand()
-                )
+                new DriveActionCommand(path1),
+                BarnRobot.getInstance().shooter.shootAtRangeCommand(),
+                new WaitCommand(2000),
+                farminator.transfer.activateTransferCommand(),
+                farminator.intake.activateIntakeCommand(),
+                new WaitCommand(2000),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.transfer.deactivateTransferCommand()
         ).schedule();
 
     }

@@ -22,7 +22,7 @@ public class Shooter  extends SubsystemBase {
     private final double SHOOTING_HEIGHT = 0.32;
     private final double SHOOTING_ANGLE = Math.toRadians(53);
     private final double GOAL_HEIGHT = 0.98;
-    public static double SHOOTING_CONSTANT = 4.4;
+    public static double SHOOTING_CONSTANT = 3;  //was 4.4
 
     public Shooter() {
         shooter = BarnRobot.getInstance().farminatorHardware.shooter;
@@ -43,6 +43,10 @@ public class Shooter  extends SubsystemBase {
 
     public Command customShooterCommand(double speed) {
         return new InstantCommand(() -> setSpeed(speed), this);
+    }
+
+    public Command calcAndShootCommand() {
+        return new InstantCommand(() -> setSpeed(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())));
     }
 
     public Command activateShooterCommand() {

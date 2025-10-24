@@ -63,7 +63,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
     public void run() {
         super.run();
         BarnRobot.getInstance().limelight.periodic();
-        BarnRobot.getInstance().limelight.findRange();
+        BarnRobot.getInstance().limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()){
             farminator.limelight.findPattern();
         }

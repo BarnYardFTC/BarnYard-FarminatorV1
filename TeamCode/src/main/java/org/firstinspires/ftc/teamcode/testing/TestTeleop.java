@@ -83,7 +83,7 @@ public class TestTeleop extends CommandOpMode {
     public void run() {
         super.run();
         farminator.limelight.findDyaw();
-        farminator.limelight.findRange();
+        farminator.limelight.findRange(farminator.drive.getHeading());
         farminator.periodic();
     }
 }

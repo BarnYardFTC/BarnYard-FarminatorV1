@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.OpModeData.AllianceColor;
 
 import java.util.List;
@@ -151,9 +152,9 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
-    public void findRange() {
+    public void findRange(double heading) {
         if (isDataValid()) {
-            limelight.updateRobotOrientation(BarnRobot.getInstance().drive.getHeading());
+            limelight.updateRobotOrientation(heading);
             Pose3D botpose_mt2 = llResult.getBotpose_MT2();
             if (botpose_mt2 != null) {
                 double x = botpose_mt2.getPosition().x;

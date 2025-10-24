@@ -49,7 +49,7 @@ public class LimeLight extends SubsystemBase {
 
     private final Limelight3A limelight;
     private LLResult llResult;
-    private List<LLResultTypes.FiducialResult> frs;
+    public List<LLResultTypes.FiducialResult> frs;
 
     // Vision data
     private Pattern obeliskPattern;
@@ -57,7 +57,7 @@ public class LimeLight extends SubsystemBase {
     private double goalRange;
 
     // Current pipeline
-    private int currentPipeline;
+    public int currentPipeline;
 
     // ------------------------------------------------------------
     // Constructor & Initialization
@@ -103,7 +103,7 @@ public class LimeLight extends SubsystemBase {
         if (currentPipeline == OBELISK_PIPELINE) {
             return llResult != null && llResult.isValid();
         } else {
-            return llResult != null && llResult.isValid() &&
+            return llResult != null && frs !=null && !frs.isEmpty() && llResult.isValid() &&
                     llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
         }
     }

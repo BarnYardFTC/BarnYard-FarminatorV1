@@ -51,20 +51,17 @@ public class ThreePlusZeroClose extends CommandOpMode {
                 new ParallelCommandGroup(
                     new DriveActionCommand(path1),
                     new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-                        farminator.shooter.calcAndShootCommand(),
-                        new WaitCommand(500),
-                        farminator.shooter.calcAndShootCommand()
+                        new WaitUntilCommand(() -> true),
+                        farminator.shooter.activateShooterCommand()
                     )
                 ),
-                new SequentialCommandGroup(
-                    farminator.transfer.activateTransferCommand(),
-                    farminator.intake.activateIntakeCommand(),
-                    new WaitCommand(2000),
-                    farminator.intake.deactivateIntakeCommand(),
-                    farminator.transfer.deactivateTransferCommand(),
-                    farminator.shooter.deactivateShooterCommand()
-                )
+                farminator.shooter.calcAndShootCommand(),
+                farminator.transfer.activateTransferCommand(),
+                farminator.intake.activateIntakeCommand(),
+                new WaitCommand(2000),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.transfer.deactivateTransferCommand(),
+                farminator.shooter.deactivateShooterCommand()
         ).schedule();
 
     }
@@ -73,9 +70,12 @@ public class ThreePlusZeroClose extends CommandOpMode {
     public void run() {
         super.run();
         BarnRobot.getInstance().limelight.periodic();
-        BarnRobot.getInstance().limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()){
             farminator.limelight.findPattern();
+        }
+        else if (farminator.limelight.isPatternFound()){
+            if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE) farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
+            BarnRobot.getInstance().limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         }
         farminator.limelight.displayTelemetry();
         farminator.periodic();

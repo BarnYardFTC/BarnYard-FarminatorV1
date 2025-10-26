@@ -44,9 +44,16 @@ public class TestTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .toggleWhenPressed(farminator.shooter.shootAtRangeCommand(), farminator.shooter.deactivateShooterCommand());
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                        .whenActive(farminator.drive.resetHeadingCommand());
+
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .whenActive(IntakeCommandGroup.activateIntakeCommand())
                 .whenInactive(IntakeCommandGroup.deactivateIntakeCommand());
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+                .whenActive(farminator.transfer.unloadTransferCommand())
+                .whenInactive(farminator.transfer.deactivateTransferCommand());
 
 //        new Trigger(
 //                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0

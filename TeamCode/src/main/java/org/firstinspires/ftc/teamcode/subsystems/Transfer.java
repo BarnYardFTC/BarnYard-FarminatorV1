@@ -80,6 +80,9 @@ public class Transfer extends SubsystemBase {
     public Command activateTransferCommand(){
         return new InstantCommand(() -> activateTransfer(), this);
     }
+    public Command unloadTransferCommand(){
+        return new InstantCommand(() -> setPower(-DEFAULT_POWER), this);
+    }
     public Command deactivateTransferCommand(){
         return new InstantCommand(() -> deactivateTransfer(), this);
     }

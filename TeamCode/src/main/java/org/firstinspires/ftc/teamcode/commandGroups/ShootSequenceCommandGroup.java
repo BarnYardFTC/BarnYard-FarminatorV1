@@ -40,7 +40,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         );
     }
 
-    public Command shootOneCommand(){
+    public static Command shootOneCommand(){
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().transfer.activateTransferCommand(),
                 new WaitCommand(TRANSFER_ONE_DURATION),

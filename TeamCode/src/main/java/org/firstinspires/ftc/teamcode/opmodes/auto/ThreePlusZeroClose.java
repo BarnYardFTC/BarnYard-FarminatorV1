@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
+import static org.firstinspires.ftc.teamcode.subsystems.Transfer.TRANSFER_ONE_DURATION;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -51,14 +53,27 @@ public class ThreePlusZeroClose extends CommandOpMode {
                 new ParallelCommandGroup(
                     new DriveActionCommand(path1),
                     new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> true),
-                        farminator.shooter.activateShooterCommand()
+                        new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
+                        farminator.shooter.calcAndShootCommand(),
+                        new WaitCommand(500)
                     )
                 ),
                 farminator.shooter.calcAndShootCommand(),
                 farminator.transfer.activateTransferCommand(),
                 farminator.intake.activateIntakeCommand(),
-                new WaitCommand(2000),
+                new WaitCommand(TRANSFER_ONE_DURATION),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.transfer.deactivateTransferCommand(),
+                new WaitCommand(1000),
+                farminator.transfer.activateTransferCommand(),
+                farminator.intake.activateIntakeCommand(),
+                new WaitCommand(TRANSFER_ONE_DURATION),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.transfer.deactivateTransferCommand(),
+                new WaitCommand(1000),
+                farminator.transfer.activateTransferCommand(),
+                farminator.intake.activateIntakeCommand(),
+                new WaitCommand(TRANSFER_ONE_DURATION),
                 farminator.intake.deactivateIntakeCommand(),
                 farminator.transfer.deactivateTransferCommand(),
                 farminator.shooter.deactivateShooterCommand()

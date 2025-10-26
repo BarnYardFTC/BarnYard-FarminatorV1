@@ -23,7 +23,7 @@ public class Shooter  extends SubsystemBase {
     private final double SHOOTING_ANGLE = Math.toRadians(53);
     private final double GOAL_HEIGHT = 0.98;
     public final double RPM_TOLERANCE = 10;
-    public static double SHOOTING_CONSTANT = 2.7;  //was 4.4
+    public static double SHOOTING_CONSTANT = 4;  //was 4.4
 
 
     public Shooter() {

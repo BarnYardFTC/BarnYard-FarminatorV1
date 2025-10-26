@@ -50,14 +50,11 @@ public class ThreePlusZeroClose extends CommandOpMode {
 
 
         new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                    farminator.shooter.customShooterCommand(1),
-                    new DriveActionCommand(path1),
-                    new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-                        new WaitCommand(1500)
-                    )
-                ),
+                new WaitUntilCommand(this::opModeIsActive),
+                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(0.5)),
+                new DriveActionCommand(path1),
+                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
+                new WaitCommand(500),
                 farminator.shooter.calcAndShootCommand(),
                 ShootSequenceCommandGroup.shootWhenReady(),
                 ShootSequenceCommandGroup.shootWhenReady(),

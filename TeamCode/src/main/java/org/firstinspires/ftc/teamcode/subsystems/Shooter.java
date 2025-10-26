@@ -22,7 +22,9 @@ public class Shooter  extends SubsystemBase {
     private final double SHOOTING_HEIGHT = 0.32;
     private final double SHOOTING_ANGLE = Math.toRadians(53);
     private final double GOAL_HEIGHT = 0.98;
-    public static double SHOOTING_CONSTANT = 3;  //was 4.4
+    public final double RPM_TOLERANCE = 10;
+    public static double SHOOTING_CONSTANT = 2.7;  //was 4.4
+
 
     public Shooter() {
         shooter = BarnRobot.getInstance().farminatorHardware.shooter;
@@ -34,6 +36,10 @@ public class Shooter  extends SubsystemBase {
 
     private void setSpeed(double speed) {
         shooter.setVelocity(speed);
+    }
+    public boolean isMotorReady() {
+        return (shooter.getVelocity() > rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()) - RPM_TOLERANCE &&
+                shooter.getVelocity() < rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()) + RPM_TOLERANCE);
     }
 
     public double rangeDependentVelocity(double range) {
@@ -68,5 +74,6 @@ public class Shooter  extends SubsystemBase {
 
         telemetry.addData("Shooter speed formula", rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()));
         telemetry.addData("shooter actual speed", shooter.getVelocity());
+        telemetry.addData("is motor ready", isMotorReady());
     }
 }

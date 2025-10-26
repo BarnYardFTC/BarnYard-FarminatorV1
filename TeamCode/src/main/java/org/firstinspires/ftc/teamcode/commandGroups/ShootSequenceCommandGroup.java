@@ -8,6 +8,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
+import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
@@ -30,6 +31,17 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         return new ParallelCommandGroup(
                 BarnRobot.getInstance().transfer.activateTransferCommand(),
                 BarnRobot.getInstance().intake.activateIntakeCommand()
+        );
+    }
+    public static Command shootWhenReady(){
+        return new SequentialCommandGroup(
+                new WaitCommand(200),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isMotorReady()),
+                BarnRobot.getInstance().transfer.activateTransferCommand(),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
+                new WaitCommand(TRANSFER_ONE_DURATION),
+                BarnRobot.getInstance().intake.deactivateIntakeCommand(),
+                BarnRobot.getInstance().transfer.deactivateTransferCommand()
         );
     }
 

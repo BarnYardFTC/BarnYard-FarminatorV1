@@ -41,6 +41,7 @@ public class TestTeleop extends CommandOpMode {
               Gamepad Mapping
            ----------------------*/
 
+
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .toggleWhenPressed(farminator.shooter.shootAtRangeCommand(), farminator.shooter.deactivateShooterCommand());
 
@@ -80,7 +81,6 @@ public class TestTeleop extends CommandOpMode {
 
     @Override
     public void initialize_loop(){
-        farminator.limelight.findPattern();
         BarnRobot.getInstance().limelight.periodic();
         BarnRobot.getInstance().limelight.displayTelemetry();
         farminator.periodic();

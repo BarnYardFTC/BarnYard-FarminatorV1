@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -59,7 +60,12 @@ public class ThreePlusThree extends CommandOpMode {
                 ShootSequenceCommandGroup.shootWhenReady(),
                 ShootSequenceCommandGroup.shootWhenReady(),
                 ShootSequenceCommandGroup.shootWhenReady(),
-                farminator.shooter.deactivateShooterCommand()
+                farminator.shooter.deactivateShooterCommand(),
+                new ConditionalCommand(
+                        new SequentialCommandGroup(),
+                        new SequentialCommandGroup(),
+                        () -> true
+                )
         ).schedule();
 
     }

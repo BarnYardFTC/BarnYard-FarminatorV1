@@ -35,13 +35,20 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
     }
     public static Command shootWhenReady(){
         return new SequentialCommandGroup(
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isMotorReady()),
                 new WaitCommand(200),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isMotorReady()),
-                BarnRobot.getInstance().transfer.activateTransferCommand(),
-                BarnRobot.getInstance().intake.activateIntakeCommand(),
+                new WaitCommand(200),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isMotorReady()),
+                new ParallelCommandGroup(
+                    BarnRobot.getInstance().intake.activateIntakeCommand(),
+                    BarnRobot.getInstance().transfer.activateTransferCommand()
+                ),
                 new WaitCommand(TRANSFER_ONE_DURATION),
-                BarnRobot.getInstance().intake.deactivateIntakeCommand(),
-                BarnRobot.getInstance().transfer.deactivateTransferCommand()
+                new ParallelCommandGroup(
+                    BarnRobot.getInstance().transfer.deactivateTransferCommand(),
+                    BarnRobot.getInstance().intake.deactivateIntakeCommand()
+                )
         );
     }
 

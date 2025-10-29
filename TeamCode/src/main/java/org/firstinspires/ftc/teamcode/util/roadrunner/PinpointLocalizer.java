@@ -21,8 +21,8 @@ public final class PinpointLocalizer implements Localizer {
     }
 
     public static Params PARAMS = new Params();
-    public static int yOffset = -90;
-    public static int xOffset = 100;
+    public static int xOffset = 110; //was 100
+    public static int yOffset = -110; //was -90
 
     public final GoBildaPinpointDriver driver;
     public final GoBildaPinpointDriver.EncoderDirection initialParDirection, initialPerpDirection;

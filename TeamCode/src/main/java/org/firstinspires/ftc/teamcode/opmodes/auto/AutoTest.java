@@ -54,8 +54,8 @@ public class AutoTest extends CommandOpMode {
 
 
         new SequentialCommandGroup(
-//                new DriveActionCommand(path1),
-//                new DriveActionCommand(path2),
+                new DriveActionCommand(path1),
+                new DriveActionCommand(path2),
                 new DriveActionCommand(path3)
         ).schedule();
 

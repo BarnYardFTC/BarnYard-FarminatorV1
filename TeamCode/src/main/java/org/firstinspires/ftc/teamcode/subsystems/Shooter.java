@@ -15,9 +15,8 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class Shooter  extends SubsystemBase {
     private DcMotorEx shooter;
-    private static final double MOTOR_RPS = 27;
     private static final double WHEEL_RADIUS = 0.048;
-    public static double DEFAULT_SPEED = 4 * Math.PI * WHEEL_RADIUS * MOTOR_RPS / WHEEL_RADIUS;
+    public static double DEFAULT_SPEED = 300;
     private final double g = 9.87;
     private final double SHOOTING_HEIGHT = 0.32;
     private final double SHOOTING_ANGLE = Math.toRadians(53);

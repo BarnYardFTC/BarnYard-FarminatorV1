@@ -17,6 +17,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
@@ -51,7 +52,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooter.customShooterCommand(300),
+                farminator.shooter.customShooterCommand(Shooter.DEFAULT_SPEED),
                 new DriveActionCommand(path1),
                 new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
                 new WaitCommand(200),

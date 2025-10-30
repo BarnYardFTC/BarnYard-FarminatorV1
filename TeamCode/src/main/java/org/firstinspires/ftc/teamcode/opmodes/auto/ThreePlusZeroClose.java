@@ -30,7 +30,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
     public static double POSE1_Y = -53;
     public static double POSE1_HEADING = Math.toRadians(90);
 
-    public static double POSE2_X = -25;
+    public static double POSE2_X = -40;
     public static double POSE2_Y = -15;
     public static double POSE2_HEADING = Math.toRadians(250);
 
@@ -51,10 +51,10 @@ public class ThreePlusZeroClose extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(0.5)),
+                farminator.shooter.customShooterCommand(300),
                 new DriveActionCommand(path1),
                 new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-                new WaitCommand(500),
+                new WaitCommand(200),
                 farminator.shooter.calcAndShootCommand(),
                 ShootSequenceCommandGroup.shootWhenReady(),
                 ShootSequenceCommandGroup.shootWhenReady(),

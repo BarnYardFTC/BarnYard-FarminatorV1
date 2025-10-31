@@ -41,10 +41,17 @@ public class Shooter  extends SubsystemBase {
                 shooter.getVelocity() < rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()) + RPM_TOLERANCE);
     }
 
+    public boolean customIsMotorReady(double range) {
+        return (shooter.getVelocity() > rangeDependentVelocity(range) - RPM_TOLERANCE &&
+                shooter.getVelocity() < rangeDependentVelocity(range) + RPM_TOLERANCE);
+    }
+
     public double rangeDependentVelocity(double range) {
         double artifactSpeed = g / (Math.cos(SHOOTING_ANGLE) * Math.sqrt(2)) * range / Math.sqrt(SHOOTING_HEIGHT + range * Math.tan(SHOOTING_ANGLE) - GOAL_HEIGHT);
         return artifactSpeed * SHOOTING_CONSTANT / WHEEL_RADIUS;
     }
+
+
 
     public Command customShooterCommand(double speed) {
         return new InstantCommand(() -> setSpeed(speed), this);

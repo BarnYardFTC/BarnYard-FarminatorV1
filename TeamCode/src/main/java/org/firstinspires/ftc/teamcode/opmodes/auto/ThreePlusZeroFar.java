@@ -27,6 +27,10 @@ public class ThreePlusZeroFar extends CommandOpMode {
     public static double POSE2_Y = -31;
     public static double POSE2_HEADING = Math.toRadians(235);
 
+    public static double POSE3_X = 32;
+    public static double POSE3_Y = -22;
+    public static double POSE3_HEADING = Math.toRadians(180);
+
     @Override
     public void initialize() {
 
@@ -40,9 +44,13 @@ public class ThreePlusZeroFar extends CommandOpMode {
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
 
+        TrajectoryActionBuilder path2 = path1.endTrajectory()
+                .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING);
+
 
         new SequentialCommandGroup(
-                new DriveActionCommand(path1)
+                new DriveActionCommand(path1),
+                new DriveActionCommand(path2)
         ).schedule();
 
     }

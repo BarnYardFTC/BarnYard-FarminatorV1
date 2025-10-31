@@ -52,6 +52,25 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         );
     }
 
+    public static Command customShootWhenReady(double range){
+        return new SequentialCommandGroup(
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.customIsMotorReady(range)),
+                new WaitCommand(200),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.customIsMotorReady(range)),
+                new WaitCommand(200),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.customIsMotorReady(range)),
+                new ParallelCommandGroup(
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        BarnRobot.getInstance().transfer.activateTransferCommand()
+                ),
+                new WaitCommand(TRANSFER_ONE_DURATION),
+                new ParallelCommandGroup(
+                        BarnRobot.getInstance().transfer.deactivateTransferCommand(),
+                        BarnRobot.getInstance().intake.deactivateIntakeCommand()
+                )
+        );
+    }
+
     public static Command deactivateTransferToShooter(){
         return new ParallelCommandGroup(
                 BarnRobot.getInstance().transfer.deactivateTransferCommand(),

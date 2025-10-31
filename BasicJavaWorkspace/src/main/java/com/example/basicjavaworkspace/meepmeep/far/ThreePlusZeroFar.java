@@ -37,16 +37,14 @@ public class ThreePlusZeroFar {
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
 
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
+        TrajectoryActionBuilder path2 = path1.endTrajectory()
                 .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING);
 
         myBot.runAction(
                 new SequentialAction(
                         path1.build(),
-                        new SleepAction(10),
                         path2.build()
                 ));
-
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)

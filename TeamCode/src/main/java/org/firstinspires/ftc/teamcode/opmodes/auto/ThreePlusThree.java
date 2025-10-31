@@ -35,6 +35,27 @@ public class ThreePlusThree extends CommandOpMode {
     public static double POSE2_Y = -15;
     public static double POSE2_HEADING = Math.toRadians(250);
 
+
+    public static final double POSE3_X = 34;
+    public static final double POSE3_Y = -23.1;
+    public static final double POSE3_HEADING = Math.toRadians(270);
+
+    public static final double POSE4_X = 34;
+    public static final double POSE4_Y = -51;
+    public static final double POSE4_HEADING = Math.toRadians(270);
+
+    public static final double GPP_PRE_COLLECT_X = 34;
+    public static final double GPP_PRE_COLLECT_Y = -23.1;
+    public static final double GPP_PRE_COLLECT_HEADING = Math.toRadians(270);
+
+    public static final double PGP_PRE_COLLECT_X = 10.6;
+    public static final double PGP_PRE_COLLECT_Y = -23.1;
+    public static final double PGP_PRE_COLLECT_HEADING = Math.toRadians(270);
+    public static final double PPG_PRE_COLLECT_X = -12;
+    public static final double PPG_PRE_COLLECT_Y = -23.1;
+    public static final double PPG_PRE_COLLECT_HEADING = Math.toRadians(270);
+
+
     @Override
     public void initialize() {
 
@@ -49,22 +70,43 @@ public class ThreePlusThree extends CommandOpMode {
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
 
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
+                .strafeToLinearHeading(new Vector2d(GPP_PRE_COLLECT_X, GPP_PRE_COLLECT_Y), GPP_PRE_COLLECT_HEADING);
+
+
+        TrajectoryActionBuilder path3 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
+                .strafeToLinearHeading(new Vector2d(PGP_PRE_COLLECT_X, PGP_PRE_COLLECT_Y), PGP_PRE_COLLECT_HEADING);
+
+        TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
+                .strafeToLinearHeading(new Vector2d(PPG_PRE_COLLECT_X, PPG_PRE_COLLECT_Y), PPG_PRE_COLLECT_HEADING);
+
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(0.5)),
+                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                 new DriveActionCommand(path1),
-                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-                new WaitCommand(500),
-                farminator.shooter.calcAndShootCommand(),
-                ShootSequenceCommandGroup.shootWhenReady(),
-                ShootSequenceCommandGroup.shootWhenReady(),
-                ShootSequenceCommandGroup.shootWhenReady(),
+                ShootSequenceCommandGroup.customShootWhenReady(1.8),
+                ShootSequenceCommandGroup.customShootWhenReady(1.8),
+                ShootSequenceCommandGroup.customShootWhenReady(1.8),
                 farminator.shooter.deactivateShooterCommand(),
+
+
                 new ConditionalCommand(
+                        new SequentialCommandGroup(new DriveActionCommand(path2)),
                         new SequentialCommandGroup(),
+                        () -> (farminator.limelight.getObeliskPattern() == LimeLight.Pattern.GPP)
+                ),
+
+                new ConditionalCommand(
+                        new SequentialCommandGroup(new DriveActionCommand(path3)),
                         new SequentialCommandGroup(),
-                        () -> true
+                        () -> (farminator.limelight.getObeliskPattern() == LimeLight.Pattern.PGP)
+                ),
+
+                new ConditionalCommand(
+                        new SequentialCommandGroup(new DriveActionCommand(path4)),
+                        new SequentialCommandGroup(),
+                        () -> (farminator.limelight.getObeliskPattern() == LimeLight.Pattern.PPG)
                 )
         ).schedule();
 

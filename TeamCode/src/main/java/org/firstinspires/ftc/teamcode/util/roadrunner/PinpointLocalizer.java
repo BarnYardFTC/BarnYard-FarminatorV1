@@ -16,6 +16,8 @@ import java.util.Objects;
 @Config
 public final class PinpointLocalizer implements Localizer {
     public static class Params {
+
+        //TODO: dismantle Avivs spaghetti code and implement real offsets (fuck u Aviv - all of us)
         public double parYTicks = -2209.54523542; // y position of the parallel encoder (in tick units)
         public double perpXTicks = 2209.54523542; // x position of the perpendicular encoder (in tick units)
     }

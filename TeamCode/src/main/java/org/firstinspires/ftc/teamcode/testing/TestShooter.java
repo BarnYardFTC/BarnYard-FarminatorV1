@@ -30,6 +30,7 @@ public class TestShooter extends CommandOpMode {
     @Override
     public void run() {
         super.run();
+        farminator.shooter.displayTelemetry();
         telemetry.update();
     }
 }

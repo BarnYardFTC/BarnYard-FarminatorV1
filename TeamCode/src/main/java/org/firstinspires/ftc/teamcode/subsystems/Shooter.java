@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -23,13 +24,15 @@ public class Shooter  extends SubsystemBase {
     private final double GOAL_HEIGHT = 0.98;
     public final double RPM_TOLERANCE = 10;
     public static double SHOOTING_CONSTANT = 4;  //was 4.4
+    private static PIDFCoefficients pidf = new PIDFCoefficients(10, 0, 0, 12);
 
 
     public Shooter() {
         shooter = BarnRobot.getInstance().farminatorHardware.shooter;
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setDirection(DcMotorSimple.Direction.FORWARD);
-        shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
     }
 
 

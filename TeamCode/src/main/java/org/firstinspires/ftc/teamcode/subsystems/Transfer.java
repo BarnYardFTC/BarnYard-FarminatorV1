@@ -5,107 +5,125 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
-@Config //Needed if we want to tune out values in dashboard
+/**
+ * Transfer subsystem controls the four transfer CRServos on the robot.
+ *
+ * This subsystem allows activating/deactivating front, back, or all transfer servos individually
+ * or together. Commands are provided to integrate with the command-based framework.
+ */
+
+/*
+TODO:
+    - Make class more dynamic. Too many functions that do the same thing
+ */
+@Config // Allows tuning constants via dashboard
 public class Transfer extends SubsystemBase {
 
-    private CRServo leftFrontTrans;
-    private CRServo leftBackTrans;
-    private CRServo rightFrontTrans;
-    private CRServo rightBackTrans;
-    private static  double DEFAULT_POWER = 1;
-    public static int TRANSFER_ONE_DURATION = 800;
-    public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
+    // ------------------------------------------------------------
+    // Hardware
+    // ------------------------------------------------------------
+    private final CRServo leftFrontTrans;
+    private final CRServo leftBackTrans;
+    private final CRServo rightFrontTrans;
+    private final CRServo rightBackTrans;
 
-    public Transfer(){
-        leftFrontTrans = BarnRobot.getInstance().farminatorHardware.leftFrontTransfer;
-        leftBackTrans = BarnRobot.getInstance().farminatorHardware.leftBackTransfer;
-        rightFrontTrans = BarnRobot.getInstance().farminatorHardware.rightFrontTransfer;
-        rightBackTrans = BarnRobot.getInstance().farminatorHardware.rightBackTransfer;
+    // ------------------------------------------------------------
+    // Constants
+    // ------------------------------------------------------------
+    public static double DEFAULT_POWER = 1;           // default power for transfer
+    public static int TRANSFER_ONE_DURATION = 800;    // duration for single transfer step (ms)
+    public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3; // full transfer duration
 
-        // Needed so that positive power = transfer
+    // ------------------------------------------------------------
+    // Constructor
+    // ------------------------------------------------------------
+    public Transfer() {
+        BarnRobot robot = BarnRobot.getInstance();
+        leftFrontTrans = robot.farminatorHardware.leftFrontTransfer;
+        leftBackTrans = robot.farminatorHardware.leftBackTransfer;
+        rightFrontTrans = robot.farminatorHardware.rightFrontTransfer;
+        rightBackTrans = robot.farminatorHardware.rightBackTransfer;
+
+        // Positive power = forward transfer; left servos reversed
         leftFrontTrans.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackTrans.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void setPower(double power){
+    // ------------------------------------------------------------
+    // Low-level control methods
+    // ------------------------------------------------------------
+
+    /** Sets all four transfer servos to the given power. */
+    public void setPower(double power) {
         leftFrontTrans.setPower(power);
         leftBackTrans.setPower(power);
         rightFrontTrans.setPower(power);
         rightBackTrans.setPower(power);
     }
 
-    public void setBackPower(double power){
+    /** Sets only back transfer servos to the given power. */
+    public void setBackPower(double power) {
         leftBackTrans.setPower(power);
         rightBackTrans.setPower(power);
     }
 
-    public void setFrontPower(double power){
+    /** Sets only front transfer servos to the given power. */
+    public void setFrontPower(double power) {
         leftFrontTrans.setPower(power);
         rightFrontTrans.setPower(power);
     }
 
-    public void deactivateTransfer(){
-        setPower(0);
+    // ------------------------------------------------------------
+    // High-level actions
+    // ------------------------------------------------------------
+
+    public void deactivateTransfer() { setPower(0); }
+    public void activateTransfer() { setPower(DEFAULT_POWER); }
+
+    public void activateBackTransfer() { setBackPower(DEFAULT_POWER); }
+    public void activateBackTransfer(double power) { setBackPower(power); }
+    public void deactivateBackTransfer() { setBackPower(0); }
+
+    public void activateFrontTransfer() { setFrontPower(DEFAULT_POWER); }
+    public void deactivateFrontTransfer() { setFrontPower(0); }
+
+    // ------------------------------------------------------------
+    // Command wrappers
+    // ------------------------------------------------------------
+
+    public Command activateTransferCommand() {
+        return new InstantCommand(this::activateTransfer, this);
     }
 
-    public void activateTransfer(){
-        setPower(DEFAULT_POWER);
-    }
-
-    public void activateBackTransfer(){
-        setBackPower(DEFAULT_POWER);
-    }
-
-    public void activateBackTransfer(double power){
-        setBackPower(power);
-    }
-    public void deactivateBackTransfer(){
-        setBackPower(0);
-    }
-
-    public void activateFrontTransfer(){
-        setFrontPower(DEFAULT_POWER);
-    }
-    public void deactivateFrontTransfer(){
-        setFrontPower(0);
-    }
-
-
-    public Command activateTransferCommand(){
-        return new InstantCommand(() -> activateTransfer(), this);
-    }
-    public Command unloadTransferCommand(){
+    public Command unloadTransferCommand() {
         return new InstantCommand(() -> setPower(-DEFAULT_POWER), this);
     }
-    public Command deactivateTransferCommand(){
-        return new InstantCommand(() -> deactivateTransfer(), this);
+
+    public Command deactivateTransferCommand() {
+        return new InstantCommand(this::deactivateTransfer, this);
     }
 
-    public Command activateBackTransferCommand(){
-        return new InstantCommand(() -> activateBackTransfer(), this);
+    public Command activateBackTransferCommand() {
+        return new InstantCommand(this::activateBackTransfer, this);
     }
-    public Command activateBackTransferCommand(double power){
+
+    public Command activateBackTransferCommand(double power) {
         return new InstantCommand(() -> activateBackTransfer(power), this);
     }
 
-    public Command activateFrontTransferCommand(){
-        return new InstantCommand(() -> activateFrontTransfer(), this);
+    public Command deactivateBackTransferCommand() {
+        return new InstantCommand(this::deactivateBackTransfer, this);
     }
 
-    public Command deactivateBackTransferCommand(){
-        return new InstantCommand(() -> deactivateBackTransfer(), this);
+    public Command activateFrontTransferCommand() {
+        return new InstantCommand(this::activateFrontTransfer, this);
     }
 
-    public Command deactivateFrontTransferCommand(){
-        return new InstantCommand(() -> deactivateFrontTransfer(), this);
+    public Command deactivateFrontTransferCommand() {
+        return new InstantCommand(this::deactivateFrontTransfer, this);
     }
-
-
-
 }

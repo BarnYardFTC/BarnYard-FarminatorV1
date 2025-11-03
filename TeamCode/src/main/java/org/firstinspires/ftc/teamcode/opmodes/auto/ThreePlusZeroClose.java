@@ -1,36 +1,41 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Transfer.TRANSFER_ONE_DURATION;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
 
+/**
+ * Autonomous routine "3+0 Close":
+ * - Starts at a defined pose
+ * - Prepares shooter and shoots three preloaded elements
+ * - Does not collect additional elements after shooting
+ */
 @Config
-@Autonomous(name="3+0 close", group = "main")
+@Autonomous(name = "3+0 Close", group = "main")
 public class ThreePlusZeroClose extends CommandOpMode {
+
+    /** Robot and drive system instances */
     private BarnRobot farminator;
     private MecanumDrive drive;
+
+    /** Initial pose */
     public static double POSE1_X = -37;
     public static double POSE1_Y = -53;
     public static double POSE1_HEADING = Math.toRadians(90);
 
+    /** Shooter shooting pose */
     public static double POSE2_X = -40;
     public static double POSE2_Y = -15;
     public static double POSE2_HEADING = Math.toRadians(250);
@@ -38,18 +43,21 @@ public class ThreePlusZeroClose extends CommandOpMode {
     @Override
     public void initialize() {
 
-        // ------------------------
-        // Initialize Robot Systems
-        // ------------------------
+        /** Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
+        farminator.init(this, new OpModeData(
+                OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
+
         drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+
+        /** Switch limelight to obelisk detection pipeline */
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
+        /** Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
 
-
+        /** Schedule autonomous sequence */
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
@@ -59,24 +67,26 @@ public class ThreePlusZeroClose extends CommandOpMode {
                 ShootSequenceCommandGroup.customShootWhenReady(1.8),
                 farminator.shooter.deactivateShooterCommand()
         ).schedule();
-
     }
 
     @Override
     public void run() {
         super.run();
-        BarnRobot.getInstance().limelight.periodic();
-        if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()){
+
+        /** Update limelight and shooter telemetry */
+        farminator.limelight.periodic();
+
+        if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()) {
             farminator.limelight.findPattern();
+        } else if (farminator.limelight.isPatternFound()) {
+            if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE) {
+                farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
+            }
+            farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         }
-        else if (farminator.limelight.isPatternFound()){
-            if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE) farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
-            BarnRobot.getInstance().limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
-        }
+
         farminator.limelight.displayTelemetry();
         farminator.shooter.displayTelemetry();
         farminator.periodic();
     }
-
-
 }

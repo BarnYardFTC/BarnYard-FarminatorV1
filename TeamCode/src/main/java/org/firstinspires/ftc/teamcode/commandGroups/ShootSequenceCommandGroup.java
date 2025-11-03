@@ -12,77 +12,139 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+/**
+ * Command group sequences for shooting and feeding game elements to the shooter.
+ *
+ * Provides ready-to-use sequences for activating the shooter, transferring elements,
+ * and waiting until the shooter is up to speed.
+ */
 @Config
 public class ShootSequenceCommandGroup extends SequentialCommandGroup {
+
+    /** Default preparation time for shooter in milliseconds. */
     public static int SHOOT_PREP_TIME = 4000;
-    public static Command shootAllCommand(){
+
+    /**
+     * Full shoot-all sequence:
+     * - Activate shooter and wait for it to reach speed
+     * - Activate transfer and intake
+     * - Wait for all elements to transfer
+     * - Deactivate transfer, intake, and shooter
+     *
+     * @return Sequential command executing the full shoot-all routine
+     */
+    public static Command shootAllCommand() {
+        BarnRobot robot = BarnRobot.getInstance();
+
         return new SequentialCommandGroup(
-                BarnRobot.getInstance().shooter.activateShooterCommand(),
+                robot.shooter.activateShooterCommand(),
                 new WaitCommand(SHOOT_PREP_TIME),
-                BarnRobot.getInstance().transfer.activateTransferCommand(),
-                BarnRobot.getInstance().intake.activateIntakeCommand(),
+                robot.transfer.activateTransferCommand(),
+                robot.intake.activateIntakeCommand(),
                 new WaitCommand(TRANSFER_ALL_DURATION),
-                BarnRobot.getInstance().transfer.deactivateTransferCommand(),
-                BarnRobot.getInstance().shooter.deactivateShooterCommand(),
-                BarnRobot.getInstance().intake.deactivateIntakeCommand());
-    }
-
-    public static Command activateTransferToShooter(){
-        return new ParallelCommandGroup(
-                BarnRobot.getInstance().transfer.activateTransferCommand(),
-                BarnRobot.getInstance().intake.activateIntakeCommand()
+                robot.transfer.deactivateTransferCommand(),
+                robot.shooter.deactivateShooterCommand(),
+                robot.intake.deactivateIntakeCommand()
         );
     }
-    public static Command shootWhenReady(){
+
+    /**
+     * Parallel command to activate intake and transfer simultaneously.
+     *
+     * @return Parallel command activating intake and transfer
+     */
+    public static Command activateTransferToShooter() {
+        BarnRobot robot = BarnRobot.getInstance();
+
+        return new ParallelCommandGroup(
+                robot.transfer.activateTransferCommand(),
+                robot.intake.activateIntakeCommand()
+        );
+    }
+
+    /**
+     * Sequence to shoot one element when shooter reaches ready velocity.
+     * Includes multiple checks to ensure the motor is up to speed.
+     *
+     * @return Sequential command shooting when shooter is ready
+     */
+    public static Command shootWhenReady() {
+        BarnRobot robot = BarnRobot.getInstance();
+
         return new SequentialCommandGroup(
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isMotorReady()),
+                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isMotorReady()),
+                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isMotorReady()),
+                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
                 new ParallelCommandGroup(
-                    BarnRobot.getInstance().intake.activateIntakeCommand(),
-                    BarnRobot.getInstance().transfer.activateTransferCommand()
+                        robot.intake.activateIntakeCommand(),
+                        robot.transfer.activateTransferCommand()
                 ),
                 new WaitCommand(TRANSFER_ONE_DURATION),
                 new ParallelCommandGroup(
-                    BarnRobot.getInstance().transfer.deactivateTransferCommand(),
-                    BarnRobot.getInstance().intake.deactivateIntakeCommand()
+                        robot.transfer.deactivateTransferCommand(),
+                        robot.intake.deactivateIntakeCommand()
                 )
         );
     }
 
-    public static Command customShootWhenReady(double range){
+    /**
+     * Sequence to shoot one element when shooter reaches ready velocity for a specific range.
+     *
+     * @param range The target distance for shooter speed calculation
+     * @return Sequential command shooting when shooter is ready for the given range
+     */
+    public static Command customShootWhenReady(double range) {
+        BarnRobot robot = BarnRobot.getInstance();
+
         return new SequentialCommandGroup(
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.customIsMotorReady(range)),
+                new WaitUntilCommand(() -> robot.shooter.customIsMotorReady(range)),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.customIsMotorReady(range)),
+                new WaitUntilCommand(() -> robot.shooter.customIsMotorReady(range)),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.customIsMotorReady(range)),
+                new WaitUntilCommand(() -> robot.shooter.customIsMotorReady(range)),
                 new ParallelCommandGroup(
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        BarnRobot.getInstance().transfer.activateTransferCommand()
+                        robot.intake.activateIntakeCommand(),
+                        robot.transfer.activateTransferCommand()
                 ),
                 new WaitCommand(TRANSFER_ONE_DURATION),
                 new ParallelCommandGroup(
-                        BarnRobot.getInstance().transfer.deactivateTransferCommand(),
-                        BarnRobot.getInstance().intake.deactivateIntakeCommand()
+                        robot.transfer.deactivateTransferCommand(),
+                        robot.intake.deactivateIntakeCommand()
                 )
         );
     }
 
-    public static Command deactivateTransferToShooter(){
+    /**
+     * Parallel command to deactivate intake and transfer simultaneously.
+     *
+     * @return Parallel command deactivating intake and transfer
+     */
+    public static Command deactivateTransferToShooter() {
+        BarnRobot robot = BarnRobot.getInstance();
+
         return new ParallelCommandGroup(
-                BarnRobot.getInstance().transfer.deactivateTransferCommand(),
-                BarnRobot.getInstance().intake.deactivateIntakeCommand()
+                robot.transfer.deactivateTransferCommand(),
+                robot.intake.deactivateIntakeCommand()
         );
     }
 
-    public static Command shootOneCommand(){
+    /**
+     * Shoot a single element:
+     * - Activate transfer for one element duration
+     * - Deactivate transfer and shooter
+     *
+     * @return Sequential command shooting one element
+     */
+    public static Command shootOneCommand() {
+        BarnRobot robot = BarnRobot.getInstance();
+
         return new SequentialCommandGroup(
-                BarnRobot.getInstance().transfer.activateTransferCommand(),
+                robot.transfer.activateTransferCommand(),
                 new WaitCommand(TRANSFER_ONE_DURATION),
-                BarnRobot.getInstance().transfer.deactivateTransferCommand(),
-                BarnRobot.getInstance().shooter.deactivateShooterCommand());
+                robot.transfer.deactivateTransferCommand(),
+                robot.shooter.deactivateShooterCommand()
+        );
     }
 }

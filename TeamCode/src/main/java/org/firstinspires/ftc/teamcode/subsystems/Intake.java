@@ -9,34 +9,62 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
-
+/**
+ * Subsystem for controlling the intake mechanism.
+ *
+ * Handles power control, activation, and deactivation commands.
+ */
 @Config
 public class Intake extends SubsystemBase {
 
-    private DcMotorEx intake;
-    private static double DEFAULT_POWER = 1;
+    /** Intake motor hardware object. */
+    private final DcMotorEx intake;
 
-    public Intake(){
+    /** Default power to run the intake. */
+    public static double DEFAULT_POWER = 1;
+
+    /**
+     * Constructs the Intake subsystem and initializes motor settings.
+     */
+    public Intake() {
         this.intake = BarnRobot.getInstance().farminatorHardware.intake;
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    public void setPower(double power){
+    /**
+     * Sets the intake motor power.
+     *
+     * @param power motor power [-1, 1]
+     */
+    public void setPower(double power) {
         intake.setPower(power);
     }
 
-    public Command customIntakeCommand(double power){
+    /**
+     * Returns a command that runs the intake at a custom power.
+     *
+     * @param power desired motor power
+     * @return command to run intake at specified power
+     */
+    public Command customIntakeCommand(double power) {
         return new InstantCommand(() -> setPower(power), this);
     }
 
-    public Command activateIntakeCommand(){
-        return new InstantCommand(()-> setPower(DEFAULT_POWER), this);
+    /**
+     * Returns a command that activates the intake at default power.
+     *
+     * @return command to activate intake
+     */
+    public Command activateIntakeCommand() {
+        return new InstantCommand(() -> setPower(DEFAULT_POWER), this);
     }
 
-    public Command deactivateIntakeCommand(){
-        return new InstantCommand(()-> setPower(0), this);
+    /**
+     * Returns a command that deactivates the intake.
+     *
+     * @return command to stop the intake
+     */
+    public Command deactivateIntakeCommand() {
+        return new InstantCommand(() -> setPower(0), this);
     }
-
-
-
 }

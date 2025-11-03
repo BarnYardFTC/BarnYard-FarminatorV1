@@ -7,62 +7,71 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.OpModeData.AllianceColor;
 
 import java.util.List;
 
+/**
+ * Subsystem for controlling and reading data from the Limelight3A vision sensor.
+ *
+ * Handles pipeline switching, fiducial detection, range calculation, and telemetry output.
+ */
 public class LimeLight extends SubsystemBase {
 
-    // ------------------------------------------------------------
-    // Constants
-    // ------------------------------------------------------------
-
-    // Pipelines
+    /** Standard vision pipeline for general use. */
     public static final int STANDARD_PIPELINE = 0;
+
+    /** Pipeline optimized for blue alliance localization. */
     public static final int BLUE_PIPELINE = 1;
+
+    /** Pipeline optimized for red alliance localization. */
     public static final int RED_PIPELINE = 2;
+
+    /** Pipeline used for detecting obelisk patterns. */
     public static final int OBELISK_PIPELINE = 3;
 
-    // Polling and staleness
+    /** Maximum allowed staleness for vision data. */
     public static final int STANDARD_STALENESS_TOLERANCE = 100;
+
+    /** Polling frequency of the Limelight in Hz. */
     public static final int POLL_RATE_HZ = 100;
 
-    // Field coordinates
+    /** Field coordinates for the target goal. */
     private static final double GOAL_X = -1.57;
     private static final double BLUE_GOAL_Y = -1.62;
     private static final double RED_GOAL_Y = 1.62;
 
-    // ------------------------------------------------------------
-    // Enums
-    // ------------------------------------------------------------
-
+    /** Fiducial patterns for the obelisk. */
     public enum Pattern {
         PPG,
         PGP,
         GPP
     }
 
-    // ------------------------------------------------------------
-    // Hardware & State
-    // ------------------------------------------------------------
-
+    /** Limelight hardware object. */
     private final Limelight3A limelight;
-    private LLResult llResult;
-    public List<LLResultTypes.FiducialResult> frs;
 
-    // Vision data
+    /** Latest result from the Limelight. */
+    private LLResult llResult;
+
+    /** List of fiducial results from the Limelight. */
+    private List<LLResultTypes.FiducialResult> frs;
+
+    /** Current detected obelisk pattern. */
     private Pattern obeliskPattern;
+
+    /** Yaw offset to goal. */
     private double Dyaw;
+
+    /** Distance to goal in meters. */
     private double goalRange;
 
-    // Current pipeline
+    /** Currently active pipeline. */
     public int currentPipeline;
 
-    // ------------------------------------------------------------
-    // Constructor & Initialization
-    // ------------------------------------------------------------
-
+    /**
+     * Constructs the LimeLight subsystem and initializes default settings.
+     */
     public LimeLight() {
         limelight = BarnRobot.getInstance().farminatorHardware.limelight;
         limelight.setPollRateHz(POLL_RATE_HZ);
@@ -71,14 +80,16 @@ public class LimeLight extends SubsystemBase {
         start();
     }
 
+    /** Starts the Limelight processing loop. */
     public void start() {
         limelight.start();
     }
 
-    // ------------------------------------------------------------
-    // Pipeline Management
-    // ------------------------------------------------------------
-
+    /**
+     * Switches the Limelight to a specific pipeline.
+     *
+     * @param pipeline pipeline index to activate
+     */
     public void switchPipeline(int pipeline) {
         limelight.pipelineSwitch(pipeline);
         currentPipeline = pipeline;
@@ -86,6 +97,9 @@ public class LimeLight extends SubsystemBase {
         frs = null;
     }
 
+    /**
+     * Switches to the localization pipeline based on alliance color.
+     */
     public void switchToLocalizationPipeline() {
         AllianceColor alliance = BarnRobot.getInstance().opmodeData.allianceColor;
         if (alliance == AllianceColor.BLUE) {
@@ -95,23 +109,26 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
-    // ------------------------------------------------------------
-    // Data Validation
-    // ------------------------------------------------------------
-
+    /**
+     * Checks if the Limelight data is valid and up-to-date.
+     *
+     * @return true if data is valid
+     */
     public boolean isDataValid() {
         if (currentPipeline == OBELISK_PIPELINE) {
             return llResult != null && llResult.isValid();
         } else {
-            return llResult != null && frs !=null && !frs.isEmpty() && llResult.isValid() &&
-                    llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
+            return llResult != null && frs != null && !frs.isEmpty() && llResult.isValid()
+                    && llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
         }
     }
 
-    // ------------------------------------------------------------
-    // Vision Detection Helpers
-    // ------------------------------------------------------------
-
+    /**
+     * Finds the fiducial result with the largest target area.
+     *
+     * @param frs list of fiducial results
+     * @return fiducial result with largest area
+     */
     private LLResultTypes.FiducialResult findLargestAreaFr(List<LLResultTypes.FiducialResult> frs) {
         LLResultTypes.FiducialResult largest = frs.get(0);
         for (LLResultTypes.FiducialResult fr : frs) {
@@ -122,6 +139,12 @@ public class LimeLight extends SubsystemBase {
         return largest;
     }
 
+    /**
+     * Maps a fiducial ID to an obelisk pattern.
+     *
+     * @param id fiducial ID
+     * @return corresponding obelisk pattern
+     */
     private Pattern getObeliskPattern(int id) {
         switch (id) {
             case 21: return Pattern.GPP;
@@ -131,14 +154,22 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
+    /**
+     * Calculates distance between robot and goal coordinates.
+     *
+     * @param xG goal X
+     * @param yG goal Y
+     * @param xR robot X
+     * @param yR robot Y
+     * @return Euclidean distance
+     */
     private double calcRange(double xG, double yG, double xR, double yR) {
         return Math.sqrt((xG - xR) * (xG - xR) + (yG - yR) * (yG - yR));
     }
 
-    // ------------------------------------------------------------
-    // Vision Processing
-    // ------------------------------------------------------------
-
+    /**
+     * Detects the obelisk pattern if it hasn't been found yet.
+     */
     public void findPattern() {
         if (isDataValid() && !isPatternFound()) {
             LLResultTypes.FiducialResult obeliskFr = findLargestAreaFr(frs);
@@ -146,12 +177,18 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
+    /** Updates the yaw offset (Dyaw) if a goal tag is detected. */
     public void findDyaw() {
-        if (isDataValid() && isGoalTagDetected()){
+        if (isDataValid() && isGoalTagDetected()) {
             Dyaw = frs.get(0).getTargetXDegrees();
         }
     }
 
+    /**
+     * Calculates the range to the goal using the robot's heading.
+     *
+     * @param heading current robot heading
+     */
     public void findRange(double heading) {
         if (isDataValid()) {
             limelight.updateRobotOrientation(heading);
@@ -164,23 +201,25 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
-    // ------------------------------------------------------------
-    // Status Checks
-    // ------------------------------------------------------------
-
+    /**
+     * Checks if an obelisk pattern has been detected.
+     *
+     * @return true if a pattern is detected
+     */
     public boolean isPatternFound() {
         return obeliskPattern != null;
     }
 
+    /**
+     * Checks if the Limelight currently sees a goal tag.
+     *
+     * @return true if a goal tag is detected
+     */
     public boolean isGoalTagDetected() {
-        return (currentPipeline == BLUE_PIPELINE || currentPipeline == RED_PIPELINE)
-                && isDataValid();
+        return (currentPipeline == BLUE_PIPELINE || currentPipeline == RED_PIPELINE) && isDataValid();
     }
 
-    // ------------------------------------------------------------
-    // Periodic Update & Telemetry
-    // ------------------------------------------------------------
-
+    /** Updates Limelight results; should be called periodically. */
     @Override
     public void periodic() {
         llResult = limelight.getLatestResult();
@@ -189,6 +228,7 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
+    /** Outputs all relevant telemetry for the Limelight subsystem. */
     public void displayTelemetry() {
         BarnRobot robot = BarnRobot.getInstance();
         robot.telemetry.addData("Detected", llResult != null && llResult.isValid());
@@ -200,23 +240,21 @@ public class LimeLight extends SubsystemBase {
             robot.telemetry.addData("Location", "(" + pose.getPosition().x + ", " + pose.getPosition().y + ")");
         }
 
-        robot.telemetry.addData("pattern: ", obeliskPattern);
-
+        robot.telemetry.addData("Pattern", obeliskPattern);
         robot.telemetry.addData("Range", getGoalRange());
     }
 
-    // ------------------------------------------------------------
-    // Getters
-    // ------------------------------------------------------------
-
+    /** @return current yaw offset to goal */
     public double getDyaw() {
         return Dyaw;
     }
 
+    /** @return currently detected obelisk pattern */
     public Pattern getObeliskPattern() {
         return obeliskPattern;
     }
 
+    /** @return calculated distance to goal in meters */
     public double getGoalRange() {
         return goalRange;
     }

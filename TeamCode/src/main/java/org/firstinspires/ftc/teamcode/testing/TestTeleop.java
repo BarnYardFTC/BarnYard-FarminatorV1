@@ -42,8 +42,10 @@ public class TestTeleop extends CommandOpMode {
            ----------------------*/
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .toggleWhenPressed(farminator.shooter.shootAtRangeCommand(), farminator.shooter.deactivateShooterCommand());
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(farminator.shooter.activateShooterCommand())
+                .whenInactive(farminator.shooter.deactivateShooterCommand());
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                         .whenActive(farminator.drive.resetHeadingCommand());
@@ -56,11 +58,6 @@ public class TestTeleop extends CommandOpMode {
                 .whenActive(farminator.transfer.unloadTransferCommand())
                 .whenInactive(farminator.transfer.deactivateTransferCommand());
 
-//        new Trigger(
-//                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0
-//        )
-//                .whenActive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger pressed")))
-//                .whenInactive(new InstantCommand(() -> farminator.telemetry.addLine("right trigger not pressed")));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
                 new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
@@ -74,7 +71,7 @@ public class TestTeleop extends CommandOpMode {
                 .whenInactive(farminator.drive.driveCommand());
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(ShootSequenceCommandGroup.activateTransferToShooter())
                 .whenInactive(ShootSequenceCommandGroup.deactivateTransferToShooter());
     }

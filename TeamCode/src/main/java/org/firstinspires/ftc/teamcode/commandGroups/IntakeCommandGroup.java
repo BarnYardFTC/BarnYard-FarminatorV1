@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 public class IntakeCommandGroup extends SequentialCommandGroup {
     public static int INTAKE_TIME = 4000;
 
-    public Command autoIntakeCommand() {
+    public Command intakeSequence() {
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().intake.activateIntakeCommand(),
                 BarnRobot.getInstance().transfer.activateFrontTransferCommand(),

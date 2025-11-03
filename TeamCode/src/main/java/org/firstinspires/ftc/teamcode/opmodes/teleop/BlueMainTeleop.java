@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
- * Main TeleOp mode for the Barnyard FTC robot.
+ * Bue TeleOp mode for the Barnyard FTC robot.
  *
  * Controls all subsystems through command-based triggers and gamepad mappings.
  *
@@ -19,13 +19,15 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Gamepad Bindings (Buttons + Triggers)
  * - Periodic Updates
  */
-@TeleOp(name = "Main Teleop", group = "main")
-public class MainTeleop extends CommandOpMode {
+@TeleOp(name = "BlueMainTeleop", group = "main")
+public class BlueMainTeleop extends CommandOpMode {
 
     // ------------------------
     // Robot Instance
     // ------------------------
     private BarnRobot farminator;
+
+    private final double INITIAL_BOT_HEADING = 270;
 
     @Override
     public void initialize() {

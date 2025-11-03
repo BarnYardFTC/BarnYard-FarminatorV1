@@ -93,7 +93,7 @@ public class BarnRobot extends Robot {
     public void initDrivetrain() {
         drive = new DriveTrain();
         register(drive);
-        drive.setDefaultCommand(drive.driveCommand());
+        drive.setDefaultCommand(drive.driveCommand()); // TODO: Check whether  we have to do this here or we can do it in opmode class
     }
 
     public void initTransfer() {

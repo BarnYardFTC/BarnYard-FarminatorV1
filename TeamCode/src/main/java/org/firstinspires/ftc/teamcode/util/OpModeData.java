@@ -26,9 +26,6 @@ public class OpModeData {
     /**Pipeline of limelight*/
     public int limelightPipeline;
 
-    /**the heading in which the autonomous has ended*/
-    private static double autoFinishHeading;
-
     // ------------------------------------------------------------
     // Enums
     // ------------------------------------------------------------
@@ -39,38 +36,17 @@ public class OpModeData {
     // Constructors
     // ------------------------------------------------------------
 
-    /** Teleop constructor */
+    /** Full constructor (all fields specified). */
     public OpModeData(AllianceColor allianceColor,
                       double initialBotHeading,
                       double fieldReferenceHeading,
                       OpModeType opModeType, int limelightPipeline) {
         this.allianceColor = allianceColor;
+        this.initialBotHeading = initialBotHeading;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
         this.limelightPipeline = limelightPipeline;
-        this.initialBotHeading = initialBotHeading;
-
     }
 
-    /** Autonomous constructor */
-    public OpModeData(AllianceColor allianceColor,
-                      OpModeType opModeType, int limelightPipeline) {
-        autoFinishHeading = 0;
-        this.fieldReferenceHeading = 0;
-        this.initialBotHeading = 0;
-        this.allianceColor = allianceColor;
-        this.opModeType = opModeType;
-        this.limelightPipeline = limelightPipeline;
-    }
-
-
-    public static double getAutoFinishHeading(){
-        return autoFinishHeading;
-    }
-
-
-    public static void setAutoFinishHeading(double heading){
-        autoFinishHeading = heading;
-    }
 
 }

@@ -7,7 +7,6 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 /**
  * Command group for operating the intake and front transfer subsystem.
@@ -31,14 +30,14 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
      *
      * @return A sequential command executing the full intake routine
      */
-    public Command autoIntakeSequence() {
+    public Command intakeSequence() {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
                 robot.intake.activateIntakeCommand(),
-                robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
+                robot.transfer.activateFrontTransferCommand(),
                 new WaitCommand(INTAKE_TIME),
-                robot.transfer.setEntireTransferPowerCommand(0),
+                robot.transfer.deactivateTransferCommand(),
                 robot.intake.deactivateIntakeCommand()
         );
     }
@@ -50,10 +49,24 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
      */
     public static Command intakeAndFrontTransferCommand() {
         BarnRobot robot = BarnRobot.getInstance();
-        return new ParallelCommandGroup(
+
+        return new SequentialCommandGroup(
                 robot.intake.activateIntakeCommand(),
-                robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
+                robot.transfer.activateFrontTransferCommand()
         );
     }
 
+    /**
+     * Command group to deactivate intake and front transfer simultaneously.
+     *
+     * @return A sequential command that deactivates the intake and front transfer
+     */
+    public static Command deactivateIntakeAndFrontTransferCommand() {
+        BarnRobot robot = BarnRobot.getInstance();
+
+        return new SequentialCommandGroup(
+                robot.intake.deactivateIntakeCommand(),
+                robot.transfer.deactivateTransferCommand()
+        );
+    }
 }

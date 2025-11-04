@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -51,8 +50,8 @@ public class TestTeleop extends CommandOpMode {
                         .whenActive(farminator.drive.resetHeadingCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                .whenActive(IntakeCommandGroup.activateIntakeCommand())
-                .whenInactive(IntakeCommandGroup.deactivateIntakeCommand());
+                .whenActive(IntakeCommandGroup.intakeAndFrontTransferCommand())
+                .whenInactive(IntakeCommandGroup.deactivateIntakeAndFrontTransferCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenActive(farminator.transfer.unloadTransferCommand())

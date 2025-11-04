@@ -45,19 +45,19 @@ public class ThreePlusZeroFar extends CommandOpMode {
     @Override
     public void initialize() {
 
-        /** Initialize robot and drive system */
+        /* Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
         farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE));
         drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
-        /** Define trajectories */
+        /* Define trajectories */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
 
         TrajectoryActionBuilder path2 = path1.endTrajectory()
                 .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING);
 
-        /** Schedule autonomous drive sequence */
+        /* Schedule autonomous drive sequence */
         new SequentialCommandGroup(
                 new DriveActionCommand(path1),
                 new DriveActionCommand(path2)

@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
  * Provides sequences for activating and deactivating the intake system,
  * including timed operation for intaking game elements.
  */
+
+
 @Config
 public class IntakeCommandGroup extends SequentialCommandGroup {
 
@@ -44,7 +46,7 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
      *
      * @return A sequential command that activates the intake and front transfer
      */
-    public static Command activateIntakeCommand() {
+    public static Command intakeAndFrontTransferCommand() {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
@@ -58,7 +60,7 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
      *
      * @return A sequential command that deactivates the intake and front transfer
      */
-    public static Command deactivateIntakeCommand() {
+    public static Command deactivateIntakeAndFrontTransferCommand() {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(

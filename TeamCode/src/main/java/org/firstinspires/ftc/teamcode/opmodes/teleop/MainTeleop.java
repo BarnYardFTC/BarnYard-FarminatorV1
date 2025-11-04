@@ -38,12 +38,12 @@ public class MainTeleop extends CommandOpMode {
         // Gamepad 1 Mappings
         // -----------------------------------------------------
 
-        /** Shooter Controls */
+        /* Shooter Control. */
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(farminator.shooter.activateShooterCommand())
                 .whenInactive(farminator.shooter.deactivateShooterCommand());
 
-        /** Transfer Controls */
+        /* Transfer Controls */
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(farminator.transfer.activateFrontTransferCommand())
                 .whenInactive(farminator.transfer.deactivateFrontTransferCommand());
@@ -56,7 +56,7 @@ public class MainTeleop extends CommandOpMode {
                 .whenPressed(farminator.transfer.activateBackTransferCommand(-1))
                 .whenInactive(farminator.transfer.activateBackTransferCommand(0));
 
-        /** Intake Controls */
+        /* Intake Controls */
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenActive(farminator.intake.activateIntakeCommand())
                 .whenInactive(farminator.intake.deactivateIntakeCommand());
@@ -66,7 +66,7 @@ public class MainTeleop extends CommandOpMode {
                         farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
                 .whenInactive(farminator.intake.deactivateIntakeCommand());
 
-        /** Drive Controls */
+        /* Drive Controls */
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),

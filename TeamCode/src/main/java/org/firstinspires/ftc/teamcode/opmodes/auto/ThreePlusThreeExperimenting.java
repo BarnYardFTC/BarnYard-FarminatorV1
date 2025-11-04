@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Transfer.TRANSFER_ONE_DURATION;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -27,7 +25,7 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
  */
 @Config
 @Autonomous(name = "3+3 Close", group = "main")
-public class ThreePlusThree extends CommandOpMode {
+public class ThreePlusThreeExperimenting extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;

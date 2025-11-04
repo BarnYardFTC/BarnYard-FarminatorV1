@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -12,6 +13,8 @@ import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
+
+@Disabled
 @TeleOp(name="Test Teleop", group = "main")
 public class TestTeleop extends CommandOpMode {
 

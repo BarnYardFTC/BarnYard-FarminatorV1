@@ -30,6 +30,12 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
 
+    private final OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.BLUE,
+            OpModeData.OpModeType.AUTONOMOUS,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE
+    );
+
     /** Initial pose */
     public static double POSE1_X = -37;
     public static double POSE1_Y = -53;
@@ -45,8 +51,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
         /** Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(
-                OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
+        farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
@@ -62,11 +67,12 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                 new DriveActionCommand(path1),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
                 farminator.shooter.deactivateShooterCommand()
         ).schedule();
+
     }
 
     @Override
@@ -88,5 +94,14 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         farminator.limelight.displayTelemetry();
         farminator.shooter.displayTelemetry();
         farminator.periodic();
+    }
+
+    /**
+     * runs when the autonomous is finished
+     */
+    @Override
+    public void end(){
+        // store the finish heading of the auto
+        OpModeData.setAutoFinishHeading(drive.localizer.getPose().heading.real);
     }
 }

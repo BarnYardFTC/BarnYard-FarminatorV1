@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -12,6 +13,8 @@ import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
+
+@Disabled
 @TeleOp(name="Test Teleop", group = "main")
 public class TestTeleop extends CommandOpMode {
 
@@ -33,8 +36,8 @@ public class TestTeleop extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270));
-        farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
+        farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
 
         /* ----------------------
               Gamepad Mapping

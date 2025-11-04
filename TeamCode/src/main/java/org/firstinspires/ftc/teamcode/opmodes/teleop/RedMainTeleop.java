@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
@@ -37,7 +38,7 @@ public class RedMainTeleop extends CommandOpMode {
         // ------------------------
         farminator = BarnRobot.getInstance();
         //TODO: Put the heading in which the autonomous has ended in initialBotHeading
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.TELEOP));
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.TELEOP, LimeLight.RED_LOCALIZATION_PIPELINE));
 
         //TODO: Map buttons properly
 

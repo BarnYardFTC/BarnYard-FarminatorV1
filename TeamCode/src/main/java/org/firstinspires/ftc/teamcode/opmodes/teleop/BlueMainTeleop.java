@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
@@ -36,68 +38,54 @@ public class BlueMainTeleop extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        //TODO: Put the heading in which the autonomous has ended in initialBotHeading
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.TELEOP));
-
-        //TODO: Map buttons properly
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
+        farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
 
         // -----------------------------------------------------
         // Gamepad 1 Mappings
         // -----------------------------------------------------
 
-        /* ========== Shooter Controls ========== */
-        // X: Activate/deactivate shooter
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.shooter.activateShooterCommand())
-                .whenInactive(farminator.shooter.deactivateShooterCommand());
-
         /* ========== Transfer Controls ========== */
         // B: Front transfer forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(farminator.transfer.activateFrontTransferCommand())
                 .whenInactive(farminator.transfer.deactivateFrontTransferCommand());
 
         // Y: Back transfer forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(farminator.transfer.activateBackTransferCommand())
                 .whenInactive(farminator.transfer.deactivateBackTransferCommand());
 
-        // D-Pad Down: Back transfer reverse
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(farminator.transfer.activateBackTransferCommand(-1))
-                .whenInactive(farminator.transfer.activateBackTransferCommand(0));
+
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
+                .whenActive(new ParallelCommandGroup(
+                        farminator.transfer.activateTransferCommand(),
+                        farminator.intake.activateIntakeCommand())
+                )
+                .whenInactive(new ParallelCommandGroup(
+                        farminator.transfer.deactivateTransferCommand(),
+                        farminator.intake.deactivateIntakeCommand()
+                ));
+
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
+                .whenActive(farminator.shooter.activateShooterCommand())
+                .whenInactive(farminator.shooter.deactivateShooterCommand());
 
         /* ========== Intake Controls ========== */
         // A: Activate/deactivate intake
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenActive(farminator.intake.activateIntakeCommand())
-                .whenInactive(farminator.intake.deactivateIntakeCommand());
+                .whenActive(farminator.drive.alignToTagCommand())
+                .whenInactive(farminator.drive.driveCommand());
 
-        // Left Trigger: Variable intake speed based on trigger pressure
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
-                .whenActive(farminator.intake.customIntakeCommand(
-                        farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)))
-                .whenInactive(farminator.intake.deactivateIntakeCommand());
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+                .whenActive(farminator.transfer.activateBackTransferCommand(-1))
+                .whenInactive(farminator.transfer.activateBackTransferCommand(0));
 
-        /* ========== Drive Controls ========== */
-        // D-Pad Up: Toggle between slow and fast drive modes
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
-
-        // Right Trigger: activate yaw goal alignment
-        new Trigger(
-                () -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05
-        )
-                .whenActive(farminator.drive.alignToTagCommand())
-                .whenInactive(farminator.drive.driveCommand()); //TODO: Check tag alignment
-
-
-        // -----------------------------------------------------
-        // Gamepad 2 Mappings
-        // -----------------------------------------------------
 
     }
 

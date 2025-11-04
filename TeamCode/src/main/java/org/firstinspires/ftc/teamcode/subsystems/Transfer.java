@@ -81,6 +81,7 @@ public class Transfer extends SubsystemBase {
     // High-level actions
     // ------------------------------------------------------------
 
+    //todo: remove the "High-level actions" functions, you don't need them, you can write them in the "Command wrappers"
     public void deactivateTransfer() { setPower(0); }
     public void activateTransfer() { setPower(DEFAULT_POWER); }
 

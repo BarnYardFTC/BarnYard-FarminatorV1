@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
  */
 @Config
 @Autonomous(name = "3+0 Close", group = "main")
-public class ThreePlusZeroClose extends CommandOpMode {
+public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
@@ -46,7 +46,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
         /** Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
         farminator.init(this, new OpModeData(
-                OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
+                OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
@@ -80,7 +80,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
             farminator.limelight.findPattern();
         } else if (farminator.limelight.isPatternFound()) {
             if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE) {
-                farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
+                farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
             }
             farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         }

@@ -3,12 +3,15 @@ package org.firstinspires.ftc.teamcode.util.roadrunner.tuning;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 import org.firstinspires.ftc.teamcode.util.roadrunner.TankDrive;
 
+
+@Disabled
 @TeleOp
 public final class HeadingGainTuner extends LinearOpMode {
     @Override

@@ -23,15 +23,14 @@ public class OpModeData {
     /** The robot’s starting heading on the field at the beginning of the OpMode. */
     public double initialBotHeading;
 
+    /**Pipeline of limelight*/
+    public int limelightPipeline;
+
     // ------------------------------------------------------------
     // Enums
     // ------------------------------------------------------------
     public enum AllianceColor { RED, BLUE }
     public enum OpModeType { TELEOP, AUTONOMOUS }
-
-    // ------------------------------------------------------------
-    // Defaults
-    // ------------------------------------------------------------
 
     // ------------------------------------------------------------
     // Constructors
@@ -41,11 +40,13 @@ public class OpModeData {
     public OpModeData(AllianceColor allianceColor,
                       double initialBotHeading,
                       double fieldReferenceHeading,
-                      OpModeType opModeType) {
+                      OpModeType opModeType, int limelightPipeline) {
         this.allianceColor = allianceColor;
         this.initialBotHeading = initialBotHeading;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
+        this.limelightPipeline = limelightPipeline;
     }
+
 
 }

@@ -34,6 +34,8 @@ public class Shooter extends SubsystemBase {
     public static double DEFAULT_SPEED = 1000;         // RPM
     public final double RPM_TOLERANCE = 10;            // allowable error for motor readiness
 
+    public static double TARGET_SPEED = 1850;
+
     // Shooting parameters
     private final double g = 9.87;                     // gravity (m/s^2)
     private final double SHOOTING_HEIGHT = 0.32;       // meters
@@ -48,7 +50,7 @@ public class Shooter extends SubsystemBase {
     // Constructor
     // ------------------------------------------------------------
     public Shooter() {
-        shooter = BarnRobot.getInstance().farminatorHardware.shooter;
+        shooter = BarnRobot.getInstance().robotHardware.shooter;
 
         // Motor configuration
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -114,6 +116,10 @@ public class Shooter extends SubsystemBase {
         return new InstantCommand(() -> shooter.setPower(0.6), this);
     }
 
+    public Command setPower(double power){
+        return new InstantCommand(() -> shooter.setPower(power), this);
+    }
+
     /** Deactivates the shooter motor. */
     public Command deactivateShooterCommand() {
         return new InstantCommand(() -> shooter.setPower(0), this);
@@ -137,5 +143,17 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Shooter target speed", rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()));
         telemetry.addData("Shooter actual speed", shooter.getVelocity());
         telemetry.addData("Is motor ready", isMotorReady());
+    }
+
+    public void runShooter(){
+
+    }
+
+//    public Command runShooterCommand(){
+//
+//    }
+
+    public double getVelocity(){
+        return shooter.getVelocity();
     }
 }

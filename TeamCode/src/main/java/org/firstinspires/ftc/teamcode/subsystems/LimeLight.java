@@ -7,7 +7,6 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.util.OpModeData.AllianceColor;
 
 import java.util.List;
 
@@ -70,7 +69,7 @@ public class LimeLight extends SubsystemBase {
      * Constructs the LimeLight subsystem and initializes default settings.
      */
     public LimeLight(int pipeline) {
-        limelight = BarnRobot.getInstance().farminatorHardware.limelight;
+        limelight = BarnRobot.getInstance().robotHardware.limelight;
         limelight.setPollRateHz(POLL_RATE_HZ);
         switchPipeline(pipeline);
         Dyaw = 0;

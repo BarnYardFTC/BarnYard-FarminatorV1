@@ -51,8 +51,8 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
         mecanumDriveComponent = new MecanumDriveComponent();
 
-        imu = BarnRobot.getInstance().farminatorHardware.imu;
-        imu.initialize(BarnRobot.getInstance().farminatorHardware.IMU_PARAMETERS);
+        imu = BarnRobot.getInstance().robotHardware.imu;
+        imu.initialize(BarnRobot.getInstance().robotHardware.IMU_PARAMETERS);
         imu.resetYaw();
 
         initialBotHeading = BarnRobot.getInstance().opmodeData.initialBotHeading;

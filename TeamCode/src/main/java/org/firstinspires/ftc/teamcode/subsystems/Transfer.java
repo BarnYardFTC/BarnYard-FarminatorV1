@@ -43,10 +43,10 @@ public class Transfer extends SubsystemBase {
     // ------------------------------------------------------------
     public Transfer() {
         BarnRobot robot = BarnRobot.getInstance();
-        leftFrontTrans = robot.farminatorHardware.leftFrontTransfer;
-        leftBackTrans = robot.farminatorHardware.leftBackTransfer;
-        rightFrontTrans = robot.farminatorHardware.rightFrontTransfer;
-        rightBackTrans = robot.farminatorHardware.rightBackTransfer;
+        leftFrontTrans = robot.robotHardware.leftFrontTransfer;
+        leftBackTrans = robot.robotHardware.leftBackTransfer;
+        rightFrontTrans = robot.robotHardware.rightFrontTransfer;
+        rightBackTrans = robot.robotHardware.rightBackTransfer;
 
         // Positive power = forward transfer; left servos reversed
         leftFrontTrans.setDirection(DcMotorSimple.Direction.REVERSE);

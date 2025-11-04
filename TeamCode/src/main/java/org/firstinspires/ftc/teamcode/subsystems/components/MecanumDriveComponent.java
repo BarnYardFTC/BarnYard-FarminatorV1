@@ -36,10 +36,10 @@ public class MecanumDriveComponent {
        CONSTRUCTOR
        ========================= */
     public MecanumDriveComponent() {
-        this.leftFront = BarnRobot.getInstance().farminatorHardware.leftFrontDrivetrain;
-        this.rightFront = BarnRobot.getInstance().farminatorHardware.rightFrontDrivetrain;
-        this.leftBack = BarnRobot.getInstance().farminatorHardware.leftBackDrivetrain;
-        this.rightBack = BarnRobot.getInstance().farminatorHardware.rightBackDrivetrain;
+        this.leftFront = BarnRobot.getInstance().robotHardware.leftFrontDrivetrain;
+        this.rightFront = BarnRobot.getInstance().robotHardware.rightFrontDrivetrain;
+        this.leftBack = BarnRobot.getInstance().robotHardware.leftBackDrivetrain;
+        this.rightBack = BarnRobot.getInstance().robotHardware.rightBackDrivetrain;
 
 
         initMotor(DcMotorSimple.Direction.REVERSE, leftFront);

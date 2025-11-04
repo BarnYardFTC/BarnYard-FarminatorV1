@@ -27,7 +27,7 @@ public class Intake extends SubsystemBase {
      * Constructs the Intake subsystem and initializes motor settings.
      */
     public Intake() {
-        this.intake = BarnRobot.getInstance().farminatorHardware.intake;
+        this.intake = BarnRobot.getInstance().robotHardware.intake;
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 

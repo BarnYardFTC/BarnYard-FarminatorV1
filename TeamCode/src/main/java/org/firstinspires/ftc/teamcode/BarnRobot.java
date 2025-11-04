@@ -60,7 +60,7 @@ public class BarnRobot extends Robot {
     // Robot Hardware
     // ------------------------------------------------------------
 
-    public RobotHardware farminatorHardware;
+    public RobotHardware robotHardware;
 
 
     // ------------------------------------------------------------
@@ -108,7 +108,7 @@ public class BarnRobot extends Robot {
         this.opmodeData = opModeData;
 
         // Hardware and telemetry setup
-        this.farminatorHardware = new RobotHardware(opMode.hardwareMap);
+        this.robotHardware = new RobotHardware(opMode.hardwareMap);
         this.telemetry = opMode.telemetry;
 
         // Gamepad setup

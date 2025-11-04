@@ -11,7 +11,7 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 
 /**
  * Autonomous routine "3+0 Far":
@@ -25,7 +25,7 @@ public class ThreePlusZeroFar extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
-    private MecanumDrive drive;
+    private RoadRunnerMecanumDrive drive;
 
     /** Starting pose */
     public static double POSE1_X = -39;
@@ -48,7 +48,7 @@ public class ThreePlusZeroFar extends CommandOpMode {
         /* Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
         farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE));
-        drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
         /* Define trajectories */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))

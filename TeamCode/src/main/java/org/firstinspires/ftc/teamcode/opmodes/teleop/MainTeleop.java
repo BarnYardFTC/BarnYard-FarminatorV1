@@ -32,7 +32,9 @@ public class MainTeleop extends CommandOpMode {
     public void initialize() {
         // Initialize robot systems
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270));
+        farminator.init(this, new OpModeData(
+                OpModeData.AllianceColor.BLUE,250, 270, OpModeData.OpModeType.TELEOP
+                ));
 
         // -----------------------------------------------------
         // Gamepad 1 Mappings

@@ -36,7 +36,8 @@ public class BlueMainTeleop extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270));
+        //TODO: Put the heading in which the autonomous has ended in initialBotHeading
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.TELEOP));
 
         //TODO: Map buttons properly
 

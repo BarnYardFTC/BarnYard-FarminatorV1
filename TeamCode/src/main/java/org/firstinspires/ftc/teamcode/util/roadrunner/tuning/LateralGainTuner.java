@@ -6,7 +6,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 import org.firstinspires.ftc.teamcode.util.roadrunner.TankDrive;
 
 @TeleOp
@@ -14,8 +14,8 @@ public final class LateralGainTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Pose2d beginPose = new Pose2d(50, 0, Math.PI/2);
-        if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
-            MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        if (TuningOpModes.DRIVE_CLASS.equals(RoadRunnerMecanumDrive.class)) {
+            RoadRunnerMecanumDrive drive = new RoadRunnerMecanumDrive(hardwareMap, beginPose);
 
             waitForStart();
 

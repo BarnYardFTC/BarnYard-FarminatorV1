@@ -144,7 +144,6 @@ public class BarnRobot extends Robot {
      */
     public void initDrivetrain() {
         drive = new DriveTrain();
-        // TODO: confirm if the default command should be set here or in the OpMode
         drive.setDefaultCommand(drive.driveCommand());
     }
 

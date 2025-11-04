@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 
 /**
  * Autonomous routine "3+0 Close":
@@ -28,7 +28,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
-    private MecanumDrive drive;
+    private RoadRunnerMecanumDrive drive;
 
     /** Initial pose */
     public static double POSE1_X = -37;
@@ -48,7 +48,7 @@ public class ThreePlusZeroClose extends CommandOpMode {
         farminator.init(this, new OpModeData(
                 OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
 
-        drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
         /** Switch limelight to obelisk detection pipeline */
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);

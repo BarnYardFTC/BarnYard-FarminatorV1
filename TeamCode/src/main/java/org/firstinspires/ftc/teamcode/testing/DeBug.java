@@ -12,13 +12,13 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 
 @Config
 @Autonomous(name="DeBug", group = "main")
 public class DeBug extends CommandOpMode {
     private BarnRobot farminator;
-    private MecanumDrive drive;
+    private RoadRunnerMecanumDrive drive;
     public static double POSE1_X = -37;
     public static double POSE1_Y = -53;
     public static double POSE1_HEADING = Math.toRadians(90);
@@ -35,7 +35,7 @@ public class DeBug extends CommandOpMode {
         // ------------------------
         farminator = BarnRobot.getInstance();
         farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
-        drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))

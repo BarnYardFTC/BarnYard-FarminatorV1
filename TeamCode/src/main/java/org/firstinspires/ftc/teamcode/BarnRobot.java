@@ -123,7 +123,7 @@ public class BarnRobot extends Robot {
             initDrivetrain();
         }
 
-        initLimeLight();
+        initLimeLight(opModeData.limelightPipeline);
         initShooter();
         initIntake();
     }
@@ -154,8 +154,8 @@ public class BarnRobot extends Robot {
     }
 
     /** Sets up the LimeLight vision system. */
-    public void initLimeLight() {
-        limelight = new LimeLight();
+    public void initLimeLight(int pipeline) {
+        limelight = new LimeLight(pipeline);
     }
 
     /** Sets up the intake system. */

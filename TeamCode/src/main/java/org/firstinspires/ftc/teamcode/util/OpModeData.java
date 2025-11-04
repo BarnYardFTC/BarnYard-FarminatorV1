@@ -23,17 +23,14 @@ public class OpModeData {
     /** The robot’s starting heading on the field at the beginning of the OpMode. */
     public double initialBotHeading;
 
+    /**Pipeline of limelight*/
+    public int limelightPipeline;
+
     // ------------------------------------------------------------
     // Enums
     // ------------------------------------------------------------
     public enum AllianceColor { RED, BLUE }
     public enum OpModeType { TELEOP, AUTONOMOUS }
-
-    // ------------------------------------------------------------
-    // Defaults
-    // ------------------------------------------------------------
-    public static OpModeData defaultOpmodeData =
-            new OpModeData(AllianceColor.RED, 0, 0, OpModeType.TELEOP);
 
     // ------------------------------------------------------------
     // Constructors
@@ -43,57 +40,13 @@ public class OpModeData {
     public OpModeData(AllianceColor allianceColor,
                       double initialBotHeading,
                       double fieldReferenceHeading,
-                      OpModeType opModeType) {
+                      OpModeType opModeType, int limelightPipeline) {
         this.allianceColor = allianceColor;
         this.initialBotHeading = initialBotHeading;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
+        this.limelightPipeline = limelightPipeline;
     }
 
-    /** Constructor without mode type (uses default mode). */
-    public OpModeData(AllianceColor allianceColor,
-                      double initialBotHeading,
-                      double fieldReferenceHeading) {
-        this(allianceColor, initialBotHeading, fieldReferenceHeading, defaultOpmodeData.opModeType);
-    }
 
-    /** Constructor with only alliance color (everything else default). */
-    public OpModeData(AllianceColor allianceColor) {
-        this(allianceColor,
-                defaultOpmodeData.initialBotHeading,
-                defaultOpmodeData.fieldReferenceHeading,
-                defaultOpmodeData.opModeType);
-    }
-
-    /** Constructor with only initial heading (everything else default). */
-    public OpModeData(double initialBotHeading) {
-        this(defaultOpmodeData.allianceColor,
-                initialBotHeading,
-                defaultOpmodeData.fieldReferenceHeading,
-                defaultOpmodeData.opModeType);
-    }
-
-    /** Constructor with only field reference heading (everything else default). */
-    public OpModeData(double fieldReferenceHeading, boolean isFieldReference) {
-        this(defaultOpmodeData.allianceColor,
-                defaultOpmodeData.initialBotHeading,
-                fieldReferenceHeading,
-                defaultOpmodeData.opModeType);
-    }
-
-    /** Constructor with only mode type (everything else default). */
-    public OpModeData(OpModeType opModeType) {
-        this(defaultOpmodeData.allianceColor,
-                defaultOpmodeData.initialBotHeading,
-                defaultOpmodeData.fieldReferenceHeading,
-                opModeType);
-    }
-
-    /** Default constructor — uses all default values. */
-    public OpModeData() {
-        this(defaultOpmodeData.allianceColor,
-                defaultOpmodeData.initialBotHeading,
-                defaultOpmodeData.fieldReferenceHeading,
-                defaultOpmodeData.opModeType);
-    }
 }

@@ -66,7 +66,7 @@ public class ThreePlusThreePrototype extends CommandOpMode {
 
         /** Initialize robot and drive */
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
         drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
         /** Switch to obelisk detection pipeline */
@@ -87,7 +87,7 @@ public class ThreePlusThreePrototype extends CommandOpMode {
 
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(
-                new WaitUntilCommand(this::opModeIsActive), //todo:what is that
+                new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                 new DriveActionCommand(path1),
                 ShootSequenceCommandGroup.customShootWhenReady(1.8),
@@ -130,7 +130,7 @@ public class ThreePlusThreePrototype extends CommandOpMode {
             farminator.limelight.findPattern();
         } else if (farminator.limelight.isPatternFound()) {
             if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE)
-                farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
+                farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
 
             farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         }

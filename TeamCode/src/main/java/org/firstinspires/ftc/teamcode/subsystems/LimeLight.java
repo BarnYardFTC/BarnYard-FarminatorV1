@@ -18,14 +18,11 @@ import java.util.List;
  */
 public class LimeLight extends SubsystemBase {
 
-    /** Standard vision pipeline for general use. */
-    public static final int STANDARD_PIPELINE = 0;
-
     /** Pipeline optimized for blue alliance localization. */
-    public static final int BLUE_PIPELINE = 1;
+    public static final int BLUE_LOCALIZATION_PIPELINE = 1;
 
     /** Pipeline optimized for red alliance localization. */
-    public static final int RED_PIPELINE = 2;
+    public static final int RED_LOCALIZATION_PIPELINE = 2;
 
     /** Pipeline used for detecting obelisk patterns. */
     public static final int OBELISK_PIPELINE = 3;
@@ -72,10 +69,10 @@ public class LimeLight extends SubsystemBase {
     /**
      * Constructs the LimeLight subsystem and initializes default settings.
      */
-    public LimeLight() {
+    public LimeLight(int pipeline) {
         limelight = BarnRobot.getInstance().farminatorHardware.limelight;
         limelight.setPollRateHz(POLL_RATE_HZ);
-        switchPipeline(STANDARD_PIPELINE);
+        switchPipeline(pipeline);
         Dyaw = 0;
         start();
     }
@@ -97,17 +94,6 @@ public class LimeLight extends SubsystemBase {
         frs = null;
     }
 
-    /**
-     * Switches to the localization pipeline based on alliance color.
-     */
-    public void switchToLocalizationPipeline() {
-        AllianceColor alliance = BarnRobot.getInstance().opmodeData.allianceColor;
-        if (alliance == AllianceColor.BLUE) {
-            switchPipeline(BLUE_PIPELINE);
-        } else {
-            switchPipeline(RED_PIPELINE);
-        }
-    }
 
     /**
      * Checks if the Limelight data is valid and up-to-date.
@@ -216,7 +202,7 @@ public class LimeLight extends SubsystemBase {
      * @return true if a goal tag is detected
      */
     public boolean isGoalTagDetected() {
-        return (currentPipeline == BLUE_PIPELINE || currentPipeline == RED_PIPELINE) && isDataValid();
+        return (currentPipeline == BLUE_LOCALIZATION_PIPELINE || currentPipeline == RED_LOCALIZATION_PIPELINE) && isDataValid();
     }
 
     /** Updates Limelight results; should be called periodically. */

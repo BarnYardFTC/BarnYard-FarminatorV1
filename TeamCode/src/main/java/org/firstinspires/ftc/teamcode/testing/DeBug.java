@@ -36,7 +36,7 @@ public class DeBug extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
+        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS, LimeLight.RED_LOCALIZATION_PIPELINE));
         drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
@@ -65,7 +65,7 @@ public class DeBug extends CommandOpMode {
 //            BarnRobot.getInstance().limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
 //        }
 
-        if (farminator.limelight.currentPipeline != LimeLight.BLUE_PIPELINE) farminator.limelight.switchPipeline(LimeLight.BLUE_PIPELINE);
+        if (farminator.limelight.currentPipeline != LimeLight.BLUE_LOCALIZATION_PIPELINE) farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
         BarnRobot.getInstance().limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
 
         farminator.periodic();

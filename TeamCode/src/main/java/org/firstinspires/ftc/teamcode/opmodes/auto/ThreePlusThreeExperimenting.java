@@ -87,13 +87,14 @@ public class ThreePlusThreeExperimenting extends CommandOpMode {
 
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(
-                new WaitUntilCommand(this::opModeIsActive),
+                new WaitUntilCommand(this::opModeIsActive), //todo:what is that
                 farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                 new DriveActionCommand(path1),
                 ShootSequenceCommandGroup.customShootWhenReady(1.8),
                 ShootSequenceCommandGroup.customShootWhenReady(1.8),
                 ShootSequenceCommandGroup.customShootWhenReady(1.8),
                 farminator.shooter.deactivateShooterCommand(),
+
 
                 new ConditionalCommand(
                         new SequentialCommandGroup(new DriveActionCommand(path2)),
@@ -122,6 +123,9 @@ public class ThreePlusThreeExperimenting extends CommandOpMode {
         /** Update limelight and shooter telemetry */
         farminator.limelight.periodic();
 
+        //todo: it's better to do this with runCommand
+        //todo: once you detected the pattern stop searching
+        //if you don't detect the pattern you don't calc the range, you don't have to do it this way
         if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()) {
             farminator.limelight.findPattern();
         } else if (farminator.limelight.isPatternFound()) {

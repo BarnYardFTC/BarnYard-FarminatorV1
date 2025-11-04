@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
@@ -18,6 +19,10 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 public class AutoTest extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
+
+    private final OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.BLUE, OpModeData.OpModeType.AUTONOMOUS,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE);
 
     public static double POSE1_X = 0;
     public static double POSE1_Y = 0;
@@ -40,7 +45,8 @@ public class AutoTest extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS));
+        farminator.init(this, opModeData);
+
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))

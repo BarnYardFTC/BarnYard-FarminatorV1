@@ -77,7 +77,7 @@ public class Shooter extends SubsystemBase {
     }
 
     /** Checks if the shooter motor is ready for a custom range. */
-    public boolean customIsMotorReady(double range) {
+    public boolean isMotorReady(double range) {
         double target = rangeDependentVelocity(range);
         double velocity = shooter.getVelocity();
         return velocity > target - RPM_TOLERANCE && velocity < target + RPM_TOLERANCE;

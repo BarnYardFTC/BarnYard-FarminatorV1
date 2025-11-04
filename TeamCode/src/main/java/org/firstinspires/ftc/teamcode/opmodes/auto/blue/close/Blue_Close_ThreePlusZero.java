@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 
 /**
  * Autonomous routine "3+0 Close":
@@ -28,7 +28,13 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
-    private MecanumDrive drive;
+    private RoadRunnerMecanumDrive drive;
+
+    private final OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.BLUE,
+            OpModeData.OpModeType.AUTONOMOUS,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE
+    );
 
     /** Initial pose */
     public static double POSE1_X = -37;
@@ -45,10 +51,9 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
         /** Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(
-                OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
+        farminator.init(this, opModeData);
 
-        drive = new MecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
         /** Switch limelight to obelisk detection pipeline */
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
@@ -62,11 +67,12 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                 new DriveActionCommand(path1),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
                 farminator.shooter.deactivateShooterCommand()
         ).schedule();
+
     }
 
     @Override
@@ -88,5 +94,14 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         farminator.limelight.displayTelemetry();
         farminator.shooter.displayTelemetry();
         farminator.periodic();
+    }
+
+    /**
+     * runs when the autonomous is finished
+     */
+    @Override
+    public void end(){
+        // store the finish heading of the auto
+        OpModeData.setAutoFinishHeading(drive.localizer.getPose().heading.real);
     }
 }

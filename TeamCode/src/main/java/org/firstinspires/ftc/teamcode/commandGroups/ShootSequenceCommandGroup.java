@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Transfer.TRANSFER_ALL_DURATION;
-import static org.firstinspires.ftc.teamcode.subsystems.Transfer.TRANSFER_ONE_DURATION;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
@@ -11,6 +9,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 /**
  * Command group sequences for shooting and feeding game elements to the shooter.
@@ -24,6 +23,9 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
     /** Default preparation time for shooter in milliseconds. */
     public static int SHOOT_PREP_TIME = 4000;
 
+
+    public static int TRANSFER_ONE_DURATION = 800;
+    public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
     /**
      * Full shoot-all sequence:
      * - Activate shooter and wait for it to reach speed
@@ -39,10 +41,10 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 robot.shooter.activateShooterCommand(),
                 new WaitCommand(SHOOT_PREP_TIME),
-                robot.transfer.activateTransferCommand(),
+                robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                 robot.intake.activateIntakeCommand(),
                 new WaitCommand(TRANSFER_ALL_DURATION),
-                robot.transfer.deactivateTransferCommand(),
+                robot.transfer.setFrontPowerCommand(0),
                 robot.shooter.deactivateShooterCommand(),
                 robot.intake.deactivateIntakeCommand()
         );
@@ -57,7 +59,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new ParallelCommandGroup(
-                robot.transfer.activateTransferCommand(),
+                robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                 robot.intake.activateIntakeCommand()
         );
     }
@@ -79,11 +81,11 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
                 new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
                 new ParallelCommandGroup(
                         robot.intake.activateIntakeCommand(),
-                        robot.transfer.activateTransferCommand()
+                        robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
                 ),
                 new WaitCommand(TRANSFER_ONE_DURATION),
                 new ParallelCommandGroup(
-                        robot.transfer.deactivateTransferCommand(),
+                        robot.transfer.setEntireTransferPowerCommand(0),
                         robot.intake.deactivateIntakeCommand()
                 )
         );
@@ -92,25 +94,25 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
     /**
      * Sequence to shoot one element when shooter reaches ready velocity for a specific range.
      *
-     * @param range The target distance for shooter speed calculation
+     * @param velocity The target distance for shooter speed calculation
      * @return Sequential command shooting when shooter is ready for the given range
      */
-    public static Command customShootWhenReady(double range) {
+    public static Command shootWhenReady(double velocity) {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
-                new WaitUntilCommand(() -> robot.shooter.customIsMotorReady(range)),
+                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> robot.shooter.customIsMotorReady(range)),
+                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> robot.shooter.customIsMotorReady(range)),
+                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
                 new ParallelCommandGroup(
                         robot.intake.activateIntakeCommand(),
-                        robot.transfer.activateTransferCommand()
+                        robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
                 ),
                 new WaitCommand(TRANSFER_ONE_DURATION),
                 new ParallelCommandGroup(
-                        robot.transfer.deactivateTransferCommand(),
+                        robot.transfer.setEntireTransferPowerCommand(0),
                         robot.intake.deactivateIntakeCommand()
                 )
         );
@@ -125,7 +127,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new ParallelCommandGroup(
-                robot.transfer.deactivateTransferCommand(),
+                robot.transfer.setEntireTransferPowerCommand(0),
                 robot.intake.deactivateIntakeCommand()
         );
     }
@@ -141,10 +143,9 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
-                robot.transfer.activateTransferCommand(),
+                robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                 new WaitCommand(TRANSFER_ONE_DURATION),
-                robot.transfer.deactivateTransferCommand(),
-                robot.shooter.deactivateShooterCommand()
+                robot.transfer.setEntireTransferPowerCommand(0)
         );
     }
 }

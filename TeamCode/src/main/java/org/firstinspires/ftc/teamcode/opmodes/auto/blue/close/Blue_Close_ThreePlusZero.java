@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto;
+package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.MecanumDrive;
  */
 @Config
 @Autonomous(name = "3+0 Close", group = "main")
-public class ThreePlusZeroClose extends CommandOpMode {
+public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;

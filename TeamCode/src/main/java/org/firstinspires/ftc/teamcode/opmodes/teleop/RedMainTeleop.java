@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -31,7 +32,16 @@ public class RedMainTeleop extends CommandOpMode {
     // ------------------------
     private BarnRobot farminator;
 
-    private static final double INITIAL_BOT_HEADING = 270;
+    private double START_POSE_X = 10;
+    private double START_POSE_Y = 10;
+    private double START_POSE_HEADING = Math.toRadians(180);
+
+    private OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.RED,
+            new Pose2d(START_POSE_X, START_POSE_Y, START_POSE_HEADING),
+            90,
+            OpModeData.OpModeType.TELEOP, LimeLight.BLUE_LOCALIZATION_PIPELINE
+    );
 
     @Override
     public void initialize() {
@@ -42,14 +52,8 @@ public class RedMainTeleop extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(
                 this,
-                new OpModeData(
-                        OpModeData.AllianceColor.RED,
-                        INITIAL_BOT_HEADING,
-                        INITIAL_BOT_HEADING,
-                        OpModeData.OpModeType.TELEOP,
-                        LimeLight.RED_LOCALIZATION_PIPELINE
-                )
-        );
+                opModeData
+                );
         farminator.limelight.switchPipeline(LimeLight.RED_LOCALIZATION_PIPELINE);
 
         // ==========================================================

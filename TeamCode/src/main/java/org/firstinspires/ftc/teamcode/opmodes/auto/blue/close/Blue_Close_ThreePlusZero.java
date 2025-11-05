@@ -30,12 +30,6 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
 
-    private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
-            OpModeData.OpModeType.AUTONOMOUS,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE
-    );
-
     /** Initial pose */
     public static double POSE1_X = -37;
     public static double POSE1_Y = -53;
@@ -45,6 +39,13 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     public static double POSE2_X = -40;
     public static double POSE2_Y = -15;
     public static double POSE2_HEADING = Math.toRadians(250);
+
+
+    private final OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.BLUE,
+            OpModeData.OpModeType.AUTONOMOUS,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
+            new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
     @Override
     public void initialize() {

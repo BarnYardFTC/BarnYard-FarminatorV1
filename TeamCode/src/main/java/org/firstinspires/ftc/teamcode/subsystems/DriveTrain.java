@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -55,7 +56,7 @@ public class DriveTrain extends SubsystemBase {
         imu.initialize(BarnRobot.getInstance().robotHardware.IMU_PARAMETERS);
         imu.resetYaw();
 
-        initialBotHeading = BarnRobot.getInstance().opmodeData.initialBotHeading;
+        initialBotHeading = BarnRobot.getInstance().opmodeData.initialPose2d.heading.real;
         pidControllerYaw = new PIDController(pYaw, 0, dYaw);
 
         lastLimelightValid = false;

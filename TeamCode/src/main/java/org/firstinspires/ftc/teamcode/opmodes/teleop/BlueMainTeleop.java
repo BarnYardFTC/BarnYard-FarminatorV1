@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -24,6 +26,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Periodic updates
  */
 @TeleOp(name = "BlueMainTeleop", group = "main")
+@Config
 public class BlueMainTeleop extends CommandOpMode {
 
     // ------------------------
@@ -33,9 +36,14 @@ public class BlueMainTeleop extends CommandOpMode {
 
     private static final double INITIAL_BOT_HEADING = 270;
 
+    // TODO: Put correct pose here
+    public double START_POSE_X = 24;
+    public double START_POSE_Y = -40;
+    public double START_POSE_HEADING = Math.toRadians(215);
+
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
-            OpModeData.getAutoFinishHeading(),
+            new Pose2d(START_POSE_X, START_POSE_Y, START_POSE_HEADING),
             270,
             OpModeData.OpModeType.TELEOP,
             LimeLight.BLUE_LOCALIZATION_PIPELINE
@@ -50,13 +58,7 @@ public class BlueMainTeleop extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(
                 this,
-                new OpModeData(
-                        OpModeData.AllianceColor.BLUE,
-                        INITIAL_BOT_HEADING,
-                        INITIAL_BOT_HEADING,
-                        OpModeData.OpModeType.AUTONOMOUS,
-                        LimeLight.BLUE_LOCALIZATION_PIPELINE
-                )
+                opModeData
         );
         farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
 

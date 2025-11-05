@@ -12,10 +12,17 @@ import java.util.List;
 
 /**
  * Subsystem for controlling and reading data from the Limelight3A vision sensor.
- *
+
  * Handles pipeline switching, fiducial detection, range calculation, and telemetry output.
  */
 public class LimeLight extends SubsystemBase {
+
+    /*
+    Limelight 3d Pos on bot:
+        - Forward: 0.2
+        - Up: 0.34
+        - Right: 0
+     */
 
     /** Pipeline optimized for blue alliance localization. */
     public static final int BLUE_LOCALIZATION_PIPELINE = 1;
@@ -74,6 +81,15 @@ public class LimeLight extends SubsystemBase {
         switchPipeline(pipeline);
         Dyaw = 0;
         start();
+    }
+
+    public void resetData(){
+        llResult = null;
+        frs = null;
+        obeliskPattern = null;
+        Dyaw = 0;
+        goalRange = 0;
+        currentPipeline = BLUE_LOCALIZATION_PIPELINE;
     }
 
     /** Starts the Limelight processing loop. */

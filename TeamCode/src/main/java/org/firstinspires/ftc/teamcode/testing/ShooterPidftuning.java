@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -31,6 +32,9 @@ public class ShooterPidftuning extends CommandOpMode {
 
     private VoltageSensor voltageSensor;
 
+
+    private OpModeData opModedata = new OpModeData(OpModeData.AllianceColor.BLUE, new Pose2d(0,0,0), 270, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE);
+
     @Override
     public void initialize() {
 
@@ -38,7 +42,7 @@ public class ShooterPidftuning extends CommandOpMode {
         // Initialize Robot Systems
         // ------------------------
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
+        farminator.init(this, opModedata);
 
         this.voltageSensor = farminator.robotHardware.voltageSensor;
 

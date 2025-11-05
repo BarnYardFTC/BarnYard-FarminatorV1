@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.roadrunner.Pose2d;
+
 /**
  * Stores configuration and runtime data for an OpMode.
  *
@@ -21,7 +23,7 @@ public class OpModeData {
     public double fieldReferenceHeading;
 
     /** The robot’s starting heading on the field at the beginning of the OpMode. */
-    public double initialBotHeading;
+    public Pose2d initialPose2d;
 
     /**Pipeline of limelight*/
     public int limelightPipeline;
@@ -41,23 +43,23 @@ public class OpModeData {
 
     /** Teleop constructor */
     public OpModeData(AllianceColor allianceColor,
-                      double initialBotHeading,
+                      Pose2d initialPose2d,
                       double fieldReferenceHeading,
                       OpModeType opModeType, int limelightPipeline) {
         this.allianceColor = allianceColor;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
         this.limelightPipeline = limelightPipeline;
-        this.initialBotHeading = initialBotHeading;
+        this.initialPose2d = initialPose2d;
 
     }
 
     /** Autonomous constructor */
     public OpModeData(AllianceColor allianceColor,
-                      OpModeType opModeType, int limelightPipeline) {
+                      OpModeType opModeType, int limelightPipeline, Pose2d initialPose2d) {
         autoFinishHeading = 0;
         this.fieldReferenceHeading = 0;
-        this.initialBotHeading = 0;
+        this.initialPose2d = initialPose2d;
         this.allianceColor = allianceColor;
         this.opModeType = opModeType;
         this.limelightPipeline = limelightPipeline;
@@ -72,5 +74,4 @@ public class OpModeData {
     public static void setAutoFinishHeading(double heading){
         autoFinishHeading = heading;
     }
-
 }

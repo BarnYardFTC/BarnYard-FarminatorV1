@@ -20,10 +20,6 @@ public class AutoTest extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
 
-    private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE, OpModeData.OpModeType.AUTONOMOUS,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE);
-
     public static double POSE1_X = 0;
     public static double POSE1_Y = 0;
     public static double POSE1_HEADING = Math.toRadians(0);
@@ -37,6 +33,13 @@ public class AutoTest extends CommandOpMode {
     public static double POSE4_X = 24;
     public static double POSE4_Y = 24;
     public static double POSE4_HEADING = Math.toRadians(90);
+
+    private final OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.BLUE,
+            OpModeData.OpModeType.TELEOP,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
+            new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING)
+            );
 
     @Override
     public void initialize() {

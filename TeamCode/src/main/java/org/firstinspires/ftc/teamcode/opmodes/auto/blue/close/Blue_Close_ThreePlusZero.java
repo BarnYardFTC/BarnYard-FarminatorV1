@@ -99,11 +99,6 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
             farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         }
 
-
-        telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x);
-        telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y);
-        telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
-
         farminator.periodic();
     }
 

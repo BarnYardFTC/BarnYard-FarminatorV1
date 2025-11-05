@@ -17,6 +17,13 @@ import java.util.List;
  */
 public class LimeLight extends SubsystemBase {
 
+    /*
+    Limelight 3d Pos on bot:
+        - Forward: 0.2
+        - Up: 0.34
+        - Right: 0
+     */
+
     /** Pipeline optimized for blue alliance localization. */
     public static final int BLUE_LOCALIZATION_PIPELINE = 1;
 

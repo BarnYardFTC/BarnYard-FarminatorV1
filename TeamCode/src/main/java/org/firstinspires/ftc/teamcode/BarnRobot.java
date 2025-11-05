@@ -151,7 +151,7 @@ public class BarnRobot extends Robot {
         pinpointLocalizer = new PinpointLocalizer(
                 hardwareMap,
                 RoadRunnerMecanumDrive.PARAMS.inPerTick,
-                opmodeData.initialPose2d
+                new Pose2d
                 );
 
         if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP){

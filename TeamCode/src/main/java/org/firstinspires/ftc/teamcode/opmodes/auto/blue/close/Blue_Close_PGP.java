@@ -118,6 +118,6 @@ public class Blue_Close_PGP extends CommandOpMode {
     @Override
     public void end(){
         // store the finish heading of the auto
-        OpModeData.setAutoFinishHeading(drive.localizer.getPose().heading.real);
+        OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
 }

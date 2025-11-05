@@ -29,7 +29,7 @@ public class OpModeData {
     public int limelightPipeline;
 
     /**the heading in which the autonomous has ended*/
-    private static double autoFinishHeading;
+    private static Pose2d autoFinishPose;
 
     // ------------------------------------------------------------
     // Enums
@@ -46,18 +46,21 @@ public class OpModeData {
                       Pose2d initialPose2d,
                       double fieldReferenceHeading,
                       OpModeType opModeType, int limelightPipeline) {
+
         this.allianceColor = allianceColor;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
         this.limelightPipeline = limelightPipeline;
         this.initialPose2d = initialPose2d;
-
     }
+
+
 
     /** Autonomous constructor */
     public OpModeData(AllianceColor allianceColor,
                       OpModeType opModeType, int limelightPipeline, Pose2d initialPose2d) {
-        autoFinishHeading = 0;
+
+        autoFinishPose = new Pose2d(0,0,0); //reset autoFinishPose
         this.fieldReferenceHeading = 0;
         this.initialPose2d = initialPose2d;
         this.allianceColor = allianceColor;
@@ -66,12 +69,14 @@ public class OpModeData {
     }
 
 
-    public static double getAutoFinishHeading(){
-        return autoFinishHeading;
+    public static Pose2d getAutoFinishPose(){
+        return autoFinishPose;
+    }
+
+    public static void setAutoFinishPose(Pose2d autoFinishPose){
+        OpModeData.autoFinishPose = autoFinishPose;
     }
 
 
-    public static void setAutoFinishHeading(double heading){
-        autoFinishHeading = heading;
-    }
+
 }

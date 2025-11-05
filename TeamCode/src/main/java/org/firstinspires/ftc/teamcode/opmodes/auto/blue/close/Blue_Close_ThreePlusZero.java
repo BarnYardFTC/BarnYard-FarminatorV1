@@ -104,6 +104,6 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     @Override
     public void end(){
         // store the finish heading of the auto
-        OpModeData.setAutoFinishHeading(drive.localizer.getPose().heading.toDouble());
+        OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
 }

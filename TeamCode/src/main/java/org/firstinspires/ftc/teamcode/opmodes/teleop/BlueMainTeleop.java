@@ -39,18 +39,19 @@ public class BlueMainTeleop extends CommandOpMode {
     // TODO: Put correct pose here
     public double START_POSE_X = 24;
     public double START_POSE_Y = -40;
-    public double START_POSE_HEADING = Math.toRadians(215);
-
-    private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
-            new Pose2d(START_POSE_X, START_POSE_Y, START_POSE_HEADING),
-            270,
-            OpModeData.OpModeType.TELEOP,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE
-    );
+    public double START_POSE_HEADING = 0; // This is defualt, the real heading is  received in initalize() through OpModeData
 
     @Override
     public void initialize() {
+
+        double autoFinishHeading = OpModeData.getAutoFinishHeading();
+        OpModeData opModeData = new OpModeData(
+                OpModeData.AllianceColor.BLUE,
+                new Pose2d(START_POSE_X, START_POSE_Y, autoFinishHeading),
+                270,
+                OpModeData.OpModeType.TELEOP,
+                LimeLight.BLUE_LOCALIZATION_PIPELINE
+        );
 
         // ==========================================================
         // Robot Initialization
@@ -114,6 +115,9 @@ public class BlueMainTeleop extends CommandOpMode {
         // Periodic Updates
         // ==========================================================
         super.run();
+        telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
+
         farminator.periodic();
+
     }
 }

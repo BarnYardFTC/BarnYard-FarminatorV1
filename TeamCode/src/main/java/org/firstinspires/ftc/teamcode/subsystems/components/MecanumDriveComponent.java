@@ -120,13 +120,17 @@ public class MecanumDriveComponent {
 
     public void adjustSpeedForHeading() {
         double heading = Math.toRadians(
-                (BarnRobot.getInstance().drive.getHeading() - BarnRobot.getInstance().opmodeData.fieldReferenceHeading + 540) % 360 -180
+                (getHeading() - BarnRobot.getInstance().opmodeData.fieldReferenceHeading + 540) % 360 -180
         );
         double adjustedX = spdX * Math.cos(heading) + spdY * Math.sin(heading);
         double adjustedY = - spdX * Math.sin(heading) + spdY * Math.cos(heading);
 
         spdX = adjustedX;
         spdY = adjustedY;
+    }
+
+    private double getHeading(){
+        return BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble();
     }
 
 

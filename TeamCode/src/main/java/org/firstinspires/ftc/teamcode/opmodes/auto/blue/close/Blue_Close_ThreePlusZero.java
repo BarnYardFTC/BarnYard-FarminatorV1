@@ -92,8 +92,9 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
             farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         }
 
-        farminator.limelight.displayTelemetry();
-        farminator.shooter.displayTelemetry();
+
+        telemetry.addData("heading", drive.localizer.getPose().heading.toDouble());
+
         farminator.periodic();
     }
 
@@ -103,6 +104,6 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     @Override
     public void end(){
         // store the finish heading of the auto
-        OpModeData.setAutoFinishHeading(drive.localizer.getPose().heading.real);
+        OpModeData.setAutoFinishHeading(drive.localizer.getPose().heading.toDouble());
     }
 }

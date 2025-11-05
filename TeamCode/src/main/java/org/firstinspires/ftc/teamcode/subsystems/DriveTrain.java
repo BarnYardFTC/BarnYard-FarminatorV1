@@ -28,7 +28,6 @@ public class DriveTrain extends SubsystemBase {
     //                       HARDWARE
     // ============================================================
 
-    private final IMU imu;
     public final MecanumDriveComponent mecanumDriveComponent;
 
     // ============================================================
@@ -52,34 +51,12 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
         mecanumDriveComponent = new MecanumDriveComponent();
 
-        imu = BarnRobot.getInstance().robotHardware.imu;
-        imu.initialize(BarnRobot.getInstance().robotHardware.IMU_PARAMETERS);
-        imu.resetYaw();
-
         initialBotHeading = BarnRobot.getInstance().opmodeData.initialPose2d.heading.real;
         pidControllerYaw = new PIDController(pYaw, 0, dYaw);
 
         lastLimelightValid = false;
         tagJustVanished = false;
     }
-
-    // ============================================================
-    //                       HEADING & IMU
-    // ============================================================
-
-    public void resetHeading() {
-        imu.resetYaw();
-    }
-
-
-    /** Returns heading in degrees (includes initial offset) */
-    public double getHeading() {
-        return ((imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) + 360) % 360 + initialBotHeading) % 360;
-    }
-
-    /** Normalizes any angle into [0, 360) range */
-
-
 
     // ============================================================
     //                          DRIVING
@@ -121,7 +98,7 @@ public class DriveTrain extends SubsystemBase {
 
     /** Determines turn direction when Limelight is invalid */
     private double determineFinalTurnSpeed() {
-        double heading = getHeading();
+        double heading = BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble();
 
         double lowerBound, upperBound;
 
@@ -206,11 +183,6 @@ public class DriveTrain extends SubsystemBase {
                 ),
                 this
         );
-    }
-
-    /** Reset IMU heading instantly */
-    public Command resetHeadingCommand() {
-        return new InstantCommand(this::resetHeading, this);
     }
 
     /** Continuous alignment command (runs alignToGoal loop) */

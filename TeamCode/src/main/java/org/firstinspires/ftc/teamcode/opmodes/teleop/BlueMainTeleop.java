@@ -108,9 +108,11 @@ public class BlueMainTeleop extends CommandOpMode {
         // ==========================================================
         // Periodic Updates
         // ==========================================================
-        telemetry.addData("robot x", );
+        telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x);
+        telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y);
+        telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
+
         super.run();
         farminator.periodic();
-
     }
 }

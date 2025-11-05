@@ -6,7 +6,10 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -74,6 +77,10 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                 farminator.shooter.deactivateShooterCommand()
         ).schedule();
 
+        new SequentialCommandGroup(
+                new WaitCommand(10000)
+                );
+
     }
 
     @Override
@@ -93,7 +100,9 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         }
 
 
-        telemetry.addData("heading", drive.localizer.getPose().heading.toDouble());
+        telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x);
+        telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y);
+        telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
 
         farminator.periodic();
     }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -9,19 +11,22 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
- * Bue TeleOp mode for the Barnyard FTC robot.
+ * BlueMainTeleop
  *
- * Controls all subsystems through command-based triggers and gamepad mappings.
+ * Main TeleOp mode for the Barnyard FTC robot (Blue Alliance).
+ * Controls all robot subsystems using the command-based architecture.
  *
  * Structure:
- * - Robot Initialization
- * - Gamepad Bindings (Buttons + Triggers)
- * - Periodic Updates
+ * - Initialization (robot setup)
+ * - Gamepad mappings
+ * - Periodic updates
  */
 @TeleOp(name = "BlueMainTeleop", group = "main")
+@Config
 public class BlueMainTeleop extends CommandOpMode {
 
     // ------------------------
@@ -29,69 +34,81 @@ public class BlueMainTeleop extends CommandOpMode {
     // ------------------------
     private BarnRobot farminator;
 
-    private final double INITIAL_BOT_HEADING = 270;
+    private static final double INITIAL_BOT_HEADING = 270;
 
     @Override
     public void initialize() {
 
-        // ------------------------
-        // Initialize Robot Systems
-        // ------------------------
+        Pose2d autoFinishPose = OpModeData.getAutoFinishPose(); // use the pose in which the auto has ended
+        OpModeData opModeData = new OpModeData(
+                OpModeData.AllianceColor.BLUE,
+                OpModeData.OpModeType.TELEOP,
+                LimeLight.BLUE_LOCALIZATION_PIPELINE,
+                autoFinishPose
+        );
+
+        // ==========================================================
+        // Robot Initialization
+        // ==========================================================
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(OpModeData.AllianceColor.BLUE, 270, 270, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
+        farminator.init(
+                this,
+                opModeData
+        );
         farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
 
-        // -----------------------------------------------------
-        // Gamepad 1 Mappings
-        // -----------------------------------------------------
+        // ==========================================================
+        // Gamepad 1 Controls
+        // ==========================================================
 
-        /* ========== Transfer Controls ========== */
-        // B: Front transfer forward
+        // ------------------------
+        // Transfer System
+        // ------------------------
+
+        // Left Bumper → Run back transfer backward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.transfer.activateFrontTransferCommand())
-                .whenInactive(farminator.transfer.deactivateFrontTransferCommand());
+                .whenPressed(farminator.transfer.setBackPowerCommand(-Transfer.DEFAULT_TRANSFER_POWER))
+                .whenInactive(farminator.transfer.setBackPowerCommand(0));
 
-        // Y: Back transfer forward
+        // Right Bumper → Run all transfer motors forward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(farminator.transfer.activateBackTransferCommand())
-                .whenInactive(farminator.transfer.deactivateBackTransferCommand());
+                .whenPressed(farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER))
+                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
-
+        // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.transfer.activateTransferCommand(),
-                        farminator.intake.activateIntakeCommand())
-                )
+                        farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
+                        farminator.intake.activateIntakeCommand()
+                ))
                 .whenInactive(new ParallelCommandGroup(
-                        farminator.transfer.deactivateTransferCommand(),
+                        farminator.transfer.setEntireTransferPowerCommand(0),
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
+        // Right Trigger → Shooter active
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(farminator.shooter.activateShooterCommand())
                 .whenInactive(farminator.shooter.deactivateShooterCommand());
 
-        /* ========== Intake Controls ========== */
-        // A: Activate/deactivate intake
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenActive(farminator.drive.alignToTagCommand())
-                .whenInactive(farminator.drive.driveCommand());
+        // ------------------------
+        // Drive System
+        // ------------------------
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenActive(farminator.transfer.activateBackTransferCommand(-1))
-                .whenInactive(farminator.transfer.activateBackTransferCommand(0));
-
+        // Right Stick Button → Toggle between slow and fast drive modes
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
-
     }
 
     @Override
     public void run() {
-        // Run command scheduler and periodic updates
+        // ==========================================================
+        // Periodic Updates
+        // ==========================================================
+
         super.run();
         farminator.periodic();
     }

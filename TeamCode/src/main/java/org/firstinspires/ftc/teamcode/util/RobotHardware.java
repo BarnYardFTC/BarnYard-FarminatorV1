@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
@@ -21,6 +22,9 @@ import com.qualcomm.robotcore.hardware.IMU;
  * Every subsystem gets its devices from here.
  */
 public class RobotHardware {
+
+    public VoltageSensor voltageSensor;
+
 
     // ------------------------------------------------------------
     // Transfer Servos
@@ -128,6 +132,7 @@ public class RobotHardware {
         initMotors();
         initServos();
         initSensors();
+        initVoltageSensor();
     }
 
 
@@ -153,6 +158,7 @@ public class RobotHardware {
      * Example method for initializing Control/Expansion hubs, kept for future expansion.
      */
     private void initHubs() {
+
         // ctrlHub = new CuttleRevHub(hw, CuttleRevHub.HubTypes.CONTROL_HUB);
         // expHub = new CuttleRevHub(hw, "Expansion Hub 1");
     }
@@ -207,5 +213,8 @@ public class RobotHardware {
     private void initSensors() {
         imu = hw.get(IMU.class, "imu");
         limelight = hw.get(Limelight3A.class, "limelight");
+    }
+    private void initVoltageSensor(){
+        voltageSensor = hw.get(VoltageSensor.class, "Control Hub");
     }
 }

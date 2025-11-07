@@ -6,7 +6,10 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -40,13 +43,19 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     public static double POSE2_Y = -15;
     public static double POSE2_HEADING = Math.toRadians(250);
 
+
+    private final OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.BLUE,
+            OpModeData.OpModeType.AUTONOMOUS,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
+            new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+
     @Override
     public void initialize() {
 
         /** Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
-        farminator.init(this, new OpModeData(
-                OpModeData.AllianceColor.BLUE, 0, 0, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE));
+        farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
@@ -62,11 +71,16 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                 new DriveActionCommand(path1),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
-                ShootSequenceCommandGroup.customShootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
+                ShootSequenceCommandGroup.shootWhenReady(1.8),
                 farminator.shooter.deactivateShooterCommand()
         ).schedule();
+
+        new SequentialCommandGroup(
+                new WaitCommand(10000)
+                );
+
     }
 
     @Override
@@ -85,8 +99,15 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
             farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
         }
 
-        farminator.limelight.displayTelemetry();
-        farminator.shooter.displayTelemetry();
         farminator.periodic();
+    }
+
+    /**
+     * runs when the autonomous is finished
+     */
+    @Override
+    public void end(){
+        // store the finish heading of the auto
+        OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
 }

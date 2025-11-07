@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
@@ -8,6 +10,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.roadrunner.Localizer;
+import org.firstinspires.ftc.teamcode.util.roadrunner.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
 
 /**
  * BarnRobot is the central robot class.
@@ -35,10 +40,13 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
 
     public Transfer transfer;
-    public DriveTrain drive;
+    public DriveTrain drive; // used in teleop
+    public RoadRunnerMecanumDrive roadRunnerMecanumDrive; // used in auto
     public LimeLight limelight;
     public Shooter shooter;
     public Intake intake;
+
+    public Localizer pinpointLocalizer;
 
 
     // ------------------------------------------------------------
@@ -60,7 +68,7 @@ public class BarnRobot extends Robot {
     // Robot Hardware
     // ------------------------------------------------------------
 
-    public RobotHardware farminatorHardware;
+    public RobotHardware robotHardware;
 
 
     // ------------------------------------------------------------
@@ -68,6 +76,7 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
 
     public OpModeData opmodeData;
+    public static boolean isRobotInitialized = false;
 
 
     // ------------------------------------------------------------
@@ -81,6 +90,7 @@ public class BarnRobot extends Robot {
     public static synchronized BarnRobot getInstance() {
         if (instance == null) {
             instance = new BarnRobot();
+            isRobotInitialized = true;
         }
         return instance;
     }
@@ -108,7 +118,7 @@ public class BarnRobot extends Robot {
         this.opmodeData = opModeData;
 
         // Hardware and telemetry setup
-        this.farminatorHardware = new RobotHardware(opMode.hardwareMap);
+        this.robotHardware = new RobotHardware(opMode.hardwareMap);
         this.telemetry = opMode.telemetry;
 
         // Gamepad setup
@@ -117,15 +127,10 @@ public class BarnRobot extends Robot {
 
         // Subsystem initialization
         initTransfer();
-
-        // Only initialize drivetrain in TeleOp
-        if (opModeData.opModeType == OpModeData.OpModeType.TELEOP) {
-            initDrivetrain();
-        }
-
         initLimeLight(opModeData.limelightPipeline);
         initShooter();
         initIntake();
+        initDrivetrain(opMode.hardwareMap);
     }
 
 
@@ -142,9 +147,12 @@ public class BarnRobot extends Robot {
      * Sets up the drivetrain, registers it in the command framework,
      * and sets its default driving command.
      */
-    public void initDrivetrain() {
-        drive = new DriveTrain();
-        drive.setDefaultCommand(drive.driveCommand());
+    public void initDrivetrain(HardwareMap hardwareMap) {
+
+        if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
+            drive = new DriveTrain();
+            drive.setDefaultCommand(drive.driveCommand());
+        }
     }
 
     /** Sets up the transfer system. */
@@ -172,6 +180,7 @@ public class BarnRobot extends Robot {
      * For now, it just updates telemetry, but more shared logic can go here.
      */
     public void periodic() {
+        pinpointLocalizer.update();
         telemetry.update();
     }
 }

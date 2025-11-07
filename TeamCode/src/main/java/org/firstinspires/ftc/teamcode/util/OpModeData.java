@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.roadrunner.Pose2d;
+
 /**
  * Stores configuration and runtime data for an OpMode.
  *
@@ -21,10 +23,13 @@ public class OpModeData {
     public double fieldReferenceHeading;
 
     /** The robot’s starting heading on the field at the beginning of the OpMode. */
-    public double initialBotHeading;
+    public Pose2d initialPose2d;
 
     /**Pipeline of limelight*/
     public int limelightPipeline;
+
+    /**the heading in which the autonomous has ended*/
+    private static Pose2d autoFinishPose;
 
     // ------------------------------------------------------------
     // Enums
@@ -36,16 +41,40 @@ public class OpModeData {
     // Constructors
     // ------------------------------------------------------------
 
-    /** Full constructor (all fields specified). */
+    /** Teleop constructor */
     public OpModeData(AllianceColor allianceColor,
-                      double initialBotHeading,
+                      Pose2d initialPose2d,
                       double fieldReferenceHeading,
                       OpModeType opModeType, int limelightPipeline) {
+
         this.allianceColor = allianceColor;
-        this.initialBotHeading = initialBotHeading;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
         this.limelightPipeline = limelightPipeline;
+        this.initialPose2d = initialPose2d;
+    }
+
+
+
+    /** Autonomous constructor */
+    public OpModeData(AllianceColor allianceColor,
+                      OpModeType opModeType, int limelightPipeline, Pose2d initialPose2d) {
+
+        autoFinishPose = new Pose2d(0,0,0); //reset autoFinishPose
+        this.fieldReferenceHeading = 0;
+        this.initialPose2d = initialPose2d;
+        this.allianceColor = allianceColor;
+        this.opModeType = opModeType;
+        this.limelightPipeline = limelightPipeline;
+    }
+
+
+    public static Pose2d getAutoFinishPose(){
+        return autoFinishPose;
+    }
+
+    public static void setAutoFinishPose(Pose2d autoFinishPose){
+        OpModeData.autoFinishPose = autoFinishPose;
     }
 
 

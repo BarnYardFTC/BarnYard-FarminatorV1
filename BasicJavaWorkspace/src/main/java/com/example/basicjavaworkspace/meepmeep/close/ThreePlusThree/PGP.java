@@ -29,7 +29,7 @@ public class PGP {
     public static final double POSE3_HEADING = Math.toRadians(270);
 
     public static final double POSE4_X = 11;
-    public static final double POSE4_Y = -51;
+    public static final double POSE4_Y = -58;
     public static final double POSE4_HEADING = Math.toRadians(270);
 
     public static final double POSE5_X =11;
@@ -64,6 +64,7 @@ public class PGP {
 
         TrajectoryActionBuilder slowPath = slowBot.getDrive().actionBuilder(
                         new Pose2d(POSE3_X, POSE3_Y, POSE3_HEADING))
+
                 .strafeToLinearHeading(new Vector2d(POSE4_X, POSE4_Y), POSE4_HEADING);
 
 

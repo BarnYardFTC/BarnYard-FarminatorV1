@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -26,6 +28,7 @@ public class Shooter extends SubsystemBase {
     // Hardware
     // ------------------------------------------------------------
     private final DcMotorEx shooter;
+    private final Servo shooterAlignment;
 
     // ------------------------------------------------------------
     // Constants
@@ -35,6 +38,13 @@ public class Shooter extends SubsystemBase {
     public final double RPM_TOLERANCE = 10;            // allowable error for motor readiness
 
     public static double TARGET_SPEED = 1850;
+    private double servoPos;
+
+    public static double SPEED = 0.01;
+
+    private final double UPPER_BORDER = 1;
+    private final double LOWER_BORDER = 0;
+
 
     // Shooting parameters
     private final double g = 9.87;                     // gravity (m/s^2)
@@ -51,7 +61,9 @@ public class Shooter extends SubsystemBase {
     // ------------------------------------------------------------
     public Shooter() {
         shooter = BarnRobot.getInstance().robotHardware.shooter;
+        shooterAlignment = BarnRobot.getInstance().robotHardware.shooterAlignment;
 
+        double servoPos = 0.5;
         // Motor configuration
         shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooter.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -67,6 +79,12 @@ public class Shooter extends SubsystemBase {
     /** Sets the shooter motor velocity in encoder ticks/sec. */
     private void setSpeed(double speed) {
         shooter.setVelocity(speed);
+    }
+    private void setShooterAlignmentPower(double power) {
+        if(servoPos > LOWER_BORDER && servoPos < UPPER_BORDER)
+            servoPos += power * SPEED;
+
+        shooterAlignment.setPosition(servoPos);
     }
 
     /**
@@ -132,6 +150,10 @@ public class Shooter extends SubsystemBase {
                 : rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
     }
 
+    public Command setShooterAlignment(double power) {
+        return new InstantCommand(() -> setShooterAlignmentPower(power), this);
+    }
+
     // ------------------------------------------------------------
     // Telemetry
     // ------------------------------------------------------------
@@ -139,7 +161,7 @@ public class Shooter extends SubsystemBase {
     /** Displays current shooter info on the driver station telemetry. */
     public void displayTelemetry() {
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
-
+        telemetry.addData("Shooter alignment pos:", shooterAlignment.getPosition());
         telemetry.addData("Shooter target speed", rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()));
         telemetry.addData("Shooter actual speed", shooter.getVelocity());
         telemetry.addData("Is motor ready", isMotorReady());

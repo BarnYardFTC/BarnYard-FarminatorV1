@@ -113,6 +113,7 @@ public class BarnRobot extends Robot {
      * @param opModeData contains config info like alliance color and heading offset
      */
     public void init(OpMode opMode, OpModeData opModeData) {
+        pinpointLocalizer = new PinpointLocalizer(opMode.hardwareMap, 1, opModeData.initialPose2d);
 
         // Store mode data (must be first)
         this.opmodeData = opModeData;

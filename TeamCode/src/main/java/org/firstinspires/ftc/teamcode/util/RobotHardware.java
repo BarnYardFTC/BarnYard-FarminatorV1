@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 /**
@@ -47,11 +48,12 @@ public class RobotHardware {
 
 
     // ------------------------------------------------------------
-    // Other Motors
+    // Other Motors/Servos
     // ------------------------------------------------------------
 
     public DcMotorEx shooter;
     public DcMotorEx intake;
+    public Servo shooterAlignment;
 
 
     // ------------------------------------------------------------
@@ -104,6 +106,10 @@ public class RobotHardware {
     private static final String SHOOTER_CONFIG_NAME = "shooter";
     private static final String INTAKE_CONFIG_NAME = "intake";
 
+    private static final String SHOOTER_ALIGNMENT_CONFIG_NAME = "shooterAlignment";
+
+
+
 
     // ------------------------------------------------------------
     // IMU Parameters
@@ -129,10 +135,11 @@ public class RobotHardware {
      */
     public RobotHardware(HardwareMap hw) {
         this.hw = hw;
-        initMotors();
-        initServos();
-        initSensors();
-        initVoltageSensor();
+//        initMotors();
+//        initServos();
+//        initSensors();
+//        initVoltageSensor();
+        shooterAlignment= hw.get(Servo.class, "shooterAlignment");
     }
 
 
@@ -200,6 +207,8 @@ public class RobotHardware {
 
         leftFrontTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        shooterAlignment = hw.get(Servo.class, SHOOTER_ALIGNMENT_CONFIG_NAME);
     }
 
 

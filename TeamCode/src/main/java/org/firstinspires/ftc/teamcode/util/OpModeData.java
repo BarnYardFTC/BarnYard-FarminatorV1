@@ -70,6 +70,7 @@ public class OpModeData {
 
 
     public static Pose2d getAutoFinishPose(){
+        if(autoFinishPose == null)return new Pose2d(0,0,0);
         return autoFinishPose;
     }
 

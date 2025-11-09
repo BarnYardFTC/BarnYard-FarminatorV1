@@ -31,6 +31,9 @@ public class OpModeData {
     /**the heading in which the autonomous has ended*/
     private static Pose2d autoFinishPose;
 
+    public void setAutonFinishPose(Pose2d pose) {
+    }
+
     // ------------------------------------------------------------
     // Enums
     // ------------------------------------------------------------

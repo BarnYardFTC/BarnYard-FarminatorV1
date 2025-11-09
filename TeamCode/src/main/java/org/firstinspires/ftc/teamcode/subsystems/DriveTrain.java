@@ -51,7 +51,7 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
         mecanumDriveComponent = new MecanumDriveComponent();
 
-        initialBotHeading = BarnRobot.getInstance().opmodeData.initialPose2d.heading.real;
+        initialBotHeading = 270;
         pidControllerYaw = new PIDController(pYaw, 0, dYaw);
 
         lastLimelightValid = false;

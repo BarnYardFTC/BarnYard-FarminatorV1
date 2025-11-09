@@ -80,9 +80,11 @@ public class Shooter extends SubsystemBase {
     private void setSpeed(double speed) {
         shooter.setVelocity(speed);
     }
+
+    //ToDo:fix func(servo rotates 0.01 each click of bumper in ShooterAlignmentServoTest, needs to move til button is pressed)
     private void setShooterAlignmentPower(double power) {
-        if(servoPos > LOWER_BORDER && servoPos < UPPER_BORDER)
-            servoPos += power * SPEED;
+//        if(servoPos > LOWER_BORDER && servoPos < UPPER_BORDER)
+        servoPos += power * SPEED;
 
         shooterAlignment.setPosition(servoPos);
     }
@@ -125,9 +127,9 @@ public class Shooter extends SubsystemBase {
     }
 
     /** Calculates the speed based on Limelight range and sets the shooter velocity. */
-    public Command calcAndShootCommand() {
-        return new InstantCommand(() -> setSpeed(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
-    }
+//    public Command calcAndShootCommand() {
+//        return new InstantCommand(() -> setSpeed(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
+//    }
 
     /** Activates the shooter at default power. */
     public Command activateShooterCommand() {
@@ -144,11 +146,11 @@ public class Shooter extends SubsystemBase {
     }
 
     /** Continuously runs the shooter at a velocity based on current Limelight range. */
-    public Command shootAtRangeCommand() {
-        return new RunCommand(() -> setSpeed(BarnRobot.getInstance().limelight.getGoalRange() == 0
-                ? DEFAULT_SPEED
-                : rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
-    }
+//    public Command shootAtRangeCommand() {
+//        return new RunCommand(() -> setSpeed(BarnRobot.getInstance().limelight.getGoalRange() == 0
+//                ? DEFAULT_SPEED
+//                : rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
+//    }
 
     public Command setShooterAlignment(double power) {
         return new InstantCommand(() -> setShooterAlignmentPower(power), this);
@@ -162,9 +164,9 @@ public class Shooter extends SubsystemBase {
     public void displayTelemetry() {
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
         telemetry.addData("Shooter alignment pos:", shooterAlignment.getPosition());
-        telemetry.addData("Shooter target speed", rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()));
+//        telemetry.addData("Shooter target speed", rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()));
         telemetry.addData("Shooter actual speed", shooter.getVelocity());
-        telemetry.addData("Is motor ready", isMotorReady());
+//        telemetry.addData("Is motor ready", isMotorReady());
     }
 
     public void runShooter(){

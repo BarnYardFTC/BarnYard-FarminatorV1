@@ -56,12 +56,12 @@ public class ShooterAlignmentServoTest extends CommandOpMode {
 
             // Left Bumper → Run back transfer backward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.shooter.setShooterAlignment(-1))
+                .whenActive(farminator.shooter.setShooterAlignment(-1))
                 .whenInactive(farminator.shooter.setShooterAlignment(0));
 
             // Right Bumper → Run all transfer motors forward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(farminator.shooter.setShooterAlignment(1))
+                .whenActive(farminator.shooter.setShooterAlignment(1))
                 .whenInactive(farminator.shooter.setShooterAlignment(0));
 
 

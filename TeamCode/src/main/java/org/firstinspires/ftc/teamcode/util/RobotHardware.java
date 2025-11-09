@@ -135,11 +135,11 @@ public class RobotHardware {
      */
     public RobotHardware(HardwareMap hw) {
         this.hw = hw;
-//        initMotors();
-//        initServos();
-//        initSensors();
-//        initVoltageSensor();
-        shooterAlignment= hw.get(Servo.class, "shooterAlignment");
+        initMotors();
+        initServos();
+        initSensors();
+        initVoltageSensor();
+//        shooterAlignment= hw.get(Servo.class, "shooterAlignment");
     }
 
 

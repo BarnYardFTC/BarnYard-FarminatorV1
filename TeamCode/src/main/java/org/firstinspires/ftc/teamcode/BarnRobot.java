@@ -181,7 +181,7 @@ public class BarnRobot extends Robot {
      * For now, it just updates telemetry, but more shared logic can go here.
      */
     public void periodic() {
-
+        shooter.displayTelemetry();
         telemetry.update();
     }
 }

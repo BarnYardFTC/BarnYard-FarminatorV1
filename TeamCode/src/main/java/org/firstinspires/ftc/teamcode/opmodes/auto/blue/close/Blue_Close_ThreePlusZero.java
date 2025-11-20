@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
  * - Does not collect additional elements after shooting
  */
 @Config
-@Autonomous(name = "3+0 Close", group = "main")
+@Autonomous(name = "3+0 Close Blue", group = "main")
 public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
     /** Robot and drive system instances */
@@ -69,12 +69,12 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
-                new DriveActionCommand(path1),
-                ShootSequenceCommandGroup.shootWhenReady(1.8),
-                ShootSequenceCommandGroup.shootWhenReady(1.8),
-                ShootSequenceCommandGroup.shootWhenReady(1.8),
-                farminator.shooter.deactivateShooterCommand()
+//                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
+                new DriveActionCommand(path1)
+//                ShootSequenceCommandGroup.shootWhenReady(1.8),
+//                ShootSequenceCommandGroup.shootWhenReady(1.8),
+//                ShootSequenceCommandGroup.shootWhenReady(1.8),
+//                farminator.shooter.deactivateShooterCommand()
         ).schedule();
 
         new SequentialCommandGroup(

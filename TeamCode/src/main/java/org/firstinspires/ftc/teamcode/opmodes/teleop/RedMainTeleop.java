@@ -86,9 +86,9 @@ public class RedMainTeleop extends CommandOpMode {
                 ));
 
         // Right Trigger → Shooter active
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-                .whenActive(farminator.shooter.activateShooterCommand())
-                .whenInactive(farminator.shooter.deactivateShooterCommand());
+//        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
+//                .whenActive(farminator.shooter.activateShooterCommand())
+//                .whenInactive(farminator.shooter.deactivateShooterCommand());
 
         // ------------------------
         // Drive System

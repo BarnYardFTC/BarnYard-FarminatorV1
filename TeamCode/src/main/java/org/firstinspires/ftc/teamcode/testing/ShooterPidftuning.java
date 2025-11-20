@@ -54,8 +54,8 @@ public class ShooterPidftuning extends CommandOpMode {
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
 //                .whenPressed(farminator.shooter.setPower(1));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.shooter.setPower(10/voltageSensor.getVoltage()));
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+//                .whenPressed(farminator.shooter.setPower(10/voltageSensor.getVoltage()));
 
 
     }
@@ -64,7 +64,7 @@ public class ShooterPidftuning extends CommandOpMode {
     public void run() {
         // Run command scheduler and periodic updates
         super.run();
-        farminator.telemetry.addData("motor velocity", farminator.shooter.getVelocity());
+//        farminator.telemetry.addData("motor velocity", farminator.shooter.getVelocity());
         farminator.periodic();
     }
 

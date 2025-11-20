@@ -66,12 +66,10 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                 new DriveActionCommand(path1),
                 ShootSequenceCommandGroup.shootWhenReady(1.8),
                 ShootSequenceCommandGroup.shootWhenReady(1.8),
-                ShootSequenceCommandGroup.shootWhenReady(1.8),
-                farminator.shooter.deactivateShooterCommand()
+                ShootSequenceCommandGroup.shootWhenReady(1.8)
         ).schedule();
 
         new SequentialCommandGroup(

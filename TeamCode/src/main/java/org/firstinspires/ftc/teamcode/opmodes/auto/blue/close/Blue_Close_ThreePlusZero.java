@@ -34,21 +34,21 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     private RoadRunnerMecanumDrive drive;
 
     /** Initial pose */
-    public static double POSE1_X = -37;
-    public static double POSE1_Y = -53;
-    public static double POSE1_HEADING = Math.toRadians(90);
+    public static double POSE1_X = -45;
+    public static double POSE1_Y = -45;
+//    public static double POSE1_HEADING = Math.toRadians(90);
 
     /** Shooter shooting pose */
-    public static double POSE2_X = -40;
-    public static double POSE2_Y = -15;
-    public static double POSE2_HEADING = Math.toRadians(250);
+    public static double POSE2_X = -10;
+    public static double POSE2_Y = -25;
+    public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(225);
 
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
-            new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+            new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
 
     @Override
     public void initialize() {
@@ -57,14 +57,14 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
 
         /** Switch limelight to obelisk detection pipeline */
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
         /** Define trajectory to shooting pose */
-        TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
+        TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), PERPENDICULAR_TO_DEPOT_HEADING );
 
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(

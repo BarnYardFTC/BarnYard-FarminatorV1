@@ -53,7 +53,7 @@ public class RobotHardware {
 
     public DcMotorEx shooter;
     public DcMotorEx intake;
-    public Servo shooterAlignment;
+    public Servo shooterHood;
 
 
     // ------------------------------------------------------------
@@ -106,7 +106,7 @@ public class RobotHardware {
     private static final String SHOOTER_CONFIG_NAME = "shooter";
     private static final String INTAKE_CONFIG_NAME = "intake";
 
-    private static final String SHOOTER_ALIGNMENT_CONFIG_NAME = "shooterAlignment";
+    private static final String SHOOTER_HOOD_CONFIG_NAME = "shooterHood";
 
 
 
@@ -139,7 +139,7 @@ public class RobotHardware {
         initServos();
         initSensors();
         initVoltageSensor();
-//        shooterAlignment= hw.get(Servo.class, "shooterAlignment");
+        shooterHood = hw.get(Servo.class, "shooterHood");
     }
 
 
@@ -208,7 +208,7 @@ public class RobotHardware {
         leftFrontTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        shooterAlignment = hw.get(Servo.class, SHOOTER_ALIGNMENT_CONFIG_NAME);
+        shooterHood = hw.get(Servo.class, SHOOTER_HOOD_CONFIG_NAME);
     }
 
 

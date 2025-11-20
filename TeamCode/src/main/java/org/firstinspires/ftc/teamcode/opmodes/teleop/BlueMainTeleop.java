@@ -67,7 +67,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
         // Left Bumper → Run back transfer backward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.transfer.setBackPowerCommand(-Transfer.DEFAULT_TRANSFER_POWER))
+                .whenPressed(farminator.transfer.setBackPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER))
                 .whenInactive(farminator.transfer.setBackPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
@@ -88,8 +88,8 @@ public class BlueMainTeleop extends CommandOpMode {
 
         // Right Trigger → Shooter active
 //        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-//                .whenActive(farminator.shooter.activateShooterCommand())
-//                .whenInactive(farminator.shooter.deactivateShooterCommand());
+//                .whenActive(farminator.shooter.runShooter())
+//                .whenInactive(new RunCommand(() -> farminator.shooter.turnOff()));
 
         // ------------------------
         // Drive System
@@ -102,15 +102,25 @@ public class BlueMainTeleop extends CommandOpMode {
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
 
-        // Left Bumper → Run back transfer backward
+//        // Left Bumper → Run back transfer backward
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
 //                .whenActive(farminator.shooter.setShooterAlignment(-1))
 //                .whenInactive(farminator.shooter.setShooterAlignment(0));
-
-        // Right Bumper → Run all transfer motors forward
+//
+//        // Right Bumper → Run all transfer motors forward
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
 //                .whenActive(farminator.shooter.setShooterAlignment(1))
 //                .whenInactive(farminator.shooter.setShooterAlignment(0));
+
+
+        // TODO: TEMP
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenActive(
+                        farminator.shooter.runPowerBasedOnVoltageCompFunction()
+                )
+                .whenInactive(
+                        farminator.shooter.turnOff()
+                );
 
     }
 

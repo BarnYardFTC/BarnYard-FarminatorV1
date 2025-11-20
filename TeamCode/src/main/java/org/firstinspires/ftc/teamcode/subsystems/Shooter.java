@@ -19,12 +19,10 @@ public class Shooter  extends SubsystemBase {
     private static final double MOTOR_RPS = 27;
     private static final double WHEEL_RADIUS = 0.048;
 
-    public static double SHOOTER_SPEED = 300; // TODO: Find value based on pidf controller
+    public static double SHOOTER_DEFAULT_VELOCITY = 1000; // TODO: Find value based on pidf controller
 
-    private boolean shooterTurnedOn;
+    public static double TEMP_POWER_FUNCTION_CONSTANT = 9; //TODO Remove when we have a pidf controller
 
-
-    public static double TEMP_DEFAULT_POWER = 0.7; //TODO Remove when we have a pidf controller
 
     public Shooter() {
         shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
@@ -36,36 +34,15 @@ public class Shooter  extends SubsystemBase {
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         shooterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        turnShooterOn();
     }
 
     private void setPower(double power) {
-        shooterRight.setVelocity(power);
-        shooterLeft.setVelocity(power);
+        shooterRight.setPower(power);
+        shooterLeft.setPower(power);
     }
 
-    /**
-     * This function updates the shooter's power depending on whether the shooter is turned on or not
-     */
-    @Override
-    public void periodic(){
-        if (shooterTurnedOn){
-            // PIDF CONTROLLER BASED POWER
-            setPower(TEMP_DEFAULT_POWER); // TODO: Switch to using pidf controller
-        }
-        else {
-            setPower(0);
-        }
-    }
-
-
-    public Command turnShooterOn(){
-        return new InstantCommand(() -> shooterTurnedOn = true);
-    }
-
-    public Command turnShooterOff(){
-        return new InstantCommand(() -> shooterTurnedOn = false);
+    private void operateShooter(){
+        setPower(TEMP_POWER_FUNCTION_CONSTANT);
     }
 
 
@@ -82,6 +59,13 @@ public class Shooter  extends SubsystemBase {
     }
 
 
+    public RunCommand runShooter(){
+        return new RunCommand(() -> operateShooter());
+    }
+
+    public RunCommand turnOff(){
+        return new RunCommand(() -> setPower(0), this);
+    }
 
     public Command shootAtRangeCommand() {
         return new RunCommand(() -> setPower(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())));
@@ -91,13 +75,23 @@ public class Shooter  extends SubsystemBase {
 
     public void displayTelemetry(){
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
-
-        telemetry.addData("Shooter speed formula", rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()));
         telemetry.addData("shooter actual speed", shooterRight.getVelocity());
+        telemetry.addData("left shooter power", shooterLeft.getPower());
+        telemetry.addData("right shooter power", shooterRight.getPower());
+    }
+
+    public double getVelocity() {
+        return (shooterRight.getVelocity() + shooterLeft.getVelocity()) / 2;
     }
 
     public void testMotors(){
         shooterRight.setPower(1);
         shooterLeft.setPower(1);
+    }
+
+    //TODO: TEMP
+    public Command runPowerBasedOnVoltageCompFunction(){
+        return new RunCommand(() -> setPower(TEMP_POWER_FUNCTION_CONSTANT/
+                Math.max(BarnRobot.getInstance().robotHardware.voltageSensor.getVoltage(), 1e-6)), this);
     }
 }

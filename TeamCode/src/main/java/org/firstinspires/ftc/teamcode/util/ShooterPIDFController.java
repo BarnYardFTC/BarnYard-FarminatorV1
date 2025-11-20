@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
-public class PIDFController {
+@Config
+public class ShooterPIDFController {
     public static double kP, kI, kD, kF;
     private double dt = 0.1;
     private double integral = 0;
@@ -12,7 +13,7 @@ public class PIDFController {
 
     private final double NOMINAL_VOLTAGE = 13;
 
-    public PIDFController(double kP, double kI, double kD, double kF) {
+    public ShooterPIDFController(double kP, double kI, double kD, double kF) {
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;

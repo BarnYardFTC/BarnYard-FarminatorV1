@@ -53,6 +53,8 @@ public class Shooter extends SubsystemBase {
     private final double GOAL_HEIGHT = 0.98;          // meters
     public static double SHOOTING_CONSTANT = 4;        // empirically tuned multiplier
 
+    private static double SHOOTER_SPEED = 1000;
+
     // PIDF coefficients for velocity control
     private static final PIDFCoefficients pidf = new PIDFCoefficients(10, 0, 0, 12);
 
@@ -126,6 +128,11 @@ public class Shooter extends SubsystemBase {
         return new InstantCommand(() -> setSpeed(speed), this);
     }
 
+    public Command runShooter(double power) {
+        return new RunCommand(() -> setPower(power), this);
+
+    }
+
     /** Calculates the speed based on Limelight range and sets the shooter velocity. */
 //    public Command calcAndShootCommand() {
 //        return new InstantCommand(() -> setSpeed(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
@@ -169,9 +176,6 @@ public class Shooter extends SubsystemBase {
 //        telemetry.addData("Is motor ready", isMotorReady());
     }
 
-    public void runShooter(){
-
-    }
 
 //    public Command runShooterCommand(){
 //

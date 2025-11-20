@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
@@ -61,35 +62,17 @@ public class BlueMainTeleop extends CommandOpMode {
         // Gamepad 1 Controls
         // ==========================================================
 
-        // ------------------------
-        // Transfer System
-        // ------------------------
-
-        // Left Bumper → Run back transfer backward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.transfer.setBackPowerCommand(-Transfer.DEFAULT_TRANSFER_POWER))
-                .whenInactive(farminator.transfer.setBackPowerCommand(0));
-
-        // Right Bumper → Run all transfer motors forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X) // Run transfer + intake
                 .whenPressed(farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER))
-                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
+                .whenPressed(farminator.intake.activateIntakeCommand())
+                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0))
+                .whenInactive(farminator.intake.deactivateIntakeCommand());
 
-        // Left Trigger → Intake active (transfer + intake)
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
-                .whenActive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
-                        farminator.intake.activateIntakeCommand()
-                ))
-                .whenInactive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(0),
-                        farminator.intake.deactivateIntakeCommand()
-                ));
-
-        // Right Trigger → Shooter active
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-                .whenActive(farminator.shooter.activateShooterCommand())
-                .whenInactive(farminator.shooter.deactivateShooterCommand());
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B) // Run transfer + intake backwards
+                .whenPressed(farminator.transfer.setEntireTransferPowerCommand(-Transfer.DEFAULT_TRANSFER_POWER))
+                .whenPressed(farminator.intake.customIntakeCommand(-Intake.DEFAULT_POWER))
+                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0))
+                .whenInactive(farminator.intake.deactivateIntakeCommand());
 
         // ------------------------
         // Drive System
@@ -101,17 +84,6 @@ public class BlueMainTeleop extends CommandOpMode {
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
-
-        // Left Bumper → Run back transfer backward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenActive(farminator.shooter.setShooterAlignment(-1))
-                .whenInactive(farminator.shooter.setShooterAlignment(0));
-
-        // Right Bumper → Run all transfer motors forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenActive(farminator.shooter.setShooterAlignment(1))
-                .whenInactive(farminator.shooter.setShooterAlignment(0));
-
     }
 
     @Override

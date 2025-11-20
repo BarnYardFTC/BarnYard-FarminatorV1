@@ -61,7 +61,7 @@ public class Shooter extends SubsystemBase {
     // ------------------------------------------------------------
     public Shooter() {
         shooter = BarnRobot.getInstance().robotHardware.shooter;
-        shooterAlignment = BarnRobot.getInstance().robotHardware.shooterAlignment;
+        shooterAlignment = BarnRobot.getInstance().robotHardware.shooterHood;
 
         double servoPos = 0.5;
         // Motor configuration

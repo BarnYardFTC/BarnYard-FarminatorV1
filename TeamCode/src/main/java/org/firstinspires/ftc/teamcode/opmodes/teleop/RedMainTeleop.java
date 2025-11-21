@@ -27,24 +27,24 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 @TeleOp(name = "RedMainTeleop", group = "main")
 public class RedMainTeleop extends CommandOpMode {
 
+
     // ------------------------
     // Robot Instance
     // ------------------------
     private BarnRobot farminator;
 
-    private double START_POSE_X = 10;
-    private double START_POSE_Y = 10;
-    private double START_POSE_HEADING = Math.toRadians(180);
-
-    private OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.RED,
-            new Pose2d(START_POSE_X, START_POSE_Y, START_POSE_HEADING),
-            90,
-            OpModeData.OpModeType.TELEOP, LimeLight.BLUE_LOCALIZATION_PIPELINE
-    );
+    private static final double INITIAL_BOT_HEADING = 270;
 
     @Override
     public void initialize() {
+
+        Pose2d autoFinishPose = OpModeData.getAutoFinishPose(); // use the pose in which the auto has ended
+        OpModeData opModeData = new OpModeData(
+                OpModeData.AllianceColor.BLUE,
+                OpModeData.OpModeType.TELEOP,
+                LimeLight.BLUE_LOCALIZATION_PIPELINE,
+                autoFinishPose
+        );
 
         // ==========================================================
         // Robot Initialization
@@ -53,8 +53,8 @@ public class RedMainTeleop extends CommandOpMode {
         farminator.init(
                 this,
                 opModeData
-                );
-        farminator.limelight.switchPipeline(LimeLight.RED_LOCALIZATION_PIPELINE);
+        );
+        farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
 
         // ==========================================================
         // Gamepad 1 Controls
@@ -66,7 +66,7 @@ public class RedMainTeleop extends CommandOpMode {
 
         // Left Bumper → Run back transfer backward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.transfer.setBackPowerCommand(-Transfer.DEFAULT_TRANSFER_POWER))
+                .whenPressed(farminator.transfer.setBackPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER))
                 .whenInactive(farminator.transfer.setBackPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
@@ -85,21 +85,45 @@ public class RedMainTeleop extends CommandOpMode {
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
+
+
         // Right Trigger → Shooter active
 //        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-//                .whenActive(farminator.shooter.activateShooterCommand())
-//                .whenInactive(farminator.shooter.deactivateShooterCommand());
+//                .whenActive(farminator.shooter.runShooter())
+//                .whenInactive(new RunCommand(() -> farminator.shooter.turnOff()));
 
         // ------------------------
         // Drive System
         // ------------------------
 
+//        // Left Bumper → Run back transfer backward
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+//                .whenActive(farminator.shooter.setShooterAlignment(-1))
+//                .whenInactive(farminator.shooter.setShooterAlignment(0));
+//
+//        // Right Bumper → Run all transfer motors forward
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+//                .whenActive(farminator.shooter.setShooterAlignment(1))
+//                .whenInactive(farminator.shooter.setShooterAlignment(0));
+
+
+        // TODO: TEMP
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenActive(
+                        farminator.shooter.runPowerBasedOnVoltageCompFunction()
+                )
+                .whenInactive(
+                        farminator.shooter.turnOff()
+                );
+
+
         // Right Stick Button → Toggle between slow and fast drive modes
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
+
     }
 
     @Override
@@ -107,6 +131,7 @@ public class RedMainTeleop extends CommandOpMode {
         // ==========================================================
         // Periodic Updates
         // ==========================================================
+
         super.run();
         farminator.periodic();
     }

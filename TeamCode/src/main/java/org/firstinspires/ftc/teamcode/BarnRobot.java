@@ -131,7 +131,7 @@ public class BarnRobot extends Robot {
         initLimeLight(opModeData.limelightPipeline);
         initShooter();
         initIntake();
-        initDrivetrain(opMode.hardwareMap);
+        initDrivetrain();
     }
 
 
@@ -148,8 +148,7 @@ public class BarnRobot extends Robot {
      * Sets up the drivetrain, registers it in the command framework,
      * and sets its default driving command.
      */
-    public void initDrivetrain(HardwareMap hardwareMap) {
-
+    public void initDrivetrain() {
         if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
             drive = new DriveTrain();
             drive.setDefaultCommand(drive.driveCommand());

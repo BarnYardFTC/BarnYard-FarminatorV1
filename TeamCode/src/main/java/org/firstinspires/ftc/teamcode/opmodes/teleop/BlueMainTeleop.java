@@ -86,6 +86,8 @@ public class BlueMainTeleop extends CommandOpMode {
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
+
+
         // Right Trigger → Shooter active
 //        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
 //                .whenActive(farminator.shooter.runShooter())
@@ -94,13 +96,6 @@ public class BlueMainTeleop extends CommandOpMode {
         // ------------------------
         // Drive System
         // ------------------------
-
-        // Right Stick Button → Toggle between slow and fast drive modes
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .toggleWhenActive(
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
-                );
 
 //        // Left Bumper → Run back transfer backward
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
@@ -114,12 +109,20 @@ public class BlueMainTeleop extends CommandOpMode {
 
 
         // TODO: TEMP
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(
                         farminator.shooter.runPowerBasedOnVoltageCompFunction()
                 )
                 .whenInactive(
                         farminator.shooter.turnOff()
+                );
+
+
+        // Right Stick Button → Toggle between slow and fast drive modes
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+                .toggleWhenActive(
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
 
     }

@@ -120,7 +120,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
         // TODO: TEMP
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(
+                .toggleWhenActive(
                         farminator.shooter.runPowerBasedOnVoltageCompFunction()
                 )
                 .whenInactive(

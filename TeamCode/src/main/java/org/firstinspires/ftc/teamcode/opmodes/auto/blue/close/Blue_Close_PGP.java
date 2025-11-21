@@ -98,6 +98,7 @@ public class Blue_Close_PGP extends CommandOpMode {
                 new SequentialCommandGroup(farminator.intake.activateIntakeCommand()),
                 new SequentialCommandGroup(farminator.shooter.runShooter()),
 
+
                 //lehakot zman
                 //lehafil et ha kol
                 new DriveActionCommand(path2),

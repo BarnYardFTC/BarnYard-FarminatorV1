@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -79,22 +80,21 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 //                farminator.shooter.turnOff()
 //        ).schedule();
 
-        new SequentialCommandGroup(
+        new SequentialCommandGroup(                                         //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
                 new WaitUntilCommand(this::opModeIsActive),
                 new DriveActionCommand(path1),
                 new SequentialCommandGroup(farminator.shooter.runShooter()),
                 new WaitCommand(3000),
-                new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
+                new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1)),
                 new WaitCommand(1000),
+             //   new InstantCommand(return farminator.telemetry.speak("Its working NIGGER"),     //TODO Need to add data reciving
                 new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1)),
                 new WaitCommand(1000),
                 new ParallelCommandGroup(farminator.intake.activateIntakeCommand()),
-                farminator.transfer.setEntireTransferPowerCommand(1)
-        );
-
-        new SequentialCommandGroup(
-                new WaitCommand(10000)
+                new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1))
         ).schedule();
+
+
 
     }
 

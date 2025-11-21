@@ -44,6 +44,7 @@ public class BarnRobot extends Robot {
     public RoadRunnerMecanumDrive roadRunnerMecanumDrive; // used in auto
     public LimeLight limelight;
     public Shooter shooter;
+    public ShooterHood shooterHood;
     public Intake intake;
 
     public Localizer pinpointLocalizer;
@@ -132,6 +133,7 @@ public class BarnRobot extends Robot {
         initShooter();
         initIntake();
         initDrivetrain();
+        initShooterHood();
     }
 
 
@@ -153,6 +155,10 @@ public class BarnRobot extends Robot {
             drive = new DriveTrain();
             drive.setDefaultCommand(drive.driveCommand());
         }
+    }
+
+    public void initShooterHood(){
+        shooterHood = new ShooterHood();
     }
 
     /** Sets up the transfer system. */

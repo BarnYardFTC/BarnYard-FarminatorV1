@@ -194,6 +194,11 @@ public class DriveTrain extends SubsystemBase {
     }
 
 
+    public Command resetImuHeadingCommand(){
+        return new InstantCommand(() -> BarnRobot.getInstance().robotHardware.imu.resetYaw(), this);
+    }
+
+
     // ============================================================
     //                           PERIODIC
     // ============================================================

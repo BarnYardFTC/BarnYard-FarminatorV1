@@ -44,6 +44,7 @@ public class BarnRobot extends Robot {
     public RoadRunnerMecanumDrive roadRunnerMecanumDrive; // used in auto
     public LimeLight limelight;
     public Shooter shooter;
+    public ShooterHood shooterHood;
     public Intake intake;
 
     public Localizer pinpointLocalizer;
@@ -113,6 +114,7 @@ public class BarnRobot extends Robot {
      * @param opModeData contains config info like alliance color and heading offset
      */
     public void init(OpMode opMode, OpModeData opModeData) {
+        pinpointLocalizer = new PinpointLocalizer(opMode.hardwareMap, 1, opModeData.initialPose2d);
 
         // Store mode data (must be first)
         this.opmodeData = opModeData;
@@ -130,7 +132,8 @@ public class BarnRobot extends Robot {
         initLimeLight(opModeData.limelightPipeline);
         initShooter();
         initIntake();
-        initDrivetrain(opMode.hardwareMap);
+        initDrivetrain();
+        initShooterHood();
     }
 
 
@@ -147,12 +150,15 @@ public class BarnRobot extends Robot {
      * Sets up the drivetrain, registers it in the command framework,
      * and sets its default driving command.
      */
-    public void initDrivetrain(HardwareMap hardwareMap) {
-
+    public void initDrivetrain() {
         if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
             drive = new DriveTrain();
             drive.setDefaultCommand(drive.driveCommand());
         }
+    }
+
+    public void initShooterHood(){
+        shooterHood = new ShooterHood();
     }
 
     /** Sets up the transfer system. */
@@ -180,7 +186,7 @@ public class BarnRobot extends Robot {
      * For now, it just updates telemetry, but more shared logic can go here.
      */
     public void periodic() {
-        pinpointLocalizer.update();
+        shooter.displayTelemetry();
         telemetry.update();
     }
 }

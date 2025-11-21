@@ -51,7 +51,7 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
         mecanumDriveComponent = new MecanumDriveComponent();
 
-        initialBotHeading = BarnRobot.getInstance().opmodeData.initialPose2d.heading.real;
+        initialBotHeading = 270;
         pidControllerYaw = new PIDController(pYaw, 0, dYaw);
 
         lastLimelightValid = false;
@@ -177,9 +177,9 @@ public class DriveTrain extends SubsystemBase {
     public Command driveCommand() {
         return new RunCommand(
                 () -> drive(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx1.getLeftY(),
-                        BarnRobot.getInstance().gamepadEx1.getRightX()
+                        BarnRobot.getInstance().gamepadEx2.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx2.getLeftY(),
+                        BarnRobot.getInstance().gamepadEx2.getRightX()
                 ),
                 this
         );
@@ -191,6 +191,11 @@ public class DriveTrain extends SubsystemBase {
                 BarnRobot.getInstance().gamepadEx1.getLeftX(),
                 BarnRobot.getInstance().gamepadEx1.getLeftY())
                 , this);
+    }
+
+
+    public Command resetImuHeadingCommand(){
+        return new InstantCommand(() -> BarnRobot.getInstance().robotHardware.imu.resetYaw(), this);
     }
 
 

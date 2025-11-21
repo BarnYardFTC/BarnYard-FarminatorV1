@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 /**
@@ -24,7 +25,6 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 public class RobotHardware {
 
     public VoltageSensor voltageSensor;
-
 
     // ------------------------------------------------------------
     // Transfer Servos
@@ -47,11 +47,13 @@ public class RobotHardware {
 
 
     // ------------------------------------------------------------
-    // Other Motors
+    // Other Motors/Servos
     // ------------------------------------------------------------
 
-    public DcMotorEx shooter;
+    public DcMotorEx shooterRight;
+    public DcMotorEx shooterLeft;
     public DcMotorEx intake;
+    public Servo shooterHood;
 
 
     // ------------------------------------------------------------
@@ -68,25 +70,6 @@ public class RobotHardware {
 
     private HardwareMap hw;
 
-
-    // ------------------------------------------------------------
-    // Hardware Port Constants (for reference)
-    // ------------------------------------------------------------
-
-    private static final int LEFT_FRONT_DRIVETRAIN_PORT = 3;
-    private static final int LEFT_BACK_DRIVETRAIN_PORT = 2;
-    private static final int RIGHT_FRONT_DRIVETRAIN_PORT = 1;
-    private static final int RIGHT_BACK_DRIVETRAIN_PORT = 0;
-
-    private static final int SHOOTER_PORT = 2;
-    private static final int INTAKE_PORT = 1;
-
-    private static final int LEFT_FRONT_TRANSFER_PORT = 0;
-    private static final int RIGHT_FRONT_TRANSFER_PORT = 4;
-    private static final int LEFT_BACK_TRANSFER_PORT = 1;
-    private static final int RIGHT_BACK_TRANSFER_PORT = 5;
-
-
     // ------------------------------------------------------------
     // Configuration Names (match those in the Control Hub config)
     // ------------------------------------------------------------
@@ -101,8 +84,13 @@ public class RobotHardware {
     private static final String LEFT_BACK_DRIVETRAIN_CONFIG_NAME =   "leftBackDrivetrain";
     private static final String RIGHT_BACK_DRIVETRAIN_CONFIG_NAME =  "rightBackDrivetrain";
 
-    private static final String SHOOTER_CONFIG_NAME = "shooter";
+    private static final String SHOOTER_RIGHT_CONFIG_NAME = "shooterRight";
     private static final String INTAKE_CONFIG_NAME = "intake";
+    private static final String SHOOTER_LEFT_CONFIG_NAME = "shooterLeft";
+
+    private static final String SHOOTER_HOOD_CONFIG_NAME = "shooterHood";
+
+
 
 
     // ------------------------------------------------------------
@@ -133,6 +121,7 @@ public class RobotHardware {
         initServos();
         initSensors();
         initVoltageSensor();
+        shooterHood = hw.get(Servo.class, "shooterHood");
     }
 
 
@@ -178,7 +167,8 @@ public class RobotHardware {
         rightFrontDrivetrain = hw.get(DcMotorEx.class, RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME);
         rightBackDrivetrain  = hw.get(DcMotorEx.class, RIGHT_BACK_DRIVETRAIN_CONFIG_NAME);
 
-        shooter = hw.get(DcMotorEx.class, SHOOTER_CONFIG_NAME);
+        shooterRight = hw.get(DcMotorEx.class, SHOOTER_RIGHT_CONFIG_NAME);
+        shooterLeft = hw.get(DcMotorEx.class, SHOOTER_LEFT_CONFIG_NAME);
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -200,6 +190,8 @@ public class RobotHardware {
 
         leftFrontTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        shooterHood = hw.get(Servo.class, SHOOTER_HOOD_CONFIG_NAME);
     }
 
 
@@ -212,6 +204,7 @@ public class RobotHardware {
      */
     private void initSensors() {
         imu = hw.get(IMU.class, "imu");
+        imu.initialize(IMU_PARAMETERS);
         limelight = hw.get(Limelight3A.class, "limelight");
     }
     private void initVoltageSensor(){

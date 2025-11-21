@@ -11,7 +11,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class PGP {
+public class PPG {
 
     // -----------------------------
     // Pose Constants
@@ -24,17 +24,14 @@ public class PGP {
     public static final double POSE2_Y = -15.5;
     public static final double POSE2_HEADING = Math.toRadians(225);
 
-    public static final double POSE3_X = 11;
+    public static final double POSE3_X = -12;
     public static final double POSE3_Y = -23.1;
     public static final double POSE3_HEADING = Math.toRadians(270);
 
-    public static final double POSE4_X = 11;
-    public static final double POSE4_Y = -58;
+    public static final double POSE4_X = -12;
+    public static final double POSE4_Y = -51;
     public static final double POSE4_HEADING = Math.toRadians(270);
 
-    public static final double POSE5_X =11;
-    public static final double POSE5_Y = -40;
-    public static final double POSE5_HEADING = Math.toRadians(270);
 
 
     // -----------------------------
@@ -58,23 +55,18 @@ public class PGP {
 
         // Slow path: Pose3 → Pose4
         RoadRunnerBotEntity slowBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 15) // half speed
+                .setConstraints(27, 27, Math.toRadians(180), Math.toRadians(180), 15) // half speed
                 .setDimensions(18, 18)
                 .build();
 
         TrajectoryActionBuilder slowPath = slowBot.getDrive().actionBuilder(
                         new Pose2d(POSE3_X, POSE3_Y, POSE3_HEADING))
-
                 .strafeToLinearHeading(new Vector2d(POSE4_X, POSE4_Y), POSE4_HEADING);
 
-
-
-        // Path 3: Pose4 → Pose5 → Pose2
+        // Path 3: Pose4 → Pose2
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(
                         new Pose2d(POSE4_X, POSE4_Y, POSE4_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE5_X, POSE5_Y), POSE5_HEADING)
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
-
 
         // Combine all paths
         myBot.runAction(

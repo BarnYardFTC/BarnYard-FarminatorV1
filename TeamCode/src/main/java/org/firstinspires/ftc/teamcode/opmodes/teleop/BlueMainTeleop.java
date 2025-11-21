@@ -66,14 +66,22 @@ public class BlueMainTeleop extends CommandOpMode {
         // ------------------------
 
         // Left Bumper → Run back transfer backward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.transfer.setBackPowerCommand(-Transfer.DEFAULT_TRANSFER_POWER))
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(farminator.transfer.setBackPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER))
                 .whenInactive(farminator.transfer.setBackPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER))
                 .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
+
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(farminator.shooterHood.lower());
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(farminator.shooterHood.raise());
+
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
@@ -86,21 +94,51 @@ public class BlueMainTeleop extends CommandOpMode {
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
+
+
         // Right Trigger → Shooter active
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-                .whenActive(farminator.shooter.activateShooterCommand())
-                .whenInactive(farminator.shooter.deactivateShooterCommand());
+//        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
+//                .whenActive(farminator.shooter.runShooter())
+//                .whenInactive(new RunCommand(() -> farminator.shooter.turnOff()));
 
         // ------------------------
         // Drive System
         // ------------------------
 
+//        // Left Bumper → Run back transfer backward
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+//                .whenActive(farminator.shooter.setShooterAlignment(-1))
+//                .whenInactive(farminator.shooter.setShooterAlignment(0));
+//
+//        // Right Bumper → Run all transfer motors forward
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+//                .whenActive(farminator.shooter.setShooterAlignment(1))
+//                .whenInactive(farminator.shooter.setShooterAlignment(0));
+
+
+        // TODO: TEMP
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenActive(
+                        farminator.shooter.runPowerBasedOnVoltageCompFunction()
+                )
+                .whenInactive(
+                        farminator.shooter.turnOff()
+                );
+
+
+
         // Right Stick Button → Toggle between slow and fast drive modes
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
+
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(farminator.drive.resetImuHeadingCommand());
+
+
+
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -13,147 +12,86 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
-/**
- * Shooter subsystem controls the shooter motor for launching game elements.
- *
- * Provides velocity-based control, range-dependent speed calculations, and
- * integration with the command-based framework.
- */
-@Config // Allows tuning constants from dashboard
-public class Shooter extends SubsystemBase {
+@Config
+public class Shooter  extends SubsystemBase {
+    private DcMotorEx shooterRight;
+    private DcMotorEx shooterLeft;
+    private static final double MOTOR_RPS = 27;
+    private static final double WHEEL_RADIUS = 0.048;
 
-    // ------------------------------------------------------------
-    // Hardware
-    // ------------------------------------------------------------
-    private final DcMotorEx shooter;
+    public static double SHOOTER_DEFAULT_VELOCITY = 1000; // TODO: Find value based on pidf controller
 
-    // ------------------------------------------------------------
-    // Constants
-    // ------------------------------------------------------------
-    private static final double WHEEL_RADIUS = 0.048;  // meters
-    public static double DEFAULT_SPEED = 1000;         // RPM
-    public final double RPM_TOLERANCE = 10;            // allowable error for motor readiness
+    public static double TEMP_POWER_FUNCTION_CONSTANT = 9; //TODO Remove when we have a pidf controller
 
-    public static double TARGET_SPEED = 1850;
 
-    // Shooting parameters
-    private final double g = 9.87;                     // gravity (m/s^2)
-    private final double SHOOTING_HEIGHT = 0.32;       // meters
-    private final double SHOOTING_ANGLE = Math.toRadians(53);
-    private final double GOAL_HEIGHT = 0.98;          // meters
-    public static double SHOOTING_CONSTANT = 4;        // empirically tuned multiplier
-
-    // PIDF coefficients for velocity control
-    private static final PIDFCoefficients pidf = new PIDFCoefficients(10, 0, 0, 12);
-
-    // ------------------------------------------------------------
-    // Constructor
-    // ------------------------------------------------------------
     public Shooter() {
-        shooter = BarnRobot.getInstance().robotHardware.shooter;
+        shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
+        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Motor configuration
-        shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        shooter.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        // Velocity control
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
+        shooterLeft = BarnRobot.getInstance().robotHardware.shooterLeft;
+        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    // ------------------------------------------------------------
-    // Low-level control
-    // ------------------------------------------------------------
-
-    /** Sets the shooter motor velocity in encoder ticks/sec. */
-    private void setSpeed(double speed) {
-        shooter.setVelocity(speed);
+    private void setPower(double power) {
+        shooterRight.setPower(power);
+        shooterLeft.setPower(power);
     }
 
-    /**
-     * Checks if the shooter motor is ready based on the current range from the Limelight.
-     */
-    public boolean isMotorReady() {
-        double target = rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange());
-        double velocity = shooter.getVelocity();
-        return velocity > target - RPM_TOLERANCE && velocity < target + RPM_TOLERANCE;
+    private void operateShooter(){
+        setPower(TEMP_POWER_FUNCTION_CONSTANT);
     }
 
-    /** Checks if the shooter motor is ready for a custom range. */
-    public boolean isMotorReady(double range) {
-        double target = rangeDependentVelocity(range);
-        double velocity = shooter.getVelocity();
-        return velocity > target - RPM_TOLERANCE && velocity < target + RPM_TOLERANCE;
-    }
 
-    /**
-     * Calculates the required shooter velocity based on the target range.
-     *
-     * @param range distance to target in meters
-     * @return required motor velocity
-     */
+
+    //TODO: REMOVE FUNCTION when we have a pidf controller
     public double rangeDependentVelocity(double range) {
-        double artifactSpeed = g / (Math.cos(SHOOTING_ANGLE) * Math.sqrt(2))
-                * range / Math.sqrt(SHOOTING_HEIGHT + range * Math.tan(SHOOTING_ANGLE) - GOAL_HEIGHT);
+        double SHOOTING_CONSTANT = 4.4;
+        double g = 9.87;
+        double SHOOTING_HEIGHT = 0.32;
+        double SHOOTING_ANGLE = Math.toRadians(53);
+        double GOAL_HEIGHT = 0.98;
+        double artifactSpeed = g / (Math.cos(SHOOTING_ANGLE) * Math.sqrt(2)) * range / Math.sqrt(SHOOTING_HEIGHT + range * Math.tan(SHOOTING_ANGLE) - GOAL_HEIGHT);
         return artifactSpeed * SHOOTING_CONSTANT / WHEEL_RADIUS;
     }
 
-    // ------------------------------------------------------------
-    // Command-based wrappers
-    // ------------------------------------------------------------
 
-    /** Sets a custom speed for the shooter motor. */
-    public Command customShooterCommand(double speed) {
-        return new InstantCommand(() -> setSpeed(speed), this);
+    public RunCommand runShooter(){
+        return new RunCommand(() -> operateShooter());
     }
 
-    /** Calculates the speed based on Limelight range and sets the shooter velocity. */
-    public Command calcAndShootCommand() {
-        return new InstantCommand(() -> setSpeed(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
+    public RunCommand turnOff(){
+        return new RunCommand(() -> setPower(0), this);
     }
 
-    /** Activates the shooter at default power. */
-    public Command activateShooterCommand() {
-        return new InstantCommand(() -> shooter.setPower(0.6), this);
-    }
-
-    public Command setPower(double power){
-        return new InstantCommand(() -> shooter.setPower(power), this);
-    }
-
-    /** Deactivates the shooter motor. */
-    public Command deactivateShooterCommand() {
-        return new InstantCommand(() -> shooter.setPower(0), this);
-    }
-
-    /** Continuously runs the shooter at a velocity based on current Limelight range. */
     public Command shootAtRangeCommand() {
-        return new RunCommand(() -> setSpeed(BarnRobot.getInstance().limelight.getGoalRange() == 0
-                ? DEFAULT_SPEED
-                : rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())), this);
+        return new RunCommand(() -> setPower(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())));
+//        double range = BarnRobot.getInstance().limelight.getGoalRange();
+//        return new InstantCommand(() -> setSpeed(rangeDependentVelocity(range)), this);
     }
 
-    // ------------------------------------------------------------
-    // Telemetry
-    // ------------------------------------------------------------
-
-    /** Displays current shooter info on the driver station telemetry. */
-    public void displayTelemetry() {
+    public void displayTelemetry(){
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
-
-        telemetry.addData("Shooter target speed", rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange()));
-        telemetry.addData("Shooter actual speed", shooter.getVelocity());
-        telemetry.addData("Is motor ready", isMotorReady());
+        telemetry.addData("shooter actual speed", shooterRight.getVelocity());
+        telemetry.addData("left shooter power", shooterLeft.getPower());
+        telemetry.addData("right shooter power", shooterRight.getPower());
     }
 
-    public void runShooter(){
-
+    public double getVelocity() {
+        return (shooterRight.getVelocity());
     }
 
-//    public Command runShooterCommand(){
-//
-//    }
+    public void testMotors(){
+        shooterRight.setPower(1);
+        shooterLeft.setPower(1);
+    }
 
-    public double getVelocity(){
-        return shooter.getVelocity();
+    //TODO: TEMP
+    public Command runPowerBasedOnVoltageCompFunction(){
+        return new RunCommand(() -> setPower(TEMP_POWER_FUNCTION_CONSTANT/
+                Math.max(BarnRobot.getInstance().robotHardware.voltageSensor.getVoltage(), 1e-6)), this);
     }
 }

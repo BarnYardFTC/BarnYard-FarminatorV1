@@ -39,13 +39,13 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
-                robot.shooter.activateShooterCommand(),
+//                robot.shooter.activateShooterCommand(),
                 new WaitCommand(SHOOT_PREP_TIME),
                 robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                 robot.intake.activateIntakeCommand(),
                 new WaitCommand(TRANSFER_ALL_DURATION),
                 robot.transfer.setFrontPowerCommand(0),
-                robot.shooter.deactivateShooterCommand(),
+//                robot.shooter.deactivateShooterCommand(),
                 robot.intake.deactivateIntakeCommand()
         );
     }
@@ -74,11 +74,11 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
-                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
+//                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
+//                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
+//                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
                 new ParallelCommandGroup(
                         robot.intake.activateIntakeCommand(),
                         robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
@@ -101,11 +101,11 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
-                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
+//                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
+//                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
                 new WaitCommand(200),
-                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
+//                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
                 new ParallelCommandGroup(
                         robot.intake.activateIntakeCommand(),
                         robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)

@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
  * - Does not collect additional elements after shooting
  */
 @Config
-@Autonomous(name = "3+3 Close test PGP", group = "main")
+@Autonomous(name = "3+3 Close test gpp", group = "main")
 public class Blue_Close_GPP extends CommandOpMode {
 
     /** Robot and drive system instances */

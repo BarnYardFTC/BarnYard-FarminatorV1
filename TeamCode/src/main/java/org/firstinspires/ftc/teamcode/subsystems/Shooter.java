@@ -17,12 +17,10 @@ import org.firstinspires.ftc.teamcode.util.ShooterPIDFController;
 @Config
 public class Shooter  extends SubsystemBase {
 
-    public static double p = 0.1, f = 0.0075;
+    public static double p = 1, f = 0.0007;
     private ShooterPIDFController pidfController;
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
-    private static final double MOTOR_RPS = 27;
-    private static final double WHEEL_RADIUS = 0.048;
 
     public static double SHOOTER_DEFAULT_VELOCITY = 1000; // TODO: Find value based on pidf controller
 
@@ -40,7 +38,7 @@ public class Shooter  extends SubsystemBase {
         shooterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        pidfController = new ShooterPIDFController(p, 0, 0, f);  //i,d should stay zero
+        pidfController = new ShooterPIDFController(p, 0, 0, f);
     }
 
     private void setPower(double power) {
@@ -49,21 +47,9 @@ public class Shooter  extends SubsystemBase {
     }
 
     private void operateShooter(){
+        pidfController.setPIDF(p, 0, 0, f);
         double power = pidfController.calculate(SHOOTER_DEFAULT_VELOCITY, shooterRight.getVelocity());
         setPower(power);
-    }
-
-
-
-    //TODO: REMOVE FUNCTION when we have a pidf controller
-    public double rangeDependentVelocity(double range) {
-        double SHOOTING_CONSTANT = 4.4;
-        double g = 9.87;
-        double SHOOTING_HEIGHT = 0.32;
-        double SHOOTING_ANGLE = Math.toRadians(53);
-        double GOAL_HEIGHT = 0.98;
-        double artifactSpeed = g / (Math.cos(SHOOTING_ANGLE) * Math.sqrt(2)) * range / Math.sqrt(SHOOTING_HEIGHT + range * Math.tan(SHOOTING_ANGLE) - GOAL_HEIGHT);
-        return artifactSpeed * SHOOTING_CONSTANT / WHEEL_RADIUS;
     }
 
 
@@ -75,11 +61,7 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> setPower(0), this);
     }
 
-    public Command shootAtRangeCommand() {
-        return new RunCommand(() -> setPower(rangeDependentVelocity(BarnRobot.getInstance().limelight.getGoalRange())));
-//        double range = BarnRobot.getInstance().limelight.getGoalRange();
-//        return new InstantCommand(() -> setSpeed(rangeDependentVelocity(range)), this);
-    }
+
 
     public void displayTelemetry(){
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
@@ -94,6 +76,10 @@ public class Shooter  extends SubsystemBase {
     public void testMotors(){
         shooterRight.setPower(1);
         shooterLeft.setPower(1);
+    }
+
+    public boolean isReady() {
+        return getVelocity() > SHOOTER_DEFAULT_VELOCITY-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY+40;
     }
 
     //TODO: TEMP

@@ -27,20 +27,22 @@ public class ShooterHood extends SubsystemBase {
     public double rangeDependentAngle(double range) {
         return Math.sqrt(A*range) + B*range + C;
     }
-    public double tempTestFormula (double range) {return range / 4;}
-
-    public Command autoAdjust(){
-        return new InstantCommand(() -> {
-            double newPos = tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange());
-            servo.setPosition(newPos);
-        }, this);
-//        servo.setPosition(tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange()));
-//        return new InstantCommand(()  -> servo.setPosition(rangeDependentAngle(BarnRobot.getInstance().limelight.getGoalRange())));
+    public void tempTestRangeDependent() {
+        servo.setPosition(Math.min(BarnRobot.getInstance().limelight.getGoalRange()/4, 4.0));
     }
 
-    public Command moveWithFormula(double position){
-        return new InstantCommand(()  -> servo.setPosition(tempTestFormula(position)));
-    }
+//    public Command autoAdjust(){
+//        return new InstantCommand(() -> {
+//            double newPos = tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange());
+//            servo.setPosition(newPos);
+//        }, this);
+////        servo.setPosition(tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange()));
+////        return new InstantCommand(()  -> servo.setPosition(rangeDependentAngle(BarnRobot.getInstance().limelight.getGoalRange())));
+//    }
+
+//    public Command moveWithFormula(double position){
+//        return new InstantCommand(()  -> servo.setPosition(tempTestFormula(position)));
+//    }
 
     public Command lower() {
         return new InstantCommand(() -> {

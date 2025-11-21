@@ -88,13 +88,11 @@ public class BlueMainTeleop extends CommandOpMode {
 
 
         // Left Trigger → Intake active (transfer + intake)
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                         farminator.intake.activateIntakeCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(0),
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
@@ -147,9 +145,6 @@ public class BlueMainTeleop extends CommandOpMode {
 
     @Override
     public void run() {
-        // ==========================================================
-        // Periodic Updates
-        // ==========================================================
         super.run();
         farminator.shooterHood.displayTelemetry();
         farminator.periodic();

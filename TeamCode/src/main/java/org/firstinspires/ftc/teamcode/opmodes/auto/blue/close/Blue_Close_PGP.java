@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
@@ -22,6 +23,8 @@ import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * Autonomous routine "3+0 Close":
@@ -74,16 +77,16 @@ public class Blue_Close_PGP extends CommandOpMode {
 
         /** Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(100));
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25));
 
 
         TrajectoryActionBuilder path2 = path1.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING, new TranslationalVelConstraint(100))
+                .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING, new TranslationalVelConstraint(25))
                 .strafeToLinearHeading(new Vector2d(POSE4_X, POSE4_Y), POSE4_HEADING, new TranslationalVelConstraint(25));
 
         TrajectoryActionBuilder path3 = path2.endTrajectory().fresh()
-                .strafeToLinearHeading(new Vector2d(POSE5_X, POSE5_Y), POSE5_HEADING, new TranslationalVelConstraint(100))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(100));
+                .strafeToLinearHeading(new Vector2d(POSE5_X, POSE5_Y), POSE5_HEADING, new TranslationalVelConstraint(25))
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25));
 
 
 
@@ -92,7 +95,6 @@ public class Blue_Close_PGP extends CommandOpMode {
         new SequentialCommandGroup(
                 new DriveActionCommand(path1),
                 new SequentialCommandGroup(farminator.shooter.runShooter()),
-                new WaitCommand(4500),
                 new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
                 new WaitCommand(3000),
                 new SequentialCommandGroup(farminator.intake.activateIntakeCommand()),

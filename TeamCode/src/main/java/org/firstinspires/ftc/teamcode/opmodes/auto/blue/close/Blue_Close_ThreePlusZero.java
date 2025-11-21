@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -34,13 +35,16 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     private RoadRunnerMecanumDrive drive;
 
     /** Initial pose */
-    public static double POSE1_X = -45;
-    public static double POSE1_Y = -45;
-//    public static double POSE1_HEADING = Math.toRadians(90);
+//    public static double POSE1_X = -45;
+//    public static double POSE1_Y = -45;
+    public static final double POSE1_X = -37;
+    public static final double POSE1_Y = -53;
+    public static final double POSE1_HEADING = Math.toRadians(90);
+    public static final double POSE2_HEADING = Math.toRadians(225);
 
     /** Shooter shooting pose */
-    public static double POSE2_X = -10;
-    public static double POSE2_Y = -25;
+    public static double POSE2_X = -35;
+    public static double POSE2_Y = -35;
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(225);
 
 
@@ -57,29 +61,40 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
         /** Switch limelight to obelisk detection pipeline */
         farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
         /** Define trajectory to shooting pose */
-        TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), PERPENDICULAR_TO_DEPOT_HEADING );
+        TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
         /** Schedule autonomous sequence */
+//        new SequentialCommandGroup(
+//                new WaitUntilCommand(this::opModeIsActive),
+//                new DriveActionCommand(path1),
+//                new SequentialCommandGroup(farminator.shooter.runShooter()),
+//                new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
+//                farminator.shooter.turnOff()
+//        ).schedule();
+
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-//                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
-                new DriveActionCommand(path1)
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                farminator.shooter.deactivateShooterCommand()
-        ).schedule();
+                new DriveActionCommand(path1),
+                new SequentialCommandGroup(farminator.shooter.runShooter()),
+                new WaitCommand(3000),
+                new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
+                new WaitCommand(1000),
+                new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1)),
+                new WaitCommand(1000),
+                new ParallelCommandGroup(farminator.intake.activateIntakeCommand()),
+                farminator.transfer.setEntireTransferPowerCommand(1)
+        );
 
         new SequentialCommandGroup(
                 new WaitCommand(10000)
-                );
+        ).schedule();
 
     }
 

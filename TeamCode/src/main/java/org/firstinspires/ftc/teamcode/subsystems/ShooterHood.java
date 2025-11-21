@@ -44,7 +44,7 @@ public class ShooterHood extends SubsystemBase {
 
     public Command lower() {
         return new InstantCommand(() -> {
-            double newPos = servo.getPosition() + 0.2;
+            double newPos = servo.getPosition() + 0.1;
             if (newPos <= MAX) {
                 servo.setPosition(newPos);
             }
@@ -53,7 +53,7 @@ public class ShooterHood extends SubsystemBase {
 
     public Command raise() {
         return new InstantCommand(() -> {
-            double newPos = servo.getPosition() - 0.2;
+            double newPos = servo.getPosition() - 0.1;
             servo.setPosition(newPos);
             if (servo.getPosition() > MIN && servo.getPosition() < 0.1) {
                 servo.setPosition(MIN);
@@ -71,6 +71,5 @@ public class ShooterHood extends SubsystemBase {
     public void displayTelemetry(){
         BarnRobot robot = BarnRobot.getInstance();
         robot.telemetry.addData("Position", servo.getPosition());
-        robot.telemetry.addData("Debug Pos", servo.getPosition());
     }
 }

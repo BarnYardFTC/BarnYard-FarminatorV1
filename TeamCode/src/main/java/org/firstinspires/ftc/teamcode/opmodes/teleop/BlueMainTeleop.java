@@ -67,7 +67,11 @@ public class BlueMainTeleop extends CommandOpMode {
 
         // Left Bumper → Run back transfer backward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(farminator.transfer.setBackPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER))
+                .whenPressed(
+                        new ParallelCommandGroup(
+                                farminator.transfer.setEntireTransferPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER)
+                        )
+                )
                 .whenInactive(farminator.transfer.setBackPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
@@ -146,8 +150,8 @@ public class BlueMainTeleop extends CommandOpMode {
         // ==========================================================
         // Periodic Updates
         // ==========================================================
-
         super.run();
+        farminator.shooterHood.displayTelemetry();
         farminator.periodic();
     }
 }

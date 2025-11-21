@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.util.ShooterPIDFController;
 @Config
 public class Shooter  extends SubsystemBase {
 
-    private static double p, i, d, f;
+    public static double p = 0.1, f = 0.0075;
     private ShooterPIDFController pidfController;
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
@@ -40,7 +40,7 @@ public class Shooter  extends SubsystemBase {
         shooterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        pidfController = new ShooterPIDFController(p, i, d, f);
+        pidfController = new ShooterPIDFController(p, 0, 0, f);  //i,d should stay zero
     }
 
     private void setPower(double power) {
@@ -49,8 +49,8 @@ public class Shooter  extends SubsystemBase {
     }
 
     private void operateShooter(){
-
-        setPower(TEMP_POWER_FUNCTION_CONSTANT);
+        double power = pidfController.calculate(SHOOTER_DEFAULT_VELOCITY, shooterRight.getVelocity());
+        setPower(power);
     }
 
 
@@ -68,7 +68,7 @@ public class Shooter  extends SubsystemBase {
 
 
     public RunCommand runShooter(){
-        return new RunCommand(() -> operateShooter());
+        return new RunCommand(() -> operateShooter(), this);
     }
 
     public RunCommand turnOff(){
@@ -83,9 +83,8 @@ public class Shooter  extends SubsystemBase {
 
     public void displayTelemetry(){
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
-        telemetry.addData("shooter actual speed", shooterRight.getVelocity());
+        telemetry.addData("shooter velocity", shooterRight.getVelocity());
         telemetry.addData("left shooter power", shooterLeft.getPower());
-        telemetry.addData("right shooter power", shooterRight.getPower());
     }
 
     public double getVelocity() {

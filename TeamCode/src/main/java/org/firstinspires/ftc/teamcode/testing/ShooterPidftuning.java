@@ -1,26 +1,25 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
-/**
- * Bue TeleOp mode for the Barnyard FTC robot.
- *
- * Controls all subsystems through command-based triggers and gamepad mappings.
- *
- * Structure:
- * - Robot Initialization
- * - Gamepad Bindings (Buttons + Triggers)
- * - Periodic Updates
- */
-@TeleOp(name = "pidf tuner", group = "main")
+//How to tune?
+
+
+@Config
+@TeleOp(name = "shooter pidf tuner", group = "tuning")
 public class ShooterPidftuning extends CommandOpMode {
 
     // ------------------------
@@ -28,11 +27,7 @@ public class ShooterPidftuning extends CommandOpMode {
     // ------------------------
     private BarnRobot farminator;
 
-    private final double INITIAL_BOT_HEADING = 270;
-
-    private VoltageSensor voltageSensor;
-
-
+    private Telemetry telemetry2;
     private OpModeData opModedata = new OpModeData(OpModeData.AllianceColor.BLUE, new Pose2d(0,0,0), 270, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE);
 
     @Override
@@ -44,28 +39,24 @@ public class ShooterPidftuning extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModedata);
 
-        this.voltageSensor = farminator.robotHardware.voltageSensor;
+        telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        //kol ha kod
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-//                .whenPressed(farminator.shooter.setPower(0));
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-//                .whenPressed(farminator.shooter.setPower(0.5));
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-//                .whenPressed(farminator.shooter.setPower(1));
-
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-//                .whenPressed(farminator.shooter.setPower(10/voltageSensor.getVoltage()));
-
-
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenActive(
+                        farminator.shooter.runShooter()
+                )
+                .whenInactive(
+                        farminator.shooter.turnOff()
+                );
     }
 
     @Override
     public void run() {
         // Run command scheduler and periodic updates
         super.run();
-//        farminator.telemetry.addData("motor velocity", farminator.shooter.getVelocity());
-        farminator.periodic();
+        telemetry2.addData("current velocity", farminator.shooter.getVelocity());
+        telemetry2.addData("target velocity", Shooter.SHOOTER_DEFAULT_VELOCITY);
+        telemetry2.update();
     }
 
 

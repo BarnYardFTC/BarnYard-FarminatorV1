@@ -8,12 +8,17 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.controller.PIDFController;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.ShooterPIDFController;
 
 @Config
 public class Shooter  extends SubsystemBase {
+
+    private static double p, i, d, f;
+    private ShooterPIDFController pidfController;
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
     private static final double MOTOR_RPS = 27;
@@ -26,14 +31,16 @@ public class Shooter  extends SubsystemBase {
 
     public Shooter() {
         shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
-        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         shooterLeft = BarnRobot.getInstance().robotHardware.shooterLeft;
-        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        pidfController = new ShooterPIDFController(p, i, d, f);
     }
 
     private void setPower(double power) {
@@ -42,6 +49,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     private void operateShooter(){
+
         setPower(TEMP_POWER_FUNCTION_CONSTANT);
     }
 

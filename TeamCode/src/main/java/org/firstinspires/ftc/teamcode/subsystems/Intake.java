@@ -51,6 +51,7 @@ public class Intake extends SubsystemBase {
     }
 
     /**
+     * \
      * Returns a command that activates the intake at default power.
      *
      * @return command to activate intake

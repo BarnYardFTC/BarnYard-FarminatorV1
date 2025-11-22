@@ -122,7 +122,12 @@ public class BlueMainTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
                         farminator.shooter.runPowerBasedOnVoltageCompFunction()
+                )
+                .whenInactive(
+                        farminator.shooter.turnOff()
                 );
+
+
 
         // Right Stick Button → Toggle between slow and fast drive modes
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
@@ -133,6 +138,9 @@ public class BlueMainTeleop extends CommandOpMode {
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(farminator.drive.resetImuHeadingCommand());
+
+
+
     }
 
     @Override

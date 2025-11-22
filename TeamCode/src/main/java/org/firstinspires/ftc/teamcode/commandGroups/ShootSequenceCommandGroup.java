@@ -24,7 +24,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
     public static int SHOOT_PREP_TIME = 4000;
 
 
-    public static int TRANSFER_ONE_DURATION = 800;
+    public static int TRANSFER_ONE_DURATION = 1500;
     public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
 
     /**
@@ -77,11 +77,11 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 new WaitUntilCommand(() -> robot.shooter.isReady()),
                 robot.transfer.setBackPowerCommand(1),
-                new WaitCommand(1500),
+                new WaitCommand(TRANSFER_ONE_DURATION),
                 robot.transfer.setBackPowerCommand(0),
                 robot.transfer.setFrontPowerCommand(1),
                 robot.intake.activateIntakeCommand(),
-                new WaitCommand(1500),
+                new WaitCommand(TRANSFER_ONE_DURATION),
                 robot.transfer.setFrontPowerCommand(0),
                 robot.intake.deactivateIntakeCommand(),
                 new WaitCommand(2000)

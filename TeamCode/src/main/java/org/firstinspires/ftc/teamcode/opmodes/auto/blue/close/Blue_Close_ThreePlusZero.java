@@ -80,14 +80,14 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 //                farminator.shooter.turnOff()
 //        ).schedule();
 
-        new SequentialCommandGroup(                                         //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
+        //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
+        new ParallelCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 new DriveActionCommand(path1),
                 new SequentialCommandGroup(farminator.shooter.runShooter()),
                 new WaitCommand(3000),
-                new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1)),
+                new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
                 new WaitCommand(1000),
-             //   new InstantCommand(return farminator.telemetry.speak("Its working NIGGER"),     //TODO Need to add data reciving
                 new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1)),
                 new WaitCommand(1000),
                 new ParallelCommandGroup(farminator.intake.activateIntakeCommand()),

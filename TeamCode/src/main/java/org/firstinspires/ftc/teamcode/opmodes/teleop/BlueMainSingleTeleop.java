@@ -25,9 +25,9 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "BlueMainTeleop", group = "main")
+@TeleOp(name = "BlueMainSingleTeleop", group = "main")
 @Config
-public class BlueMainTeleop extends CommandOpMode {
+public class BlueMainSingleTeleop extends CommandOpMode {
 
     // ------------------------
     // Robot Instance
@@ -125,13 +125,13 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
         // Right Stick Button → Toggle between slow and fast drive modes
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(farminator.drive.resetImuHeadingCommand());
     }
 

@@ -81,21 +81,23 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 //        ).schedule();
 
         //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
-        new ParallelCommandGroup(
-                new WaitUntilCommand(this::opModeIsActive),
+        new SequentialCommandGroup(
+            new WaitUntilCommand(this::opModeIsActive),
+            new ParallelCommandGroup(
                 new DriveActionCommand(path1),
-                new SequentialCommandGroup(farminator.shooter.runShooter()),
+                farminator.shooter.runShooter(),
                 new WaitCommand(3000),
-                new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
-                new WaitCommand(1000),
-                new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1)),
-                new WaitCommand(1000),
-                new ParallelCommandGroup(farminator.intake.activateIntakeCommand()),
-                new SequentialCommandGroup(farminator.transfer.setEntireTransferPowerCommand(1))
+
+                new SequentialCommandGroup(
+                        farminator.transfer.setBackPowerCommand(1),
+                        new WaitCommand(3000),
+                        farminator.transfer.setEntireTransferPowerCommand(1),
+                        new WaitCommand(3000),
+                        farminator.intake.activateIntakeCommand(),
+                        farminator.transfer.setEntireTransferPowerCommand(1)
+                )
+            )
         ).schedule();
-
-
-
     }
 
     @Override

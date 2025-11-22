@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -9,6 +11,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+
+import org.firstinspires.ftc.teamcode.util.roadrunner.PinpointLocalizer;
 
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
@@ -90,6 +94,8 @@ public class RobotHardware {
 
     private static final String SHOOTER_HOOD_CONFIG_NAME = "shooterHood";
 
+
+    public PinpointLocalizer pinpoint;
 
 
 
@@ -206,6 +212,9 @@ public class RobotHardware {
         imu = hw.get(IMU.class, "imu");
         imu.initialize(IMU_PARAMETERS);
         limelight = hw.get(Limelight3A.class, "limelight");
+
+        pinpoint = new PinpointLocalizer(hw, 1, new Pose2d(0, 0, 0)); //TODO: Move the BarnRobot
+
     }
     private void initVoltageSensor(){
         voltageSensor = hw.get(VoltageSensor.class, "Control Hub");

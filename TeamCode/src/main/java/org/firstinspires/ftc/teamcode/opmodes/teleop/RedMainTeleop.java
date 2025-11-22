@@ -110,7 +110,7 @@ public class RedMainTeleop extends CommandOpMode {
         // TODO: TEMP
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(
-                        farminator.shooter.runPowerBasedOnVoltageCompFunction()
+                        farminator.shooter.runShooter()
                 )
                 .whenInactive(
                         farminator.shooter.turnOff()

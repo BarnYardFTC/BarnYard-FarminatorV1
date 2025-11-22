@@ -5,10 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.controller.PIDFController;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -22,10 +20,7 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-    public static double SHOOTER_DEFAULT_VELOCITY = 1400; // TODO: Find value based on pidf controller
-
-    public static double TEMP_POWER_FUNCTION_CONSTANT = 9; //TODO Remove when we have a pidf controller
-
+    public static double SHOOTER_DEFAULT_VELOCITY = 1600;
 
     public Shooter() {
         shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
@@ -52,9 +47,17 @@ public class Shooter  extends SubsystemBase {
         setPower(power);
     }
 
+    private void operateShooterReverse(){
+        setPower(-1);
+    }
+
 
     public RunCommand runShooter(){
         return new RunCommand(() -> operateShooter(), this);
+    }
+
+    public RunCommand runShooterReversed(){
+        return new RunCommand(() -> operateShooterReverse(), this);
     }
 
     public RunCommand turnOff(){
@@ -84,9 +87,4 @@ public class Shooter  extends SubsystemBase {
         return getVelocity() > SHOOTER_DEFAULT_VELOCITY-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY+40;
     }
 
-    //TODO: TEMP
-    public Command runPowerBasedOnVoltageCompFunction(){
-        return new RunCommand(() -> setPower(TEMP_POWER_FUNCTION_CONSTANT/
-                Math.max(BarnRobot.getInstance().robotHardware.voltageSensor.getVoltage(), 1e-6)), this);
-    }
 }

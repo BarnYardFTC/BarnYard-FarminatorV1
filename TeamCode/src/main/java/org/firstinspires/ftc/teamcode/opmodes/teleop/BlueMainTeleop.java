@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.RobotHardware;
 
 /**
  * BlueMainTeleop
@@ -72,7 +74,7 @@ public class BlueMainTeleop extends CommandOpMode {
                                 farminator.transfer.setEntireTransferPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER)
                         )
                 )
-                .whenInactive(farminator.transfer.setBackPowerCommand(0));
+                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
@@ -117,11 +119,26 @@ public class BlueMainTeleop extends CommandOpMode {
 //                .whenActive(farminator.shooter.setShooterAlignment(1))
 //                .whenInactive(farminator.shooter.setShooterAlignment(0));
 
-
-        // TODO: TEMP
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
-                        farminator.shooter.runPowerBasedOnVoltageCompFunction()
+                        farminator.shooter.runShooter(),
+                        farminator.shooter.turnOff()
+
+                );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                        .whenPressed(
+                                farminator.shooterHood.setHoodPosition(1)
+                        );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+                        .whenPressed(
+                                farminator.shooterHood.setHoodPosition(0.2)
+                        );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+                .toggleWhenActive(
+                        farminator.shooter.runShooterReversed()
                 )
                 .whenInactive(
                         farminator.shooter.turnOff()
@@ -141,11 +158,15 @@ public class BlueMainTeleop extends CommandOpMode {
 
 
 
+
+
     }
 
     @Override
     public void run() {
         super.run();
+        telemetry.addData("heading pinpoint: ", BarnRobot.getInstance().robotHardware.pinpoint.getPose().heading.toDouble());
+        farminator.shooter.displayTelemetry();
         farminator.shooterHood.displayTelemetry();
         farminator.periodic();
     }

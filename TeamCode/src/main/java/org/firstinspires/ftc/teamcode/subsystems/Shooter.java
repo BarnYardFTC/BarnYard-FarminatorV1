@@ -22,7 +22,7 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-    public static double SHOOTER_DEFAULT_VELOCITY = 1000; // TODO: Find value based on pidf controller
+    public static double SHOOTER_DEFAULT_VELOCITY = 1400; // TODO: Find value based on pidf controller
 
     public static double TEMP_POWER_FUNCTION_CONSTANT = 9; //TODO Remove when we have a pidf controller
 
@@ -72,6 +72,8 @@ public class Shooter  extends SubsystemBase {
     public double getVelocity() {
         return (shooterRight.getVelocity());
     }
+
+
 
     public void testMotors(){
         shooterRight.setPower(1);

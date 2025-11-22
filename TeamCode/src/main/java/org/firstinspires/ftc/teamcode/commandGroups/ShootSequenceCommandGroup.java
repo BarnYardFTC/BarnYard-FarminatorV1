@@ -26,6 +26,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
 
     public static int TRANSFER_ONE_DURATION = 800;
     public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
+
     /**
      * Full shoot-all sequence:
      * - Activate shooter and wait for it to reach speed
@@ -75,12 +76,17 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
 
         return new SequentialCommandGroup(
                 new WaitUntilCommand(() -> robot.shooter.isReady()),
-                new WaitCommand(100),
+                new WaitCommand(1000),
+                robot.transfer.setBackPowerCommand(1),
+                new WaitCommand(1500),
+                robot.transfer.setBackPowerCommand(0),
+                new WaitCommand(1000),
+                robot.transfer.setFrontPowerCommand(1),
                 robot.intake.activateIntakeCommand(),
-                robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
-                new WaitCommand(TRANSFER_ONE_DURATION),
-                robot.transfer.setEntireTransferPowerCommand(0),
-                robot.intake.deactivateIntakeCommand()
+                new WaitCommand(1500),
+                robot.transfer.setFrontPowerCommand(0),
+                robot.intake.deactivateIntakeCommand(),
+                new WaitCommand(2000)
         );
     }
 

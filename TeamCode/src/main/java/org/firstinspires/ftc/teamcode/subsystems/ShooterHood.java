@@ -63,6 +63,12 @@ public class ShooterHood extends SubsystemBase {
         }, this);
     }
 
+    public Command setHoodPosition(double position){
+        return new InstantCommand(() -> {
+            servo.setPosition(position);
+        }, this);
+    }
+
     public Command returnToBase(){
         return new InstantCommand(() -> {
             servo.setPosition(MIN);

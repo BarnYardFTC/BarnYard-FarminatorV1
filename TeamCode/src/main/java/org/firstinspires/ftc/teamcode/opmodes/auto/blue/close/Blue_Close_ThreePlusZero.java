@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
+import static org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup.shootWhenReady;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -44,8 +46,8 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     public static final double POSE2_HEADING = Math.toRadians(225);
 
     /** Shooter shooting pose */
-    public static double POSE2_X = -35;
-    public static double POSE2_Y = -35;
+    public static double POSE2_X = -40;
+    public static double POSE2_Y = -40;
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(225);
 
 
@@ -83,20 +85,31 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
         new SequentialCommandGroup(
             new WaitUntilCommand(this::opModeIsActive),
+            farminator.shooterHood.setHoodPosition(0.05),
             new ParallelCommandGroup(
                 new DriveActionCommand(path1),
                 farminator.shooter.runShooter(),
-                new WaitCommand(3000),
-
                 new SequentialCommandGroup(
-                        farminator.transfer.setBackPowerCommand(1),
-                        new WaitCommand(3000),
-                        farminator.transfer.setEntireTransferPowerCommand(1),
-                        new WaitCommand(3000),
-                        farminator.intake.activateIntakeCommand(),
-                        farminator.transfer.setEntireTransferPowerCommand(1)
+                        shootWhenReady(),
+                        shootWhenReady(),
+                        shootWhenReady()
                 )
-            )
+
+
+
+
+//                new WaitCommand(3000),
+//
+//                new SequentialCommandGroup(
+//                        farminator.transfer.setBackPowerCommand(1),
+//                        new WaitCommand(3000),
+//                        farminator.transfer.setEntireTransferPowerCommand(1),
+//                        new WaitCommand(3000),
+//                        farminator.intake.activateIntakeCommand(),
+//                        farminator.transfer.setEntireTransferPowerCommand(1)
+//                )
+            ),
+            farminator.shooter.turnOff()
         ).schedule();
     }
 

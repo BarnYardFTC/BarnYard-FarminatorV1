@@ -94,11 +94,11 @@ public class Blue_Close_PGP extends CommandOpMode {
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(
                 new DriveActionCommand(path1),
-                new SequentialCommandGroup(farminator.shooter.runShooter()),
+                new SequentialCommandGroup(farminator.shooter.runShooterClose()),
                 new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
                 new WaitCommand(3000),
                 new SequentialCommandGroup(farminator.intake.activateIntakeCommand()),
-                new SequentialCommandGroup(farminator.shooter.runShooter()),
+                new SequentialCommandGroup(farminator.shooter.runShooterClose()),
 
 
                 //lehakot zman
@@ -109,7 +109,7 @@ public class Blue_Close_PGP extends CommandOpMode {
                 new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(-1)),
                 new SequentialCommandGroup(farminator.intake.deactivateIntakeCommand()),
                 new DriveActionCommand(path3),
-                new SequentialCommandGroup(farminator.shooter.runShooter()),
+                new SequentialCommandGroup(farminator.shooter.runShooterClose()),
                 new WaitCommand(4500),
                 new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
                 new WaitCommand(3000),

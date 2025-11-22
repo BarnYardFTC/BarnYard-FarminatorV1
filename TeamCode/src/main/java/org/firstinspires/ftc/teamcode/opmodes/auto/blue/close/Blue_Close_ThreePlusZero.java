@@ -46,8 +46,8 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     public static final double POSE2_HEADING = Math.toRadians(225);
 
     /** Shooter shooting pose */
-    public static double POSE2_X = -40;
-    public static double POSE2_Y = -40;
+    public static double POSE2_X = -30;
+    public static double POSE2_Y = -30;
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(225);
 
 
@@ -85,10 +85,10 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
         new SequentialCommandGroup(
             new WaitUntilCommand(this::opModeIsActive),
-            farminator.shooterHood.setHoodPosition(0.05),
+            farminator.shooterHood.setHoodPosition(0.1),
             new ParallelCommandGroup(
                 new DriveActionCommand(path1),
-                farminator.shooter.runShooter(),
+                farminator.shooter.runShooterClose(),
                 new SequentialCommandGroup(
                         shootWhenReady(),
                         shootWhenReady(),

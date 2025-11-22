@@ -121,7 +121,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
-                        farminator.shooter.runShooter(),
+                        farminator.shooter.runShooterFar(),
                         farminator.shooter.turnOff()
 
                 );

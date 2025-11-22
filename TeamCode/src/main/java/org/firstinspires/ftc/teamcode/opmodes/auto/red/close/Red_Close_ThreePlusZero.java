@@ -67,7 +67,7 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 new DriveActionCommand(path1),
-                new RunCommand(() -> farminator.shooter.runShooter(), farminator.shooter),
+                new RunCommand(() -> farminator.shooter.runShooterClose(), farminator.shooter),
                 ShootSequenceCommandGroup.shootWhenReady(),
                 ShootSequenceCommandGroup.shootWhenReady(),
                 ShootSequenceCommandGroup.shootWhenReady(),

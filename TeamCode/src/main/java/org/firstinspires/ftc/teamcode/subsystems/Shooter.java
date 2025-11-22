@@ -20,7 +20,8 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-    public static double SHOOTER_DEFAULT_VELOCITY = 1600;
+    public static double SHOOTER_DEFAULT_VELOCITY_FAR = 1600;
+    public static double SHOOTER_DEFAULT_VELOCITY_CLOSE = 1350;
 
     public Shooter() {
         shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
@@ -41,9 +42,9 @@ public class Shooter  extends SubsystemBase {
         shooterLeft.setPower(power);
     }
 
-    private void operateShooter(){
+    private void operateShooter(double defVelocity){
         pidfController.setPIDF(p, 0, 0, f);
-        double power = pidfController.calculate(SHOOTER_DEFAULT_VELOCITY, shooterRight.getVelocity());
+        double power = pidfController.calculate(defVelocity, shooterRight.getVelocity());
         setPower(power);
     }
 
@@ -52,8 +53,12 @@ public class Shooter  extends SubsystemBase {
     }
 
 
-    public RunCommand runShooter(){
-        return new RunCommand(() -> operateShooter(), this);
+    public RunCommand runShooterFar(){
+        return new RunCommand(() -> operateShooter(SHOOTER_DEFAULT_VELOCITY_FAR), this);
+    }
+
+    public RunCommand runShooterClose(){
+        return new RunCommand(() -> operateShooter(SHOOTER_DEFAULT_VELOCITY_CLOSE), this);
     }
 
     public RunCommand runShooterReversed(){
@@ -84,7 +89,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public boolean isReady() {
-        return getVelocity() > SHOOTER_DEFAULT_VELOCITY-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY+40;
+        return getVelocity() > SHOOTER_DEFAULT_VELOCITY_CLOSE-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY_CLOSE+40 || getVelocity() > SHOOTER_DEFAULT_VELOCITY_FAR-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY_FAR;
     }
 
 }

@@ -43,7 +43,7 @@ public class ShooterPidftuning extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(
-                        farminator.shooter.runShooter()
+                        farminator.shooter.runShooterFar()
                 )
                 .whenInactive(
                         farminator.shooter.turnOff()
@@ -55,7 +55,7 @@ public class ShooterPidftuning extends CommandOpMode {
         // Run command scheduler and periodic updates
         super.run();
         telemetry2.addData("current velocity", farminator.shooter.getVelocity());
-        telemetry2.addData("target velocity", Shooter.SHOOTER_DEFAULT_VELOCITY);
+        telemetry2.addData("target velocity", Shooter.SHOOTER_DEFAULT_VELOCITY_FAR);
         telemetry2.update();
     }
 

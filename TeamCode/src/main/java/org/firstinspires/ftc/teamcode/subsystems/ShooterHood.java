@@ -21,7 +21,7 @@ public class ShooterHood extends SubsystemBase {
         servo = BarnRobot.getInstance().robotHardware.shooterHood;
         servo.setDirection(Servo.Direction.REVERSE);    // Change if needed
         servo.scaleRange(MIN,MAX);
-        servo.setPosition(MIN);
+        servo.setPosition(MAX);
     }
 
     public double rangeDependentAngle(double range) {
@@ -64,9 +64,8 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public Command setHoodPosition(double position){
-        return new InstantCommand(() -> {
-            servo.setPosition(position);
-        }, this);
+        return new InstantCommand(() ->
+            servo.setPosition(position), this);
     }
 
     public Command returnToBase(){

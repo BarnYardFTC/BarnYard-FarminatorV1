@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
 public class MecanumDriveComponent {
@@ -131,7 +132,7 @@ public class MecanumDriveComponent {
     }
 
     private double getHeading(){
-        return BarnRobot.getInstance().robotHardware.imu.getRobotYawPitchRollAngles().getYaw();
+        return BarnRobot.getInstance().robotHardware.pinpoint.getPose().heading.toDouble();
     }
 
 

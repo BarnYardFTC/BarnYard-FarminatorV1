@@ -121,7 +121,7 @@ public class BlueMainSingleTeleop extends CommandOpMode {
         // TODO: TEMP
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
-                        farminator.shooter.runPowerBasedOnVoltageCompFunction()
+                        farminator.shooter.runShooter()
                 );
 
         // Right Stick Button → Toggle between slow and fast drive modes

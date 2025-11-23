@@ -49,11 +49,11 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     /** Shooter shooting pose */
     public static double POSE2_X = -30;
     public static double POSE2_Y = -30;
-    public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(225);
+    public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(135);
     public static boolean IsFinished = false;
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
+            OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));

@@ -47,7 +47,7 @@ public class BarnRobot extends Robot {
     public ShooterHood shooterHood;
     public Intake intake;
 
-    public Localizer pinpointLocalizer;
+    public PinpointLocalizer pinpointLocalizer;
 
 
     // ------------------------------------------------------------
@@ -114,8 +114,13 @@ public class BarnRobot extends Robot {
      * @param opModeData contains config info like alliance color and heading offset
      */
     public void init(OpMode opMode, OpModeData opModeData) {
-        pinpointLocalizer = new PinpointLocalizer(opMode.hardwareMap, 1, opModeData.initialPose2d);
 
+        if (opModeData.opModeType == OpModeData.OpModeType.AUTONOMOUS){
+            pinpointLocalizer = new PinpointLocalizer(opMode.hardwareMap, RoadRunnerMecanumDrive.PARAMS.inPerTick, opModeData.initialPose2d);
+        }
+        else {
+            pinpointLocalizer = new PinpointLocalizer(opMode.hardwareMap, RoadRunnerMecanumDrive.PARAMS.inPerTick, new Pose2d(0, 0, 0));
+        }
         // Store mode data (must be first)
         this.opmodeData = opModeData;
 
@@ -186,7 +191,7 @@ public class BarnRobot extends Robot {
      * For now, it just updates telemetry, but more shared logic can go here.
      */
     public void periodic() {
-        shooter.displayTelemetry();
+        pinpointLocalizer.update();
         telemetry.update();
     }
 }

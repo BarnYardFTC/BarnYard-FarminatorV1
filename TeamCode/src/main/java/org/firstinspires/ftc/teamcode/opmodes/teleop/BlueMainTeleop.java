@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -14,7 +13,6 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.RobotHardware;
 
 /**
  * BlueMainTeleop
@@ -27,7 +25,7 @@ import org.firstinspires.ftc.teamcode.util.RobotHardware;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "BlueMainTeleop", group = "main")
+@TeleOp(name = "Main Teleop", group = "main")
 @Config
 public class BlueMainTeleop extends CommandOpMode {
 
@@ -154,7 +152,7 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.resetImuHeadingCommand());
+                .whenPressed(farminator.drive.resetPinpointImuTracking());
 
 
 
@@ -165,7 +163,7 @@ public class BlueMainTeleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("heading pinpoint: ", BarnRobot.getInstance().robotHardware.pinpoint.getPose().heading.toDouble());
+        telemetry.addData("heading pinpoint: ", BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
         farminator.shooter.displayTelemetry();
         farminator.shooterHood.displayTelemetry();
         farminator.periodic();

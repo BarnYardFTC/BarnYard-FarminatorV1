@@ -123,7 +123,7 @@ public class MecanumDriveComponent {
 //        double heading = Math.toRadians(
 //                (getHeading() - BarnRobot.getInstance().opmodeData.fieldReferenceHeading + 540) % 360 -180
 //        );
-        double heading = Math.toRadians(getHeading());
+        double heading = getHeading();
         double adjustedX = spdX * Math.cos(heading) + spdY * Math.sin(heading);
         double adjustedY = - spdX * Math.sin(heading) + spdY * Math.cos(heading);
 
@@ -132,7 +132,7 @@ public class MecanumDriveComponent {
     }
 
     private double getHeading(){
-        return BarnRobot.getInstance().robotHardware.pinpoint.getPose().heading.toDouble();
+        return BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble();
     }
 
 

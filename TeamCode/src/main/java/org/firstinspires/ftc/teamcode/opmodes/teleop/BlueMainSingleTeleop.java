@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -26,6 +27,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Periodic updates
  */
 @TeleOp(name = "BlueMainSingleTeleop", group = "main")
+@Disabled
 @Config
 public class BlueMainSingleTeleop extends CommandOpMode {
 
@@ -132,7 +134,7 @@ public class BlueMainSingleTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.resetImuHeadingCommand());
+                .whenPressed(farminator.drive.resetPinpointImuTracking());
     }
 
     @Override

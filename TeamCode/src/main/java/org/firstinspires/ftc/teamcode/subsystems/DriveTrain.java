@@ -2,14 +2,12 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDController;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
 
@@ -194,8 +192,8 @@ public class DriveTrain extends SubsystemBase {
     }
 
 
-    public Command resetImuHeadingCommand(){
-        return new InstantCommand(() -> BarnRobot.getInstance().robotHardware.imu.resetYaw(), this);
+    public Command resetPinpointImuTracking(){
+        return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);
     }
 
 

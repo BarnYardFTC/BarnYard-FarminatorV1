@@ -95,9 +95,6 @@ public class RobotHardware {
     private static final String SHOOTER_HOOD_CONFIG_NAME = "shooterHood";
 
 
-    public PinpointLocalizer pinpoint;
-
-
 
     // ------------------------------------------------------------
     // IMU Parameters
@@ -212,8 +209,6 @@ public class RobotHardware {
         imu = hw.get(IMU.class, "imu");
         imu.initialize(IMU_PARAMETERS);
         limelight = hw.get(Limelight3A.class, "limelight");
-
-        pinpoint = new PinpointLocalizer(hw, 1, new Pose2d(0, 0, 0)); //TODO: Move the BarnRobot
 
     }
     private void initVoltageSensor(){

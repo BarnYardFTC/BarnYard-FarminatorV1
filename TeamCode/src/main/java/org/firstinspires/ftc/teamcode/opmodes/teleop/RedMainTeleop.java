@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Periodic updates
  */
 @TeleOp(name = "RedMainTeleop", group = "main")
+@Disabled
 public class RedMainTeleop extends CommandOpMode {
 
 

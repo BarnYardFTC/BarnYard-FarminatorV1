@@ -86,7 +86,6 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
                 robot.transfer.setFrontPowerCommand(0),
                 robot.intake.deactivateIntakeCommand(),
                 new WaitCommand(2000)
-
         );
     }
 

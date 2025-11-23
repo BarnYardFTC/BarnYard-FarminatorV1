@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
@@ -86,6 +87,14 @@ public class BlueMainTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(farminator.shooterHood.raise());
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(farminator.shooterHood.setHoodPosition(1));
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(farminator.shooterHood.setHoodPosition(0));
+
+
+
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
@@ -117,22 +126,20 @@ public class BlueMainTeleop extends CommandOpMode {
 //                .whenActive(farminator.shooter.setShooterAlignment(1))
 //                .whenInactive(farminator.shooter.setShooterAlignment(0));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenActive(
-                        farminator.shooter.runShooterFar(),
-                        farminator.shooter.turnOff()
-
-                );
-
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                         .whenPressed(
-                                farminator.shooterHood.setHoodPosition(1)
+                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_CLOSE)
                         );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                         .whenPressed(
-                                farminator.shooterHood.setHoodPosition(0.2)
+                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_FAR)
                         );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(
+                        farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_MID)
+                );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(

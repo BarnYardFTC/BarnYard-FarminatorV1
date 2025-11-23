@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -20,8 +19,10 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-    public static double SHOOTER_DEFAULT_VELOCITY_FAR = 1600;
-    public static double SHOOTER_DEFAULT_VELOCITY_CLOSE = 1350;
+    public static double SHOOTER_VELOCITY_FAR = 1600;
+    public static double SHOOTER_VELOCITY_CLOSE = 1350;
+    public static double SHOOTER_VELOCITY_MID = 1000;
+
 
     public Shooter() {
         shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
@@ -42,9 +43,9 @@ public class Shooter  extends SubsystemBase {
         shooterLeft.setPower(power);
     }
 
-    private void operateShooter(double defVelocity){
+    private void operateShooter(double velocity){
         pidfController.setPIDF(p, 0, 0, f);
-        double power = pidfController.calculate(defVelocity, shooterRight.getVelocity());
+        double power = pidfController.calculate(velocity, shooterRight.getVelocity());
         setPower(power);
     }
 
@@ -54,11 +55,11 @@ public class Shooter  extends SubsystemBase {
 
 
     public RunCommand runShooterFar(){
-        return new RunCommand(() -> operateShooter(SHOOTER_DEFAULT_VELOCITY_FAR), this);
+        return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_FAR), this);
     }
 
     public RunCommand runShooterClose(){
-        return new RunCommand(() -> operateShooter(SHOOTER_DEFAULT_VELOCITY_CLOSE), this);
+        return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_CLOSE), this);
     }
 
     public RunCommand runShooterReversed(){
@@ -67,6 +68,11 @@ public class Shooter  extends SubsystemBase {
 
     public RunCommand turnOff(){
         return new RunCommand(() -> setPower(0), this);
+    }
+
+
+    public RunCommand runShooter(double velocity){
+        return new RunCommand(() -> operateShooter(velocity));
     }
 
 
@@ -89,7 +95,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public boolean isReady() {
-        return getVelocity() > SHOOTER_DEFAULT_VELOCITY_CLOSE-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY_CLOSE+40 || getVelocity() > SHOOTER_DEFAULT_VELOCITY_FAR-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY_FAR;
+        return getVelocity() > SHOOTER_VELOCITY_CLOSE -40 && getVelocity() < SHOOTER_VELOCITY_CLOSE +40 || getVelocity() > SHOOTER_VELOCITY_FAR -40 && getVelocity() < SHOOTER_VELOCITY_FAR;
     }
 
     public boolean isShotDetected(double tgtRpm) {

@@ -125,29 +125,27 @@ public class BlueMainTeleop extends CommandOpMode {
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
 //                .whenActive(farminator.shooter.setShooterAlignment(1))
 //                .whenInactive(farminator.shooter.setShooterAlignment(0));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+//                        .whenPressed(
+//                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_CLOSE)
+//                        );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                        .whenPressed(
-                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_CLOSE)
-                        );
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                        .whenPressed(
-                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_FAR)
-                        );
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+//                        .whenPressed(
+//                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_FAR)
+//                        );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(
-                        farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_MID)
-                );
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
-                        farminator.shooter.runShooterReversed()
-                )
-                .whenInactive(
-                        farminator.shooter.turnOff()
-                );
+                        farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_MID),
+                        farminator.shooter.turnOff());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+//                .toggleWhenActive(
+//                        farminator.shooter.runShooterReversed(),
+//                        farminator.shooter.turnOff()
+//                );
 
 
 

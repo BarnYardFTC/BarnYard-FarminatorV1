@@ -20,8 +20,8 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterLeft;
 
     public static double SHOOTER_VELOCITY_FAR = 1600;
-    public static double SHOOTER_VELOCITY_CLOSE = 1350;
-    public static double SHOOTER_VELOCITY_MID = 1000;
+    public static double SHOOTER_VELOCITY_MID = 1350;
+    public static double SHOOTER_VELOCITY_CLOSE = 1000;
 
 
     public Shooter() {

@@ -49,7 +49,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     public static double POSE2_X = -30;
     public static double POSE2_Y = -30;
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(225);
-
+    public static boolean IsFinished = false;
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
@@ -73,6 +73,9 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE1_X - 5, POSE1_Y), POSE1_HEADING, new TranslationalVelConstraint(25) );
+
         /** Schedule autonomous sequence */
 //        new SequentialCommandGroup(
 //                new WaitUntilCommand(this::opModeIsActive),
@@ -84,32 +87,27 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
         //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
         new SequentialCommandGroup(
-            new WaitUntilCommand(this::opModeIsActive),
-            farminator.shooterHood.setHoodPosition(0.1),
+                new WaitUntilCommand(this::opModeIsActive),
+                farminator.shooterHood.setHoodPosition(0.1)
+        );
+
+        new ParallelCommandGroup(
             new ParallelCommandGroup(
                 new DriveActionCommand(path1),
                 farminator.shooter.runShooterClose(),
                 new SequentialCommandGroup(
                         shootWhenReady(),
                         shootWhenReady(),
-                        shootWhenReady()
-                )
+                        shootWhenReady(),
+                        new InstantCommand(() -> {IsFinished = true;})
+                ),
+            new SequentialCommandGroup(
+                new WaitUntilCommand(() -> IsFinished),
+                farminator.shooter.turnOff(),
+                new DriveActionCommand(path2)
 
-
-
-
-//                new WaitCommand(3000),
-//
-//                new SequentialCommandGroup(
-//                        farminator.transfer.setBackPowerCommand(1),
-//                        new WaitCommand(3000),
-//                        farminator.transfer.setEntireTransferPowerCommand(1),
-//                        new WaitCommand(3000),
-//                        farminator.intake.activateIntakeCommand(),
-//                        farminator.transfer.setEntireTransferPowerCommand(1)
-//                )
-            ),
-            farminator.shooter.turnOff()
+            )
+            )
         ).schedule();
     }
 

@@ -79,6 +79,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
                 robot.transfer.setBackPowerCommand(1),
                 new WaitUntilCommand(() -> robot.shooter.isShotDetected(robot.shooter.SHOOTER_DEFAULT_VELOCITY_CLOSE)),
                 new WaitCommand(1000),
+
                 robot.transfer.setBackPowerCommand(0),
                 robot.transfer.setFrontPowerCommand(1),
                 robot.intake.activateIntakeCommand(),

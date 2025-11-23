@@ -92,4 +92,8 @@ public class Shooter  extends SubsystemBase {
         return getVelocity() > SHOOTER_DEFAULT_VELOCITY_CLOSE-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY_CLOSE+40 || getVelocity() > SHOOTER_DEFAULT_VELOCITY_FAR-40 && getVelocity() < SHOOTER_DEFAULT_VELOCITY_FAR;
     }
 
+    public boolean isShotDetected(double tgtRpm) {
+        return getVelocity() < tgtRpm - 60;
+    }
+
 }

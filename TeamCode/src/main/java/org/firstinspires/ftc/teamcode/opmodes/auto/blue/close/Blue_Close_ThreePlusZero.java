@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -91,14 +92,19 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                 farminator.shooterHood.setHoodPosition(0.1),
                 new ParallelCommandGroup(
                         new DriveActionCommand(path1),
-                        farminator.shooter.runShooterClose(),
-                        new SequentialCommandGroup(
-                                shootWhenReady(),
-                                shootWhenReady(),
-                                shootWhenReady()
-                        )
+                        new ParallelRaceGroup(
+                                farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
+                                new SequentialCommandGroup(
+                                        shootWhenReady(),
+                                        shootWhenReady(),
+                                        shootWhenReady()
+                                )
+                        ),
+                        new DriveActionCommand(path2)
                 )
         ).schedule();
+
+
     }
 
     @Override

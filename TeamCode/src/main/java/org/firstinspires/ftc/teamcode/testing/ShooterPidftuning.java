@@ -5,7 +5,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -55,7 +54,7 @@ public class ShooterPidftuning extends CommandOpMode {
         // Run command scheduler and periodic updates
         super.run();
         telemetry2.addData("current velocity", farminator.shooter.getVelocity());
-        telemetry2.addData("target velocity", Shooter.SHOOTER_DEFAULT_VELOCITY_FAR);
+        telemetry2.addData("target velocity", Shooter.SHOOTER_VELOCITY_FAR);
         telemetry2.update();
     }
 

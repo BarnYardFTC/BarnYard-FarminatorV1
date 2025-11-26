@@ -32,27 +32,26 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.PinpointLocalizer;
 Configuration:
 
     Exapnsion hub motors:
-        0:
-        1:
-        2:
-        3:
+        0: intake
+        1: leftFrontDrivetrain
+        2: leftBackDrivetrain
+        3: shoterLeft
 
     Control hub motors:
-        0:
-        1:
-        2:
+        0: rightFrontDrivetrain
+        1: rightBackDrivetrain
+        2: shooterRight
         3:
 
     Control hub i2c:
         1: pinpoint
 
     Servo Hub:
-        0:
-        1:
-        2:
-        3:
-        4:
-        5:
+        0: leftFrontTransfer
+        1: leftBackTransfer
+        2: shooterHood
+        4: rightFrontTransfer
+        5: rightBackTransfer
 
  */
 public class RobotHardware {

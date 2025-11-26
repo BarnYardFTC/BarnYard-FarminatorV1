@@ -107,6 +107,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
 
 
+
         // Right Trigger → Shooter active
 //        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
 //                .whenActive(farminator.shooter.runShooter())
@@ -160,6 +161,14 @@ public class BlueMainTeleop extends CommandOpMode {
                 .whenPressed(farminator.drive.resetPinpointImuTracking());
 
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+                .toggleWhenActive(
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
+                );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+                .whenPressed(farminator.drive.resetPinpointImuTracking());
 
 
 

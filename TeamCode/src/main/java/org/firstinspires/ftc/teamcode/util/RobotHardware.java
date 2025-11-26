@@ -26,6 +26,35 @@ import org.firstinspires.ftc.teamcode.util.roadrunner.PinpointLocalizer;
  *
  * Every subsystem gets its devices from here.
  */
+
+
+/*
+Configuration:
+
+    Exapnsion hub motors:
+        0:
+        1:
+        2:
+        3:
+
+    Control hub motors:
+        0:
+        1:
+        2:
+        3:
+
+    Control hub i2c:
+        1: pinpoint
+
+    Servo Hub:
+        0:
+        1:
+        2:
+        3:
+        4:
+        5:
+
+ */
 public class RobotHardware {
 
     public VoltageSensor voltageSensor;
@@ -174,7 +203,6 @@ public class RobotHardware {
         shooterLeft = hw.get(DcMotorEx.class, SHOOTER_LEFT_CONFIG_NAME);
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 

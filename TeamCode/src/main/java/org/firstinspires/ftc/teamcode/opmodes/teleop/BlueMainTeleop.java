@@ -43,7 +43,7 @@ public class BlueMainTeleop extends CommandOpMode {
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                new Pose2d(0,0,Math.toRadians(90)),
+                autoFinishPose,
                 270
         );
 

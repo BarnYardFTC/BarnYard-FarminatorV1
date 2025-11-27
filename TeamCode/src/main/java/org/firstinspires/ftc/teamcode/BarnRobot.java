@@ -114,13 +114,6 @@ public class BarnRobot extends Robot {
      * @param opModeData contains config info like alliance color and heading offset
      */
     public void init(OpMode opMode, OpModeData opModeData) {
-
-        if (opModeData.opModeType == OpModeData.OpModeType.AUTONOMOUS){
-            pinpointLocalizer = new PinpointLocalizer(opMode.hardwareMap, RoadRunnerMecanumDrive.PARAMS.inPerTick, opModeData.initialPose2d);
-        }
-        else {
-            pinpointLocalizer = new PinpointLocalizer(opMode.hardwareMap, RoadRunnerMecanumDrive.PARAMS.inPerTick, new Pose2d(0, 0, 0));
-        }
         // Store mode data (must be first)
         this.opmodeData = opModeData;
 
@@ -137,7 +130,7 @@ public class BarnRobot extends Robot {
         initLimeLight(opModeData.limelightPipeline);
         initShooter();
         initIntake();
-        initDrivetrain();
+        initDrivetrain(opMode.hardwareMap);
         initShooterHood();
     }
 
@@ -155,10 +148,14 @@ public class BarnRobot extends Robot {
      * Sets up the drivetrain, registers it in the command framework,
      * and sets its default driving command.
      */
-    public void initDrivetrain() {
+    public void initDrivetrain(HardwareMap hw) {
         if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
             drive = new DriveTrain();
             drive.setDefaultCommand(drive.driveCommand());
+            pinpointLocalizer = new PinpointLocalizer(hw, RoadRunnerMecanumDrive.PARAMS.inPerTick, opmodeData.initialPose2d);
+        }
+        else {
+            roadRunnerMecanumDrive = new RoadRunnerMecanumDrive(hw, opmodeData.initialPose2d);
         }
     }
 
@@ -191,7 +188,9 @@ public class BarnRobot extends Robot {
      * For now, it just updates telemetry, but more shared logic can go here.
      */
     public void periodic() {
-        pinpointLocalizer.update();
+        if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
+            pinpointLocalizer.update();
+        }
         telemetry.update();
     }
 }

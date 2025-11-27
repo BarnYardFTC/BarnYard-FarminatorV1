@@ -130,7 +130,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
      * runs when the autonomous is finished
      */
     @Override
-    public void end(){
+    public void end() {
         // store the finish heading of the auto
         OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }

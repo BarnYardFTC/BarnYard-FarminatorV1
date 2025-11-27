@@ -27,7 +27,12 @@ public class ShooterPidftuning extends CommandOpMode {
     private BarnRobot farminator;
 
     private Telemetry telemetry2;
-    private OpModeData opModedata = new OpModeData(OpModeData.AllianceColor.BLUE, new Pose2d(0,0,0), 270, OpModeData.OpModeType.AUTONOMOUS, LimeLight.BLUE_LOCALIZATION_PIPELINE);
+    private OpModeData opModedata = new OpModeData(
+            OpModeData.AllianceColor.BLUE,
+            OpModeData.OpModeType.TELEOP,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
+            new Pose2d(0,0,0)
+            );
 
     @Override
     public void initialize() {

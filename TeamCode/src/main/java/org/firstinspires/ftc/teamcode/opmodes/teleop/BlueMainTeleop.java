@@ -35,8 +35,6 @@ public class BlueMainTeleop extends CommandOpMode {
     // ------------------------
     private BarnRobot farminator;
 
-    private static final double INITIAL_BOT_HEADING = 270;
-
     @Override
     public void initialize() {
 
@@ -45,7 +43,8 @@ public class BlueMainTeleop extends CommandOpMode {
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                autoFinishPose
+                new Pose2d(0,0,Math.toRadians(90)),
+                270
         );
 
         // ==========================================================
@@ -158,7 +157,7 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.resetPinpointImuTracking());
+                .whenPressed(farminator.drive.resetPinpointTracking());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
@@ -168,8 +167,7 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(farminator.drive.resetPinpointImuTracking());
-
+                .whenPressed(farminator.drive.resetPinpointTracking());
 
 
     }
@@ -177,9 +175,9 @@ public class BlueMainTeleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("heading pinpoint: ", BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
-        farminator.shooter.displayTelemetry();
-        farminator.shooterHood.displayTelemetry();
+        telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x);
+        telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y);
+        telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
         farminator.periodic();
     }
 }

@@ -134,7 +134,7 @@ public class BlueMainSingleTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.resetPinpointImuTracking());
+                .whenPressed(farminator.drive.resetPinpointTracking());
     }
 
     @Override

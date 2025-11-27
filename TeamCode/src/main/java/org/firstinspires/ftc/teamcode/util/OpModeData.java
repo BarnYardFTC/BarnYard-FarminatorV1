@@ -31,9 +31,6 @@ public class OpModeData {
     /**the heading in which the autonomous has ended*/
     private static Pose2d autoFinishPose;
 
-    public void setAutonFinishPose(Pose2d pose) {
-    }
-
     // ------------------------------------------------------------
     // Enums
     // ------------------------------------------------------------
@@ -46,9 +43,10 @@ public class OpModeData {
 
     /** Teleop constructor */
     public OpModeData(AllianceColor allianceColor,
+                      OpModeType opModeType,
+                      int limelightPipeline,
                       Pose2d initialPose2d,
-                      double fieldReferenceHeading,
-                      OpModeType opModeType, int limelightPipeline) {
+                      double fieldReferenceHeading) {
 
         this.allianceColor = allianceColor;
         this.fieldReferenceHeading = fieldReferenceHeading;
@@ -61,7 +59,9 @@ public class OpModeData {
 
     /** Autonomous constructor */
     public OpModeData(AllianceColor allianceColor,
-                      OpModeType opModeType, int limelightPipeline, Pose2d initialPose2d) {
+                      OpModeType opModeType,
+                      int limelightPipeline,
+                      Pose2d initialPose2d) {
 
         autoFinishPose = new Pose2d(0,0,0); //reset autoFinishPose
         this.fieldReferenceHeading = 0;
@@ -73,7 +73,7 @@ public class OpModeData {
 
 
     public static Pose2d getAutoFinishPose(){
-        if(autoFinishPose == null)return new Pose2d(0,0,0);
+        if(autoFinishPose == null) return new Pose2d(0,0,0);
         return autoFinishPose;
     }
 

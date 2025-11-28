@@ -103,5 +103,3 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
         OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
 }
-
-

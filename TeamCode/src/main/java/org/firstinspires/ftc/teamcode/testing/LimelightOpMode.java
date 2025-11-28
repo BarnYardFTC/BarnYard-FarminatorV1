@@ -40,7 +40,6 @@ public class LimelightOpMode extends CommandOpMode {
     @Override
     public void run(){
         super.run();
-        robot.limelight.displayTelemetry();
         robot.periodic();
     }
 

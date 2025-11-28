@@ -67,15 +67,12 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
-        /** Switch limelight to obelisk detection pipeline */
-        farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
-
         /** Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
         TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE1_X - 5, POSE1_Y), POSE1_HEADING, new TranslationalVelConstraint(25) );
+                .strafeToLinearHeading(new Vector2d(POSE2_X - 5, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
         /** Schedule autonomous sequence */
 //        new SequentialCommandGroup(
@@ -90,38 +87,35 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooterHood.setHoodPosition(0.1),
+                new ParallelRaceGroup(
+                        farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
+                        new SequentialCommandGroup(
+                                new DriveActionCommand(path1),
+                                new InstantCommand(() -> telemetry.addLine("finished path 1")),
+                                new InstantCommand(() -> telemetry.update()),
+                                farminator.transfer.setFrontPowerCommand(1),
+                                new WaitCommand(2000),
+                                farminator.transfer.setEntireTransferPowerCommand(1),
+                                new WaitCommand(2000),
+                                farminator.intake.activateIntakeCommand(),
+                                new WaitCommand(2000),
+                                farminator.transfer.setEntireTransferPowerCommand(0),
+                                farminator.intake.deactivateIntakeCommand()
+                        )
+                ),
                 new ParallelCommandGroup(
-                        new DriveActionCommand(path1),
-                        new ParallelRaceGroup(
-                                farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
-                                new SequentialCommandGroup(
-                                        shootWhenReady(),
-                                        shootWhenReady(),
-                                        shootWhenReady()
-                                )
-                        ),
-                        new DriveActionCommand(path2)
-                )
+                        farminator.shooter.turnOff(),
+                        new WaitCommand(1)
+                ),
+                new DriveActionCommand(path2)
         ).schedule();
-
 
     }
 
     @Override
     public void run() {
         super.run();
-
-        /** Update limelight and shooter telemetry */
-        farminator.limelight.periodic();
-
-        if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()) {
-            farminator.limelight.findPattern();
-        } else if (farminator.limelight.isPatternFound()) {
-            if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE) {
-                farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
-            }
-            farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
-        }
+        telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
 
         farminator.periodic();
     }

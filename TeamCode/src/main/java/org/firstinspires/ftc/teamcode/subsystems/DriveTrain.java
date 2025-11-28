@@ -76,24 +76,24 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     /** Main entry: aligns robot to the AprilTag or approximate direction */
-    private void alignToGoal(double x, double y) {
-        boolean valid = BarnRobot.getInstance().limelight.isGoalTagDetected();
-        tagJustVanished = false;
-
-        double turnSpeed;
-
-        if (!valid) {
-            // If tag just lost sight, turn in opposite direction
-            if (lastLimelightValid) tagJustVanished = true;
-            turnSpeed = determineFinalTurnSpeed();
-        } else {
-            double yawDiff = BarnRobot.getInstance().limelight.getDyaw();
-            turnSpeed = diffToSpeed(yawDiff);
-        }
-
-        drive(x, y, turnSpeed);
-        lastLimelightValid = valid;
-    }
+//    private void alignToGoal(double x, double y) {
+////        boolean valid = BarnRobot.getInstance().limelight.isGoalTagDetected();
+//        tagJustVanished = false;
+//
+//        double turnSpeed;
+//
+//        if (!valid) {
+//            // If tag just lost sight, turn in opposite direction
+//            if (lastLimelightValid) tagJustVanished = true;
+//            turnSpeed = determineFinalTurnSpeed();
+//        } else {
+////            double yawDiff = BarnRobot.getInstance().limelight.getDyaw();
+////            turnSpeed = diffToSpeed(yawDiff);
+//        }
+//
+//        drive(x, y, turnSpeed);
+//        lastLimelightValid = valid;
+//    }
 
     /** Determines turn direction when Limelight is invalid */
     private double determineFinalTurnSpeed() {
@@ -185,12 +185,12 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /** Continuous alignment command (runs alignToGoal loop) */
-    public Command alignToTagCommand() {
-        return new RunCommand(() -> alignToGoal(
-                BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                BarnRobot.getInstance().gamepadEx1.getLeftY())
-                , this);
-    }
+//    public Command alignToTagCommand() {
+//        return new RunCommand(() -> alignToGoal(
+//                BarnRobot.getInstance().gamepadEx1.getLeftX(),
+//                BarnRobot.getInstance().gamepadEx1.getLeftY())
+//                , this);
+//    }
 
 
     public Command resetPinpointTracking(){

@@ -16,8 +16,8 @@ public class Blue_Close_ThreePlusZero {
     public static double POSE1_Y = -53;
     public static double POSE1_HEADING = Math.toRadians(90);
 
-    public static double POSE2_X = -35;
-    public static double POSE2_Y = -35;
+    public static double POSE2_X = -30;
+    public static double POSE2_Y = -30;
     public static double POSE2_HEADING = Math.toRadians(225);
 
     // -----------------------------

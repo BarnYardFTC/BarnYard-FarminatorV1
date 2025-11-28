@@ -44,7 +44,7 @@ public class ShooterAlignmentServoTest extends CommandOpMode {
                 this,
                 opModeData
         );
-        farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
+
 
             // ==========================================================
             // Gamepad 1 Controls

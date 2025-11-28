@@ -65,8 +65,7 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
-        /** Switch limelight to obelisk detection pipeline */
-        farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
+
 
         /** Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
@@ -109,17 +108,6 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
     public void run() {
         super.run();
 
-        /** Update limelight and shooter telemetry */
-        farminator.limelight.periodic();
-
-        if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()) {
-            farminator.limelight.findPattern();
-        } else if (farminator.limelight.isPatternFound()) {
-            if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE) {
-                farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
-            }
-            farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
-        }
 
         farminator.periodic();
     }

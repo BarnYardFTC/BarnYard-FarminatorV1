@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 /**
@@ -76,8 +77,8 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
 
         return new SequentialCommandGroup(
                 new WaitUntilCommand(() -> robot.shooter.isReady()),
-                robot.transfer.setBackPowerCommand(1),
-                new WaitUntilCommand(() -> robot.shooter.isShotDetected(robot.shooter.SHOOTER_VELOCITY_CLOSE)),
+                robot.transfer.setEntireTransferPowerCommand(1),
+                new WaitUntilCommand(() -> robot.shooter.isShotDetected(Shooter.SHOOTER_VELOCITY_CLOSE)),
                 robot.transfer.setFrontPowerCommand(1),
                 new WaitCommand(1000),
                 robot.transfer.setBackPowerCommand(0),

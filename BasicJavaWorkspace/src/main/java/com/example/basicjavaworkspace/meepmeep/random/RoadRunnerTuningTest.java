@@ -11,7 +11,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class RoadRunnerTuningTest {
 
     public static void main(String[] args) {
-
+        double radius = 5;
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -21,14 +21,14 @@ public class RoadRunnerTuningTest {
 
         // Run the trajectory
         myBot.runAction(
-                myBot.getDrive().actionBuilder(new Pose2d(15, 0, Math.PI/2))
-                        .splineTo(new Vector2d(0, 15), Math.PI)
+                myBot.getDrive().actionBuilder(new Pose2d(radius, 0, Math.PI/2))
+                        .splineTo(new Vector2d(0, radius), Math.PI)
                         .waitSeconds(0.5)
-                        .splineTo(new Vector2d(-15, 0), Math.PI*1.5)
+                        .splineTo(new Vector2d(-radius, 0), Math.PI*1.5)
                         .waitSeconds(0.5)
-                        .splineTo(new Vector2d(0, -15), Math.PI*2)
+                        .splineTo(new Vector2d(0, -radius), Math.PI*2)
                         .waitSeconds(0.5)
-                        .splineTo(new Vector2d(15, 0), Math.PI/2)
+                        .splineTo(new Vector2d(radius, 0), Math.PI/2)
                         .waitSeconds(0.5)
                         .build()
         );

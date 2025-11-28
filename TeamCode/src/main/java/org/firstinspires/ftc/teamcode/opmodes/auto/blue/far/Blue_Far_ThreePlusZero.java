@@ -9,9 +9,11 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 
@@ -30,8 +32,8 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
     private RoadRunnerMecanumDrive drive;
 
     public static double POSE1_X = 60;
-    public static double POSE1_Y = 60;
-    public static double POSE1_HEADING = Math.toRadians(90);
+    public static double POSE1_Y = -10;
+    public static double POSE1_HEADING = Math.toRadians(180);
 
     public static double POSE2_X = 50;
     public static double POSE2_Y = 3;
@@ -52,27 +54,28 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
-        farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
+//        farminator.limelight.switchPipeline(LimeLight.OBELISK_PIPELINE);
 
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25));
-
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE2_X + 15, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooterHood.setHoodPosition(0.1),
-                new ParallelCommandGroup(
-                        new DriveActionCommand(path1),
-                        new ParallelRaceGroup(
-                                farminator.shooter.runShooterClose(),
-                                new SequentialCommandGroup(
-                                        shootWhenReady(),
-                                        shootWhenReady(),
-                                        shootWhenReady()
-                                )
+                new ParallelRaceGroup(
+                        farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
+                        new SequentialCommandGroup(
+                                new DriveActionCommand(path1),
+                                farminator.transfer.setEntireTransferPowerCommand(1),
+                                new WaitCommand(ShootSequenceCommandGroup.TRANSFER_ALL_DURATION),
+                                farminator.transfer.setEntireTransferPowerCommand(0)
                         )
-                )
+                ),
+                farminator.shooter.turnOff(),
+                new DriveActionCommand(path2)
         ).schedule();
 
 
@@ -82,19 +85,6 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-
-
-        farminator.limelight.periodic();
-
-        if (farminator.limelight.isDataValid() && !farminator.limelight.isPatternFound()) {
-            farminator.limelight.findPattern();
-        } else if (farminator.limelight.isPatternFound()) {
-            if (farminator.limelight.currentPipeline == LimeLight.OBELISK_PIPELINE) {
-                farminator.limelight.switchPipeline(LimeLight.BLUE_LOCALIZATION_PIPELINE);
-            }
-            farminator.limelight.findRange(Math.toDegrees(drive.localizer.getPose().heading.real));
-        }
-
         farminator.periodic();
     }
 

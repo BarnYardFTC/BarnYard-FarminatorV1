@@ -72,9 +72,7 @@ public class AutoTest extends CommandOpMode {
 
     @Override
     public void initialize_loop() {
-        farminator.limelight.findPattern();
-        BarnRobot.getInstance().limelight.periodic();
-        BarnRobot.getInstance().limelight.displayTelemetry();
+
         farminator.periodic();
     }
 

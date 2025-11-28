@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,9 +16,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
- * RedMainTeleop
+ * BlueMainTeleop
  *
- * Main TeleOp mode for the Barnyard FTC robot (Red Alliance).
+ * Main TeleOp mode for the Barnyard FTC robot (Blue Alliance).
  * Controls all robot subsystems using the command-based architecture.
  *
  * Structure:
@@ -25,10 +26,10 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "RedMainTeleop", group = "main")
+@TeleOp(name = "BlueMainSingleTeleop", group = "main")
 @Disabled
-public class RedMainTeleop extends CommandOpMode {
-
+@Config
+public class BlueMainSingleTeleop extends CommandOpMode {
 
     // ------------------------
     // Robot Instance
@@ -67,23 +68,33 @@ public class RedMainTeleop extends CommandOpMode {
         // ------------------------
 
         // Left Bumper → Run back transfer backward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.transfer.setBackPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER))
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(
+                        new ParallelCommandGroup(
+                                farminator.transfer.setEntireTransferPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER)
+                        )
+                )
                 .whenInactive(farminator.transfer.setBackPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER))
                 .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(farminator.shooterHood.lower());
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(farminator.shooterHood.raise());
+
+
         // Left Trigger → Intake active (transfer + intake)
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                         farminator.intake.activateIntakeCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(0),
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
@@ -111,30 +122,25 @@ public class RedMainTeleop extends CommandOpMode {
 
         // TODO: TEMP
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(
+                .toggleWhenActive(
                         farminator.shooter.runShooterFar()
-                )
-                .whenInactive(
-                        farminator.shooter.turnOff()
                 );
 
-
         // Right Stick Button → Toggle between slow and fast drive modes
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(farminator.drive.resetPinpointTracking());
     }
 
     @Override
     public void run() {
-        // ==========================================================
-        // Periodic Updates
-        // ==========================================================
-
         super.run();
+        farminator.shooterHood.displayTelemetry();
         farminator.periodic();
     }
 }

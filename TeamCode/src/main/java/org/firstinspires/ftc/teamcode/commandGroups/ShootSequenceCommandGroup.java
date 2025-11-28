@@ -24,8 +24,9 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
     public static int SHOOT_PREP_TIME = 4000;
 
 
-    public static int TRANSFER_ONE_DURATION = 800;
+    public static int TRANSFER_ONE_DURATION = 1500;
     public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
+
     /**
      * Full shoot-all sequence:
      * - Activate shooter and wait for it to reach speed
@@ -74,20 +75,17 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
-//                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
-                new WaitCommand(200),
-//                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
-                new WaitCommand(200),
-//                new WaitUntilCommand(() -> robot.shooter.isMotorReady()),
-                new ParallelCommandGroup(
-                        robot.intake.activateIntakeCommand(),
-                        robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
-                ),
+                new WaitUntilCommand(() -> robot.shooter.isReady()),
+                robot.transfer.setBackPowerCommand(1),
+                new WaitUntilCommand(() -> robot.shooter.isShotDetected(robot.shooter.SHOOTER_VELOCITY_CLOSE)),
+                robot.transfer.setFrontPowerCommand(1),
+                new WaitCommand(1000),
+                robot.transfer.setBackPowerCommand(0),
+                robot.intake.activateIntakeCommand(),
                 new WaitCommand(TRANSFER_ONE_DURATION),
-                new ParallelCommandGroup(
-                        robot.transfer.setEntireTransferPowerCommand(0),
-                        robot.intake.deactivateIntakeCommand()
-                )
+                robot.transfer.setFrontPowerCommand(0),
+                robot.intake.deactivateIntakeCommand(),
+                new WaitCommand(2000)
         );
     }
 
@@ -97,26 +95,23 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
      * @param velocity The target distance for shooter speed calculation
      * @return Sequential command shooting when shooter is ready for the given range
      */
-    public static Command shootWhenReady(double velocity) {
-        BarnRobot robot = BarnRobot.getInstance();
-
-        return new SequentialCommandGroup(
-//                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
-                new WaitCommand(200),
-//                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
-                new WaitCommand(200),
-//                new WaitUntilCommand(() -> robot.shooter.isMotorReady(velocity)),
-                new ParallelCommandGroup(
-                        robot.intake.activateIntakeCommand(),
-                        robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
-                ),
-                new WaitCommand(TRANSFER_ONE_DURATION),
-                new ParallelCommandGroup(
-                        robot.transfer.setEntireTransferPowerCommand(0),
-                        robot.intake.deactivateIntakeCommand()
-                )
-        );
-    }
+//    public static Command shootWhenReady(double velocity) {
+//        BarnRobot robot = BarnRobot.getInstance();
+//
+//        return new SequentialCommandGroup(
+//                new WaitUntilCommand(() -> robot.shooter.isReady()),
+//                new WaitCommand(100),
+//                new ParallelCommandGroup(
+//                        robot.intake.activateIntakeCommand(),
+//                        robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
+//                ),
+//                new WaitCommand(TRANSFER_ONE_DURATION),
+//                new ParallelCommandGroup(
+//                        robot.transfer.setEntireTransferPowerCommand(0),
+//                        robot.intake.deactivateIntakeCommand()
+//                )
+//        );
+//    }
 
     /**
      * Parallel command to deactivate intake and transfer simultaneously.

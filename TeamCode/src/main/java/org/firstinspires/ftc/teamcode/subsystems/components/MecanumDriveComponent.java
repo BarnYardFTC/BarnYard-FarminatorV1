@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
 public class MecanumDriveComponent {
@@ -119,10 +120,9 @@ public class MecanumDriveComponent {
     }
 
     public void adjustSpeedForHeading() {
-//        double heading = Math.toRadians(
-//                (getHeading() - BarnRobot.getInstance().opmodeData.fieldReferenceHeading + 540) % 360 -180
-//        );
-        double heading = Math.toRadians(getHeading());
+        double heading = Math.toRadians(
+                (getHeading() - BarnRobot.getInstance().opmodeData.fieldReferenceHeading + 540) % 360 -180
+        );
         double adjustedX = spdX * Math.cos(heading) + spdY * Math.sin(heading);
         double adjustedY = - spdX * Math.sin(heading) + spdY * Math.cos(heading);
 
@@ -131,7 +131,7 @@ public class MecanumDriveComponent {
     }
 
     private double getHeading(){
-        return BarnRobot.getInstance().robotHardware.imu.getRobotYawPitchRollAngles().getYaw();
+        return Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
     }
 
 

@@ -3,6 +3,7 @@ package com.example.basicjavaworkspace.meepmeep.blue.close;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -15,9 +16,9 @@ public class Blue_Close_ThreePlusZero {
     public static double POSE1_Y = -53;
     public static double POSE1_HEADING = Math.toRadians(90);
 
-    public static double POSE2_X = -40;
-    public static double POSE2_Y = -15;
-    public static double POSE2_HEADING = Math.toRadians(250);
+    public static double POSE2_X = -35;
+    public static double POSE2_Y = -35;
+    public static double POSE2_HEADING = Math.toRadians(225);
 
     // -----------------------------
     // Main Simulation
@@ -32,7 +33,7 @@ public class Blue_Close_ThreePlusZero {
                 .build();
 
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
 
 

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -28,6 +29,7 @@ public class Intake extends SubsystemBase {
      */
     public Intake() {
         this.intake = BarnRobot.getInstance().robotHardware.intake;
+        intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
@@ -51,6 +53,7 @@ public class Intake extends SubsystemBase {
     }
 
     /**
+     * \
      * Returns a command that activates the intake at default power.
      *
      * @return command to activate intake

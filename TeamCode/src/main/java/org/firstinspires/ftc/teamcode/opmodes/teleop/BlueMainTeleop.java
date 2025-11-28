@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
@@ -25,7 +26,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "BlueMainTeleop", group = "main")
+@TeleOp(name = "Main Teleop", group = "main")
 @Config
 public class BlueMainTeleop extends CommandOpMode {
 
@@ -33,8 +34,6 @@ public class BlueMainTeleop extends CommandOpMode {
     // Robot Instance
     // ------------------------
     private BarnRobot farminator;
-
-    private static final double INITIAL_BOT_HEADING = 270;
 
     @Override
     public void initialize() {
@@ -44,7 +43,8 @@ public class BlueMainTeleop extends CommandOpMode {
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                autoFinishPose
+                autoFinishPose,
+                270
         );
 
         // ==========================================================
@@ -67,8 +67,12 @@ public class BlueMainTeleop extends CommandOpMode {
 
         // Left Bumper → Run back transfer backward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(farminator.transfer.setBackPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER))
-                .whenInactive(farminator.transfer.setBackPowerCommand(0));
+                .whenPressed(
+                        new ParallelCommandGroup(
+                                farminator.transfer.setEntireTransferPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER)
+                        )
+                )
+                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
@@ -82,17 +86,24 @@ public class BlueMainTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(farminator.shooterHood.raise());
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(farminator.shooterHood.setHoodPosition(1));
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(farminator.shooterHood.setHoodPosition(0));
+
+
+
 
         // Left Trigger → Intake active (transfer + intake)
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                         farminator.intake.activateIntakeCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
-                        farminator.transfer.setEntireTransferPowerCommand(0),
                         farminator.intake.deactivateIntakeCommand()
                 ));
+
 
 
 
@@ -114,16 +125,27 @@ public class BlueMainTeleop extends CommandOpMode {
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
 //                .whenActive(farminator.shooter.setShooterAlignment(1))
 //                .whenInactive(farminator.shooter.setShooterAlignment(0));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+//                        .whenPressed(
+//                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_CLOSE)
+//                        );
 
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
+//                        .whenPressed(
+//                                farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_FAR)
+//                        );
 
-        // TODO: TEMP
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .whenActive(
-                        farminator.shooter.runPowerBasedOnVoltageCompFunction()
-                )
-                .whenInactive(
-                        farminator.shooter.turnOff()
-                );
+                .toggleWhenActive(
+                        farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_MID),
+                        farminator.shooter.turnOff());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+//                .toggleWhenActive(
+//                        farminator.shooter.runShooterReversed(),
+//                        farminator.shooter.turnOff()
+//                );
 
 
 
@@ -135,19 +157,27 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.resetImuHeadingCommand());
+                .whenPressed(farminator.drive.resetPinpointTracking());
 
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+                .toggleWhenActive(
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
+                );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+                .whenPressed(farminator.drive.resetPinpointTracking());
 
 
     }
 
     @Override
     public void run() {
-        // ==========================================================
-        // Periodic Updates
-        // ==========================================================
-
         super.run();
+        telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x);
+        telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y);
+        telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
         farminator.periodic();
     }
 }

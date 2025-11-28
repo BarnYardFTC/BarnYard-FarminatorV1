@@ -82,14 +82,14 @@ public class Transfer extends SubsystemBase {
     // ------------------------------------------------------------
 
     public Command setFrontPowerCommand(double power){
-        return new InstantCommand(() -> setFrontPower(power));
+        return new InstantCommand(() -> setFrontPower(power), this);
     }
 
     public Command setBackPowerCommand(double power){
-        return new InstantCommand(() -> setBackPower(power));
+        return new InstantCommand(() -> setBackPower(power), this);
     }
 
     public Command setEntireTransferPowerCommand(double power){
-        return new InstantCommand(() -> setAllTransferPower(power));
+        return new InstantCommand(() -> setAllTransferPower(power), this);
     }
 }

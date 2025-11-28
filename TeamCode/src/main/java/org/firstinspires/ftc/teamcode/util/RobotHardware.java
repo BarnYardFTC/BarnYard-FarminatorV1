@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -9,6 +11,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+
+import org.firstinspires.ftc.teamcode.util.roadrunner.PinpointLocalizer;
 
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
@@ -21,6 +25,34 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
  * - IMU and vision configuration
  *
  * Every subsystem gets its devices from here.
+ */
+
+
+/*
+Configuration:
+
+    Exapnsion hub motors:
+        0: intake
+        1: leftFrontDrivetrain
+        2: leftBackDrivetrain
+        3: shoterLeft
+
+    Control hub motors:
+        0: rightFrontDrivetrain
+        1: rightBackDrivetrain
+        2: shooterRight
+        3:
+
+    Control hub i2c:
+        1: pinpoint
+
+    Servo Hub:
+        0: leftFrontTransfer
+        1: leftBackTransfer
+        2: shooterHood
+        4: rightFrontTransfer
+        5: rightBackTransfer
+
  */
 public class RobotHardware {
 
@@ -89,7 +121,6 @@ public class RobotHardware {
     private static final String SHOOTER_LEFT_CONFIG_NAME = "shooterLeft";
 
     private static final String SHOOTER_HOOD_CONFIG_NAME = "shooterHood";
-
 
 
 
@@ -171,7 +202,6 @@ public class RobotHardware {
         shooterLeft = hw.get(DcMotorEx.class, SHOOTER_LEFT_CONFIG_NAME);
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
-        intake.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 
@@ -206,6 +236,7 @@ public class RobotHardware {
         imu = hw.get(IMU.class, "imu");
         imu.initialize(IMU_PARAMETERS);
         limelight = hw.get(Limelight3A.class, "limelight");
+
     }
     private void initVoltageSensor(){
         voltageSensor = hw.get(VoltageSensor.class, "Control Hub");

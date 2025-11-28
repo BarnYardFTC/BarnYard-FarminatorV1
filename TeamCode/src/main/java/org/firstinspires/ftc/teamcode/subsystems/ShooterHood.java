@@ -21,30 +21,32 @@ public class ShooterHood extends SubsystemBase {
         servo = BarnRobot.getInstance().robotHardware.shooterHood;
         servo.setDirection(Servo.Direction.REVERSE);    // Change if needed
         servo.scaleRange(MIN,MAX);
-        servo.setPosition(MIN);
+        servo.setPosition(MAX);
     }
 
     public double rangeDependentAngle(double range) {
         return Math.sqrt(A*range) + B*range + C;
     }
-    public double tempTestFormula (double range) {return range / 4;}
-
-    public Command autoAdjust(){
-        return new InstantCommand(() -> {
-            double newPos = tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange());
-            servo.setPosition(newPos);
-        }, this);
-//        servo.setPosition(tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange()));
-//        return new InstantCommand(()  -> servo.setPosition(rangeDependentAngle(BarnRobot.getInstance().limelight.getGoalRange())));
+    public void tempTestRangeDependent() {
+        servo.setPosition(Math.min(BarnRobot.getInstance().limelight.getGoalRange()/4, 4.0));
     }
 
-    public Command moveWithFormula(double position){
-        return new InstantCommand(()  -> servo.setPosition(tempTestFormula(position)));
-    }
+//    public Command autoAdjust(){
+//        return new InstantCommand(() -> {
+//            double newPos = tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange());
+//            servo.setPosition(newPos);
+//        }, this);
+////        servo.setPosition(tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange()));
+////        return new InstantCommand(()  -> servo.setPosition(rangeDependentAngle(BarnRobot.getInstance().limelight.getGoalRange())));
+//    }
+
+//    public Command moveWithFormula(double position){
+//        return new InstantCommand(()  -> servo.setPosition(tempTestFormula(position)));
+//    }
 
     public Command lower() {
         return new InstantCommand(() -> {
-            double newPos = servo.getPosition() + 0.2;
+            double newPos = servo.getPosition() + 0.1;
             if (newPos <= MAX) {
                 servo.setPosition(newPos);
             }
@@ -53,12 +55,17 @@ public class ShooterHood extends SubsystemBase {
 
     public Command raise() {
         return new InstantCommand(() -> {
-            double newPos = servo.getPosition() - 0.2;
+            double newPos = servo.getPosition() - 0.1;
             servo.setPosition(newPos);
             if (servo.getPosition() > MIN && servo.getPosition() < 0.1) {
                 servo.setPosition(MIN);
             }
         }, this);
+    }
+
+    public Command setHoodPosition(double position){
+        return new InstantCommand(() ->
+            servo.setPosition(position), this);
     }
 
     public Command returnToBase(){
@@ -71,6 +78,5 @@ public class ShooterHood extends SubsystemBase {
     public void displayTelemetry(){
         BarnRobot robot = BarnRobot.getInstance();
         robot.telemetry.addData("Position", servo.getPosition());
-        robot.telemetry.addData("Debug Pos", servo.getPosition());
     }
 }

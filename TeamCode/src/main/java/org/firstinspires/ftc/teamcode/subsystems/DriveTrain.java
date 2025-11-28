@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -9,6 +10,7 @@ import com.seattlesolvers.solverslib.controller.PIDController;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @Config
 public class DriveTrain extends SubsystemBase {
@@ -41,6 +43,12 @@ public class DriveTrain extends SubsystemBase {
 
     public static double MIN_TURNING_SPEED = 0.06;
 
+
+    /** Field coordinates for the target goal. */
+    private static final double GOAL_X = -1.57;
+    private static final double BLUE_GOAL_Y = -1.62;
+    private static final double RED_GOAL_Y = 1.62;
+
     // ============================================================
     //                       CONSTRUCTOR
     // ============================================================
@@ -61,12 +69,6 @@ public class DriveTrain extends SubsystemBase {
 
     public void drive(double x, double y, double turn) {
         mecanumDriveComponent.driveFieldCentric(x, y, turn);
-    }
-
-    public void displayTelemetry() {
-        BarnRobot.getInstance().telemetry.addData("spdX", mecanumDriveComponent.getSpdX());
-        BarnRobot.getInstance().telemetry.addData("spdY", mecanumDriveComponent.getSpdY());
-        BarnRobot.getInstance().telemetry.addData("spdTurn", mecanumDriveComponent.getSpdTurn());
     }
 
     // ============================================================
@@ -193,6 +195,19 @@ public class DriveTrain extends SubsystemBase {
 
     public Command resetPinpointTracking(){
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);
+    }
+
+    public double getDistanceFromGoal(){
+        double currentPoseX = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x * 0.0254; // conversion from inch to meter
+        double currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // conversion from inch to meter
+
+        if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE)
+            return calcDistance(currentPoseX, currentPoseY, GOAL_X, BLUE_GOAL_Y);
+        else return calcDistance(currentPoseX, currentPoseY, GOAL_X, RED_GOAL_Y);
+    }
+
+    private double calcDistance(double xG, double yG, double xR, double yR) {
+        return Math.sqrt((xG - xR) * (xG - xR) + (yG - yR) * (yG - yR));
     }
 
 

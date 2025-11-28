@@ -53,7 +53,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     public static boolean IsFinished = false;
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.RED,
+            OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));

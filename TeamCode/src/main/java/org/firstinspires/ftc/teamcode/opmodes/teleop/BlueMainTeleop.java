@@ -43,7 +43,7 @@ public class BlueMainTeleop extends CommandOpMode {
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                autoFinishPose,
+                new Pose2d(0,0,270),
                 270
         );
 
@@ -138,7 +138,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
-                        farminator.shooter.runShooter(Shooter.SHOOTER_VELOCITY_MID),
+                        farminator.shooter.runShooterBasedOnDistance(farminator.drive.getDistanceFromGoal()),
                         farminator.shooter.turnOff());
 //
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
@@ -179,6 +179,8 @@ public class BlueMainTeleop extends CommandOpMode {
         telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y * 0.0254);
         telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("distance from goal", farminator.drive.getDistanceFromGoal());
+        telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
+        farminator.shooterHood.displayTelemetry();
         farminator.periodic();
     }
 }

@@ -20,8 +20,9 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterLeft;
 
     public static double SHOOTER_VELOCITY_FAR = 1600;
-    public static double SHOOTER_VELOCITY_MID = 1350;
-    public static double SHOOTER_VELOCITY_CLOSE = 1000;
+    public static double SHOOTER_VELOCITY_CLOSE = 1300;
+
+    public static double CLOSE_SHOOTING_RANGE = 2.7;
 
 
     public Shooter() {
@@ -52,7 +53,7 @@ public class Shooter  extends SubsystemBase {
     public void operateShooterDistanceBased(double distance) {
         pidfController.setPIDF(p, 0, 0, f);
         double power;
-        if (distance < 3) { //3 meters is somewhere between close and far shooting areas
+        if (distance < CLOSE_SHOOTING_RANGE) { //3 meters is somewhere between close and far shooting areas
             power = pidfController.calculate(SHOOTER_VELOCITY_CLOSE, shooterRight.getVelocity());
         }
         else {
@@ -85,6 +86,10 @@ public class Shooter  extends SubsystemBase {
 
     public RunCommand runShooter(double velocity){
         return new RunCommand(() -> operateShooter(velocity));
+    }
+
+    public RunCommand runShooterBasedOnDistance(double distance){
+        return new RunCommand(() -> operateShooterDistanceBased(distance));
     }
 
 

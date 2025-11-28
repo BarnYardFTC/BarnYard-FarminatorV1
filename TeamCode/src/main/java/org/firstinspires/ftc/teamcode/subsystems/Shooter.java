@@ -49,6 +49,18 @@ public class Shooter  extends SubsystemBase {
         setPower(power);
     }
 
+    public void operateShooterDistanceBased(double distance) {
+        pidfController.setPIDF(p, 0, 0, f);
+        double power;
+        if (distance < 3) { //3 meters is somewhere between close and far shooting areas
+            power = pidfController.calculate(SHOOTER_VELOCITY_CLOSE, shooterRight.getVelocity());
+        }
+        else {
+            power = pidfController.calculate(SHOOTER_VELOCITY_FAR, shooterRight.getVelocity());
+        }
+        setPower(power);
+    }
+
     private void operateShooterReverse(){
         setPower(-1);
     }

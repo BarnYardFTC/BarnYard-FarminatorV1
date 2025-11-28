@@ -67,17 +67,15 @@ public class ShooterHood extends SubsystemBase {
 //    }
 
     public Command autoHoodAlignment(double distance){
-        return new RunCommand(()-> BarnRobot.getInstance().telemetry.addData("distanceFromG",distance));
-//
-//        if (distance < CLOSE_SHOOTING_RANGE) {
-//
-//        }
-//        else if (distance > CLOSE_SHOOTING_RANGE && distance < FAR_SHOOTING_RANGE){
-//            return new RunCommand(() -> distanceDependentAngleMid(distance));
-//        }
-//        else {
-//            return new RunCommand(() -> distanceDependentAngleClose(distance));
-//        }
+        if (distance < CLOSE_SHOOTING_RANGE) {
+            return new RunCommand(() -> BarnRobot.getInstance().telemetry.addLine("as"), this);
+        }
+        else if (distance > CLOSE_SHOOTING_RANGE && distance < FAR_SHOOTING_RANGE){
+            return new RunCommand(() -> distanceDependentAngleMid(distance), this);
+        }
+        else {
+            return new RunCommand(() -> distanceDependentAngleClose(distance), this);
+        }
     }
 
     public Command lower() {

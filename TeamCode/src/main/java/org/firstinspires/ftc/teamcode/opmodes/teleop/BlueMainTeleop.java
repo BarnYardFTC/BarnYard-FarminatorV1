@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -43,7 +44,7 @@ public class BlueMainTeleop extends CommandOpMode {
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                new Pose2d(0,0,270),
+                autoFinishPose,
                 270
         );
 
@@ -105,6 +106,12 @@ public class BlueMainTeleop extends CommandOpMode {
                 ));
 
 
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
+                .whileActiveContinuous(
+                        farminator.shooterHood.autoHoodAlignment(farminator.drive.getDistanceFromGoal())
+                );
+
+
 
 
         // Right Trigger → Shooter active
@@ -138,7 +145,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
-                        farminator.shooter.runShooterBasedOnDistance(farminator.drive.getDistanceFromGoal()),
+                        farminator.shooter.runShooterBasedOnDistance(),
                         farminator.shooter.turnOff());
 //
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
@@ -170,6 +177,8 @@ public class BlueMainTeleop extends CommandOpMode {
                 .whenPressed(farminator.drive.resetPinpointTracking());
 
 
+
+
     }
 
     @Override
@@ -180,6 +189,7 @@ public class BlueMainTeleop extends CommandOpMode {
         telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("distance from goal", farminator.drive.getDistanceFromGoal());
         telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
+        telemetry.addData("shooter power", farminator.shooter.getPower());
         farminator.shooterHood.displayTelemetry();
         farminator.periodic();
     }

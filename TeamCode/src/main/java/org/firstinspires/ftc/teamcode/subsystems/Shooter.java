@@ -20,9 +20,11 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterLeft;
 
     public static double SHOOTER_VELOCITY_FAR = 1600;
-    public static double SHOOTER_VELOCITY_CLOSE = 1300;
+    public static double SHOOTER_VELOCITY_MID = 1350;
+    public static double SHOOTER_VELOCITY_CLOSE = 1150;
 
-    public static double CLOSE_SHOOTING_RANGE = 2.7;
+    public static double FAR_SHOOTING_RANGE = 2.7;
+    public static double CLOSE_SHOOTING_RANGE = 1.5;
 
 
     public Shooter() {
@@ -46,18 +48,21 @@ public class Shooter  extends SubsystemBase {
 
     private void operateShooter(double velocity){
         pidfController.setPIDF(p, 0, 0, f);
-        double power = pidfController.calculate(velocity, shooterRight.getVelocity());
+        double power = pidfController.calculate(velocity, getVelocity());
         setPower(power);
     }
 
     public void operateShooterDistanceBased(double distance) {
         pidfController.setPIDF(p, 0, 0, f);
         double power;
-        if (distance < CLOSE_SHOOTING_RANGE) { //3 meters is somewhere between close and far shooting areas
-            power = pidfController.calculate(SHOOTER_VELOCITY_CLOSE, shooterRight.getVelocity());
+        if (distance < CLOSE_SHOOTING_RANGE) {
+            power = pidfController.calculate(SHOOTER_VELOCITY_CLOSE, getVelocity());
+        }
+        else if (distance > CLOSE_SHOOTING_RANGE && distance < FAR_SHOOTING_RANGE){
+            power = pidfController.calculate(SHOOTER_VELOCITY_MID, getVelocity());
         }
         else {
-            power = pidfController.calculate(SHOOTER_VELOCITY_FAR, shooterRight.getVelocity());
+            power = pidfController.calculate(SHOOTER_VELOCITY_FAR, getVelocity());
         }
         setPower(power);
     }
@@ -88,8 +93,10 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooter(velocity));
     }
 
-    public RunCommand runShooterBasedOnDistance(double distance){
-        return new RunCommand(() -> operateShooterDistanceBased(distance));
+    public RunCommand runShooterBasedOnDistance(){
+        return new RunCommand(() -> operateShooterDistanceBased(
+                BarnRobot.getInstance().drive.getDistanceFromGoal()
+        ));
     }
 
 
@@ -102,6 +109,9 @@ public class Shooter  extends SubsystemBase {
 
     public double getVelocity() {
         return (shooterRight.getVelocity());
+    }
+    public double getPower(){
+        return shooterRight.getPower();
     }
 
 

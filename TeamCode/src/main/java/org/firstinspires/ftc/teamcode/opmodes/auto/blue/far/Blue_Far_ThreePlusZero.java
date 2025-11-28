@@ -35,9 +35,9 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
     public static double POSE1_Y = -10;
     public static double POSE1_HEADING = Math.toRadians(180);
 
-    public static double POSE2_X = 50;
-    public static double POSE2_Y = 3;
-    public static double POSE2_HEADING = Math.toRadians(200);
+    public static double POSE2_X = 55;
+    public static double POSE2_Y = -11;
+    public static double POSE2_HEADING = Math.toRadians(215);
 
 
     private final OpModeData opModeData = new OpModeData(
@@ -64,9 +64,9 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooterHood.setHoodPosition(0.1),
+                farminator.shooterHood.setHoodPosition(1),
                 new ParallelRaceGroup(
-                        farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
+                        farminator.shooter.runShooterFar(),   // continuous, never finishes on its own
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
                                 new WaitCommand(2000),

@@ -69,9 +69,14 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
                         farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
+                                new WaitCommand(2000),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-                                new WaitCommand(ShootSequenceCommandGroup.TRANSFER_ALL_DURATION),
-                                farminator.transfer.setEntireTransferPowerCommand(0)
+                                new WaitCommand(2000),
+                                farminator.intake.activateIntakeCommand(),
+                                new WaitCommand(2000),
+                                farminator.transfer.setEntireTransferPowerCommand(0),
+                                farminator.intake.deactivateIntakeCommand()
+
                         )
                 ),
                 farminator.shooter.turnOff(),

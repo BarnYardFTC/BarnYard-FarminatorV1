@@ -28,7 +28,7 @@ public class ShooterHood extends SubsystemBase {
         return Math.sqrt(A*range) + B*range + C;
     }
     public void tempTestRangeDependent() {
-        servo.setPosition(Math.min(BarnRobot.getInstance().limelight.getGoalRange()/4, 4.0));
+        servo.setPosition(Math.min(BarnRobot.getInstance().limelight.getGoalRange()/4, 1));
     }
 
 //    public Command autoAdjust(){

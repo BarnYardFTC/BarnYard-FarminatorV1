@@ -178,6 +178,7 @@ public class BlueMainTeleop extends CommandOpMode {
         telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x);
         telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y);
         telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
+        telemetry.addData("distance from goal", farminator.drive.getDistanceFromGoal());
         farminator.periodic();
     }
 }

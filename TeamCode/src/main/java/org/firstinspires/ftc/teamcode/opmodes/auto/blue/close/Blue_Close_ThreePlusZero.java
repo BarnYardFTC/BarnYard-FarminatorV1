@@ -42,7 +42,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 //    public static double POSE1_X = -45;
 //    public static double POSE1_Y = -45;
     public static final double POSE1_X = -37;
-    public static final double POSE1_Y = -53;
+    public static final double POSE1_Y = -43;
     public static final double POSE1_HEADING = Math.toRadians(90);
     public static final double POSE2_HEADING = Math.toRadians(225);
 
@@ -72,7 +72,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
         TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X - 5, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
+                .strafeToLinearHeading(new Vector2d(POSE2_X -15, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
         /** Schedule autonomous sequence */
 //        new SequentialCommandGroup(

@@ -107,7 +107,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
-                .whileActiveContinuous(
+                .whenActive(
                         farminator.shooterHood.autoHoodAlignment()
                 );
 

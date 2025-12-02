@@ -75,12 +75,12 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(2000),
                                 farminator.transfer.setEntireTransferPowerCommand(0),
-                                farminator.intake.deactivateIntakeCommand()
+                                farminator.intake.deactivateIntakeCommand(),
+                                new DriveActionCommand(path2)
 
                         )
                 ),
-                farminator.shooter.turnOff(),
-                new DriveActionCommand(path2)
+                farminator.shooter.turnOff()
         ).schedule();
 
 

@@ -94,10 +94,10 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
                                 new SequentialCommandGroup(
                                         shootWhenReady(),
                                         shootWhenReady(),
-                                        shootWhenReady()
+                                        shootWhenReady(),
+                                        new DriveActionCommand(path2)
                                 )
-                        ),
-                        new DriveActionCommand(path2)
+                        )
                 )
         ).schedule();
 

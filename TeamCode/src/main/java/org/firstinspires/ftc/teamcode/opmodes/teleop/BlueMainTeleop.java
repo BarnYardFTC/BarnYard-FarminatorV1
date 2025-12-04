@@ -101,7 +101,7 @@ public class BlueMainTeleop extends CommandOpMode {
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.intake.customIntakeCommand(-1)
+                        farminator.intake.customIntakeCommand(-0.5)
                 ))
                 .whenInactive(new ParallelCommandGroup(
                         farminator.intake.deactivateIntakeCommand()

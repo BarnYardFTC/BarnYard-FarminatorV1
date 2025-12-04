@@ -55,6 +55,7 @@ public class TestTeleop extends CommandOpMode {
                 this,
                 opModeData
         );
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
 
         // ==========================================================
@@ -85,9 +86,6 @@ public class TestTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(farminator.shooterHood.raise());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whileHeld(farminator.shooterHood.goToPositionCommand());
 
 
         // Left Trigger → Intake active (transfer + intake)

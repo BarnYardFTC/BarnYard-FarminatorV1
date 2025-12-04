@@ -57,6 +57,8 @@ public class BlueMainTeleop extends CommandOpMode {
                 opModeData
         );
 
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+
 
         // ==========================================================
         // Gamepad 1 Controls
@@ -88,9 +90,6 @@ public class BlueMainTeleop extends CommandOpMode {
                 .whenPressed(farminator.shooterHood.raise());
 
 
-
-
-
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
@@ -102,26 +101,16 @@ public class BlueMainTeleop extends CommandOpMode {
 
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
-                .whenActive(
+                .whileActiveContinuous(
                         farminator.shooterHood.autoHoodAlignment()
                 );
 
-
-
-
-        // Right Trigger → Shooter active
-//        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-//                .whenActive(farminator.shooter.runShooter())
-//                .whenInactive(new RunCommand(() -> farminator.shooter.turnOff()));
-
-        // ------------------------
-        // Drive System
-        // ------------------------
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
                         farminator.shooter.runShooterBasedOnDistance(),
                         farminator.shooter.turnOff());
+
 
 
 
@@ -141,6 +130,17 @@ public class BlueMainTeleop extends CommandOpMode {
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
+
+        // Right Stick Button → Toggle between slow and fast drive modes
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+                .toggleWhenActive(
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
+                );
+
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(farminator.drive.resetPinpointTracking());
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0,0,Math.toRadians(270))));

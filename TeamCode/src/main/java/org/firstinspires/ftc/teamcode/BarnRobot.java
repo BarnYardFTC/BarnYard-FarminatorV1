@@ -159,7 +159,6 @@ public class BarnRobot extends Robot {
 
     public void initShooterHood(){
         shooterHood = new ShooterHood();
-        shooterHood.setDefaultCommand(shooterHood.DefaultCommand());
     }
 
     /** Sets up the transfer system. */

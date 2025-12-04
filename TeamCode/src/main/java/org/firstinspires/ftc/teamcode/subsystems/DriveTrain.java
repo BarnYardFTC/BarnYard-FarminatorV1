@@ -197,6 +197,10 @@ public class DriveTrain extends SubsystemBase {
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);
     }
 
+    public Command updatePinpointPose(Pose2d pose){
+        return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.setPose(pose));
+    }
+
     public double getDistanceFromGoal(){
         double currentPoseX = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x * 0.0254; // conversion from inch to meter
         double currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // conversion from inch to meter

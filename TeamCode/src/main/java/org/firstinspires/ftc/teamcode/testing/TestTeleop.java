@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.teleop;
+package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -27,9 +27,9 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "Main Teleop", group = "main")
+@TeleOp(name = "TestTeleop", group = "main")
 @Config
-public class BlueMainTeleop extends CommandOpMode {
+public class TestTeleop extends CommandOpMode {
 
     // ------------------------
     // Robot Instance
@@ -39,12 +39,11 @@ public class BlueMainTeleop extends CommandOpMode {
     @Override
     public void initialize() {
 
-        Pose2d autoFinishPose = OpModeData.getAutoFinishPose(); // use the pose in which the auto has ended
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                autoFinishPose,
+                new Pose2d(62.5, -60.5, Math.toRadians(90)),
                 270
         );
 
@@ -87,6 +86,9 @@ public class BlueMainTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(farminator.shooterHood.raise());
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(farminator.shooterHood.goToPositionCommand());
+
 
 
 
@@ -107,21 +109,11 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
 
-
-
-        // Right Trigger → Shooter active
-//        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-//                .whenActive(farminator.shooter.runShooter())
-//                .whenInactive(new RunCommand(() -> farminator.shooter.turnOff()));
-
-        // ------------------------
-        // Drive System
-        // ------------------------
-
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
                         farminator.shooter.runShooterBasedOnDistance(),
                         farminator.shooter.turnOff());
+
 
 
 
@@ -145,14 +137,18 @@ public class BlueMainTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0,0,Math.toRadians(270))));
 
-
-
-
     }
 
     @Override
     public void run() {
         super.run();
+        telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x * 0.0254);
+        telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y * 0.0254);
+        telemetry.addData("heading", farminator.pinpointLocalizer.getPose().heading.toDouble());
+        telemetry.addData("distance from goal", farminator.drive.getDistanceFromGoal());
+        telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
+        farminator.shooterHood.displayTelemetry();
         farminator.periodic();
     }
 }
+

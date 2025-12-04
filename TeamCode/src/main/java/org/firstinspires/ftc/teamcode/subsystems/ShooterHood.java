@@ -2,28 +2,28 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.subsystems.Shooter.CLOSE_SHOOTING_RANGE;
 import static org.firstinspires.ftc.teamcode.subsystems.Shooter.FAR_SHOOTING_RANGE;
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTER_VELOCITY_CLOSE;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.util.InterpLUT;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+@Config
 public class ShooterHood extends SubsystemBase {
     private Servo servo;
     private final double MIN = 0.3;
     private final double MAX = 1;
 
-    private final double A_CLOSE = 0.1;
-    private final double B_CLOSE = 0.5;
-    private final double C_CLOSE = 10;
+    InterpLUT close_lut;
+    InterpLUT mid_lut;
+    InterpLUT far_lut;
 
-    private final double A_MID = 0.1;
-    private final double B_MID = 0.5;
-    private final double C_MID = 10;
+    public static double SERVO_POSITION = 0;
 
 
     public ShooterHood(){
@@ -31,43 +31,57 @@ public class ShooterHood extends SubsystemBase {
         servo.setDirection(Servo.Direction.REVERSE);    // Change if needed
         servo.scaleRange(MIN,MAX);
         servo.setPosition(MAX);
+        initInterpLUT();
+    }
+
+    private void initInterpLUT(){
+        close_lut = new InterpLUT();
+        mid_lut = new InterpLUT();
+        far_lut = new InterpLUT();
+
+        //Adding each val with a key
+        close_lut.add(1.1, 0.2);
+        close_lut.add(2.7, .5);
+        close_lut.add(3.6, 0.75);
+
+        mid_lut.add(1,0.2);
+        mid_lut.add(2,0.5);
+        mid_lut.add(3,0.7);
+
+        far_lut.add(1,0.2);
+        far_lut.add(2,0.5);
+        far_lut.add(3,0.7);
+
+        //generating final equation
+        close_lut.createLUT();
+        mid_lut.createLUT();
+        far_lut.createLUT();
     }
 
     public void distanceDependentAngleClose(double distance) {
-        double position = -17.196*Math.pow(distance,6) + 97.619*Math.pow(distance,5) - 220.89*Math.pow(distance,4)
-                + 253.55*Math.pow(distance,3) - 154.62*Math.pow(distance,2) + 47.505*distance - 5.4667;
+        double position = close_lut.get(distance);
 
-        BarnRobot.getInstance().telemetry.addData("range dependent position", position);
+        BarnRobot.getInstance().telemetry.addData("range dependent position close", position);
         servo.setPosition(position);
     }
 
-    public double distanceDependentAngleMid(double distance) {
-        return Math.sqrt(A_MID*distance) + B_MID*distance + C_MID;
+    public void distanceDependentAngleMid(double distance) {
+        double position = mid_lut.get(distance);
+
+        BarnRobot.getInstance().telemetry.addData("range dependent position mid", position);
+        servo.setPosition(position);
     }
 
-    public double distanceDependentAngleFar(double distance) {
-        return Math.sqrt(A_MID*distance) + B_MID*distance + C_MID;
+    public void distanceDependentAngleFar(double distance) {
+        double position = far_lut.get(distance);
+
+        BarnRobot.getInstance().telemetry.addData("range dependent position far", position);
+        servo.setPosition(position);
     }
-
-    public void tempTestRangeDependent() {
-//        servo.setPosition(Math.min(BarnRobot.getInstance().limelight.getGoalRange()/4, 1));
-    }
-
-//    public Command autoAdjust(){
-//        return new InstantCommand(() -> {
-//            double newPos = tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange());
-//            servo.setPosition(newPos);
-//        }, this);
-//        servo.setPosition(tempTestFormula(BarnRobot.getInstance().limelight.getGoalRange()));
-//        return new InstantCommand(()  -> servo.setPosition(rangeDependentAngle(BarnRobot.getInstance().limelight.getGoalRange())));
-//    }
-
-//    public Command moveWithFormula(double position){
-//        return new InstantCommand(()  -> servo.setPosition(tempTestFormula(position)));
-//    }
 
     public void autoHoodAlignmentFunc(){
         double distance = BarnRobot.getInstance().drive.getDistanceFromGoal();
+        BarnRobot.getInstance().telemetry.addData("distance test", distance);
 
         if (distance < CLOSE_SHOOTING_RANGE) {
             distanceDependentAngleClose(distance);
@@ -113,6 +127,10 @@ public class ShooterHood extends SubsystemBase {
             servo.setPosition(MIN);
             },this
         );
+    }
+
+    public Command goToPositionCommand(){
+        return setHoodPosition(SERVO_POSITION);
     }
 
     public void displayTelemetry(){

@@ -122,7 +122,7 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.resetPinpointTracking());
+                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0,0,Math.toRadians(270))));
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)

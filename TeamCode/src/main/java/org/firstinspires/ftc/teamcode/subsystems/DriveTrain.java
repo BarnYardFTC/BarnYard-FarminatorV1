@@ -197,8 +197,8 @@ public class DriveTrain extends SubsystemBase {
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);
     }
 
-    public Command updatePinpointPose(Pose2d pose){
-        return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.setPose(pose));
+    public Command updatePinpointPose(Pose2d pose2d){
+        return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.setPose(pose2d));
     }
 
     public double getDistanceFromGoal(){

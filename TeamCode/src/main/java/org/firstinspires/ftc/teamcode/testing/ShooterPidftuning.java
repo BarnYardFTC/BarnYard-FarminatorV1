@@ -59,7 +59,7 @@ public class ShooterPidftuning extends CommandOpMode {
         // Run command scheduler and periodic updates
         super.run();
         telemetry2.addData("current velocity", farminator.shooter.getVelocity());
-        telemetry2.addData("target velocity", Shooter.SHOOTER_VELOCITY_FAR);
+        telemetry2.addData("target velocity", Shooter.SHOOTER_VELOCITY_RANGE_4);
         telemetry2.update();
     }
 

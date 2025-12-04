@@ -19,12 +19,16 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-    public static double SHOOTER_VELOCITY_FAR = 1600;
-    public static double SHOOTER_VELOCITY_MID = 1350;
-    public static double SHOOTER_VELOCITY_CLOSE = 1150;
+    public static double SHOOTER_VELOCITY_RANGE_4 = 1600; // only for far zone
+    public static double SHOOTER_VELOCITY_RANGE_3 = 1350;
+    public static double SHOOTER_VELOCITY_RANGE_2 = 1200;
+    public static double SHOOTER_VELOCITY_RANGE_1 = 1050;
 
-    public static double FAR_SHOOTING_RANGE = 2.7;
-    public static double CLOSE_SHOOTING_RANGE = 1.5;
+
+    public static double SHOOTING_RANGE_1 = 1.1;
+    public static double SHOOTING_RANGE_2 = 1.8;
+    public static double SHOOTING_RANGE_3 = 2.8;
+
 
 
     public Shooter() {
@@ -55,16 +59,23 @@ public class Shooter  extends SubsystemBase {
     public void operateShooterDistanceBased(double distance) {
         pidfController.setPIDF(p, 0, 0, f);
         double power;
-        if (distance < CLOSE_SHOOTING_RANGE) {
-            power = pidfController.calculate(SHOOTER_VELOCITY_CLOSE, getVelocity());
+        if (distance < SHOOTING_RANGE_1) {
+            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_1, getVelocity());
         }
-        else if (distance > CLOSE_SHOOTING_RANGE && distance < FAR_SHOOTING_RANGE){
-            power = pidfController.calculate(SHOOTER_VELOCITY_MID, getVelocity());
+        else if (distance > SHOOTING_RANGE_1 && distance < SHOOTING_RANGE_2){
+            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_2, getVelocity());
+        }
+        else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
+            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_3, getVelocity());
+        }
+        else if (distance > SHOOTING_RANGE_3) {
+            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_4, getVelocity());
         }
         else {
-            power = pidfController.calculate(SHOOTER_VELOCITY_FAR, getVelocity());
+            power = 0;
         }
-        setPower(power);
+        setPower(power
+        );
     }
 
     private void operateShooterReverse(){
@@ -73,11 +84,11 @@ public class Shooter  extends SubsystemBase {
 
 
     public RunCommand runShooterFar(){
-        return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_FAR), this);
+        return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_RANGE_4), this);
     }
 
     public RunCommand runShooterClose(){
-        return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_CLOSE), this);
+        return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_RANGE_1), this);
     }
 
     public RunCommand runShooterReversed(){
@@ -122,9 +133,9 @@ public class Shooter  extends SubsystemBase {
     }
 
     public boolean isReady() {
-        return (getVelocity() > SHOOTER_VELOCITY_CLOSE - 40 && getVelocity() < SHOOTER_VELOCITY_CLOSE + 40) ||
-                (getVelocity() > SHOOTER_VELOCITY_MID - 40 && getVelocity() < SHOOTER_VELOCITY_MID + 40) ||
-                (getVelocity() > SHOOTER_VELOCITY_FAR - 40 && getVelocity() < SHOOTER_VELOCITY_FAR + 40);
+        return (getVelocity() > SHOOTER_VELOCITY_RANGE_1 - 40 && getVelocity() < SHOOTER_VELOCITY_RANGE_1 + 40) ||
+                (getVelocity() > SHOOTER_VELOCITY_RANGE_2 - 40 && getVelocity() < SHOOTER_VELOCITY_RANGE_2 + 40) ||
+                (getVelocity() > SHOOTER_VELOCITY_RANGE_4 - 40 && getVelocity() < SHOOTER_VELOCITY_RANGE_4 + 40);
     }
 
     public boolean isShotDetected(double tgtRpm) {

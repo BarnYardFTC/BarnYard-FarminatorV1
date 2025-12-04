@@ -43,7 +43,7 @@ public class TestTeleop extends CommandOpMode {
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                new Pose2d(62.5, -60.5, Math.toRadians(90)),
+                new Pose2d(62.5, -60.5, Math.toRadians(270)),
                 270
         );
 
@@ -87,10 +87,7 @@ public class TestTeleop extends CommandOpMode {
                 .whenPressed(farminator.shooterHood.raise());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(farminator.shooterHood.goToPositionCommand());
-
-
-
+                .whileHeld(farminator.shooterHood.goToPositionCommand());
 
 
         // Left Trigger → Intake active (transfer + intake)
@@ -104,7 +101,7 @@ public class TestTeleop extends CommandOpMode {
 
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
-                .whenActive(
+                .whileActiveContinuous(
                         farminator.shooterHood.autoHoodAlignment()
                 );
 
@@ -135,7 +132,7 @@ public class TestTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0,0,Math.toRadians(270))));
+                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(62.5, -60.5, Math.toRadians(270))));
 
     }
 

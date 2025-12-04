@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.CLOSE_SHOOTING_RANGE;
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.FAR_SHOOTING_RANGE;
+import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_1;
+import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_2;
+import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_3;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -19,11 +20,12 @@ public class ShooterHood extends SubsystemBase {
     private final double MIN = 0.3;
     private final double MAX = 1;
 
-    InterpLUT close_lut;
-    InterpLUT mid_lut;
-    InterpLUT far_lut;
+    InterpLUT range1Lut;
+    InterpLUT range2Lut;
+    InterpLUT range3Lut;
+    InterpLUT range4Lut;
 
-    public static double SERVO_POSITION = 0;
+    public static double SERVO_POSITION = 1;
 
 
     public ShooterHood(){
@@ -35,63 +37,81 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private void initInterpLUT(){
-        close_lut = new InterpLUT();
-        mid_lut = new InterpLUT();
-        far_lut = new InterpLUT();
+        range1Lut = new InterpLUT();
+        range2Lut = new InterpLUT();
+        range3Lut = new InterpLUT();
+        range4Lut = new InterpLUT();
 
         //Adding each val with a key
-        close_lut.add(1.1, 0.2);
-        close_lut.add(2.7, .5);
-        close_lut.add(3.6, 0.75);
+        range1Lut.add(0.7, 0.3);
+        range1Lut.add(0.81, 0.4);
+        range1Lut.add(0.9, 0.45);
+        range1Lut.add(1, 0.55);
+        range1Lut.add(1.08, 0.7);
 
-        mid_lut.add(1,0.2);
-        mid_lut.add(2,0.5);
-        mid_lut.add(3,0.7);
+        range2Lut.add(1.12,0.3);
+        range2Lut.add(1.24,0.35);
+        range2Lut.add(1.29,0.45);
+        range2Lut.add(1.4, 0.55);
+        range2Lut.add(1.5, 0.75);
+        range2Lut.add(1.6, 0.85);
+        range2Lut.add(1.7, 0.9);
+        range2Lut.add(1.79, 0.95);
 
-        far_lut.add(1,0.2);
-        far_lut.add(2,0.5);
-        far_lut.add(3,0.7);
+        range3Lut.add(1.8,0.2);
+        range3Lut.add(2,0.5);
+        range3Lut.add(3,0.7);
+
+        range4Lut.add(1,0.2);
+        range4Lut.add(2,0.5);
+        range4Lut.add(3,0.7);
 
         //generating final equation
-        close_lut.createLUT();
-        mid_lut.createLUT();
-        far_lut.createLUT();
+        range1Lut.createLUT();
+        range2Lut.createLUT();
+        range3Lut.createLUT();
+        range4Lut.createLUT();
     }
 
-    public void distanceDependentAngleClose(double distance) {
-        double position = close_lut.get(distance);
+    public void distanceDependentAngleRange1(double distance) {
+        distance = capDistanceRange1(distance);
+        double position = range1Lut.get(distance);
 
         BarnRobot.getInstance().telemetry.addData("range dependent position close", position);
         servo.setPosition(position);
     }
 
-    public void distanceDependentAngleMid(double distance) {
-        double position = mid_lut.get(distance);
+    public void distanceDependentAngleRange2(double distance) {
+        distance = capDistanceRange2(distance);
+        double position = range2Lut.get(distance);
 
-        BarnRobot.getInstance().telemetry.addData("range dependent position mid", position);
         servo.setPosition(position);
     }
 
-    public void distanceDependentAngleFar(double distance) {
-        double position = far_lut.get(distance);
+    public void distanceDependentAngleRange3() {
+        servo.setPosition(1);
+    }
 
-        BarnRobot.getInstance().telemetry.addData("range dependent position far", position);
-        servo.setPosition(position);
+    public void distanceDependentAngleRange4() {
+        servo.setPosition(1);
     }
 
     public void autoHoodAlignmentFunc(){
         double distance = BarnRobot.getInstance().drive.getDistanceFromGoal();
-        BarnRobot.getInstance().telemetry.addData("distance test", distance);
 
-        if (distance < CLOSE_SHOOTING_RANGE) {
-            distanceDependentAngleClose(distance);
+        if (distance < SHOOTING_RANGE_1) {
+            distanceDependentAngleRange1(distance);
         }
-        else if (distance > CLOSE_SHOOTING_RANGE && distance < FAR_SHOOTING_RANGE){
-            distanceDependentAngleMid(distance);
+        else if (distance > SHOOTING_RANGE_1 && distance < SHOOTING_RANGE_2){
+            distanceDependentAngleRange2(distance);
         }
-        else {
-            distanceDependentAngleClose(distance);
+        else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
+            distanceDependentAngleRange3();
         }
+        else if (distance > SHOOTING_RANGE_3) {
+            distanceDependentAngleRange4();
+        }
+
     }
 
     public Command autoHoodAlignment(){
@@ -130,11 +150,41 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public Command goToPositionCommand(){
-        return setHoodPosition(SERVO_POSITION);
+        return new RunCommand(() ->
+                goToPosition(), this);
     }
+
+    public void goToPosition(){
+        if (SERVO_POSITION > MAX) SERVO_POSITION = MAX;
+        if (SERVO_POSITION < MIN) SERVO_POSITION = MIN;
+        servo.setPosition(SERVO_POSITION);
+    }
+
+    public Command DefaultCommand(){
+        return new RunCommand(() -> rest(), this);
+    }
+
+    public void rest(){
+        BarnRobot.getInstance().telemetry.addLine("hood resting");
+    }
+
+
 
     public void displayTelemetry(){
         BarnRobot robot = BarnRobot.getInstance();
         robot.telemetry.addData("Position", servo.getPosition());
     }
+
+    private double capDistanceRange1(double distance){
+        if (distance <= 0.7) distance = 0.71;
+        else if (distance >= 1.08) distance = 1.079;
+        return distance;
+    }
+
+    private double capDistanceRange2(double distance){
+        if (distance <= 1.12) distance = 1.13;
+        else if (distance >= 1.79) distance = 1.78;
+        return distance;
+    }
+
 }

@@ -24,8 +24,6 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 public class MainDashboard extends CommandOpMode {
 
     private BarnRobot farminator;
-
-    // === DASHBOARD ===
     private FtcDashboard dashboard;
 
     @Override
@@ -43,12 +41,12 @@ public class MainDashboard extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        // === DASHBOARD SETUP ===
+        // dashboard shi
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         // ---------------------------------------------------------
-        // YOUR GAMEPAD BINDINGS
+        // kys nigga
         // ---------------------------------------------------------
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
@@ -75,7 +73,6 @@ public class MainDashboard extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(farminator.shooterHood.setHoodPosition(0));
 
-        // etc, etc — unchanged
     }
 
     @Override
@@ -83,7 +80,7 @@ public class MainDashboard extends CommandOpMode {
         super.run();
 
         // ----------------------------------------------------------
-        //  Dashboard shi
+        //  Dashboard shi again
         // ----------------------------------------------------------
         TelemetryPacket packet = new TelemetryPacket();
         Canvas field = packet.fieldOverlay();
@@ -126,6 +123,8 @@ public class MainDashboard extends CommandOpMode {
         packet.put("heading (deg)", Math.toDegrees(heading));
 
         dashboard.sendTelemetryPacket(packet);
+
+        //usual telemetry
 
         telemetry.addData("x", x);
         telemetry.addData("y", y);

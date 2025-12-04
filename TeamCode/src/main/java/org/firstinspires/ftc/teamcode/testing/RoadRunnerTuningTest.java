@@ -7,9 +7,9 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.util.roadrunner.RoadRunnerMecanumDrive;
-import org.firstinspires.ftc.teamcode.util.roadrunner.TankDrive;
-import org.firstinspires.ftc.teamcode.util.roadrunner.tuning.TuningOpModes;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.TankDrive;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.tuning.TuningOpModes;
 @Config
 @Autonomous(name="raodrunner tuning test", group="test")
 public class RoadRunnerTuningTest extends LinearOpMode {

@@ -69,7 +69,7 @@ public class BlueMainTeleop extends CommandOpMode {
         // ------------------------
 
         // Left Bumper → Run back transfer backward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(
                         new ParallelCommandGroup(
                                 farminator.transfer.setEntireTransferPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER)
@@ -78,15 +78,15 @@ public class BlueMainTeleop extends CommandOpMode {
                 .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER))
                 .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(farminator.shooterHood.lower());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(farminator.shooterHood.raise());
 
 
@@ -99,11 +99,14 @@ public class BlueMainTeleop extends CommandOpMode {
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
-
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
-                .whileActiveContinuous(
-                        farminator.shooterHood.autoHoodAlignment()
-                );
+                .whenActive(new ParallelCommandGroup(
+                        farminator.intake.customIntakeCommand(-1)
+                ))
+                .whenInactive(new ParallelCommandGroup(
+                        farminator.intake.deactivateIntakeCommand()
+                ));
+
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

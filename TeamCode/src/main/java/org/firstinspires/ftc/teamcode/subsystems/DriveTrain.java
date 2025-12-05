@@ -46,7 +46,7 @@ public class DriveTrain extends SubsystemBase {
 
 
     /** Field coordinates for the target goal. */
-    private static final double GOAL_X = -1.57;
+    private static final double GOAL_X = -1.65;
     private static final double BLUE_GOAL_Y = -1.62;
     private static final double RED_GOAL_Y = 1.62;
 
@@ -162,7 +162,7 @@ public class DriveTrain extends SubsystemBase {
 
     /** Converts yaw difference (Limelight) into turning speed via PID */
     private double diffToSpeed(double yawDiff) {
-        double output = pidControllerYaw.calculate(-yawDiff, 0);
+        double output = pidControllerYaw.calculate(yawDiff, 0);
         if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1)
             output = Math.copySign(MIN_TURNING_SPEED, output);
         return output;
@@ -173,17 +173,17 @@ public class DriveTrain extends SubsystemBase {
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
         double currentX = currentPose.position.x * 0.0254;
         double currentY = currentPose.position.y * 0.0254;
-        double currentHeading = currentPose.heading.toDouble(); //TODO: Check if this gives desired value
+        double currentHeading = getBotAbsoluteHeading(); //TODO: Check if this gives desired value
 
         double desiredHeading, tangentAngle;
 
         if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED){
-            tangentAngle = Math.atan((currentX - GOAL_X)/(RED_GOAL_Y - currentY));
+            tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X)/(RED_GOAL_Y - currentY)));
             desiredHeading = 180 + tangentAngle;
         }
         else {
-            tangentAngle = Math.atan((currentX - GOAL_X)/(currentY-BLUE_GOAL_Y));
-            desiredHeading = 270 + tangentAngle;
+            tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X)/(currentY-BLUE_GOAL_Y)));
+            desiredHeading = 270 - tangentAngle;
         }
 
         double diffYaw = desiredHeading - currentHeading;
@@ -244,6 +244,12 @@ public class DriveTrain extends SubsystemBase {
 
     private double calcDistance(double xG, double yG, double xR, double yR) {
         return Math.sqrt((xG - xR) * (xG - xR) + (yG - yR) * (yG - yR));
+    }
+
+    public double getBotAbsoluteHeading(){
+        double heading = Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+        if (heading < 0) return heading + 360;
+        return heading;
     }
 
 

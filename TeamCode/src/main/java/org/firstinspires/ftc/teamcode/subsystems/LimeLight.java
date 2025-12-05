@@ -40,7 +40,7 @@ public class LimeLight extends SubsystemBase {
     public static final int POLL_RATE_HZ = 100;
 
     /** Field coordinates for the target goal. */
-    private static final double GOAL_X = -1.57;
+    private static final double GOAL_X = -1.65;
     private static final double BLUE_GOAL_Y = -1.62;
     private static final double RED_GOAL_Y = 1.62;
 

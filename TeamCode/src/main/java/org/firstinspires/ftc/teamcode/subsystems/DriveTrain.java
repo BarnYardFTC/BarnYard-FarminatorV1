@@ -20,7 +20,7 @@ public class DriveTrain extends SubsystemBase {
     //                       CONSTANTS
     // ============================================================
 
-    public static double pYaw = 0.005, dYaw = 0.0008;
+    public static double pYaw = 0.03, dYaw = 0.0008;
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
     public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.35;
 

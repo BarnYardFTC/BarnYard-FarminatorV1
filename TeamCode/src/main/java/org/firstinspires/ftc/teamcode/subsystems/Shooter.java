@@ -19,7 +19,7 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-    public static double SHOOTER_VELOCITY_RANGE_4 = 1600; // only for far zone
+    public static double SHOOTER_VELOCITY_RANGE_4 = 1550; // only for far zone
     public static double SHOOTER_VELOCITY_RANGE_3 = 1350;
     public static double SHOOTER_VELOCITY_RANGE_2 = 1200;
     public static double SHOOTER_VELOCITY_RANGE_1 = 1050;

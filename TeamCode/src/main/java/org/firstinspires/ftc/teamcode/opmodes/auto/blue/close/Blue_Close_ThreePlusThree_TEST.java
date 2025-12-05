@@ -38,13 +38,13 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
         public static double POSE2_Y = -23;
 
         /* To artifacts pose */
-        public static double POSE3_X = -11;
+        public static double POSE3_X = -12;
         public static double POSE3_Y = -31;
         public static double SOUTH_HEADING = Math.toRadians(270);
 
         /* Collect artifacts pose */
-        public static double POSE4_X = -11;
-        public static double POSE4_Y = -55;
+        public static double POSE4_X = -12;
+        public static double POSE4_Y = -58;
 
 
 
@@ -61,6 +61,8 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
             farminator.init(this, opModeData);
 
             drive = new RoadRunnerMecanumDrive(hardwareMap,new Pose2d(POSE1_X,POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
+
+            farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
 
             /* Define trajectory to shooting pose */
@@ -82,22 +84,14 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
             /* Schedule autonomous sequence */
             new SequentialCommandGroup(
                     new WaitUntilCommand(this::opModeIsActive),
-//                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
                     new DriveActionCommand(path1),
-                    farminator.intake.activateIntakeCommand(),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                farminator.shooter.customShooterCommand(farminator.shooter.rangeDependentVelocity(1.8)),
-                    farminator.intake.activateIntakeCommand(),
+                    farminator.shooter.runShooterBasedOnDistance(),
                     new DriveActionCommand(path2),
+                    farminator.intake.activateIntakeCommand(),
                     new DriveActionCommand(path3),
+                    farminator.intake.deactivateIntakeCommand(),
                     new DriveActionCommand(path4),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                farminator.shooter.deactivateShooterCommand()
-                    farminator.intake.deactivateIntakeCommand()
+                    farminator.shooter.runShooterBasedOnDistance()
             ).schedule();
 
             new SequentialCommandGroup(

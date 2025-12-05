@@ -33,12 +33,12 @@ public class ThreePlusThree_Blue_Close_EDEN_TEST extends CommandOpMode {
     public static double POSE2_Y = -23;
 
     /* To artifacts pose */
-    public static double POSE3_X = -11;
+    public static double POSE3_X = -15;
     public static double POSE3_Y = -31;
     public static double SOUTH_HEADING = Math.toRadians(270);
 
     /* Collect artifacts pose */
-    public static double POSE4_X = -11;
+    public static double POSE4_X = -15;
     public static double POSE4_Y = -55;
 
 
@@ -90,7 +90,7 @@ public class ThreePlusThree_Blue_Close_EDEN_TEST extends CommandOpMode {
 //                ShootSequenceCommandGroup.shootWhenReady(1.8),
 //                ShootSequenceCommandGroup.shootWhenReady(1.8),
 //                ShootSequenceCommandGroup.shootWhenReady(1.8),
-//                farminator.shooter.deactivateShooterCommand()
+//                farminator.shooter.deactivateShooterCommand(),
                 farminator.intake.deactivateIntakeCommand()
         ).schedule();
 

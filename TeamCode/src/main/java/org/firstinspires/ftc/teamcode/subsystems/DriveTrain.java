@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -162,10 +163,41 @@ public class DriveTrain extends SubsystemBase {
     /** Converts yaw difference (Limelight) into turning speed via PID */
     private double diffToSpeed(double yawDiff) {
         double output = pidControllerYaw.calculate(-yawDiff, 0);
-        BarnRobot.getInstance().telemetry.addData("output: ", output);
         if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1)
             output = Math.copySign(MIN_TURNING_SPEED, output);
         return output;
+    }
+
+    private void localizationBasedGoalAlignment(double spdX, double spdY){
+
+        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+        double currentX = currentPose.position.x * 0.0254;
+        double currentY = currentPose.position.y * 0.0254;
+        double currentHeading = currentPose.heading.toDouble(); //TODO: Check if this gives desired value
+
+        double desiredHeading, tangentAngle;
+
+        if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED){
+            tangentAngle = Math.atan((currentX - GOAL_X)/(RED_GOAL_Y - currentY));
+            desiredHeading = 180 + tangentAngle;
+        }
+        else {
+            tangentAngle = Math.atan((currentX - GOAL_X)/(currentY-BLUE_GOAL_Y));
+            desiredHeading = 270 + tangentAngle;
+        }
+
+        double diffYaw = desiredHeading - currentHeading;
+
+        double turnSpd = diffToSpeed(diffYaw);
+
+        drive(spdX, spdY, turnSpd);
+
+        // TODO: REMOVE
+        BarnRobot.getInstance().telemetry.addData("tangent angle", tangentAngle);
+        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
+        BarnRobot.getInstance().telemetry.addData("diff Yaw`", diffYaw);
+
+
     }
 
     // ============================================================
@@ -185,12 +217,12 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /** Continuous alignment command (runs alignToGoal loop) */
-//    public Command alignToTagCommand() {
-//        return new RunCommand(() -> alignToGoal(
-//                BarnRobot.getInstance().gamepadEx1.getLeftX(),
-//                BarnRobot.getInstance().gamepadEx1.getLeftY())
-//                , this);
-//    }
+    public Command alignToTagCommand() {
+        return new RunCommand(() -> localizationBasedGoalAlignment(
+                BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                BarnRobot.getInstance().gamepadEx1.getLeftY())
+                , this);
+    }
 
 
     public Command resetPinpointTracking(){

@@ -67,7 +67,7 @@ public class TestTeleop extends CommandOpMode {
         // ------------------------
 
         // Left Bumper → Run back transfer backward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(
                         new ParallelCommandGroup(
                                 farminator.transfer.setEntireTransferPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER)
@@ -76,15 +76,15 @@ public class TestTeleop extends CommandOpMode {
                 .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
         // Right Bumper → Run all transfer motors forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER))
                 .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(farminator.shooterHood.lower());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(farminator.shooterHood.raise());
 
 
@@ -97,11 +97,14 @@ public class TestTeleop extends CommandOpMode {
                         farminator.intake.deactivateIntakeCommand()
                 ));
 
-
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
-                .whileActiveContinuous(
-                        farminator.shooterHood.autoHoodAlignment()
-                );
+                .whenActive(new ParallelCommandGroup(
+                        farminator.intake.customIntakeCommand(-0.5)
+                ))
+                .whenInactive(new ParallelCommandGroup(
+                        farminator.intake.deactivateIntakeCommand()
+                ));
+
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
@@ -109,8 +112,18 @@ public class TestTeleop extends CommandOpMode {
                         farminator.shooter.runShooterBasedOnDistance(),
                         farminator.shooter.turnOff());
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+                        .toggleWhenActive(
+                                farminator.drive.alignToTagCommand(),
+                                farminator.drive.driveCommand()
+                        );
 
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+                .toggleWhenActive(
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
+                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
+                );
 
         // Right Stick Button → Toggle between slow and fast drive modes
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
@@ -120,14 +133,7 @@ public class TestTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.resetPinpointTracking());
-
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .toggleWhenActive(
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
-                );
+                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(62.5, -60.5, Math.toRadians(270))));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(62.5, -60.5, Math.toRadians(270))));

@@ -173,7 +173,7 @@ public class DriveTrain extends SubsystemBase {
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
         double currentX = currentPose.position.x * 0.0254;
         double currentY = currentPose.position.y * 0.0254;
-        double currentHeading = getBotAbsoluteHeading(); //TODO: Check if this gives desired value
+        double currentHeading = getBotAbsoluteHeading();
 
         double desiredHeading, tangentAngle;
 
@@ -192,10 +192,6 @@ public class DriveTrain extends SubsystemBase {
 
         drive(spdX, spdY, turnSpd);
 
-        // TODO: REMOVE
-        BarnRobot.getInstance().telemetry.addData("tangent angle", tangentAngle);
-        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
-        BarnRobot.getInstance().telemetry.addData("diff Yaw`", diffYaw);
 
 
     }

@@ -85,6 +85,10 @@ public class Blue_Close_PGP extends CommandOpMode {
                 .strafeToLinearHeading(new Vector2d(POSE5_X, POSE5_Y), POSE5_HEADING, new TranslationalVelConstraint(25))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25));
 
+        TrajectoryActionBuilder path4 = path2.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(POSE5_X, POSE5_Y), POSE5_HEADING, new TranslationalVelConstraint(25))
+                .strafeToLinearHeading(new Vector2d(POSE2_X-20, POSE2_Y+10), POSE2_HEADING, new TranslationalVelConstraint(25));
+
 
 
 
@@ -110,7 +114,8 @@ public class Blue_Close_PGP extends CommandOpMode {
                 new WaitCommand(4500),
                 new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
                 new WaitCommand(3000),
-                new SequentialCommandGroup(farminator.intake.activateIntakeCommand())
+                new SequentialCommandGroup(farminator.intake.activateIntakeCommand()),
+                new DriveActionCommand(path4)
         ).schedule();
 
     }

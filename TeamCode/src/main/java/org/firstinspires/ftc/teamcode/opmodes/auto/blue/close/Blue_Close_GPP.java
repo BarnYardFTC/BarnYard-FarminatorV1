@@ -79,6 +79,11 @@ public class Blue_Close_GPP extends CommandOpMode {
                 .strafeToLinearHeading(new Vector2d(POSE5_X, POSE5_Y), POSE5_HEADING, new TranslationalVelConstraint(100))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(100));
 
+        TrajectoryActionBuilder path4 = path2.endTrajectory().fresh()
+                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25))
+                .strafeToLinearHeading(new Vector2d(POSE2_X-20, POSE2_Y+10), POSE2_HEADING, new TranslationalVelConstraint(25));
+
+
 
 
 
@@ -86,7 +91,8 @@ public class Blue_Close_GPP extends CommandOpMode {
         new SequentialCommandGroup(
                 new DriveActionCommand(path1),
                 new DriveActionCommand(path2),
-                new DriveActionCommand(path3)
+                new DriveActionCommand(path3),
+                new DriveActionCommand(path4)
         ).schedule();
 
     }

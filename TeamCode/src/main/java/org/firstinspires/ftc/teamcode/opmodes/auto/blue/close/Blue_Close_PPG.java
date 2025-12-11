@@ -3,14 +3,10 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.robocol.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
@@ -23,7 +19,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
 
     @Config
     @Autonomous (name = "3+3 Close test eden", group = "main")
-    public class Blue_Close_ThreePlusThree_TEST extends CommandOpMode {
+    public class Blue_Close_PPG extends CommandOpMode {
         /* Robot and drive system instances */
         private BarnRobot farminator;
         private  RoadRunnerMecanumDrive drive;
@@ -81,6 +77,11 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
             TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, SOUTH_HEADING))
                     .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), PERPENDICULAR_TO_DEPOT_HEADING);
 
+            TrajectoryActionBuilder path5 = path2.endTrajectory().fresh()
+                    .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), PERPENDICULAR_TO_DEPOT_HEADING, new TranslationalVelConstraint(25))
+                    .strafeToLinearHeading(new Vector2d(POSE2_X-20, POSE2_Y+10), PERPENDICULAR_TO_DEPOT_HEADING, new TranslationalVelConstraint(25));
+
+
             /* Schedule autonomous sequence */
             new SequentialCommandGroup(
                     new WaitUntilCommand(this::opModeIsActive),
@@ -91,7 +92,11 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
                     new DriveActionCommand(path3),
                     farminator.intake.deactivateIntakeCommand(),
                     new DriveActionCommand(path4),
-                    farminator.shooter.runShooterBasedOnDistance()
+                    farminator.shooter.runShooterBasedOnDistance(),
+                    new WaitCommand(3000),
+                    farminator.shooter.turnOff(),
+                    new DriveActionCommand(path5)
+
             ).schedule();
 
             new SequentialCommandGroup(

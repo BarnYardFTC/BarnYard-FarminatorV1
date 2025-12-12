@@ -87,24 +87,23 @@ public class Blue_Far_PPG extends CommandOpMode {
                         farminator.shooter.runShooterFar(),   // continuous, never finishes on its own
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
-                                new WaitCommand(2000),
+                                farminator.shooter.runShooterBasedOnDistance(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-                                new WaitCommand(2000),
 //                                farminator.intake.activateIntakeCommand(),
 //                                new WaitCommand(2000),
 //                                farminator.transfer.setEntireTransferPowerCommand(0),
 //                                farminator.intake.deactivateIntakeCommand(),
                                 new DriveActionCommand(path2),
-                                farminator.shooter.runShooterBasedOnDistance(),
-                                new WaitCommand(3000),
-                                farminator.shooter.turnOff(),
+                                farminator.intake.activateIntakeCommand(),
                                 new DriveActionCommand(path3),
                                 new WaitCommand(1500),
                                 new DriveActionCommand(path4),
+                                farminator.intake.deactivateIntakeCommand(),
                                 new DriveActionCommand(path5),
                                 farminator.shooter.runShooterBasedOnDistance(),
-                                new WaitCommand(3000),
+                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.shooter.turnOff(),
+                                farminator.transfer.setEntireTransferPowerCommand(0),
                                 new DriveActionCommand(path6)
 
 

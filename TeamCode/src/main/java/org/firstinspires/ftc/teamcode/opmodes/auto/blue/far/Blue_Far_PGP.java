@@ -36,7 +36,6 @@ public class Blue_Far_PGP extends CommandOpMode {
     public static double POSE1_X = 57.5;
     public static double POSE1_Y = 0;
 
-
     public static double POSE2_X = 50;
     public static double POSE2_Y = 0;
 
@@ -44,7 +43,7 @@ public class Blue_Far_PGP extends CommandOpMode {
     public static double POSE3_Y = -30;
 
     public static double POSE4_X = 11;
-    public static double POSE4_Y = -60;
+    public static double POSE4_Y = -50;
 
 
 
@@ -89,24 +88,25 @@ public class Blue_Far_PGP extends CommandOpMode {
                         farminator.shooter.runShooterFar(),   // continuous, never finishes on its own
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
-                                new DriveActionCommand(path2),
+                                farminator.shooter.runShooterBasedOnDistance(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-                                new WaitCommand(2000),
 //                                farminator.intake.activateIntakeCommand(),
 //                                new WaitCommand(2000),
 //                                farminator.transfer.setEntireTransferPowerCommand(0),
 //                                farminator.intake.deactivateIntakeCommand(),
-                                farminator.shooter.runShooterBasedOnDistance(),
-                                farminator.intake.deactivateIntakeCommand(),
-                                new WaitCommand(3000),
-                                farminator.shooter.turnOff(),
+                                new DriveActionCommand(path2),
+                                farminator.intake.activateIntakeCommand(),
                                 new DriveActionCommand(path3),
                                 new WaitCommand(1500),
                                 new DriveActionCommand(path4),
+                                farminator.intake.deactivateIntakeCommand(),
                                 new DriveActionCommand(path5),
                                 farminator.shooter.runShooterBasedOnDistance(),
-                                new WaitCommand(3000),
-                                farminator.shooter.turnOff()
+                                farminator.transfer.setEntireTransferPowerCommand(1),
+                                farminator.shooter.turnOff(),
+                                farminator.transfer.setEntireTransferPowerCommand(0)
+
+
 
 
 

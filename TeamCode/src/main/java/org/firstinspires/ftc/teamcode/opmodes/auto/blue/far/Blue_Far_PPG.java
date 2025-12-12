@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
 
 @Config
 @Autonomous(name = "3+0 Far Blue PPG ", group = "main")
-public class Blue_Far_PPG1 extends CommandOpMode {
+public class Blue_Far_PPG extends CommandOpMode {
 
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
@@ -29,12 +29,12 @@ public class Blue_Far_PPG1 extends CommandOpMode {
     public static double NORTH_HEADING = Math.toRadians(270);
     public static double WEST_HEADING = Math.toRadians(215);
 
-    public static double POSE1_X = 60;
-    public static double POSE1_Y = -10;
+    public static double POSE1_X = 57.5;
+    public static double POSE1_Y = 0;
 
 
-    public static double POSE2_X = 55;
-    public static double POSE2_Y = -11;
+    public static double POSE2_X = 50;
+    public static double POSE2_Y = 0;
 
     public static double POSE3_X = -10;
     public static double POSE3_Y = -30;

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
     @Config
-    @Autonomous (name = "3+3 Close test eden", group = "main")
+    @Autonomous (name = "3+3 Close test PPG", group = "main")
     public class Blue_Close_PPG extends CommandOpMode {
         /* Robot and drive system instances */
         private BarnRobot farminator;
@@ -96,6 +96,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
                     new WaitCommand(3000),
                     farminator.shooter.turnOff(),
                     new DriveActionCommand(path5)
+
 
             ).schedule();
 

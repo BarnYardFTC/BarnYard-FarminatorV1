@@ -33,12 +33,12 @@ public class Blue_Far_PGP extends CommandOpMode {
     public static double NORTH_HEADING = Math.toRadians(270);
     public static double WEST_HEADING = Math.toRadians(215);
 
-    public static double POSE1_X = 60;
-    public static double POSE1_Y = -10;
+    public static double POSE1_X = 57.5;
+    public static double POSE1_Y = 0;
 
 
-    public static double POSE2_X = 55;
-    public static double POSE2_Y = -11;
+    public static double POSE2_X = 50;
+    public static double POSE2_Y = 0;
 
     public static double POSE3_X = 11;
     public static double POSE3_Y = -30;
@@ -70,16 +70,14 @@ public class Blue_Far_PGP extends CommandOpMode {
 
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, WEST_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), GOAL_HEADING, new TranslationalVelConstraint(25));
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y,GOAL_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), GOAL_HEADING, new TranslationalVelConstraint(25) );
-        TrajectoryActionBuilder path3 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, GOAL_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE2_X, 0), GOAL_HEADING, new TranslationalVelConstraint(25));
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, GOAL_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), NORTH_HEADING, new TranslationalVelConstraint(25) );
-        TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, GOAL_HEADING))
+        TrajectoryActionBuilder path3 = drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, GOAL_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE4_X , POSE4_Y), NORTH_HEADING, new TranslationalVelConstraint(25) );
-        TrajectoryActionBuilder path5 = drive.actionBuilder(new Pose2d(POSE4_X , POSE4_Y, NORTH_HEADING))
+        TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE4_X , POSE4_Y, NORTH_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X , POSE2_Y), GOAL_HEADING, new TranslationalVelConstraint(25) );
-        TrajectoryActionBuilder path6 = drive.actionBuilder(new Pose2d(POSE2_X , POSE2_Y, NORTH_HEADING))
+        TrajectoryActionBuilder path5 = drive.actionBuilder(new Pose2d(POSE2_X , POSE2_Y, NORTH_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE1_X , POSE1_Y+5), GOAL_HEADING, new TranslationalVelConstraint(25) );
 
 
@@ -91,15 +89,15 @@ public class Blue_Far_PGP extends CommandOpMode {
                         farminator.shooter.runShooterFar(),   // continuous, never finishes on its own
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
-                                new WaitCommand(2000),
+                                new DriveActionCommand(path2),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
                                 new WaitCommand(2000),
 //                                farminator.intake.activateIntakeCommand(),
 //                                new WaitCommand(2000),
 //                                farminator.transfer.setEntireTransferPowerCommand(0),
 //                                farminator.intake.deactivateIntakeCommand(),
-                                new DriveActionCommand(path2),
                                 farminator.shooter.runShooterBasedOnDistance(),
+                                farminator.intake.deactivateIntakeCommand(),
                                 new WaitCommand(3000),
                                 farminator.shooter.turnOff(),
                                 new DriveActionCommand(path3),
@@ -108,8 +106,7 @@ public class Blue_Far_PGP extends CommandOpMode {
                                 new DriveActionCommand(path5),
                                 farminator.shooter.runShooterBasedOnDistance(),
                                 new WaitCommand(3000),
-                                farminator.shooter.turnOff(),
-                                new DriveActionCommand(path6)
+                                farminator.shooter.turnOff()
 
 
 

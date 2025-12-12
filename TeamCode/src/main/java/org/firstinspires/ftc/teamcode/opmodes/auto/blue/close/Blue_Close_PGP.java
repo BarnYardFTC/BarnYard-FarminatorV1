@@ -31,7 +31,7 @@ public class Blue_Close_PGP extends CommandOpMode {
     private RoadRunnerMecanumDrive drive;
 
     public static final double POSE1_X = -37;
-    public static final double POSE1_Y = -53;
+    public static final double POSE1_Y = -56;
     public static final double POSE1_HEADING = Math.toRadians(90);
 
     private final OpModeData opModeData = new OpModeData(
@@ -39,7 +39,7 @@ public class Blue_Close_PGP extends CommandOpMode {
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(1,1,1)
-            );
+    );
 
     public static final double POSE2_X = -15.5;
     public static final double POSE2_Y = -15.5;

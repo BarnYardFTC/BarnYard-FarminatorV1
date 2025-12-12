@@ -8,6 +8,8 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitUntilCommand;
+import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
@@ -30,7 +32,7 @@ public class Blue_Close_GPP extends CommandOpMode {
     private RoadRunnerMecanumDrive drive;
 
     public static final double POSE1_X = -37;
-    public static final double POSE1_Y = -53;
+    public static final double POSE1_Y = -56;
     public static final double POSE1_HEADING = Math.toRadians(90);
 
     private final OpModeData opModeData = new OpModeData(

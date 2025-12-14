@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -46,7 +45,8 @@ public class DriveTrain extends SubsystemBase {
 
 
     /** Field coordinates for the target goal. */
-    private static final double GOAL_X = -1.65;
+    private static final double GOAL_X_1 = -1.68;
+    private static final double GOAL_X_2 = -1.65;
     private static final double BLUE_GOAL_Y = -1.62;
     private static final double RED_GOAL_Y = 1.62;
 
@@ -178,11 +178,21 @@ public class DriveTrain extends SubsystemBase {
         double desiredHeading, tangentAngle;
 
         if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED){
-            tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X)/(RED_GOAL_Y - currentY)));
+            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_3) {
+                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_2)/(RED_GOAL_Y - currentY)));
+            }
+            else {
+                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_1)/(RED_GOAL_Y - currentY)));
+            }
             desiredHeading = 180 + tangentAngle;
         }
         else {
-            tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X)/(currentY-BLUE_GOAL_Y)));
+            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_3) {
+                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_2)/(currentY-BLUE_GOAL_Y)));
+            }
+            else {
+                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_1)/(currentY-BLUE_GOAL_Y)));
+            }
             desiredHeading = 270 - tangentAngle;
         }
 
@@ -234,8 +244,8 @@ public class DriveTrain extends SubsystemBase {
         double currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // conversion from inch to meter
 
         if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE)
-            return calcDistance(currentPoseX, currentPoseY, GOAL_X, BLUE_GOAL_Y);
-        else return calcDistance(currentPoseX, currentPoseY, GOAL_X, RED_GOAL_Y);
+            return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, BLUE_GOAL_Y);
+        else return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, RED_GOAL_Y);
     }
 
     private double calcDistance(double xG, double yG, double xR, double yR) {

@@ -106,6 +106,10 @@ public class TestTeleop extends CommandOpMode {
                 ));
 
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whileHeld(farminator.shooterHood.goToPositionCommand());
+
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenActive(
@@ -148,6 +152,7 @@ public class TestTeleop extends CommandOpMode {
         telemetry.addData("heading", farminator.drive.getBotAbsoluteHeading());
         telemetry.addData("distance from goal", farminator.drive.getDistanceFromGoal());
         telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
+        farminator.shooterHood.displayTelemetry();
         farminator.periodic();
     }
 }

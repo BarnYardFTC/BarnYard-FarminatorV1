@@ -38,7 +38,7 @@ public class Blue_Close_PPG extends CommandOpMode {
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(230);
     /* To artifacts pose */
     public static double POSE3_X = -10;
-    public static double POSE3_Y = -23;
+    public static double POSE3_Y = -17;
     public static double SOUTH_HEADING = Math.toRadians(270);
 
     /* Collect artifacts pose */
@@ -46,7 +46,7 @@ public class Blue_Close_PPG extends CommandOpMode {
     public static double POSE4_Y = -58;
 
     public static int SCORE_TIME = 4000;
-    public static double INTAKE_VELOCITY = RoadRunnerMecanumDrive.PARAMS.maxWheelVel * 0.1;
+    public static double INTAKE_VELOCITY = RoadRunnerMecanumDrive.PARAMS.maxWheelVel * 0.3;
 
 
 
@@ -54,7 +54,7 @@ public class Blue_Close_PPG extends CommandOpMode {
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
-            new Pose2d(POSE1_X,POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
+            new Pose2d(POSE1_X,POSE1_Y, NORTH_HEADING));
 
     @Override
     public  void initialize() {
@@ -97,7 +97,7 @@ public class Blue_Close_PPG extends CommandOpMode {
                                 new DriveActionCommand(path1),
                                 new ParallelRaceGroup(
                                         farminator.drive.alignToTagCommandAuto(),
-                                        new WaitCommand(1000)
+                                        new WaitCommand(500)
                                 ),
                                 farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
@@ -108,10 +108,10 @@ public class Blue_Close_PPG extends CommandOpMode {
                 farminator.shooter.turnOffInstant(),
                 new DriveActionCommand(path2),
                 farminator.intake.activateIntakeCommand(),
-                farminator.transfer.setFrontPowerCommand(0.5),
-                farminator.transfer.setBackPowerCommand(-0.5),
+                farminator.transfer.setFrontPowerCommand(1),
+                farminator.transfer.setBackPowerCommand(-0.1),
                 new DriveActionCommand(path3),
-                farminator.intake.customIntakeCommand(0.6),
+                farminator.intake.activateIntakeCommand(),
                 farminator.transfer.setEntireTransferPowerCommand(0),
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
@@ -119,11 +119,10 @@ public class Blue_Close_PPG extends CommandOpMode {
                                 new DriveActionCommand(path4),
                                 new ParallelRaceGroup(
                                         farminator.drive.alignToTagCommandAuto(),
-                                        new WaitCommand(1000),
-                                        farminator.drive.stop()
+                                        new WaitCommand(500)
                                 ),
+                                farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-                                farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME)
 
                         )

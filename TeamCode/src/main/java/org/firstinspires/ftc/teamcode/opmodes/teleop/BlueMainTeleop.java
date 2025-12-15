@@ -134,11 +134,10 @@ public class BlueMainTeleop extends CommandOpMode {
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
 
-        // Right Stick Button → Toggle between slow and fast drive modes
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
+                        farminator.drive.alignToTagCommand(),
+                        farminator.drive.driveCommand()
                 );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)

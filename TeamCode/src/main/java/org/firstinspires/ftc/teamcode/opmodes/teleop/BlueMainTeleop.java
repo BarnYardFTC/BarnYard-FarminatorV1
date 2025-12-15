@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -36,6 +37,9 @@ public class BlueMainTeleop extends CommandOpMode {
     // ------------------------
     private BarnRobot farminator;
 
+    private ElapsedTime opModeTimer;
+    private boolean hasRumbled = false;
+
     @Override
     public void initialize() {
 
@@ -47,6 +51,10 @@ public class BlueMainTeleop extends CommandOpMode {
                 autoFinishPose,
                 270
         );
+
+        hasRumbled = false;
+        opModeTimer = new ElapsedTime();
+        opModeTimer.reset();
 
         // ==========================================================
         // Robot Initialization
@@ -149,12 +157,21 @@ public class BlueMainTeleop extends CommandOpMode {
 
 
 
-
     }
 
     @Override
     public void run() {
         super.run();
+       rumpleGamepadsEndgame();
+//        rumpleGamepadsEndgame();
         farminator.periodic();
+    }
+
+    private void rumpleGamepadsEndgame(){
+        if (!hasRumbled && opModeTimer.seconds() >= 100) {
+            gamepad1.rumble(1.0, 1.0, 2000);
+            gamepad2.rumble(1.0, 1.0, 2000);
+            hasRumbled = true;
+        }
     }
 }

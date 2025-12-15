@@ -7,10 +7,7 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
@@ -39,21 +36,24 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 //    public static double POSE1_X = -45;
 //    public static double POSE1_Y = -45;
     public static final double POSE1_X = -37;
-    public static final double POSE1_Y = -43;
+    public static final double POSE1_Y = -48;
     public static final double POSE1_HEADING = Math.toRadians(90);
     public static final double POSE2_HEADING = Math.toRadians(225);
 
     /** Shooter shooting pose */
-    public static double POSE2_X = -30;
-    public static double POSE2_Y = -30;
+    public static double SHOOTING_POSE_X = -57;
+    public static double SHOOTING_POSE_Y = -32;
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(135);
     public static boolean IsFinished = false;
+
+    public static int SCORE_TIME = 4000;
+
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
-            new Pose2d(POSE1_X, POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
+            new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
     @Override
     public void initialize() {
@@ -64,48 +64,35 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+
         /** Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X -15, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, POSE2_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
-        /** Schedule autonomous sequence */
-//        new SequentialCommandGroup(
-//                new WaitUntilCommand(this::opModeIsActive),
-//                new DriveActionCommand(path1),
-//                new SequentialCommandGroup(farminator.shooter.runShooter()),
-//                new SequentialCommandGroup(farminator.transfer.setBackPowerCommand(1)),
-//                farminator.shooter.turnOff()
-//        ).schedule();
 
-        //TODO This auto just can move robot to right place and start shooter and i didnt found the solution yet
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooterHood.setHoodPosition(0.1),
                 new ParallelRaceGroup(
-                        farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
+                        farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
-                                new InstantCommand(() -> telemetry.addLine("finished path 1")),
-                                new InstantCommand(() -> telemetry.update()),
-                                farminator.transfer.setFrontPowerCommand(1),
-                                new WaitCommand(2000),
+                                new ParallelRaceGroup(
+                                        farminator.drive.alignToTagCommandAuto(),
+                                        new WaitCommand(500)
+                                ),
+                                farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-                                new WaitCommand(2000),
                                 farminator.intake.activateIntakeCommand(),
-                                new WaitCommand(2000),
-                                farminator.transfer.setEntireTransferPowerCommand(0),
-                                farminator.intake.deactivateIntakeCommand(),
-                                new DriveActionCommand(path2)
-
+                                new WaitCommand(SCORE_TIME)
                         )
                 ),
-                new ParallelCommandGroup(
-                        farminator.shooter.turnOff(),
-                        new WaitCommand(1)
-                )
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.shooter.turnOffInstant()
         ).schedule();
 
     }
@@ -113,8 +100,6 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
-
         farminator.periodic();
     }
 

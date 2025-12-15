@@ -33,8 +33,9 @@ public class Blue_Close_PPG extends CommandOpMode {
 
 
     /* Shooter shooting pose */
-    public static double POSE2_X = -37;
-    public static double POSE2_Y = -37;
+    public static double SHOOTING_POSE_X = -57;
+    public static double SHOOTING_POSE_Y = -32;
+
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(230);
     /* To artifacts pose */
     public static double POSE3_X = -10;
@@ -70,10 +71,10 @@ public class Blue_Close_PPG extends CommandOpMode {
 
         /* Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X,POSE1_Y,NORTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), PERPENDICULAR_TO_DEPOT_HEADING - Math.toRadians(20));
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), PERPENDICULAR_TO_DEPOT_HEADING - Math.toRadians(20));
 
         /* Define trajectory to artifacts pose */
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, PERPENDICULAR_TO_DEPOT_HEADING))
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, PERPENDICULAR_TO_DEPOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), SOUTH_HEADING);
 
         /* Define trajectory to collect artifacts pose */
@@ -82,10 +83,8 @@ public class Blue_Close_PPG extends CommandOpMode {
 
         /* Define trajectory to returning to shooting pose */
         TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, SOUTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), PERPENDICULAR_TO_DEPOT_HEADING - Math.toRadians(20));
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), PERPENDICULAR_TO_DEPOT_HEADING - Math.toRadians(20));
 
-        TrajectoryActionBuilder path5 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, PERPENDICULAR_TO_DEPOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X-20 , POSE2_Y+10), PERPENDICULAR_TO_DEPOT_HEADING);
 
 
         /* Schedule autonomous sequence */
@@ -129,8 +128,7 @@ public class Blue_Close_PPG extends CommandOpMode {
                 ),
                 farminator.transfer.setEntireTransferPowerCommand(0),
                 farminator.intake.deactivateIntakeCommand(),
-                farminator.shooter.turnOffInstant(),
-                new DriveActionCommand(path5)
+                farminator.shooter.turnOffInstant()
         ).schedule();
 
 

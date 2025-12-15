@@ -189,7 +189,7 @@ public class DriveTrain extends SubsystemBase {
             else {
                 tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_1)/(RED_GOAL_Y - currentY)));
             }
-            desiredHeading = 180 + tangentAngle;
+            desiredHeading = 90 + tangentAngle;
         }
         else {
             if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_3) {

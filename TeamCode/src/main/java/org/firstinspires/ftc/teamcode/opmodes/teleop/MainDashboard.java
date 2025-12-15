@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name = "Main Teleop with ftc dashboard", group = "main")
 @Config
+@Disabled
 public class MainDashboard extends CommandOpMode {
 
     private BarnRobot farminator;

@@ -147,10 +147,10 @@ public class BarnRobot extends Robot {
      * and sets its default driving command.
      */
     public void initDrivetrain(HardwareMap hw) {
+        drive = new DriveTrain();
+        pinpointLocalizer = new PinpointLocalizer(hw, RoadRunnerMecanumDrive.PARAMS.inPerTick, opmodeData.initialPose2d);
         if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
-            drive = new DriveTrain();
             drive.setDefaultCommand(drive.driveCommand());
-            pinpointLocalizer = new PinpointLocalizer(hw, RoadRunnerMecanumDrive.PARAMS.inPerTick, opmodeData.initialPose2d);
         }
         else {
             roadRunnerMecanumDrive = new RoadRunnerMecanumDrive(hw, opmodeData.initialPose2d);
@@ -186,9 +186,7 @@ public class BarnRobot extends Robot {
      * For now, it just updates telemetry, but more shared logic can go here.
      */
     public void periodic() {
-        if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
-            pinpointLocalizer.update();
-        }
+        pinpointLocalizer.update();
         telemetry.update();
     }
 }

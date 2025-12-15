@@ -1,14 +1,20 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.subsystems.DriveTrain.BLUE_GOAL_Y;
+import static org.firstinspires.ftc.teamcode.subsystems.DriveTrain.GOAL_X_1;
+import static org.firstinspires.ftc.teamcode.subsystems.DriveTrain.RED_GOAL_Y;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.ShooterPIDFController;
 
 @Config
@@ -99,6 +105,9 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> setPower(0), this);
     }
 
+    public InstantCommand turnOffInstant(){
+        return new InstantCommand(() -> setPower(0), this);
+    }
 
     public RunCommand runShooter(double velocity){
         return new RunCommand(() -> operateShooter(velocity), this);

@@ -45,10 +45,10 @@ public class DriveTrain extends SubsystemBase {
 
 
     /** Field coordinates for the target goal. */
-    private static final double GOAL_X_1 = -1.68;
-    private static final double GOAL_X_2 = -1.65;
-    private static final double BLUE_GOAL_Y = -1.62;
-    private static final double RED_GOAL_Y = 1.62;
+    public static final double GOAL_X_1 = -1.68;
+    public static final double GOAL_X_2 = -1.65;
+    public static final double BLUE_GOAL_Y = -1.62;
+    public static final double RED_GOAL_Y = 1.62;
 
     // ============================================================
     //                       CONSTRUCTOR
@@ -70,6 +70,10 @@ public class DriveTrain extends SubsystemBase {
 
     public void drive(double x, double y, double turn) {
         mecanumDriveComponent.driveFieldCentric(x, y, turn);
+    }
+
+    public void turnOnly(double turn){
+        mecanumDriveComponent.turnOnly(turn);
     }
 
     // ============================================================
@@ -171,6 +175,7 @@ public class DriveTrain extends SubsystemBase {
     private void localizationBasedGoalAlignment(double spdX, double spdY){
 
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+
         double currentX = currentPose.position.x * 0.0254;
         double currentY = currentPose.position.y * 0.0254;
         double currentHeading = getBotAbsoluteHeading();
@@ -198,9 +203,13 @@ public class DriveTrain extends SubsystemBase {
 
         double diffYaw = desiredHeading - currentHeading;
 
+        BarnRobot.getInstance().telemetry.addData("dyaw", diffYaw);
         double turnSpd = diffToSpeed(diffYaw);
 
-        drive(spdX, spdY, turnSpd);
+        if (BarnRobot.getInstance().opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
+            drive(spdX, spdY, turnSpd);
+        }
+        else turnOnly(turnSpd);
 
 
 
@@ -230,6 +239,16 @@ public class DriveTrain extends SubsystemBase {
                 , this);
     }
 
+    public RunCommand alignToTagCommandAuto() {
+        return new RunCommand(() -> localizationBasedGoalAlignment(
+                0,0)
+                , this);
+    }
+
+    public Command stop(){
+        return new InstantCommand(() -> turnOnly(0));
+    }
+
 
     public Command resetPinpointTracking(){
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);
@@ -242,18 +261,20 @@ public class DriveTrain extends SubsystemBase {
     public double getDistanceFromGoal(){
         double currentPoseX = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x * 0.0254; // conversion from inch to meter
         double currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // conversion from inch to meter
+        
 
         if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE)
             return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, BLUE_GOAL_Y);
         else return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, RED_GOAL_Y);
     }
 
-    private double calcDistance(double xG, double yG, double xR, double yR) {
+    public double calcDistance(double xG, double yG, double xR, double yR) {
         return Math.sqrt((xG - xR) * (xG - xR) + (yG - yR) * (yG - yR));
     }
 
     public double getBotAbsoluteHeading(){
-        double heading = Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+        double heading;
+        heading = Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
         if (heading < 0) return heading + 360;
         return heading;
     }

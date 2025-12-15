@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
 public class MecanumDriveComponent {
@@ -150,6 +149,11 @@ public class MecanumDriveComponent {
     public void driveFieldCentric(double x, double y, double turn) {
         setSpeed(x, y, turn);
         adjustSpeedForHeading();
+        translateSpeedToPower();
+    }
+
+    public void turnOnly(double turn) {
+        setSpeed(0,0,turn);
         translateSpeedToPower();
     }
 }

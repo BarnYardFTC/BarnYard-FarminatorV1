@@ -147,6 +147,8 @@ public class TestTeleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
+
+        telemetry.addData("Game pattern", farminator.web)
         telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x * 0.0254);
         telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y * 0.0254);
         telemetry.addData("heading", farminator.drive.getBotAbsoluteHeading());

@@ -44,6 +44,7 @@ public class BarnRobot extends Robot {
     public Shooter shooter;
     public ShooterHood shooterHood;
     public Intake intake;
+    public Webcam webcam;
 
     public PinpointLocalizer pinpointLocalizer;
 
@@ -130,12 +131,17 @@ public class BarnRobot extends Robot {
         initIntake();
         initDrivetrain(opMode.hardwareMap);
         initShooterHood();
+        initWebcam(opMode.hardwareMap);
     }
 
 
     // ------------------------------------------------------------
     // Subsystem Initializers
     // ------------------------------------------------------------
+
+    public void initWebcam(HardwareMap hw){
+        webcam = new Webcam(hw);
+    }
 
     /** Sets up the shooter system. */
     public void initShooter() {

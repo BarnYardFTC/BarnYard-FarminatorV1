@@ -153,12 +153,6 @@ public class BlueMainTeleop extends CommandOpMode {
                 );
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .toggleWhenActive(
-                        farminator.drive.alignToTagCommand(),
-                        farminator.drive.driveCommand()
-                );
-
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(farminator.drive.resetPinpointTracking());
 

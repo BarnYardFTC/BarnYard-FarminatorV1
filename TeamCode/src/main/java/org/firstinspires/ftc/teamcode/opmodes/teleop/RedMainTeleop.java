@@ -41,7 +41,7 @@ public class RedMainTeleop extends CommandOpMode {
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.RED_LOCALIZATION_PIPELINE,
                 autoFinishPose,
-                270
+                90
         );
 
 

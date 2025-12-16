@@ -29,7 +29,7 @@ public class MecanumDriveComponent {
        CONSTANTS
        ========================= */
 
-    private static final double SLOW_SPEED = 0.3;
+    private static final double SLOW_SPEED = 0.5;
     private static final double FAST_SPEED = 1.0;
 
     /* =========================

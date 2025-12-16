@@ -38,11 +38,11 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
     public static final double POSE1_X = -37;
     public static final double POSE1_Y = -48;
     public static final double POSE1_HEADING = Math.toRadians(90);
-    public static final double POSE2_HEADING = Math.toRadians(225);
+    public static final double SHOOTING_HEADING = Math.toRadians(250);
 
     /** Shooter shooting pose */
     public static double SHOOTING_POSE_X = -57;
-    public static double SHOOTING_POSE_Y = -32;
+    public static double SHOOTING_POSE_Y = -22;
     public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(135);
     public static boolean IsFinished = false;
 
@@ -68,10 +68,10 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
         /** Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING, new TranslationalVelConstraint(25) );
 
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, POSE2_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING, new TranslationalVelConstraint(25) );
 
 
         new SequentialCommandGroup(

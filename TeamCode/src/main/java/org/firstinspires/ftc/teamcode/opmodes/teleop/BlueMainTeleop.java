@@ -201,53 +201,5 @@ public class BlueMainTeleop extends CommandOpMode {
     }
 
 
-    private void reportHeldButtons() {
-
-        StringBuilder gp1 = new StringBuilder();
-        StringBuilder gp2 = new StringBuilder();
-
-        // -------- Gamepad 1 --------
-        if (gamepad1.a) gp1.append("A ");
-        if (gamepad1.b) gp1.append("B ");
-        if (gamepad1.x) gp1.append("X ");
-        if (gamepad1.y) gp1.append("Y ");
-
-        if (gamepad1.left_bumper) gp1.append("LB ");
-        if (gamepad1.right_bumper) gp1.append("RB ");
-
-        if (gamepad1.left_stick_button) gp1.append("LSB ");
-        if (gamepad1.right_stick_button) gp1.append("RSB ");
-
-        if (gamepad1.dpad_up) gp1.append("DPAD_UP ");
-        if (gamepad1.dpad_down) gp1.append("DPAD_DOWN ");
-        if (gamepad1.dpad_left) gp1.append("DPAD_LEFT ");
-        if (gamepad1.dpad_right) gp1.append("DPAD_RIGHT ");
-
-        if (gamepad1.left_trigger > 0.1) gp1.append("LT ");
-        if (gamepad1.right_trigger > 0.1) gp1.append("RT ");
-
-        // -------- Gamepad 2 --------
-        if (gamepad2.a) gp2.append("A ");
-        if (gamepad2.b) gp2.append("B ");
-        if (gamepad2.x) gp2.append("X ");
-        if (gamepad2.y) gp2.append("Y ");
-
-        if (gamepad2.left_bumper) gp2.append("LB ");
-        if (gamepad2.right_bumper) gp2.append("RB ");
-
-        if (gamepad2.left_stick_button) gp2.append("LSB ");
-        if (gamepad2.right_stick_button) gp2.append("RSB ");
-
-        if (gamepad2.dpad_up) gp2.append("DPAD_UP ");
-        if (gamepad2.dpad_down) gp2.append("DPAD_DOWN ");
-        if (gamepad2.dpad_left) gp2.append("DPAD_LEFT ");
-        if (gamepad2.dpad_right) gp2.append("DPAD_RIGHT ");
-
-        if (gamepad2.left_trigger > 0.1) gp2.append("LT ");
-        if (gamepad2.right_trigger > 0.1) gp2.append("RT ");
-
-        telemetry.addData("Held GP1", gp1.length() == 0 ? "none" : gp1.toString());
-        telemetry.addData("Held GP2", gp2.length() == 0 ? "none" : gp2.toString());
-    }
 
 }

@@ -140,6 +140,7 @@ public class BarnRobot extends Robot {
     /** Sets up the shooter system. */
     public void initShooter() {
         shooter = new Shooter();
+        shooter.setDefaultCommand(shooter.turnOff());
     }
 
     /**
@@ -159,6 +160,7 @@ public class BarnRobot extends Robot {
 
     public void initShooterHood(){
         shooterHood = new ShooterHood();
+        shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
     }
 
     /** Sets up the transfer system. */

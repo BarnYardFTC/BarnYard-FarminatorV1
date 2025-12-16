@@ -13,7 +13,6 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
@@ -34,9 +33,9 @@ public class Blue_Close_PPG extends CommandOpMode {
 
     /* Shooter shooting pose */
     public static double SHOOTING_POSE_X = -57;
-    public static double SHOOTING_POSE_Y = -32;
+    public static double SHOOTING_POSE_Y = -22;
 
-    public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(230);
+    public static double SHOOTING_HEADING = Math.toRadians(250);
     /* To artifacts pose */
     public static double POSE3_X = -10;
     public static double POSE3_Y = -17;
@@ -71,10 +70,10 @@ public class Blue_Close_PPG extends CommandOpMode {
 
         /* Define trajectory to shooting pose */
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X,POSE1_Y,NORTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), PERPENDICULAR_TO_DEPOT_HEADING - Math.toRadians(20));
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING - Math.toRadians(20));
 
         /* Define trajectory to artifacts pose */
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, PERPENDICULAR_TO_DEPOT_HEADING))
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), SOUTH_HEADING);
 
         /* Define trajectory to collect artifacts pose */
@@ -83,7 +82,7 @@ public class Blue_Close_PPG extends CommandOpMode {
 
         /* Define trajectory to returning to shooting pose */
         TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, SOUTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), PERPENDICULAR_TO_DEPOT_HEADING - Math.toRadians(20));
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING - Math.toRadians(20));
 
 
 

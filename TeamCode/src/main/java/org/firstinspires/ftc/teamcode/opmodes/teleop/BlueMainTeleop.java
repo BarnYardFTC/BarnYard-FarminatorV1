@@ -41,6 +41,8 @@ public class BlueMainTeleop extends CommandOpMode {
     private int tenSecondCount = 0;
     private double lastTickTime = 0;
     private boolean hasRumbled = false;
+    private int lastRumbleSecond = -1;
+
 
     @Override
     public void initialize() {
@@ -55,7 +57,7 @@ public class BlueMainTeleop extends CommandOpMode {
         );
 
         hasRumbled = false;
-        tenSecondCount = 0;
+        lastRumbleSecond = 0;
         lastTickTime = 0;
         opModeTimer = new ElapsedTime();
         opModeTimer.reset();
@@ -175,22 +177,20 @@ public class BlueMainTeleop extends CommandOpMode {
 
         double now = opModeTimer.seconds();
 
-        // Every 10 seconds
-        if (now - lastTickTime >= 10.0) {
-            tenSecondCount++;
-            lastTickTime = now;
-        }
+        // Endgame window: last 20 seconds (100s → 120s)
+        if (now >= 100 && now <= 120) {
 
-        // After 10 ticks (≈100 seconds)
-        if (!hasRumbled && tenSecondCount >= 10) {
+            int currentSecond = (int) now;
 
-            // 🔒 SAFEST OPTION: rumble ONE gamepad
-            gamepad2.rumble(1.0, 1.0, 250);
+            // Rumble once per second
+            if (currentSecond != lastRumbleSecond) {
 
-            // If you REALLY want both (riskier):
-            // gamepad2.rumble(1.0, 1.0, 150);
+                // Short, clear pulse
+//                gamepad1.rumble(1.0, 1.0, 200 );
+                gamepad2.rumble(1.0, 1.0, 200);
 
-            hasRumbled = true;
+                lastRumbleSecond = currentSecond;
+            }
         }
     }
 

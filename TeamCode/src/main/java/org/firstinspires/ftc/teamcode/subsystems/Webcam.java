@@ -44,7 +44,7 @@ public class Webcam extends SubsystemBase {
 
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(
             AngleUnit.DEGREES,
-            0, -90, 0, 0
+            0, -52, 0, 0
     );
 
     public Webcam(HardwareMap hw) {
@@ -81,13 +81,16 @@ public class Webcam extends SubsystemBase {
     public void updateGamePattern() {
         for (AprilTagDetection d : aprilTag.getDetections()) {
             if (d.metadata != null && d.metadata.name.contains("Obelisk")) {
-                switch (d.id) {
+                switch (d.metadata.id) {
                     case 21:
                         gamePattern = Pattern.GPP;
+                        break;
                     case 22:
                         gamePattern = Pattern.PGP;
+                        break;
                     case 23:
                         gamePattern = Pattern.PPG;
+                        break;
                     default:
                         gamePattern = null;
                 }
@@ -115,7 +118,7 @@ public class Webcam extends SubsystemBase {
 
     /** Updates the localizer with the current robot pose */
     public void updatePose(){
-        Pose2d currenrPose = new Pose2d(getRobotPosition().x, getRobotPosition().y,  getRobotOrientation().getYaw());
+        Pose2d currenrPose = new Pose2d(getRobotPosition().x, getRobotPosition().y, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
         BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
     }
 
@@ -136,13 +139,13 @@ public class Webcam extends SubsystemBase {
 
     /** Operate webcam. */
     public void operate() {
-        if (getBestDetection() != null && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE) {
+        if (getBestDetection() != null) {
             updatePose();
         }
         if (gamePattern == null) {
             updateGamePattern();
         }
-        displayTelemetry();
+//        displayTelemetry();
     }
 
     public RunCommand operateCommand() {
@@ -151,9 +154,10 @@ public class Webcam extends SubsystemBase {
 
     /** Display webcam + pinpoint telemetry. */
     public void displayTelemetry() {
-        if (getRobotPosition() != null) {
-            BarnRobot.getInstance().telemetry.addData("Webcam pose x:", getRobotPosition().x);
-            BarnRobot.getInstance().telemetry.addData("Webcam pose y:", getRobotPosition().y);
+        Position pos = getRobotPosition();
+        if (pos != null) {
+            BarnRobot.getInstance().telemetry.addData("Webcam pose x:", pos.x);
+            BarnRobot.getInstance().telemetry.addData("Webcam pose y:", pos.y);
 
         }
         BarnRobot.getInstance().telemetry.addData("Pinpoint pose x:", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);

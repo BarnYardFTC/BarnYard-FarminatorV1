@@ -142,7 +142,7 @@ public class BarnRobot extends Robot {
     /** Sets up the webcam. */
     public void initWebcam(HardwareMap hw){
         webcam = new Webcam(hw);
-        webcam.setDefaultCommand(webcam.operateCommand());
+//        webcam.setDefaultCommand(webcam.operateCommand());
     }
 
     /** Sets up the shooter system. */

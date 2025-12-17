@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.robocol.Command;
+import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -16,10 +20,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-public class Webcam {
+@Config
+public class Webcam extends SubsystemBase {
 
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
+
+    public static double MAX_UPDATE_DISTANCE = 1.5;
 
     public enum Pattern {
         PPG,
@@ -31,8 +38,8 @@ public class Webcam {
 
     // CHANGE THESE TO MATCH YOUR CAMERA MOUNT!!!
     private final Position cameraPosition = new Position(
-            DistanceUnit.INCH,
-            0, 0, 0, 0
+            DistanceUnit.CM,
+            12, 10, 30, 0
     );
 
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(
@@ -72,19 +79,17 @@ public class Webcam {
 
     /** Updates MOTIF pattern based on the obelisk detections (slightly changed code from a func above) */
     public void updateGamePattern() {
-        if (gamePattern != null) {
-            for (AprilTagDetection d : aprilTag.getDetections()) {
-                if (d.metadata != null && d.metadata.name.contains("Obelisk")) {
-                    switch (d.id) {
-                        case 21:
-                            gamePattern = Pattern.GPP;
-                        case 22:
-                            gamePattern = Pattern.PGP;
-                        case 23:
-                            gamePattern = Pattern.PPG;
-                        default:
-                            gamePattern = null;
-                    }
+        for (AprilTagDetection d : aprilTag.getDetections()) {
+            if (d.metadata != null && d.metadata.name.contains("Obelisk")) {
+                switch (d.id) {
+                    case 21:
+                        gamePattern = Pattern.GPP;
+                    case 22:
+                        gamePattern = Pattern.PGP;
+                    case 23:
+                        gamePattern = Pattern.PPG;
+                    default:
+                        gamePattern = null;
                 }
             }
         }
@@ -127,6 +132,35 @@ public class Webcam {
     /** Close the camera to save power */
     public void close() {
         if (visionPortal != null) visionPortal.close();
+    }
+
+    /** Operate webcam. */
+    public void operate() {
+        if (getBestDetection() != null && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE) {
+            updatePose();
+        }
+        if (gamePattern == null) {
+            updateGamePattern();
+        }
+        displayTelemetry();
+    }
+
+    public RunCommand operateCommand() {
+        return new RunCommand(() -> operate(), this);
+    }
+
+    /** Display webcam + pinpoint telemetry. */
+    public void displayTelemetry() {
+        if (getRobotPosition() != null) {
+            BarnRobot.getInstance().telemetry.addData("Webcam pose x:", getRobotPosition().x);
+            BarnRobot.getInstance().telemetry.addData("Webcam pose y:", getRobotPosition().y);
+
+        }
+        BarnRobot.getInstance().telemetry.addData("Pinpoint pose x:", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
+        BarnRobot.getInstance().telemetry.addData("Pinpoint pose y:", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
+
+        BarnRobot.getInstance().telemetry.addData("Pattern:", getGamePattern());
+
     }
 }
 

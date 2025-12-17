@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -144,7 +145,6 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
                 farminator.transfer.setFrontPowerCommand(1),
                 farminator.transfer.setBackPowerCommand(-0.1),
                 new DriveActionCommand(path4),
-                farminator.intake.activateIntakeCommand(),
                 farminator.transfer.setEntireTransferPowerCommand(0),
                 new DriveActionCommand(path5),
                 new ParallelRaceGroup(

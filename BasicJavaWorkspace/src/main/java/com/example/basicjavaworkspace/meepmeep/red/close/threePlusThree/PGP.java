@@ -19,19 +19,19 @@ public class PGP {
 
     public static final double POSE2_X = -15.5;
     public static final double POSE2_Y = -15.5;
-    public static final double POSE2_HEADING = Math.toRadians(225);
+    public static final double POSE2_HEADING = Math.toRadians(145);
 
     public static final double POSE3_X = 11.5;
     public static final double POSE3_Y = -17;
-    public static final double POSE3_HEADING = Math.toRadians(270);
+    public static final double POSE3_HEADING = Math.toRadians(90);
 
     public static final double POSE4_X = 11.5;
     public static final double POSE4_Y = -62;
-    public static final double POSE4_HEADING = Math.toRadians(270);
+    public static final double POSE4_HEADING = Math.toRadians(90);
 
     public static final double POSE5_X =11;
     public static final double POSE5_Y = -40;
-    public static final double POSE5_HEADING = Math.toRadians(270);
+    public static final double POSE5_HEADING = Math.toRadians(90);
 
 
     // -----------------------------

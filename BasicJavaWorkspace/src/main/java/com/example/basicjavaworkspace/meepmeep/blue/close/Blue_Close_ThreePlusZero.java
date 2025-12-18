@@ -11,6 +11,14 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 
 public class Blue_Close_ThreePlusZero {
+    public static double POSE4_X = -10;
+    public static double POSE4_Y = 45;
+    public static double SOUTH_HEADING = Math.toRadians(130);
+    public static double SHOOTING_POSE_X = -41;
+    public static double SHOOTING_POSE_Y = 25;
+
+    public static double SHOOTING_HEADING = Math.toRadians(250);
+
 
     public static double POSE1_X = -37;
     public static double POSE1_Y = -53;
@@ -35,12 +43,14 @@ public class Blue_Close_ThreePlusZero {
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
-
+        TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(new Pose2d(POSE4_X, POSE4_Y, SOUTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING - Math.toRadians(20));
 
         // Run the trajectory
         myBot.runAction(
                 new SequentialAction(
-                        path1.build()
+//                        path1.build(),
+                        path4.build()
                 )
         );
 

@@ -120,6 +120,7 @@ public class Blue_Close_PGP extends CommandOpMode {
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
+                farminator.intake.activateIntakeCommand(),
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
@@ -134,6 +135,7 @@ public class Blue_Close_PGP extends CommandOpMode {
                                 new WaitCommand(SCORE_TIME)
                         )
                 ),
+                farminator.intake.deactivateIntakeCommand(),
                 farminator.shooter.turnOffInstant(),
                 new DriveActionCommand(path2),
                 farminator.intake.activateIntakeCommand(),

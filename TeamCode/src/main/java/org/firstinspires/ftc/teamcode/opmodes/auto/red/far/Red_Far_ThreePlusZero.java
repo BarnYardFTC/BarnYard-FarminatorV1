@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.far;
 
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.Blue_Close_PGP.SCORE_TIME;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -63,22 +65,23 @@ public class Red_Far_ThreePlusZero extends CommandOpMode {
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 new ParallelRaceGroup(
-                        farminator.shooter.runShooterFar(),   // continuous, never finishes on its own
+                        farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
-                                new WaitCommand(2000),
+                                new ParallelRaceGroup(
+                                        farminator.drive.alignToTagCommandAuto(),
+                                        new WaitCommand(500)
+                                ),
+                                farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-                                new WaitCommand(2000),
                                 farminator.intake.activateIntakeCommand(),
-                                new WaitCommand(2000),
-                                farminator.transfer.setEntireTransferPowerCommand(0),
-                                farminator.intake.deactivateIntakeCommand(),
-                                new DriveActionCommand(path2)
-
-
+                                new WaitCommand(SCORE_TIME)
                         )
                 ),
-                farminator.shooter.turnOff()
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.shooter.turnOffInstant(),
+                new DriveActionCommand(path2)
         ).schedule();
 
 

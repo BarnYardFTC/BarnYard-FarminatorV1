@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
 
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.Blue_Close_PGP.SCORE_TIME;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -56,28 +58,30 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25));
+
         TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X + 15, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
+                .strafeToLinearHeading(new Vector2d(POSE2_X - 15, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                farminator.shooterHood.setHoodPosition(1),
                 new ParallelRaceGroup(
-                        farminator.shooter.runShooterFar(),   // continuous, never finishes on its own
+                        farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
-                                new WaitCommand(2000),
+                                new ParallelRaceGroup(
+                                        farminator.drive.alignToTagCommandAuto(),
+                                        new WaitCommand(500)
+                                ),
+                                farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-                                new WaitCommand(2000),
                                 farminator.intake.activateIntakeCommand(),
-                                new WaitCommand(2000),
-                                farminator.transfer.setEntireTransferPowerCommand(0),
-                                farminator.intake.deactivateIntakeCommand(),
-                                new DriveActionCommand(path2)
-
+                                new WaitCommand(SCORE_TIME)
                         )
                 ),
-                farminator.shooter.turnOff()
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.shooter.turnOffInstant(),
+                new DriveActionCommand(path2)
         ).schedule();
 
 

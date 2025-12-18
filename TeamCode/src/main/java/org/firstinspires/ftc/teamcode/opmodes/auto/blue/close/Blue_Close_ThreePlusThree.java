@@ -15,6 +15,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -140,17 +141,47 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
                 farminator.shooter.turnOffInstant(),
                 new DriveActionCommand(path2),
                 new WaitCommand(500),
-                new DriveActionCommand(path3),
+                new ConditionalCommand(
+                        ppg(),
+                        new ConditionalCommand(
+                                pgp(),
+                                gpp(),
+                                () -> farminator.webcam.getGamePattern() == Webcam.Pattern.PGP
+                        ),
+                        () -> farminator.webcam.getGamePattern() == null || farminator.webcam.getGamePattern() == Webcam.Pattern.PPG
+                )
+        ).schedule();
+
+    }
+
+
+    public SequentialCommandGroup ppg(){
+
+        /* Define trajectory to artifacts pose */
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
+                .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), Math.toRadians(270));
+
+        /* Define trajectory to collect artifacts pose */
+        TrajectoryActionBuilder path3 = drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(POSE4_X, POSE4_Y), Math.toRadians(270), new TranslationalVelConstraint(INTAKE_VELOCITY));
+
+        /* Define trajectory to returning to shooting pose */
+        TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, Math.toRadians(270)))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING - Math.toRadians(20));
+
+
+        return new SequentialCommandGroup(
+                new DriveActionCommand(path2),
                 farminator.intake.activateIntakeCommand(),
                 farminator.transfer.setFrontPowerCommand(1),
                 farminator.transfer.setBackPowerCommand(-0.1),
-                new DriveActionCommand(path4),
+                new DriveActionCommand(path3),
+                farminator.intake.activateIntakeCommand(),
                 farminator.transfer.setEntireTransferPowerCommand(0),
-                new DriveActionCommand(path5),
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
-                                new DriveActionCommand(path6),
+                                new DriveActionCommand(path4),
                                 new ParallelRaceGroup(
                                         farminator.drive.alignToTagCommandAuto(),
                                         new WaitCommand(500)
@@ -164,8 +195,135 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
                 farminator.transfer.setEntireTransferPowerCommand(0),
                 farminator.intake.deactivateIntakeCommand(),
                 farminator.shooter.turnOffInstant()
-        ).schedule();
+        );
+    }
 
+    public SequentialCommandGroup pgp() {
+        TrajectoryActionBuilder path2 =
+                drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(POSE3_X, POSE3_Y),
+                                POSE3_HEADING
+                        );
+
+
+
+        TrajectoryActionBuilder path3 =
+                drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, POSE3_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(POSE4_X, POSE4_Y),
+                                POSE4_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
+                        );
+
+        TrajectoryActionBuilder path4 =
+                drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, POSE4_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(POSE5_X, POSE5_Y),
+                                POSE5_HEADING
+                        );
+
+
+
+        TrajectoryActionBuilder path5 =
+                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, POSE5_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
+                                SHOOTING_HEADING
+
+                        );
+
+
+        return new SequentialCommandGroup(
+                new DriveActionCommand(path2),
+                farminator.intake.activateIntakeCommand(),
+                farminator.transfer.setFrontPowerCommand(1),
+                farminator.transfer.setBackPowerCommand(-0.1),
+                new DriveActionCommand(path3),
+                farminator.intake.activateIntakeCommand(),
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                new DriveActionCommand(path4),
+                new ParallelRaceGroup(
+                        farminator.shooter.runShooterBasedOnDistance(),
+                        new SequentialCommandGroup(
+                                new DriveActionCommand(path5),
+                                new ParallelRaceGroup(
+                                        farminator.drive.alignToTagCommandAuto(),
+                                        new WaitCommand(500)
+                                ),
+                                farminator.drive.stop(),
+                                farminator.transfer.setEntireTransferPowerCommand(1),
+                                new WaitCommand(SCORE_TIME)
+
+                        )
+                ),
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.shooter.turnOffInstant()
+        );
+    }
+
+    public SequentialCommandGroup gpp(){
+        TrajectoryActionBuilder path2 =
+                drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(POSE3_X, POSE3_Y),
+                                POSE3_HEADING
+                        );
+
+
+
+        TrajectoryActionBuilder path3 =
+                drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, POSE3_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(POSE4_X, POSE4_Y),
+                                POSE4_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
+                        );
+
+
+        TrajectoryActionBuilder path4 =
+                drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, POSE4_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(POSE5_X, POSE5_Y),
+                                POSE5_HEADING
+
+                        );
+
+
+        TrajectoryActionBuilder path5 =
+                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, POSE5_HEADING))
+                        .strafeToLinearHeading(
+                                new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
+                                SHOOTING_HEADING
+
+                        );
+
+        return new SequentialCommandGroup(
+                new DriveActionCommand(path2),
+                farminator.intake.activateIntakeCommand(),
+                farminator.transfer.setFrontPowerCommand(1),
+                farminator.transfer.setBackPowerCommand(-0.1),
+                new DriveActionCommand(path3),
+                farminator.intake.activateIntakeCommand(),
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                new DriveActionCommand(path4),
+                new ParallelRaceGroup(
+                        farminator.shooter.runShooterBasedOnDistance(),
+                        new SequentialCommandGroup(
+                                new DriveActionCommand(path5),
+                                new ParallelRaceGroup(
+                                        farminator.drive.alignToTagCommandAuto(),
+                                        new WaitCommand(500)
+                                ),
+                                farminator.drive.stop(),
+                                farminator.transfer.setEntireTransferPowerCommand(1),
+                                new WaitCommand(SCORE_TIME)
+
+                        )
+                ),
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.shooter.turnOffInstant()
+        );
     }
 
     @Override

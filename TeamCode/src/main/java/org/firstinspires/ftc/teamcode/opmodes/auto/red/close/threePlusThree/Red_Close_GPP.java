@@ -55,6 +55,10 @@ public class Red_Close_GPP extends CommandOpMode {
     public static final double POSE4_Y = 62;
     public static final double POSE4_HEADING = Math.toRadians(90);
 
+    public static final double POSE5_X = 35;
+    public static final double POSE5_Y = 40;
+    public static final double POSE5_HEADING = Math.toRadians(90);
+
     public static double SHOOTING_POSE_X = -41;
     public static double SHOOTING_POSE_Y = 25;
     public static final double SHOOTING_HEADING = Math.toRadians(145);
@@ -97,20 +101,19 @@ public class Red_Close_GPP extends CommandOpMode {
                                 POSE4_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
                         );
 
-
         TrajectoryActionBuilder path4 =
                 drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, POSE4_HEADING))
                         .strafeToLinearHeading(
-                                new Vector2d(SHOOTING_POSE_X,SHOOTING_POSE_Y),
-                                SHOOTING_HEADING
+                                new Vector2d(POSE5_X, POSE5_Y),
+                                POSE5_HEADING
 
                         );
 
 
         TrajectoryActionBuilder path5 =
-                drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
+                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, POSE5_HEADING))
                         .strafeToLinearHeading(
-                                new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
+                                new Vector2d(SHOOTING_POSE_X,SHOOTING_POSE_Y),
                                 SHOOTING_HEADING
 
                         );
@@ -120,6 +123,7 @@ public class Red_Close_GPP extends CommandOpMode {
         /** Schedule autonomous sequence */
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
+                farminator.intake.activateIntakeCommand(),
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
@@ -134,6 +138,7 @@ public class Red_Close_GPP extends CommandOpMode {
                                 new WaitCommand(SCORE_TIME)
                         )
                 ),
+                farminator.intake.deactivateIntakeCommand(),
                 farminator.shooter.turnOffInstant(),
                 new DriveActionCommand(path2),
                 farminator.intake.activateIntakeCommand(),

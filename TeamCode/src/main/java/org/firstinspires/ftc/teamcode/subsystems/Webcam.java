@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.robocol.Command;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.PinpointLocalizer;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -26,7 +28,10 @@ public class Webcam extends SubsystemBase {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
-    public static double MAX_UPDATE_DISTANCE = 1.5;
+    public static double MAX_UPDATE_DISTANCE = 1.4;
+
+    private final ElapsedTime poseUpdateTimer = new ElapsedTime();
+    private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;
 
     public enum Pattern {
         PPG,
@@ -39,7 +44,7 @@ public class Webcam extends SubsystemBase {
     // CHANGE THESE TO MATCH YOUR CAMERA MOUNT!!!
     private final Position cameraPosition = new Position(
             DistanceUnit.CM,
-            12, 10, 30, 0
+            12, 25, 30, 0
     );
 
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(
@@ -71,7 +76,10 @@ public class Webcam extends SubsystemBase {
     public AprilTagDetection getBestDetection() {
         for (AprilTagDetection d : aprilTag.getDetections()) {
             if (d.metadata != null && !d.metadata.name.contains("Obelisk")) {
-                return d;
+                if (d.id == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED ||
+                d.id == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE){
+                    return d;
+                }
             }
         }
         return null;
@@ -118,8 +126,10 @@ public class Webcam extends SubsystemBase {
 
     /** Updates the localizer with the current robot pose */
     public void updatePose(){
-        Pose2d currenrPose = new Pose2d(getRobotPosition().x, getRobotPosition().y, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
-        BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
+        if (getRobotPosition() != null){
+            Pose2d currenrPose = new Pose2d(getRobotPosition().x, getRobotPosition().y, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+            BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
+        }
     }
 
     /** Stop camera stream */
@@ -139,13 +149,19 @@ public class Webcam extends SubsystemBase {
 
     /** Operate webcam. */
     public void operate() {
-        if (getBestDetection() != null) {
+        if (getRobotPosition() != null
+                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
+                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
+
             updatePose();
+            poseUpdateTimer.reset();
         }
+
         if (gamePattern == null) {
             updateGamePattern();
         }
-//        displayTelemetry();
+
+        displayTelemetry();
     }
 
     public RunCommand operateCommand() {

@@ -43,7 +43,7 @@ public class TestTeleop extends CommandOpMode {
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
                 LimeLight.BLUE_LOCALIZATION_PIPELINE,
-                new Pose2d(62.5, -60.5, Math.toRadians(270)),
+                new Pose2d(0, 0, Math.toRadians(270)),
                 270
         );
 
@@ -122,6 +122,12 @@ public class TestTeleop extends CommandOpMode {
                                 farminator.drive.driveCommand()
                         );
 
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+                .toggleWhenActive(
+                        farminator.drive.alignToTagCommand(),
+                        farminator.drive.driveCommand()
+                );
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .toggleWhenActive(
@@ -137,10 +143,10 @@ public class TestTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(62.5, -60.5, Math.toRadians(270))));
+                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0, 0, Math.toRadians(270))));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(62.5, -60.5, Math.toRadians(270))));
+                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0, 0, Math.toRadians(270))));
 
     }
 

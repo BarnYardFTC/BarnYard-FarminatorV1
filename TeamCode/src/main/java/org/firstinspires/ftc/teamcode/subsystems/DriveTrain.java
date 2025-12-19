@@ -45,10 +45,10 @@ public class DriveTrain extends SubsystemBase {
 
 
     /** Field coordinates for the target goal. */
-    public static final double GOAL_X_1 = -1.68;
+    public static final double GOAL_X_1 = -1.72;
     public static final double GOAL_X_2 = -1.65;
-    public static final double BLUE_GOAL_Y = -1.62;
-    public static final double RED_GOAL_Y = 1.62;
+    public static final double BLUE_GOAL_Y = -1.6;
+    public static final double RED_GOAL_Y = 1.55;
 
     // ============================================================
     //                       CONSTRUCTOR
@@ -204,6 +204,7 @@ public class DriveTrain extends SubsystemBase {
         double diffYaw = desiredHeading - currentHeading;
 
         BarnRobot.getInstance().telemetry.addData("dyaw", diffYaw);
+        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
         double turnSpd = diffToSpeed(diffYaw);
 
         if (BarnRobot.getInstance().opmodeData.opModeType == OpModeData.OpModeType.TELEOP){

@@ -30,18 +30,23 @@ public class Red_Far_ThreePlusZero extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
 
+
     public static double POSE1_X = 60;
-    public static double POSE1_Y = 10;
+    public static double POSE1_Y = 16;
     public static double POSE1_HEADING = Math.toRadians(180);
 
     public static double POSE2_X = 55;
-    public static double POSE2_Y = 11;
-    public static double POSE2_HEADING = Math.toRadians(150);
+    public static double POSE2_Y = 12;
+    public static double POSE2_HEADING = Math.toRadians(135);
+
+    public static double POSE3_X = 40;
+    public static double POSE3_Y = 12;
+    public static double POSE3_HEADING = Math.toRadians(90);
 
 
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
+            OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
@@ -59,8 +64,11 @@ public class Red_Far_ThreePlusZero extends CommandOpMode {
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
                 .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25));
+
         TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(POSE2_X, POSE2_Y, POSE2_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X -15, POSE2_Y), POSE2_HEADING, new TranslationalVelConstraint(25) );
+                .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), POSE3_HEADING, new TranslationalVelConstraint(25) );
+
+
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
@@ -70,7 +78,7 @@ public class Red_Far_ThreePlusZero extends CommandOpMode {
                                 new DriveActionCommand(path1),
                                 new ParallelRaceGroup(
                                         farminator.drive.alignToTagCommandAuto(),
-                                        new WaitCommand(500)
+                                        new WaitCommand(1000)
                                 ),
                                 farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),

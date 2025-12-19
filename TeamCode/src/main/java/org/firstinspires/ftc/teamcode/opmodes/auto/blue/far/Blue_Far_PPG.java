@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
 
 @Config
 @Autonomous(name = "3+0 Far Blue PPG ", group = "main")
+@Disabled
 public class Blue_Far_PPG extends CommandOpMode {
 
     private BarnRobot farminator;
@@ -30,7 +32,7 @@ public class Blue_Far_PPG extends CommandOpMode {
     public static double WEST_HEADING = Math.toRadians(215);
 
     public static double POSE1_X = 57.5;
-    public static double POSE1_Y = 0;
+    public static double POSE1_Y = -30;
 
 
     public static double POSE2_X = 50;
@@ -89,10 +91,6 @@ public class Blue_Far_PPG extends CommandOpMode {
                                 new DriveActionCommand(path1),
                                 farminator.shooter.runShooterBasedOnDistance(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
-//                                farminator.intake.activateIntakeCommand(),
-//                                new WaitCommand(2000),
-//                                farminator.transfer.setEntireTransferPowerCommand(0),
-//                                farminator.intake.deactivateIntakeCommand(),
                                 new DriveActionCommand(path2),
                                 farminator.intake.activateIntakeCommand(),
                                 new DriveActionCommand(path3),

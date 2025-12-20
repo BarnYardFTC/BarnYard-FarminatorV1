@@ -50,6 +50,8 @@ public class DriveTrain extends SubsystemBase {
     public static final double BLUE_GOAL_Y = -1.6;
     public static final double RED_GOAL_Y = 1.55;
 
+    public static double GOAL_ROBOT_MIN_DISTANCE = 0.7;
+
     // ============================================================
     //                       CONSTRUCTOR
     // ============================================================

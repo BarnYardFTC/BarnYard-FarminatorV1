@@ -232,6 +232,7 @@ public class RobotHardware {
     private void initSensors() {
         imu = hw.get(IMU.class, "imu");
         imu.initialize(IMU_PARAMETERS);
+        imu.resetYaw();
 //        limelight = hw.get(Limelight3A.class, "limelight");
 
     }

@@ -99,6 +99,11 @@ public class ShooterHood extends SubsystemBase {
     public void autoHoodAlignmentFunc(){
         double distance = BarnRobot.getInstance().drive.getDistanceFromGoal();
 
+        autoHoodAlignmentConstantDistance(distance);
+
+    }
+
+    public void autoHoodAlignmentConstantDistance(double distance){
         if (distance < SHOOTING_RANGE_1) {
             distanceDependentAngleRange1(distance);
         }
@@ -111,7 +116,10 @@ public class ShooterHood extends SubsystemBase {
         else if (distance > SHOOTING_RANGE_3) {
             distanceDependentAngleRange4();
         }
+    }
 
+    public Command setHoodCloseToGoalPos(){
+        return new RunCommand(() -> servo.setPosition(0.1), this);
     }
 
     public Command autoHoodAlignment(){

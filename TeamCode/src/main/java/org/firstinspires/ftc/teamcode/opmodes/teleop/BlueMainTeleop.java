@@ -7,13 +7,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
@@ -163,12 +162,21 @@ public class BlueMainTeleop extends CommandOpMode {
                 .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0,0,Math.toRadians(270))));
 
 
-
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .toggleWhenPressed(
+                        new ParallelCommandGroup(
+                                farminator.shooterHood.setHoodCloseToGoalPos(),
+                                farminator.shooter.runShooterBasedOnConstantDistance(DriveTrain.GOAL_ROBOT_MIN_DISTANCE)
+                                ),
+                        farminator.shooterHood.autoHoodAlignment()
+                );
     }
 
     @Override
     public void run() {
         super.run();
+        telemetry.addData("heading pinpoint", Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()));
+        telemetry.addData("heading control hub", BarnRobot.getInstance().robotHardware.imu.getRobotYawPitchRollAngles().getYaw());
         farminator.periodic();
         rumpleGamepadsEndgame();
     }
@@ -186,7 +194,6 @@ public class BlueMainTeleop extends CommandOpMode {
             if (currentSecond != lastRumbleSecond) {
 
                 // Short, clear pulse
-//                gamepad1.rumble(1.0, 1.0, 200 );
                 gamepad2.rumble(1.0, 1.0, 200);
 
                 lastRumbleSecond = currentSecond;

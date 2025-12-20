@@ -119,6 +119,13 @@ public class Shooter  extends SubsystemBase {
         ), this);
     }
 
+    public RunCommand runShooterBasedOnConstantDistance(double distance){
+        return new RunCommand(() -> operateShooterDistanceBased(
+                distance
+        ), this);
+    }
+
+
 
 
     public void displayTelemetry(){

@@ -9,8 +9,8 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class Blue_Close_ThreePlusThree {
-    public static double POSE1_X = -37;
-    public static double POSE1_Y = -53;
+    public static double POSE1_X = 62;
+    public static double POSE1_Y = 60;
     public static double POSE1_HEADING = Math.toRadians(90);
 
     public static double POSE2_X = -40;

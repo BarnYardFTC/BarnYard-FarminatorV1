@@ -28,7 +28,7 @@ public class Webcam extends SubsystemBase {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
-    public static double MAX_UPDATE_DISTANCE = 1.4;
+    public static double MAX_UPDATE_DISTANCE = 1.8;
 
     private final ElapsedTime poseUpdateTimer = new ElapsedTime();
     private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;

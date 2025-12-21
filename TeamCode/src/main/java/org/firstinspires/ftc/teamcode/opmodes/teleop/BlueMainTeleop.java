@@ -144,19 +144,7 @@ public class BlueMainTeleop extends CommandOpMode {
                         farminator.drive.driveCommand()
                 );
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(62,60,Math.toRadians(270))));
-
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .toggleWhenActive(
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
-                );
-
-
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0,0,Math.toRadians(270))));
+                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(62,-60,Math.toRadians(270))));
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
@@ -172,8 +160,9 @@ public class BlueMainTeleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("heading pinpoint", Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()));
-        telemetry.addData("heading control hub", BarnRobot.getInstance().robotHardware.imu.getRobotYawPitchRollAngles().getYaw());
+        telemetry.addData("x", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
+        telemetry.addData("y", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
+        telemetry.addData("heading", BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
         farminator.periodic();
         rumpleGamepadsEndgame();
     }

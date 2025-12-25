@@ -5,9 +5,11 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +42,7 @@ public class LimeLight extends SubsystemBase {
     public static final int POLL_RATE_HZ = 100;
 
     /** Field coordinates for the target goal. */
-    private static final double GOAL_X = -1.65;
+    private static final double GOAL_X = -1.57;
     private static final double BLUE_GOAL_Y = -1.62;
     private static final double RED_GOAL_Y = 1.62;
 
@@ -56,6 +58,9 @@ public class LimeLight extends SubsystemBase {
 
     /** Latest result from the Limelight. */
     private LLResult llResult;
+    public LimeLightColorRecognition llColor;
+
+
 
     /** List of fiducial results from the Limelight. */
     private List<LLResultTypes.FiducialResult> frs;
@@ -72,14 +77,43 @@ public class LimeLight extends SubsystemBase {
     /** Currently active pipeline. */
     public int currentPipeline;
 
+    private double leftPixel;
+
+    private List<Double> allLeftPixels;
+
+    public enum artifactReadiness {READY, UNREADY, NOTHING}
+
+    // temp telemetry
+    public Telemetry telemetry;
+
+    public enum artifactPositions {
+        SHOOTPOSMAX(1050), SHOOTPOSMIN(800);
+        private int numVal;
+
+        artifactPositions(int numVal) {
+            this.numVal = numVal;
+        }
+
+        public int getNumVal() {
+            return numVal;
+        }
+    }
+    private List<Enum<artifactReadiness>> ArtifactReadiness;
+
+
+
     /**
      * Constructs the LimeLight subsystem and initializes default settings.
      */
-    public LimeLight(int pipeline) {
+    public LimeLight(int pipeline, Telemetry telemetry) {
+        llColor = new LimeLightColorRecognition();
         limelight = BarnRobot.getInstance().robotHardware.limelight;
         limelight.setPollRateHz(POLL_RATE_HZ);
         switchPipeline(pipeline);
         Dyaw = 0;
+        ArtifactReadiness = new ArrayList<>();
+        allLeftPixels = new ArrayList<>();
+        this.telemetry = telemetry;
         start();
     }
 
@@ -178,6 +212,51 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
+    public void ArtifactLeftPixel(){
+        if (llColor.getIsFound()){
+            List<List<Double>> corners = llResult.getColorResults().get(0).getTargetCorners();
+            List<Double> leftCorner = corners.get(3);
+            double leftPixel = leftCorner.get(0);
+            allLeftPixels.add(leftPixel);
+            telemetry.addData("Left Pixel", leftPixel);
+        }
+    }
+
+    public void ArtifactReadinessFunc(){
+        ArtifactLeftPixel();
+        if (llColor.getIsFound()){
+            ArtifactReadiness.remove(artifactReadiness.NOTHING);
+            ArtifactReadiness.add(artifactReadiness.READY);
+//            if (leftPixel > artifactPositions.SHOOTPOSMIN.getNumVal() && leftPixel < artifactPositions.SHOOTPOSMAX.getNumVal()){
+//                telemetry.addLine("Artifact state is READY");
+//                ArtifactReadiness.remove(artifactReadiness.UNREADY);
+//                ArtifactReadiness.add(artifactReadiness.READY);
+//            }
+//            else{
+//                this.telemetry.addLine("Artifact state is UNREADY");
+//                ArtifactReadiness.remove(artifactReadiness.READY);
+//                ArtifactReadiness.add(artifactReadiness.UNREADY);
+//            }
+        }
+        else {
+            ArtifactReadiness.add(artifactReadiness.NOTHING);
+        }
+
+    }
+
+    public Enum<artifactReadiness> getArtifactReadiness(){
+        ArtifactReadinessFunc();
+        this.telemetry.addData("afsaf", ArtifactReadiness.get(ArtifactReadiness.size()-1));
+        try {
+            if (ArtifactReadiness == null || ArtifactReadiness.isEmpty()) return null;
+            Enum<artifactReadiness> art = ArtifactReadiness.get(0);
+            if (art == null) return null;
+            return ArtifactReadiness.get(ArtifactReadiness.size() - 1);
+        } catch (NullPointerException e) {
+            return null;
+        }
+    }
+
     /** Updates the yaw offset (Dyaw) if a goal tag is detected. */
     public void findDyaw() {
         if (isDataValid() && isGoalTagDetected()) {
@@ -243,6 +322,12 @@ public class LimeLight extends SubsystemBase {
 
         robot.telemetry.addData("Pattern", obeliskPattern);
         robot.telemetry.addData("Range", getGoalRange());
+    }
+
+    public void farminatorPos(){
+        double posX = llResult.getBotpose().getPosition().x;
+        double posY = llResult.getBotpose().getPosition().y;
+
     }
 
     /** @return current yaw offset to goal */

@@ -50,6 +50,11 @@ Configuration:
         4: rightFrontTransfer
         5: rightBackTransfer
 
+    Webcam:
+        Webcam 1
+
+    Limelight
+        limelight
  */
 public class RobotHardware {
 
@@ -89,7 +94,7 @@ public class RobotHardware {
     // Sensors
     // ------------------------------------------------------------
 
-    public IMU imu;
+//    public IMU imu;
     public Limelight3A limelight;
 
 
@@ -126,12 +131,12 @@ public class RobotHardware {
     // ------------------------------------------------------------
 
     /** Default IMU orientation settings for the control hub placement. */
-    public final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
-            new RevHubOrientationOnRobot(
-                    RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                    RevHubOrientationOnRobot.UsbFacingDirection.UP
-            )
-    );
+//    public final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
+//            new RevHubOrientationOnRobot(
+//                    RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+//                    RevHubOrientationOnRobot.UsbFacingDirection.UP
+//            )
+//    );
 
 
     // ------------------------------------------------------------
@@ -230,10 +235,9 @@ public class RobotHardware {
      * Initializes the IMU and Limelight sensors.
      */
     private void initSensors() {
-        imu = hw.get(IMU.class, "imu");
-        imu.initialize(IMU_PARAMETERS);
-        imu.resetYaw();
-//        limelight = hw.get(Limelight3A.class, "limelight");
+//        imu.initialize(IMU_PARAMETERS);
+//        imu.resetYaw();
+        limelight = hw.get(Limelight3A.class, "limelight");
 
     }
     private void initVoltageSensor(){

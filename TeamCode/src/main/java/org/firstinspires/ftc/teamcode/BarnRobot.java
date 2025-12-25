@@ -40,7 +40,7 @@ public class BarnRobot extends Robot {
     public Transfer transfer;
     public DriveTrain drive; // used in teleop
     public RoadRunnerMecanumDrive roadRunnerMecanumDrive; // used in auto
-//    public LimeLight limelight;
+    public LimeLight limelight;
     public Shooter shooter;
     public ShooterHood shooterHood;
     public Intake intake;
@@ -126,7 +126,7 @@ public class BarnRobot extends Robot {
 
         // Subsystem initialization
         initTransfer();
-//        initLimeLight(opModeData.limelightPipeline);
+        initLimeLight(opModeData.limelightPipeline);
         initShooter();
         initIntake();
         initDrivetrain(opMode.hardwareMap);
@@ -177,9 +177,9 @@ public class BarnRobot extends Robot {
     }
 
     /** Sets up the LimeLight vision system. */
-//    public void initLimeLight(int pipeline) {
-//        limelight = new LimeLight(pipeline);
-//    }
+    public void initLimeLight(int pipeline) {
+        limelight = new LimeLight(pipeline, this.telemetry);
+    }
 
     /** Sets up the intake system. */
     public void initIntake() {

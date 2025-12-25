@@ -205,8 +205,6 @@ public class DriveTrain extends SubsystemBase {
 
         double diffYaw = desiredHeading - currentHeading;
 
-        BarnRobot.getInstance().telemetry.addData("dyaw", diffYaw);
-        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
         double turnSpd = diffToSpeed(diffYaw);
 
         if (BarnRobot.getInstance().opmodeData.opModeType == OpModeData.OpModeType.TELEOP){

@@ -225,6 +225,7 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
+
     /** Updates the current artifact readiness */
     public void ArtifactReadinessFunc(){
         ArtifactLeftPixel();

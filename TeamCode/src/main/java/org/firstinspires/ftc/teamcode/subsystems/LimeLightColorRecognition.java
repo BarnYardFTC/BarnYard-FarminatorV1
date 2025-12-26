@@ -61,6 +61,7 @@ public class LimeLightColorRecognition {
     public double getTy(){
         return ty;
     }
+
     public boolean getIsFound(){
         return isFound;
     }

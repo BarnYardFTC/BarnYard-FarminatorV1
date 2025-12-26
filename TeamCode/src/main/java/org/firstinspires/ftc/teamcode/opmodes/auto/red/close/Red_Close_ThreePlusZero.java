@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
+package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
 
 import static org.firstinspires.ftc.teamcode.commandGroups.ShootSequenceCommandGroup.shootWhenReady;
 

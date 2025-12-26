@@ -156,14 +156,28 @@ public class BarnRobot extends Robot {
      * and sets its default driving command.
      */
     public void initDrivetrain(HardwareMap hw) {
+        if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP) initDrivetrainTeleop();
+        else initDrivetrainAutonomous(hw);
+    }
+
+    /**
+     * Init drivetrain teleop
+     */
+    private void initDrivetrainTeleop(){
         drive = new DriveTrain();
+        drive.setDefaultCommand(drive.driveCommand());
+    }
+
+    /**
+     * init
+     * @param hw hardwareMap
+     */
+    private void initDrivetrainAutonomous(HardwareMap hw){
+        roadRunnerMecanumDrive = new RoadRunnerMecanumDrive(hw, opmodeData.initialPose2d);
+    }
+
+    private void initPinpointLocalizer(HardwareMap hw){
         pinpointLocalizer = new PinpointLocalizer(hw, RoadRunnerMecanumDrive.PARAMS.inPerTick, opmodeData.initialPose2d);
-        if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
-            drive.setDefaultCommand(drive.driveCommand());
-        }
-        else {
-            roadRunnerMecanumDrive = new RoadRunnerMecanumDrive(hw, opmodeData.initialPose2d);
-        }
     }
 
     public void initShooterHood(){

@@ -234,6 +234,16 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
+    public Command driveTwoDriversCommand(){
+        return new RunCommand(
+                () -> drive(
+                        BarnRobot.getInstance().gamepadEx2.getLeftX() + BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx2.getLeftY() + BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx2.getRightX() + BarnRobot.getInstance().gamepadEx1.getLeftX()
+                )
+        );
+    }
+
     /** Continuous alignment command (runs alignToGoal loop) */
     public Command alignToTagCommand() {
         return new RunCommand(() -> localizationBasedGoalAlignment(

@@ -11,10 +11,6 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 @TeleOp(name = "DeadwheelLocalizationTest", group = "testing")
 public class TestDeadWheelLocalizationTeleop extends CommandOpMode {
 
-    private double START_POSE_X = 0;
-    private double START_POSE_Y = 0;
-    private double START_POSE_HEADING = 0;
-
     private BarnRobot farminator;
 
     private OpModeData opModeData = new OpModeData(
@@ -28,7 +24,6 @@ public class TestDeadWheelLocalizationTeleop extends CommandOpMode {
     public void initialize() {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
-
     }
 
     @Override

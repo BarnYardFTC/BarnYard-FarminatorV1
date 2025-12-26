@@ -64,11 +64,13 @@ public class OpModeData {
                       Pose2d initialPose2d) {
 
         autoFinishPose = new Pose2d(0,0,0); //reset autoFinishPose
-        this.fieldReferenceHeading = 0;
         this.initialPose2d = initialPose2d;
         this.allianceColor = allianceColor;
         this.opModeType = opModeType;
         this.limelightPipeline = limelightPipeline;
+
+        // Default val
+        this.fieldReferenceHeading = 0;
     }
 
 

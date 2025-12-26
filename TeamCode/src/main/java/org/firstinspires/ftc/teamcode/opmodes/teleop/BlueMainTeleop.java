@@ -70,6 +70,8 @@ public class BlueMainTeleop extends CommandOpMode {
                 opModeData
         );
 
+        farminator.drive.setDefaultCommand(farminator.drive.driveTwoDriversCommand());
+
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
 
@@ -155,6 +157,8 @@ public class BlueMainTeleop extends CommandOpMode {
                                 ),
                         farminator.shooterHood.autoHoodAlignment()
                 );
+
+
     }
 
     @Override

@@ -240,7 +240,7 @@ public class DriveTrain extends SubsystemBase {
                         BarnRobot.getInstance().gamepadEx2.getLeftX() + BarnRobot.getInstance().gamepadEx1.getLeftX(),
                         BarnRobot.getInstance().gamepadEx2.getLeftY() + BarnRobot.getInstance().gamepadEx1.getLeftX(),
                         BarnRobot.getInstance().gamepadEx2.getRightX() + BarnRobot.getInstance().gamepadEx1.getLeftX()
-                )
+                ), this
         );
     }
 

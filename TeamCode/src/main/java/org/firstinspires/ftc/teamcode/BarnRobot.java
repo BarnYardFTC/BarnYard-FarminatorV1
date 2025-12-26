@@ -132,6 +132,7 @@ public class BarnRobot extends Robot {
         initDrivetrain(opMode.hardwareMap);
         initShooterHood();
         initWebcam(opMode.hardwareMap);
+        initPinpointLocalizer(opMode.hardwareMap);
     }
 
 
@@ -165,7 +166,6 @@ public class BarnRobot extends Robot {
      */
     private void initDrivetrainTeleop(){
         drive = new DriveTrain();
-        drive.setDefaultCommand(drive.driveCommand());
     }
 
     /**

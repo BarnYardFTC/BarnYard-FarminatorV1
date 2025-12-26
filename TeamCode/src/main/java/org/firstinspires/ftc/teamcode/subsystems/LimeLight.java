@@ -79,7 +79,8 @@ public class LimeLight extends SubsystemBase {
 
     private double leftPixel;
 
-    private List<Double> allLeftPixels;
+    private artifactReadiness currentArtifactReadiness = artifactReadiness.NOTHING;
+
 
     public enum artifactReadiness {READY, UNREADY, NOTHING}
 
@@ -98,7 +99,6 @@ public class LimeLight extends SubsystemBase {
             return numVal;
         }
     }
-    private List<Enum<artifactReadiness>> ArtifactReadiness;
 
 
 
@@ -111,8 +111,6 @@ public class LimeLight extends SubsystemBase {
         limelight.setPollRateHz(POLL_RATE_HZ);
         switchPipeline(pipeline);
         Dyaw = 0;
-        ArtifactReadiness = new ArrayList<>();
-        allLeftPixels = new ArrayList<>();
         this.telemetry = telemetry;
         start();
     }
@@ -212,21 +210,26 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
+    /** Finds the left pixel of the artifact */
     public void ArtifactLeftPixel(){
         if (llColor.getIsFound()){
-            List<List<Double>> corners = llResult.getColorResults().get(0).getTargetCorners();
+
+            List<LLResultTypes.ColorResult> colorData = llColor.colorData;
+
+            if(colorData == null || colorData.isEmpty()) return;
+
+            List<List<Double>> corners = colorData.get(0).getTargetCorners();
             List<Double> leftCorner = corners.get(3);
-            double leftPixel = leftCorner.get(0);
-            allLeftPixels.add(leftPixel);
-            telemetry.addData("Left Pixel", leftPixel);
+            leftPixel = leftCorner.get(0);
+            this.telemetry.addData("Left Pixel", leftPixel);
         }
     }
 
+    /** Updates the current artifact readiness */
     public void ArtifactReadinessFunc(){
         ArtifactLeftPixel();
         if (llColor.getIsFound()){
-            ArtifactReadiness.remove(artifactReadiness.NOTHING);
-            ArtifactReadiness.add(artifactReadiness.READY);
+            currentArtifactReadiness = artifactReadiness.READY;
 //            if (leftPixel > artifactPositions.SHOOTPOSMIN.getNumVal() && leftPixel < artifactPositions.SHOOTPOSMAX.getNumVal()){
 //                telemetry.addLine("Artifact state is READY");
 //                ArtifactReadiness.remove(artifactReadiness.UNREADY);
@@ -239,23 +242,12 @@ public class LimeLight extends SubsystemBase {
 //            }
         }
         else {
-            ArtifactReadiness.add(artifactReadiness.NOTHING);
+            currentArtifactReadiness = artifactReadiness.NOTHING;
         }
 
     }
 
-    public Enum<artifactReadiness> getArtifactReadiness(){
-        ArtifactReadinessFunc();
-        this.telemetry.addData("afsaf", ArtifactReadiness.get(ArtifactReadiness.size()-1));
-        try {
-            if (ArtifactReadiness == null || ArtifactReadiness.isEmpty()) return null;
-            Enum<artifactReadiness> art = ArtifactReadiness.get(0);
-            if (art == null) return null;
-            return ArtifactReadiness.get(ArtifactReadiness.size() - 1);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
+
 
     /** Updates the yaw offset (Dyaw) if a goal tag is detected. */
     public void findDyaw() {
@@ -303,6 +295,12 @@ public class LimeLight extends SubsystemBase {
     @Override
     public void periodic() {
         llResult = limelight.getLatestResult();
+        ArtifactReadinessFunc();
+
+        if (llColor != null){
+            llColor.updateResults(llResult);
+        }
+
         if (llResult.isValid() && !llResult.getFiducialResults().isEmpty()) {
             frs = llResult.getFiducialResults();
         }
@@ -322,6 +320,11 @@ public class LimeLight extends SubsystemBase {
 
         robot.telemetry.addData("Pattern", obeliskPattern);
         robot.telemetry.addData("Range", getGoalRange());
+    }
+
+    /** @return current artifact readiness */
+    public Enum<artifactReadiness> getArtifactReadiness(){
+        return currentArtifactReadiness;
     }
 
     public void farminatorPos(){

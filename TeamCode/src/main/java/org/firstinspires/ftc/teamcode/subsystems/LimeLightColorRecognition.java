@@ -17,6 +17,9 @@ public class LimeLightColorRecognition {
     /** List of fiducial results from the Limelight. */
     private List<LLResultTypes.FiducialResult> frs;
 
+    /** List of color results from the Limelight */
+    public List<LLResultTypes.ColorResult> colorData;
+
     private double ta;
     private double tx;
     private double ty;
@@ -36,9 +39,17 @@ public class LimeLightColorRecognition {
             double tx = result.getTx(); // How far left or right the target is (degrees)
             double ty = result.getTy(); // How far up or down the target is (degrees)
             double ta = result.getTa(); // How big the target looks (0%-100% of the image)
-            isFound = true;
         }
-        else {isFound = false;}
+    }
+
+    public void updateResults(LLResult result){
+        if(result == null || result.isValid() || result.getColorResults() == null){
+            isFound = false;
+            colorData = null;
+            return;
+        }
+        isFound = true;
+        colorData = result.getColorResults();
     }
 
     public double getTa(){

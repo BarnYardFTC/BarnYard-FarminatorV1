@@ -77,18 +77,28 @@ public class LimeLight extends SubsystemBase {
     /** Currently active pipeline. */
     public int currentPipeline;
 
-    private double leftPixel;
+    private double shooterLeftPixel;
+    private double middleLeftPixel;
+    private double intakeLeftPixel;
 
-    private artifactReadiness currentArtifactReadiness = artifactReadiness.NOTHING;
+    private busyType shooterPos = busyType.FREE;
+    private busyType middlePos = busyType.FREE;
+    private busyType intakePos = busyType.FREE;
 
+    private artifactReadiness currentIntakeArtifactReadiness = artifactReadiness.NOTHING;
+    private artifactReadiness currentMiddleArtifactReadiness = artifactReadiness.NOTHING;
+    private artifactReadiness currentShooterArtifactReadiness = artifactReadiness.NOTHING;
+
+    private List<Double> allLeftPixels;
 
     public enum artifactReadiness {READY, UNREADY, NOTHING}
+    private enum busyType {BUSY, FREE}
 
     // temp telemetry
     public Telemetry telemetry;
 
     public enum artifactPositions {
-        SHOOTPOSMAX(1050), SHOOTPOSMIN(800);
+        SHOOTPOSMIN(800), MIDDLEPOS(500), INTAKEPOS(100);
         private int numVal;
 
         artifactPositions(int numVal) {
@@ -109,6 +119,7 @@ public class LimeLight extends SubsystemBase {
         llColor = new LimeLightColorRecognition();
         limelight = BarnRobot.getInstance().robotHardware.limelight;
         limelight.setPollRateHz(POLL_RATE_HZ);
+        allLeftPixels = new ArrayList<>();
         switchPipeline(pipeline);
         Dyaw = 0;
         this.telemetry = telemetry;
@@ -202,13 +213,13 @@ public class LimeLight extends SubsystemBase {
 
     /**
      * Detects the obelisk pattern if it hasn't been found yet.
-     */
-    public void findPattern() {
-        if (isDataValid() && !isPatternFound()) {
-            LLResultTypes.FiducialResult obeliskFr = findLargestAreaFr(frs);
-            obeliskPattern = getObeliskPattern(obeliskFr.getFiducialId());
-        }
-    }
+//     */
+//    public void findPattern() {
+//        if (isDataValid() && !isPatternFound()) {
+//            LLResultTypes.FiducialResult obeliskFr = findLargestAreaFr(frs);
+//            obeliskPattern = getObeliskPattern(obeliskFr.getFiducialId());
+//        }
+//    }
 
     /** Finds the left pixel of the artifact */
     public void ArtifactLeftPixel(){
@@ -219,9 +230,25 @@ public class LimeLight extends SubsystemBase {
             if(colorData == null || colorData.isEmpty()) return;
 
             List<List<Double>> corners = colorData.get(0).getTargetCorners();
+
+            /** This logic for 3 artifacts in the robot(For the future) */
+//            for (int i=0; i<corners.size(); i++){
+//                if (i%3 == 0){
+//                    if (corners.get(i).get(0) > artifactPositions.MIDDLEPOS.getNumVal() && corners.get(i).get(0) <= artifactPositions.SHOOTPOSMIN.getNumVal()){
+//                        shooterLeftPixel = corners.get(i).get(0);
+//                    }
+//                    if (corners.get(i).get(0) > artifactPositions.INTAKEPOS.getNumVal() && corners.get(i).get(0) <= artifactPositions.MIDDLEPOS.getNumVal()){
+//                        middleLeftPixel = corners.get(i).get(0);
+//                    }
+//                    if (corners.get(i).get(0) <= artifactPositions.INTAKEPOS.getNumVal()){
+//                        intakeLeftPixel = corners.get(i).get(0);
+//                    }
+//                }
+//            }
+
             List<Double> leftCorner = corners.get(3);
-            leftPixel = leftCorner.get(0);
-            this.telemetry.addData("Left Pixel", leftPixel);
+            shooterLeftPixel = leftCorner.get(0);
+            this.telemetry.addData("Left Pixel", shooterLeftPixel);
         }
     }
 
@@ -230,20 +257,22 @@ public class LimeLight extends SubsystemBase {
     public void ArtifactReadinessFunc(){
         ArtifactLeftPixel();
         if (llColor.getIsFound()){
-            currentArtifactReadiness = artifactReadiness.READY;
-//            if (leftPixel > artifactPositions.SHOOTPOSMIN.getNumVal() && leftPixel < artifactPositions.SHOOTPOSMAX.getNumVal()){
+            currentShooterArtifactReadiness = artifactReadiness.READY;
+//            if (shooterLeftPixel > artifactPositions.SHOOTPOSMIN.getNumVal() && shooterPos == busyType.FREE){
+//                shooterPos = busyType.BUSY;
 //                telemetry.addLine("Artifact state is READY");
 //                ArtifactReadiness.remove(artifactReadiness.UNREADY);
 //                ArtifactReadiness.add(artifactReadiness.READY);
 //            }
 //            else{
+//                shooterPos = busyType.FREE;
 //                this.telemetry.addLine("Artifact state is UNREADY");
 //                ArtifactReadiness.remove(artifactReadiness.READY);
 //                ArtifactReadiness.add(artifactReadiness.UNREADY);
 //            }
         }
         else {
-            currentArtifactReadiness = artifactReadiness.NOTHING;
+            currentShooterArtifactReadiness = artifactReadiness.NOTHING;
         }
 
     }
@@ -325,7 +354,7 @@ public class LimeLight extends SubsystemBase {
 
     /** @return current artifact readiness */
     public Enum<artifactReadiness> getArtifactReadiness(){
-        return currentArtifactReadiness;
+        return currentShooterArtifactReadiness;
     }
 
     public void farminatorPos(){

@@ -6,13 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
@@ -119,13 +117,13 @@ public class TestTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                         .toggleWhenActive(
                                 farminator.drive.alignToTagCommand(),
-                                farminator.drive.driveCommand()
+                                farminator.drive.driveOneDriverCommand()
                         );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenActive(
                         farminator.drive.alignToTagCommand(),
-                        farminator.drive.driveCommand()
+                        farminator.drive.driveOneDriverCommand()
                 );
 
 

@@ -223,7 +223,7 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     /** Default manual field-centric drive */
-    public Command driveCommand() {
+    public Command driveOneDriverCommand() {
         return new RunCommand(
                 () -> drive(
                         BarnRobot.getInstance().gamepadEx2.getLeftX(),
@@ -238,8 +238,8 @@ public class DriveTrain extends SubsystemBase {
         return new RunCommand(
                 () -> drive(
                         BarnRobot.getInstance().gamepadEx2.getLeftX() + BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx2.getLeftY() + BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx2.getRightX() + BarnRobot.getInstance().gamepadEx1.getLeftX()
+                        BarnRobot.getInstance().gamepadEx2.getLeftY() + BarnRobot.getInstance().gamepadEx1.getLeftY(),
+                        BarnRobot.getInstance().gamepadEx2.getRightX() + BarnRobot.getInstance().gamepadEx1.getRightX()
                 ), this
         );
     }

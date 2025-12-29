@@ -35,9 +35,9 @@ Configuration:
         3: shoterLeft
 
     Control hub motors:
-        0: rightFrontDrivetrain
+        0: shooterRight
         1: rightBackDrivetrain
-        2: shooterRight
+        2: rightFrontDrivetrain
         3:
 
     Control hub i2c:

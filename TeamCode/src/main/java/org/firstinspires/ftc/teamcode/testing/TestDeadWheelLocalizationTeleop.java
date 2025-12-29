@@ -24,6 +24,7 @@ public class TestDeadWheelLocalizationTeleop extends CommandOpMode {
     public void initialize() {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
+        farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
     }
 
     @Override
@@ -33,6 +34,7 @@ public class TestDeadWheelLocalizationTeleop extends CommandOpMode {
         farminator.telemetry.addData("heading", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
         farminator.pinpointLocalizer.update();
         farminator.periodic();
+        super.run();
     }
 }
 

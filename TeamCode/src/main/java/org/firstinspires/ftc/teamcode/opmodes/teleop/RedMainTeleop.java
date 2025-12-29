@@ -148,7 +148,7 @@ public class RedMainTeleop extends CommandOpMode {
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
                         farminator.drive.alignToTagCommand(),
-                        farminator.drive.driveCommand()
+                        farminator.drive.driveOneDriverCommand()
                 );
 
         // Update pinpoint pose (field-specific)

@@ -28,7 +28,7 @@ public class LimeLightColorRecognition {
 
     public LimeLightColorRecognition() {
         limelight = BarnRobot.getInstance().robotHardware.limelight;
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
+        limelight.setPollRateHz(60);
         limelight.start(); // This tells Limelight to start looking!
         limelight.pipelineSwitch(0); // Switch to pipeline number 0
     }
@@ -43,7 +43,7 @@ public class LimeLightColorRecognition {
     }
 
     public void updateResults(LLResult result){
-        if(result == null  || result.getColorResults() == null){
+        if(result == null  || result.isValid() || result.getColorResults() == null){
             isFound = false;
             colorData = null;
             return;

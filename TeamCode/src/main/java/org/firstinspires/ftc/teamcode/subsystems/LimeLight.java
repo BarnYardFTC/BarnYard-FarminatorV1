@@ -229,7 +229,10 @@ public class LimeLight extends SubsystemBase {
 
             if(colorData == null || colorData.isEmpty()) return;
 
+
             List<List<Double>> corners = colorData.get(0).getTargetCorners();
+
+            if(corners.size() != 4) return;
 
             /** This logic for 3 artifacts in the robot(For the future) */
 //            for (int i=0; i<corners.size(); i++){
@@ -331,11 +334,11 @@ public class LimeLight extends SubsystemBase {
             llColor.updateResults(llResult);
         }
 
-        ArtifactReadinessFunc();
-
         if (llResult.isValid() && !llResult.getFiducialResults().isEmpty()) {
             frs = llResult.getFiducialResults();
         }
+
+        ArtifactReadinessFunc();
     }
 
     /** Outputs all relevant telemetry for the Limelight subsystem. */

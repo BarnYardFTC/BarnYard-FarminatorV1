@@ -43,7 +43,7 @@ public class LimeLightColorRecognition {
     }
 
     public void updateResults(LLResult result){
-        if(result == null || result.isValid() || result.getColorResults() == null){
+        if(result == null  || result.getColorResults() == null){
             isFound = false;
             colorData = null;
             return;

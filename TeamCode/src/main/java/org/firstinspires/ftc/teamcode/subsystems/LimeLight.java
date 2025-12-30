@@ -325,11 +325,13 @@ public class LimeLight extends SubsystemBase {
     @Override
     public void periodic() {
         llResult = limelight.getLatestResult();
-        ArtifactReadinessFunc();
+
 
         if (llColor != null){
             llColor.updateResults(llResult);
         }
+
+        ArtifactReadinessFunc();
 
         if (llResult.isValid() && !llResult.getFiducialResults().isEmpty()) {
             frs = llResult.getFiducialResults();

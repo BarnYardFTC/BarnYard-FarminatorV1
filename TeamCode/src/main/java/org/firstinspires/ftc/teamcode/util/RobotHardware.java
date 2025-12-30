@@ -35,8 +35,8 @@ Configuration:
         3: shoterLeft
 
     Control hub motors:
-        0: shooterRight
-        1: rightBackDrivetrain
+        0: rightBackDrivetrain
+        1: shooterRight
         2: rightFrontDrivetrain
         3:
 
@@ -44,11 +44,11 @@ Configuration:
         1: pinpoint
 
     Servo Hub:
-        0: leftFrontTransfer
-        1: leftBackTransfer
+        0:  leftBackTransfer
+        1: leftFrontTransfer
         2: shooterHood
-        4: rightFrontTransfer
-        5: rightBackTransfer
+        4: rightBackTransfer
+        5:  rightFrontTransfer
 
     Webcam:
         Webcam 1

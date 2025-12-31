@@ -144,7 +144,6 @@ public class BarnRobot extends Robot {
     /** Sets up the webcam. */
     public void initWebcam(HardwareMap hw){
         webcam = new Webcam(hw);
-        webcam.setDefaultCommand(webcam.operateCommand());
     }
 
     /** Sets up the shooter system. */
@@ -213,6 +212,6 @@ public class BarnRobot extends Robot {
     public void periodic() {
         pinpointLocalizer.update();
         telemetry.update();
-        blinkin.update();
+//        blinkin.update(); //TODO: Add in the future
     }
 }

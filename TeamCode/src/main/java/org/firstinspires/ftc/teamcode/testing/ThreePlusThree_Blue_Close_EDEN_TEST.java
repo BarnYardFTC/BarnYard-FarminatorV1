@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -46,7 +47,7 @@ public class ThreePlusThree_Blue_Close_EDEN_TEST extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE,
+            Webcam.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X,POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
 
     @Override

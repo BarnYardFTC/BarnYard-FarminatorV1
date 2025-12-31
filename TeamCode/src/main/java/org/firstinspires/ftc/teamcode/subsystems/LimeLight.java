@@ -27,10 +27,8 @@ public class LimeLight extends SubsystemBase {
      */
 
     /** Pipeline optimized for blue alliance localization. */
-    public static final int BLUE_LOCALIZATION_PIPELINE = 1;
 
     /** Pipeline optimized for red alliance localization. */
-    public static final int RED_LOCALIZATION_PIPELINE = 2;
 
     /** Pipeline used for detecting obelisk patterns. */
     public static final int OBELISK_PIPELINE = 3;
@@ -132,7 +130,6 @@ public class LimeLight extends SubsystemBase {
         obeliskPattern = null;
         Dyaw = 0;
         goalRange = 0;
-        currentPipeline = BLUE_LOCALIZATION_PIPELINE;
     }
 
     /** Starts the Limelight processing loop. */
@@ -279,16 +276,6 @@ public class LimeLight extends SubsystemBase {
         }
 
     }
-
-
-
-    /** Updates the yaw offset (Dyaw) if a goal tag is detected. */
-    public void findDyaw() {
-        if (isDataValid() && isGoalTagDetected()) {
-            Dyaw = frs.get(0).getTargetXDegrees();
-        }
-    }
-
     /**
      * Calculates the range to the goal using the robot's heading.
      *
@@ -315,14 +302,7 @@ public class LimeLight extends SubsystemBase {
         return obeliskPattern != null;
     }
 
-    /**
-     * Checks if the Limelight currently sees a goal tag.
-     *
-     * @return true if a goal tag is detected
-     */
-    public boolean isGoalTagDetected() {
-        return (currentPipeline == BLUE_LOCALIZATION_PIPELINE || currentPipeline == RED_LOCALIZATION_PIPELINE) && isDataValid();
-    }
+
 
     /** Updates Limelight results; should be called periodically. */
     @Override

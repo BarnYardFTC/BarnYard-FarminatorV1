@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -37,7 +38,7 @@ public class AutoTest extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.TELEOP,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE,
+            Webcam.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING)
             );
 

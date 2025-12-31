@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -30,7 +31,11 @@ public class Webcam extends SubsystemBase {
 
     public static double MAX_UPDATE_DISTANCE = 1.8;
 
+    public Position lastDetection;
     private final ElapsedTime poseUpdateTimer = new ElapsedTime();
+
+    public static final int BLUE_LOCALIZATION_PIPELINE = 1;
+    public static final int RED_LOCALIZATION_PIPELINE = 2;
     private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;
 
     public enum Pattern {
@@ -42,14 +47,18 @@ public class Webcam extends SubsystemBase {
     private Pattern gamePattern;
 
     // CHANGE THESE TO MATCH YOUR CAMERA MOUNT!!!
-    private final Position cameraPosition = new Position(
+
+    public static double WEBCAM_X = 12;
+    public static double WEBCAM_Y = 12;
+    public static double WEBCAM_Z = 27.5;
+    private Position cameraPosition = new Position(
             DistanceUnit.CM,
-            12, 25, 30, 0
+            WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
     );
 
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(
             AngleUnit.DEGREES,
-            0, -52, 0, 0
+            0, -70, 0, 0
     );
 
     public Webcam(HardwareMap hw) {
@@ -57,6 +66,11 @@ public class Webcam extends SubsystemBase {
     }
 
     private void initAprilTag(HardwareMap hardwareMap) {
+        cameraPosition = new Position(
+                DistanceUnit.CM,
+                WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
+        );
+
         aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(cameraPosition, cameraOrientation)
                 .build();
@@ -65,6 +79,7 @@ public class Webcam extends SubsystemBase {
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
+        lastDetection = new Position();
     }
 
     /** Returns the full list of AprilTag detections */
@@ -113,14 +128,21 @@ public class Webcam extends SubsystemBase {
     /** Returns robot position in INCHES relative to the field, or null if no valid tag */
     public Position getRobotPosition() {
         AprilTagDetection d = getBestDetection();
-        if (d == null) return null;
-        return d.robotPose.getPosition();
+        if (d == null) return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
+        if (
+                BarnRobot.getInstance().opmodeData.limelightPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
+                        BarnRobot.getInstance().opmodeData.limelightPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24
+        ){
+            return d.robotPose.getPosition();
+        }
+        else
+            return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
     }
 
     /** Returns robot orientation in DEGREES relative to the field, or null if no valid tag */
     public YawPitchRollAngles getRobotOrientation() {
         AprilTagDetection d = getBestDetection();
-        if (d == null) return null;
+        if (d == null) return new YawPitchRollAngles(AngleUnit.DEGREES, 0, 0, 0, 0);
         return d.robotPose.getOrientation();
     }
 
@@ -148,7 +170,8 @@ public class Webcam extends SubsystemBase {
     }
 
     /** Operate webcam. */
-    public void operate() {
+    @Override
+    public void periodic() {
         if (getRobotPosition() != null
                 && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
                 && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
@@ -164,20 +187,14 @@ public class Webcam extends SubsystemBase {
         displayTelemetry();
     }
 
-    public RunCommand operateCommand() {
-        return new RunCommand(() -> operate(), this);
-    }
-
     /** Display webcam + pinpoint telemetry. */
     public void displayTelemetry() {
         Position pos = getRobotPosition();
-        if (pos != null) {
-            BarnRobot.getInstance().telemetry.addData("Webcam pose x:", pos.x);
-            BarnRobot.getInstance().telemetry.addData("Webcam pose y:", pos.y);
 
-        }
-        BarnRobot.getInstance().telemetry.addData("Pinpoint pose x:", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
-        BarnRobot.getInstance().telemetry.addData("Pinpoint pose y:", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
+
+        BarnRobot.getInstance().telemetry.addData("Webcam pose x:", pos.x);
+        BarnRobot.getInstance().telemetry.addData("Webcam pose y:", pos.y);
+        BarnRobot.getInstance().telemetry.addData("Webcam pose yaw:", getRobotOrientation().getYaw());
 
         BarnRobot.getInstance().telemetry.addData("Pattern:", getGamePattern());
 

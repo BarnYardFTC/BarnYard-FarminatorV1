@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
@@ -40,7 +41,7 @@ public class TestTeleop extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                LimeLight.BLUE_LOCALIZATION_PIPELINE,
+                Webcam.BLUE_LOCALIZATION_PIPELINE,
                 new Pose2d(0, 0, Math.toRadians(270)),
                 270
         );

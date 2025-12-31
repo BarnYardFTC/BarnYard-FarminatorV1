@@ -17,6 +17,7 @@ import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -42,7 +43,7 @@ public class Blue_Close_GPP extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE,
+            Webcam.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X,POSE1_Y,POSE1_HEADING)
     );
 

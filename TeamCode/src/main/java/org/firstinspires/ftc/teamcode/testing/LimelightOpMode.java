@@ -8,6 +8,7 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp (name="LimelightTestingOPMode")
@@ -20,7 +21,7 @@ public class LimelightOpMode extends CommandOpMode {
         OpModeData  opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                LimeLight.BLUE_LOCALIZATION_PIPELINE,
+                Webcam.BLUE_LOCALIZATION_PIPELINE,
                 autoFinishPose
         );
 

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -10,6 +11,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+
+import org.firstinspires.ftc.teamcode.subsystems.BlinkinLED;
 
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
@@ -59,6 +62,8 @@ Configuration:
 public class RobotHardware {
 
     public VoltageSensor voltageSensor;
+
+    public RevBlinkinLedDriver blinkin;
 
     // ------------------------------------------------------------
     // Transfer Servos

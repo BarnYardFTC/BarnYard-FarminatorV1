@@ -10,7 +10,6 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
@@ -60,7 +59,7 @@ public class ShooterPidftuning extends CommandOpMode {
         // Run command scheduler and periodic updates
         super.run();
         telemetry2.addData("current velocity", farminator.shooter.getVelocity());
-        telemetry2.addData("target velocity", Shooter.SHOOTER_VELOCITY_RANGE_4);
+        telemetry2.addData("target velocity", Shooter.SHOOTER_VELOCITY_RANGE_3);
         telemetry2.update();
     }
 

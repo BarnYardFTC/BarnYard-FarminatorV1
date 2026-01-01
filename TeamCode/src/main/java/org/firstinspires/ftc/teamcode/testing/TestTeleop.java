@@ -43,7 +43,7 @@ public class TestTeleop extends CommandOpMode {
                 OpModeData.OpModeType.TELEOP,
                 Webcam.BLUE_LOCALIZATION_PIPELINE,
                 new Pose2d(0, 0, Math.toRadians(270)),
-                270
+                180
         );
 
         // ==========================================================
@@ -55,6 +55,7 @@ public class TestTeleop extends CommandOpMode {
                 opModeData
         );
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        farminator.drive.setDefaultCommand(farminator.drive.driveTwoDriversCommand());
 
 
         // ==========================================================
@@ -106,7 +107,9 @@ public class TestTeleop extends CommandOpMode {
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whileHeld(farminator.shooterHood.goToPositionCommand());
+                .toggleWhenPressed(
+                        farminator.shooterHood.goToPositionCommand()
+                );
 
 
 
@@ -117,14 +120,12 @@ public class TestTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                         .toggleWhenActive(
-                                farminator.drive.alignToTagCommand(),
-                                farminator.drive.driveOneDriverCommand()
+                                farminator.drive.alignToTagCommand()
                         );
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenActive(
-                        farminator.drive.alignToTagCommand(),
-                        farminator.drive.driveOneDriverCommand()
+                        farminator.drive.alignToTagCommand()
                 );
 
 
@@ -152,9 +153,8 @@ public class TestTeleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("x", farminator.pinpointLocalizer.getPose().position.x * 0.0254);
-        telemetry.addData("y", farminator.pinpointLocalizer.getPose().position.y * 0.0254);
-        telemetry.addData("heading", farminator.drive.getBotAbsoluteHeading());
+        farminator.drive.displayPinpointDataTelemetry();
+        farminator.webcam.displayTelemetry();
         telemetry.addData("distance from goal", farminator.drive.getDistanceFromGoal());
         telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
         farminator.shooterHood.displayTelemetry();

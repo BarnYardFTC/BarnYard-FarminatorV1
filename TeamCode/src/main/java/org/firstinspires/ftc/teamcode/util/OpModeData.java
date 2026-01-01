@@ -26,7 +26,7 @@ public class OpModeData {
     public Pose2d initialPose2d;
 
     /**Pipeline of limelight*/
-    public int limelightPipeline;
+    public int webcamPipeline;
 
     /**the heading in which the autonomous has ended*/
     private static Pose2d autoFinishPose;
@@ -44,14 +44,14 @@ public class OpModeData {
     /** Teleop constructor */
     public OpModeData(AllianceColor allianceColor,
                       OpModeType opModeType,
-                      int limelightPipeline,
+                      int webcamPipeline,
                       Pose2d initialPose2d,
                       double fieldReferenceHeading) {
 
         this.allianceColor = allianceColor;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
-        this.limelightPipeline = limelightPipeline;
+        this.webcamPipeline = webcamPipeline;
         this.initialPose2d = initialPose2d;
     }
 
@@ -60,14 +60,14 @@ public class OpModeData {
     /** Autonomous constructor */
     public OpModeData(AllianceColor allianceColor,
                       OpModeType opModeType,
-                      int limelightPipeline,
+                      int webcamPipeline,
                       Pose2d initialPose2d) {
 
         autoFinishPose = new Pose2d(0,0,0); //reset autoFinishPose
         this.initialPose2d = initialPose2d;
         this.allianceColor = allianceColor;
         this.opModeType = opModeType;
-        this.limelightPipeline = limelightPipeline;
+        this.webcamPipeline = webcamPipeline;
 
         // Default val
         this.fieldReferenceHeading = 0;

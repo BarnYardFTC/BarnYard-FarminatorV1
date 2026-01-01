@@ -3,20 +3,16 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.robocol.Command;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.PinpointLocalizer;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -29,7 +25,7 @@ public class Webcam extends SubsystemBase {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
 
-    public static double MAX_UPDATE_DISTANCE = 1.8;
+    public static double MAX_UPDATE_DISTANCE = 1.5;
 
     public Position lastDetection;
     private final ElapsedTime poseUpdateTimer = new ElapsedTime();
@@ -130,8 +126,8 @@ public class Webcam extends SubsystemBase {
         AprilTagDetection d = getBestDetection();
         if (d == null) return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
         if (
-                BarnRobot.getInstance().opmodeData.limelightPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
-                        BarnRobot.getInstance().opmodeData.limelightPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24
+                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
+                        BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24
         ){
             return d.robotPose.getPosition();
         }
@@ -154,6 +150,17 @@ public class Webcam extends SubsystemBase {
         }
     }
 
+    public boolean isLocalizationTagDetected(){
+        AprilTagDetection d = getBestDetection();
+        return isTagDetected() &&
+                (BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
+                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24);
+    }
+
+    public boolean isTagDetected(){
+        return getBestDetection() != null;
+    }
+
     /** Stop camera stream */
     public void stopStreaming() {
         if (visionPortal != null) visionPortal.stopStreaming();
@@ -172,7 +179,7 @@ public class Webcam extends SubsystemBase {
     /** Operate webcam. */
     @Override
     public void periodic() {
-        if (getRobotPosition() != null
+        if (isLocalizationTagDetected()
                 && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
                 && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
 
@@ -191,10 +198,8 @@ public class Webcam extends SubsystemBase {
     public void displayTelemetry() {
         Position pos = getRobotPosition();
 
-
         BarnRobot.getInstance().telemetry.addData("Webcam pose x:", pos.x);
         BarnRobot.getInstance().telemetry.addData("Webcam pose y:", pos.y);
-        BarnRobot.getInstance().telemetry.addData("Webcam pose yaw:", getRobotOrientation().getYaw());
 
         BarnRobot.getInstance().telemetry.addData("Pattern:", getGamePattern());
 

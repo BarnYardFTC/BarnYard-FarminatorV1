@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Robot;
@@ -127,7 +126,7 @@ public class BarnRobot extends Robot {
 
         // Subsystem initialization
         initTransfer();
-        initLimeLight(opModeData.limelightPipeline);
+        initLimeLight(opModeData.webcamPipeline);
         initShooter();
         initIntake();
         initDrivetrain(opMode.hardwareMap);

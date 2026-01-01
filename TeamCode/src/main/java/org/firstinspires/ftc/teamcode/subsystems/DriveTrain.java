@@ -185,7 +185,7 @@ public class DriveTrain extends SubsystemBase {
         double desiredHeading, tangentAngle;
 
         if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED){
-            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_3) {
+            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2) {
                 tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_2)/(RED_GOAL_Y - currentY)));
             }
             else {
@@ -194,7 +194,7 @@ public class DriveTrain extends SubsystemBase {
             desiredHeading = 90 + tangentAngle;
         }
         else {
-            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_3) {
+            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2) {
                 tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_2)/(currentY-BLUE_GOAL_Y)));
             }
             else {
@@ -292,6 +292,12 @@ public class DriveTrain extends SubsystemBase {
         return heading;
     }
 
+
+    public void displayPinpointDataTelemetry(){
+        BarnRobot.getInstance().telemetry.addData("pinpoint x", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
+        BarnRobot.getInstance().telemetry.addData("pinpoint y", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
+        BarnRobot.getInstance().telemetry.addData("pinpoint heading", getBotAbsoluteHeading());
+    }
 
     // ============================================================
     //                           PERIODIC

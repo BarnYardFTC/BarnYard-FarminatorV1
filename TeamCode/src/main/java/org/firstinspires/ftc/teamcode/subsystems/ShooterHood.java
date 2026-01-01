@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class ShooterHood extends SubsystemBase {
     private Servo servo;
-    private final double MIN = 0.3;
+    private final double MIN = 0.2;
     private final double MAX = 1;
 
     InterpLUT range1Lut;
@@ -43,6 +43,7 @@ public class ShooterHood extends SubsystemBase {
         range4Lut = new InterpLUT();
 
         //Adding each val with a key
+        range1Lut.add(0.6, 0.2);
         range1Lut.add(0.7, 0.3);
         range1Lut.add(0.81, 0.4);
         range1Lut.add(0.9, 0.45);
@@ -147,13 +148,13 @@ public class ShooterHood extends SubsystemBase {
         if (position < MIN) position = MIN;
         double finalPosition = position;
         return new InstantCommand(() ->
-            servo.setPosition(finalPosition), this);
+                servo.setPosition(finalPosition), this);
     }
 
     public Command returnToBase(){
         return new InstantCommand(() -> {
             servo.setPosition(MIN);
-            },this
+        },this
         );
     }
 
@@ -184,7 +185,7 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private double capDistanceRange1(double distance){
-        if (distance <= 0.7) distance = 0.71;
+        if (distance <= 0.6) distance = 0.61;
         else if (distance >= 1.08) distance = 1.079;
         return distance;
     }

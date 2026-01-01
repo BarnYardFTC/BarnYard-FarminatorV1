@@ -133,6 +133,7 @@ public class BarnRobot extends Robot {
         initShooterHood();
         initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
+        initBlinkin();
     }
 
 
@@ -199,6 +200,10 @@ public class BarnRobot extends Robot {
         intake = new Intake();
     }
 
+    public void initBlinkin(){
+        blinkin = new BlinkinLED();
+    }
+
 
     // ------------------------------------------------------------
     // Periodic Loop
@@ -211,6 +216,6 @@ public class BarnRobot extends Robot {
     public void periodic() {
         pinpointLocalizer.update();
         telemetry.update();
-//        blinkin.update(); //TODO: Add in the future
+        blinkin.update();
     }
 }

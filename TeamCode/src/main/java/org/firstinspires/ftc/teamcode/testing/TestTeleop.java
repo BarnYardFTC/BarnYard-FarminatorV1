@@ -118,12 +118,8 @@ public class TestTeleop extends CommandOpMode {
                         farminator.shooter.runShooterBasedOnDistance(),
                         farminator.shooter.turnOff());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                        .toggleWhenActive(
-                                farminator.drive.alignToTagCommand()
-                        );
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenActive(
                         farminator.drive.alignToTagCommand()
                 );
@@ -136,17 +132,12 @@ public class TestTeleop extends CommandOpMode {
                 );
 
         // Right Stick Button → Toggle between slow and fast drive modes
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .toggleWhenActive(
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0, 0, Math.toRadians(270))));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
-                .whenPressed(farminator.drive.updatePinpointPose(new Pose2d(0, 0, Math.toRadians(270))));
 
     }
 

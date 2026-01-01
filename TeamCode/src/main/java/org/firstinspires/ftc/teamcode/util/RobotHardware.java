@@ -129,6 +129,8 @@ public class RobotHardware {
 
     private static final String SHOOTER_HOOD_CONFIG_NAME = "shooterHood";
 
+    private static final String BLINKIN_CONFIG_NAME = "blinkin";
+
 
 
     // ------------------------------------------------------------
@@ -159,6 +161,7 @@ public class RobotHardware {
         initServos();
         initSensors();
         initVoltageSensor();
+        initBlinkinLed();
         shooterHood = hw.get(Servo.class, "shooterHood");
     }
 
@@ -245,6 +248,11 @@ public class RobotHardware {
         limelight = hw.get(Limelight3A.class, "limelight");
 
     }
+
+    private void initBlinkinLed() {
+        blinkin = hw.get(RevBlinkinLedDriver.class, BLINKIN_CONFIG_NAME);
+    }
+
     private void initVoltageSensor(){
         voltageSensor = hw.get(VoltageSensor.class, "Control Hub");
     }

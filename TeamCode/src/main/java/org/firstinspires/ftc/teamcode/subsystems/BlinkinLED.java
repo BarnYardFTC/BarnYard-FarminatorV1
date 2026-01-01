@@ -6,8 +6,7 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
-//ready for general testing, but doesnt show artifact color yet
-//i hate black people
+
 public class BlinkinLED extends SubsystemBase {
     private RevBlinkinLedDriver blinkin;
     private RevBlinkinLedDriver.BlinkinPattern currentPattern = null;
@@ -59,7 +58,13 @@ public class BlinkinLED extends SubsystemBase {
         if(newPattern != currentPattern && now - lastUpdateTime > 250){
             blinkin.setPattern(newPattern);
             currentPattern = newPattern;
+            lastUpdateTime = System.currentTimeMillis();
         }
 
     }
+
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
 }

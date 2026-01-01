@@ -247,8 +247,8 @@ public class DriveTrain extends SubsystemBase {
     /** Continuous alignment command (runs alignToGoal loop) */
     public Command alignToTagCommand() {
         return new RunCommand(() -> localizationBasedGoalAlignment(
-                BarnRobot.getInstance().gamepadEx2.getLeftX(),
-                BarnRobot.getInstance().gamepadEx2.getLeftY())
+                BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                BarnRobot.getInstance().gamepadEx1.getLeftY())
                 , this);
     }
 

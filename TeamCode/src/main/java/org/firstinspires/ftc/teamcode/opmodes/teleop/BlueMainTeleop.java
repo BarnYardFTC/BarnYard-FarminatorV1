@@ -168,6 +168,7 @@ public class BlueMainTeleop extends CommandOpMode {
         telemetry.addData("x", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
         telemetry.addData("y", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
         telemetry.addData("heading", BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+        telemetry.addData("blinkin last update time", farminator.blinkin.getLastUpdateTime());
         farminator.periodic();
         rumpleGamepadsEndgame();
     }

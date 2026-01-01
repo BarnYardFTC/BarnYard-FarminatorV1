@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -8,6 +9,8 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 
 import java.util.List;
 
+//Sasha: edited in order to continue on LED class, and according to my view on this class output
+@Config
 public class LimeLightColorRecognition {
     private Limelight3A limelight;
 
@@ -24,6 +27,15 @@ public class LimeLightColorRecognition {
     private double tx;
     private double ty;
     private boolean isFound = false;
+
+    public enum Artifact {
+        NONE,
+        GREEN,
+        PURPLE
+    }
+
+//    private Artifact frontTransferArtifact = Artifact.NONE;
+    private static Artifact backTransferArtifact = Artifact.NONE;
 
 
     public LimeLightColorRecognition() {
@@ -66,5 +78,12 @@ public class LimeLightColorRecognition {
         return isFound;
     }
 
+//    public Artifact getFrontTransferArtifact() {
+//        return frontTransferArtifact;
+//    }
+
+    public Artifact getBackTransferArtifact() {
+        return backTransferArtifact;
+    }
 
 }

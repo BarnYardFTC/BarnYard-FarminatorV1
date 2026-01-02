@@ -77,7 +77,8 @@ public class ArtifactDetection extends OpenCvPipeline {
             rightBorderX = -1.0;
             leftBorderX = -1.0;
         }
-
+        System.out.println("Artifact left X: " + leftBorderX);
+        System.out.println("Artifact right X: " + rightBorderX);
         return input;
     }
 

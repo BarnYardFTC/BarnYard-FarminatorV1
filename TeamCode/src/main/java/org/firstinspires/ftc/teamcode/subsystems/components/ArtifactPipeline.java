@@ -142,5 +142,6 @@ public class ArtifactPipeline extends OpenCvPipeline {
         return artifacts;
     }
 
-    public double getLeftx() { return artifacts.get(0).center.x + artifacts.get(0).center.x/2; }
+    public double getLeftX() { return leftX; }
+    public double getRightX() { return rightX; }
 }

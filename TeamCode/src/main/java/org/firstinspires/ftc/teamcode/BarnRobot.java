@@ -174,6 +174,7 @@ public class BarnRobot extends Robot {
      */
     private void initDrivetrainAutonomous(HardwareMap hw){
         roadRunnerMecanumDrive = new RoadRunnerMecanumDrive(hw, opmodeData.initialPose2d);
+        drive = new DriveTrain();
     }
 
     private void initPinpointLocalizer(HardwareMap hw){

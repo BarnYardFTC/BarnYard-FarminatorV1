@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.eosvsim;
+package org.firstinspires.ftc.teamcode.subsystems.components.pipelines;
 
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.*;

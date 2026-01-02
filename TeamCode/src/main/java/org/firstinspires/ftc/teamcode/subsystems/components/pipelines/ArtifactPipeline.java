@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.subsystems.components;
+package org.firstinspires.ftc.teamcode.subsystems.components.pipelines;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.subsystems.components.Artifact;
+import org.firstinspires.ftc.teamcode.subsystems.components.pipelines.Artifact;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -67,6 +67,8 @@ public class ArtifactPipeline extends OpenCvPipeline {
         int greenCount = (int) artifacts.stream().filter(a -> a.color.equals("green")).count();
         telemetry.addData("Purple", purpleCount);
         telemetry.addData("Green", greenCount);
+        telemetry.addData("Left X", leftX);
+        telemetry.addData("Right X", rightX);
         telemetry.update();
 
         return output;

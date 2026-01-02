@@ -76,7 +76,6 @@ public class Webcam extends SubsystemBase {
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         builder.addProcessor(aprilTag);
-        builder.setCameraResolution(new Size(640, 480));
         visionPortal = builder.build();
         lastDetection = new Position();
     }
@@ -184,7 +183,9 @@ public class Webcam extends SubsystemBase {
     public void periodic() {
         if (isLocalizationTagDetected()
                 && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
-                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
+                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
+                BarnRobot.getInstance().drive.isRobotStatic()
+                ) {
 
             updatePose();
             poseUpdateTimer.reset();

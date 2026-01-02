@@ -39,7 +39,7 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
     public static double POSE2_Y = -10;
     public static double POSE2_HEADING = Math.toRadians(215);
 
-    public static double POSE3_X = 40;
+    public static double POSE3_X = 35;
     public static double POSE3_Y = -10;
     public static double POSE3_HEADING = Math.toRadians(270);
 

@@ -8,12 +8,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.eosvsim.ArtifactDetection;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -26,7 +28,7 @@ public class Webcam extends SubsystemBase {
 
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
-
+    private ArtifactDetection detector;
     public static double MAX_UPDATE_DISTANCE = 1.5;
 
     public Position lastDetection;
@@ -49,6 +51,36 @@ public class Webcam extends SubsystemBase {
     public static double WEBCAM_X = 12;
     public static double WEBCAM_Y = 12;
     public static double WEBCAM_Z = 27.5;
+
+    private double shooterLeftPixel;
+    private double middleLeftPixel;
+
+    private busyType shooterPos = busyType.FREE;
+    private busyType middlePos = busyType.FREE;
+
+    private artifactReadiness currentMiddleArtifactReadiness = artifactReadiness.NOTHING;
+    private artifactReadiness currentShooterArtifactReadiness = artifactReadiness.NOTHING;
+
+    public enum artifactReadiness {READY, UNREADY, NOTHING}
+    private enum busyType {BUSY, FREE}
+
+    // temp telemetry
+    public Telemetry telemetry;
+
+    public enum artifactPositions {
+        SHOOTPOSMIN(800), MIDDLEPOS(500);
+        private int numVal;
+
+        artifactPositions(int numVal) {
+            this.numVal = numVal;
+        }
+
+        public int getNumVal() {
+            return numVal;
+        }
+    }
+
+
     private Position cameraPosition = new Position(
             DistanceUnit.CM,
             WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
@@ -60,22 +92,22 @@ public class Webcam extends SubsystemBase {
     );
 
     public Webcam(HardwareMap hw) {
-        initAprilTag(hw);
+        initArtFinder(hw);
     }
 
-    private void initAprilTag(HardwareMap hardwareMap) {
+    private void initArtFinder(HardwareMap hardwareMap) {
         cameraPosition = new Position(
                 DistanceUnit.CM,
                 WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
         );
 
-        aprilTag = new AprilTagProcessor.Builder()
-                .setCameraPose(cameraPosition, cameraOrientation)
-                .build();
+        detector = new ArtifactDetection();
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-        builder.addProcessor(aprilTag);
+
+        builder.addProcessor(detector);
+
         builder.setCameraResolution(new Size(640, 480));
         visionPortal = builder.build();
         lastDetection = new Position();
@@ -98,6 +130,53 @@ public class Webcam extends SubsystemBase {
         }
         return null;
     }
+
+    public void ArtifactLeftPixel(){
+        if (detector.isArtifactFound()){
+            /** This logic for 2 artifacts in the robot(For the future) */
+//            for (int i=0; i<corners.size(); i++){
+//                if (i%3 == 0){
+//                    if (corners.get(i).get(0) > artifactPositions.MIDDLEPOS.getNumVal() && corners.get(i).get(0) <= artifactPositions.SHOOTPOSMIN.getNumVal()){
+//                        shooterLeftPixel = corners.get(i).get(0);
+//                    }
+//                    if (corners.get(i).get(0) > artifactPositions.INTAKEPOS.getNumVal() && corners.get(i).get(0) <= artifactPositions.MIDDLEPOS.getNumVal()){
+//                        middleLeftPixel = corners.get(i).get(0);
+//                    }
+//                    if (corners.get(i).get(0) <= artifactPositions.INTAKEPOS.getNumVal()){
+//                        intakeLeftPixel = corners.get(i).get(0);
+//                    }
+//                }
+//            }
+            shooterLeftPixel = detector.getLeftBorderX();
+            this.telemetry.addData("Left Pixel", shooterLeftPixel);
+        }
+    }
+
+
+    /** Updates the current artifact readiness */
+    public void ArtifactReadinessFunc(){
+        ArtifactLeftPixel();
+        if (detector.isArtifactFound()){
+            currentShooterArtifactReadiness = artifactReadiness.READY;
+//            if (shooterLeftPixel > artifactPositions.SHOOTPOSMIN.getNumVal() && shooterPos == busyType.FREE){
+//                shooterPos = busyType.BUSY;
+//                telemetry.addLine("Artifact state is READY");
+//                ArtifactReadiness.remove(artifactReadiness.UNREADY);
+//                ArtifactReadiness.add(artifactReadiness.READY);
+//            }
+//            else{
+//                shooterPos = busyType.FREE;
+//                this.telemetry.addLine("Artifact state is UNREADY");
+//                ArtifactReadiness.remove(artifactReadiness.READY);
+//                ArtifactReadiness.add(artifactReadiness.UNREADY);
+//            }
+        }
+        else {
+            currentShooterArtifactReadiness = artifactReadiness.NOTHING;
+        }
+
+    }
+
 
     /** Updates MOTIF pattern based on the obelisk detections (slightly changed code from a func above) */
     public void updateGamePattern() {

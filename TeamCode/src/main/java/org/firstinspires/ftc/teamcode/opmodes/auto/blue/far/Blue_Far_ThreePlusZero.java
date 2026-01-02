@@ -32,15 +32,15 @@ public class Blue_Far_ThreePlusZero extends CommandOpMode {
     private RoadRunnerMecanumDrive drive;
 
     public static double POSE1_X = 60;
-    public static double POSE1_Y = 15;
+    public static double POSE1_Y = -15;
     public static double POSE1_HEADING = Math.toRadians(180);
 
     public static double POSE2_X = 55;
-    public static double POSE2_Y = 10;
+    public static double POSE2_Y = -10;
     public static double POSE2_HEADING = Math.toRadians(215);
 
     public static double POSE3_X = 40;
-    public static double POSE3_Y = 10;
+    public static double POSE3_Y = -10;
     public static double POSE3_HEADING = Math.toRadians(270);
 
 

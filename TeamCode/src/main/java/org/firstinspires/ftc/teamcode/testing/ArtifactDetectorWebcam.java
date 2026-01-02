@@ -31,7 +31,7 @@ public class ArtifactDetectorWebcam {
 
             if (detector.isArtifactFound()) {
                 System.out.println("Artifact found! Right border X: " + detector.getRightBorderX());
-                System.out.println("Left border X: " + detector.getLeftBorderX());
+                System.out.println("Left border X:  " + detector.getLeftBorderX());
             } else {
                 System.out.println("Artifact not found");
             }

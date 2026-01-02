@@ -16,10 +16,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.eosvsim.ArtifactDetection;
+import org.firstinspires.ftc.teamcode.subsystems.components.ArtifactPipeline;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.List;
 
@@ -29,6 +32,8 @@ public class Webcam extends SubsystemBase {
     private VisionPortal visionPortal;
     private AprilTagProcessor aprilTag;
     private ArtifactDetection detector;
+    private OpenCvCamera camera;
+    private ArtifactPipeline pipeline;
     public static double MAX_UPDATE_DISTANCE = 1.5;
 
     public Position lastDetection;
@@ -102,6 +107,12 @@ public class Webcam extends SubsystemBase {
                 .setCameraPose(cameraPosition, cameraOrientation)
                 .build();
 
+        camera = OpenCvCameraFactory.getInstance()
+                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        pipeline = new ArtifactPipeline(BarnRobot.getInstance().telemetry);
+
+        camera.setPipeline(pipeline);
 
 
         VisionPortal.Builder builder = new VisionPortal.Builder();

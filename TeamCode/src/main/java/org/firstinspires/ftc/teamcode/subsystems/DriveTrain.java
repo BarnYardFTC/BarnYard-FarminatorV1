@@ -47,10 +47,22 @@ public class DriveTrain extends SubsystemBase {
     /** Field coordinates for the target goal. */
     public static final double GOAL_X_1 = -1.72;
     public static final double GOAL_X_2 = -1.65;
-    public static final double BLUE_GOAL_Y = -1.6;
-    public static final double RED_GOAL_Y = 1.55;
+    public static final double BLUE_GOAL_Y = -1.45;
+    public static final double RED_GOAL_Y = 1.45;
 
     public static double GOAL_ROBOT_MIN_DISTANCE = 0.7;
+
+    // thresholds (tune if needed)
+    private static final double POSITION_EPSILON = 0.5; // mm (or inches, match your units)
+    private static final double HEADING_EPSILON = Math.toRadians(1.0); // 1 degree
+    private static final double VELOCITY_EPSILON = 0.01; // units/sec
+    private static final double ANGULAR_VELOCITY_EPSILON = Math.toRadians(1.0); // rad/sec
+
+    private double lastX = Double.NaN;
+    private double lastY = Double.NaN;
+    private double lastHeading = Double.NaN;
+    private long lastTimeNs = 0;
+
 
     // ============================================================
     //                       CONSTRUCTOR
@@ -221,7 +233,6 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
     //                           COMMANDS
     // ============================================================
-
     /** Default manual field-centric drive */
     public Command driveOneDriverCommand() {
         return new RunCommand(
@@ -292,6 +303,47 @@ public class DriveTrain extends SubsystemBase {
         return heading;
     }
 
+
+    public boolean isRobotStatic() {
+        double y = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y;
+        double x = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x;
+        double heading = getBotAbsoluteHeading();
+        long now = System.nanoTime();
+
+        // first call initialization
+        if (Double.isNaN(lastX)) {
+            lastX = x;
+            lastY = y;
+            lastHeading = heading;
+            lastTimeNs = now;
+            return true;
+        }
+
+        double dt = (now - lastTimeNs) * 1e-9; // seconds
+        if (dt <= 0) return true;
+
+        double dx = x - lastX;
+        double dy = y - lastY;
+        double dHeading = angleWrap(heading - lastHeading);
+
+        double linearVelocity = Math.hypot(dx, dy) / dt;
+        double angularVelocity = Math.abs(dHeading) / dt;
+
+        // update history
+        lastX = x;
+        lastY = y;
+        lastHeading = heading;
+        lastTimeNs = now;
+
+        return linearVelocity < VELOCITY_EPSILON
+                && angularVelocity < ANGULAR_VELOCITY_EPSILON;
+    }
+
+    private double angleWrap(double radians) {
+        while (radians > Math.PI) radians -= 2 * Math.PI;
+        while (radians < -Math.PI) radians += 2 * Math.PI;
+        return radians;
+    }
 
     public void displayPinpointDataTelemetry(){
         BarnRobot.getInstance().telemetry.addData("pinpoint x", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);

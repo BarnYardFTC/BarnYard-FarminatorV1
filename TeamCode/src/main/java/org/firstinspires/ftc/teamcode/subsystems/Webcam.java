@@ -64,9 +64,6 @@ public class Webcam extends SubsystemBase {
     public enum artifactReadiness {READY, UNREADY, NOTHING}
     private enum busyType {BUSY, FREE}
 
-    // temp telemetry
-    public Telemetry telemetry;
-
     public enum artifactPositions {
         SHOOTPOSMIN(800), MIDDLEPOS(500);
         private int numVal;
@@ -101,14 +98,15 @@ public class Webcam extends SubsystemBase {
                 WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
         );
 
-        detector = new ArtifactDetection();
+        aprilTag = new AprilTagProcessor.Builder()
+                .setCameraPose(cameraPosition, cameraOrientation)
+                .build();
+
+
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-
-        builder.addProcessor(detector);
-
-        builder.setCameraResolution(new Size(640, 480));
+        builder.addProcessor(aprilTag);
         visionPortal = builder.build();
         lastDetection = new Position();
     }
@@ -148,7 +146,6 @@ public class Webcam extends SubsystemBase {
 //                }
 //            }
             shooterLeftPixel = detector.getLeftBorderX();
-            this.telemetry.addData("Left Pixel", shooterLeftPixel);
         }
     }
 
@@ -263,7 +260,9 @@ public class Webcam extends SubsystemBase {
     public void periodic() {
         if (isLocalizationTagDetected()
                 && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
-                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
+                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
+                BarnRobot.getInstance().drive.isRobotStatic()
+                ) {
 
             updatePose();
             poseUpdateTimer.reset();

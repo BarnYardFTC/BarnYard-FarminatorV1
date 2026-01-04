@@ -33,6 +33,8 @@ public class Red_Close_ThreePlusNine {
 
     public static double GATE_POSE_X = 0;
 
+    public static double ENDING_POSE_X = -40;
+    public static double ENDING_POSE_Y = 22;
 
     // -----------------------------
     // Main Simulation
@@ -83,7 +85,8 @@ public class Red_Close_ThreePlusNine {
         TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, NORTH_HEADING))
                 .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X,SHOOT_POSE_Y ),SHOOT_HEADING );
 
-
+        TrajectoryActionBuilder path10 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(ENDING_POSE_X,ENDING_POSE_Y),SHOOT_HEADING);
 
 
                         // Run the trajectory

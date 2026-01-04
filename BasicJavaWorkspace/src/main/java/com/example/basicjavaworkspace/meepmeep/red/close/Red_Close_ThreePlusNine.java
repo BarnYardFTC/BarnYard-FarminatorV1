@@ -26,7 +26,7 @@ public class Red_Close_ThreePlusNine {
     public static double NORTH_HEADING = Math.toRadians(90);
 
     public static double LEFT_COLLECT_POSE_X = -11;
-    public static double MID_COLLECT_POSE_X = 10;
+    public static double MID_COLLECT_POSE_X = 11.8;
     public static double RIGHT_COLLECT_POSE_X = 35;
 
     public static double GATE_POSE_X = 0;
@@ -66,10 +66,20 @@ public class Red_Close_ThreePlusNine {
                 .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING);
 
         TrajectoryActionBuilder path5 = slowBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X,NORTH_COLLECT_POSE_Y), NORTH_HEADING);
+                .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X,NORTH_COLLECT_POSE_Y), NORTH_HEADING)
+                .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X,NORTH_COLLECT_POSE_Y-8), NORTH_HEADING);
 
-        TrajectoryActionBuilder path6 = myBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, NORTH_HEADING))
+        TrajectoryActionBuilder path6 = myBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y-8, NORTH_HEADING))
                 .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING);
+
+        TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X,SHOOT_POSE_Y,SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING);
+
+        TrajectoryActionBuilder path8 = slowBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING);
+
+        TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, NORTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X,SHOOT_POSE_Y ),SHOOT_HEADING );
 
 
 
@@ -78,7 +88,6 @@ public class Red_Close_ThreePlusNine {
                         myBot.runAction(
                                 new SequentialAction(
                                         new SleepAction(SHOOT_TIME),
-
                                         path1.build(),
                                         path2.build(),
                                         path3.build(),
@@ -86,7 +95,11 @@ public class Red_Close_ThreePlusNine {
                                         path4.build(),
                                         path5.build(),
                                         path6.build(),
-                                        new SleepAction(SHOOT_TIME)
+                                        new SleepAction(SHOOT_TIME),
+                                        path7.build(),
+                                        path8.build(),
+                                        path9.build()
+
 
                                 )
 

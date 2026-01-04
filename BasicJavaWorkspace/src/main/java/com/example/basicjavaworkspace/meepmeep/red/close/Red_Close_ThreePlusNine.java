@@ -29,6 +29,8 @@ public class Red_Close_ThreePlusNine {
     public static double MID_COLLECT_POSE_X = 11.8;
     public static double RIGHT_COLLECT_POSE_X = 35;
 
+    public static double GATE_POSE_Y = 44;
+
     public static double GATE_POSE_X = 0;
 
 
@@ -51,15 +53,15 @@ public class Red_Close_ThreePlusNine {
 
 
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_READY_POSE_Y),NORTH_HEADING)
-                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING)
-                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING)
                 .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING);
 
         TrajectoryActionBuilder path2 = slowBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
                 .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING);
 
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, NORTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, GATE_POSE_Y),NORTH_HEADING)
+                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING)
+                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING)
                 .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING);
 
         TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))

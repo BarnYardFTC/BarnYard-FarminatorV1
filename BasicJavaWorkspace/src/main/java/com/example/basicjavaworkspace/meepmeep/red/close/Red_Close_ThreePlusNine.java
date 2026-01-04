@@ -63,7 +63,6 @@ public class Red_Close_ThreePlusNine {
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, NORTH_HEADING))
                 .strafeToLinearHeading(new Vector2d(GATE_POSE_X, GATE_POSE_Y),NORTH_HEADING)
                 .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING)
-                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING)
                 .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING);
 
         TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))

@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -19,7 +20,7 @@ public class Red_Close_ThreePlusNine {
 
     public static double SHOOT_POSE_X = -23;
     public static double SHOOT_POSE_Y = 22;
-    public static double SHOOT_HEADING = Math.toRadians(130);
+    public static double SHOOT_HEADING = Math.toRadians(135);
 
     public static double NORTH_READY_POSE_Y = 22;
     public static double NORTH_COLLECT_POSE_Y = 53;
@@ -36,6 +37,8 @@ public class Red_Close_ThreePlusNine {
     public static double ENDING_POSE_X = -40;
     public static double ENDING_POSE_Y = 22;
 
+    public static double defaultVel = 50;
+
     // -----------------------------
     // Main Simulation
     // -----------------------------
@@ -48,28 +51,26 @@ public class Red_Close_ThreePlusNine {
                 .setDimensions(13.157, 18.03044)
                 .build();
 
-        RoadRunnerBotEntity slowBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(20, 20, Math.toRadians(180), Math.toRadians(180), 15)
-                .setDimensions(13.157, 18.03044)
-                .build();
 
 
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING);
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING, new TranslationalVelConstraint(defaultVel*4));
 
-        TrajectoryActionBuilder path2 = slowBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING);
+        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING, new TranslationalVelConstraint(defaultVel * 0.5));
 
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, NORTH_HEADING))
                 .strafeToLinearHeading(new Vector2d(GATE_POSE_X, GATE_POSE_Y),NORTH_HEADING)
                 .strafeToLinearHeading(new Vector2d(GATE_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING)
-                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING);
+                .waitSeconds(0.5)
+                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING, new TranslationalVelConstraint(defaultVel*4));
+
 
         TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING);
 
-        TrajectoryActionBuilder path5 = slowBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X,NORTH_COLLECT_POSE_Y), NORTH_HEADING)
+        TrajectoryActionBuilder path5 = myBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X,NORTH_COLLECT_POSE_Y), NORTH_HEADING, new TranslationalVelConstraint(defaultVel * 0.5))
                 .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X,NORTH_COLLECT_POSE_Y-8), NORTH_HEADING);
 
         TrajectoryActionBuilder path6 = myBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y-8, NORTH_HEADING))
@@ -78,11 +79,12 @@ public class Red_Close_ThreePlusNine {
         TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X,SHOOT_POSE_Y,SHOOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_READY_POSE_Y), NORTH_HEADING);
 
-        TrajectoryActionBuilder path8 = slowBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING);
+        TrajectoryActionBuilder path8 = myBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_READY_POSE_Y, NORTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y), NORTH_HEADING, new TranslationalVelConstraint(defaultVel * 0.5))
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y - 8), NORTH_HEADING);
 
-        TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, NORTH_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X,SHOOT_POSE_Y ),SHOOT_HEADING );
+        TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y-8, NORTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X,SHOOT_POSE_Y ),SHOOT_HEADING, new TranslationalVelConstraint(defaultVel * 4));
 
         TrajectoryActionBuilder path10 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(ENDING_POSE_X,ENDING_POSE_Y),SHOOT_HEADING);

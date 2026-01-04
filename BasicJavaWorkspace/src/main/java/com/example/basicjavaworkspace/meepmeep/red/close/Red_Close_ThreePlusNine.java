@@ -88,6 +88,7 @@ public class Red_Close_ThreePlusNine {
 
                         // Run the trajectory
                         myBot.runAction(
+
                                 new SequentialAction(
                                         new SleepAction(SHOOT_TIME),
                                         path1.build(),

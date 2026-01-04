@@ -33,7 +33,7 @@ public class ShooterAlignmentServoTest extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                Webcam.BLUE_LOCALIZATION_PIPELINE,
+                LimeLight.BLUE_LOCALIZATION_PIPELINE,
                 autoFinishPose
         );
 

@@ -21,7 +21,7 @@ public class LimelightOpMode extends CommandOpMode {
         OpModeData  opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                Webcam.BLUE_LOCALIZATION_PIPELINE,
+                LimeLight.BLUE_LOCALIZATION_PIPELINE,
                 autoFinishPose
         );
 
@@ -40,7 +40,7 @@ public class LimelightOpMode extends CommandOpMode {
     public void run(){
         super.run();
 
-        robot.telemetry.addData("Lime", BarnRobot.getInstance().limelight.getArtifactReadiness());
+//        robot.telemetry.addData("Lime", BarnRobot.getInstance().limelight.getArtifactReadiness());
         robot.periodic();
     }
 

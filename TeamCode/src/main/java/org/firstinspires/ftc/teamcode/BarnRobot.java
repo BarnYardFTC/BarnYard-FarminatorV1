@@ -193,7 +193,7 @@ public class BarnRobot extends Robot {
 
     /** Sets up the LimeLight vision system. */
     public void initLimeLight(int pipeline) {
-        limelight = new LimeLight(pipeline, this.telemetry);
+        limelight = new LimeLight(pipeline);
     }
 
     /** Sets up the intake system. */

@@ -14,6 +14,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -30,7 +31,7 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
-            limelight.RED_LOCALIZATION_PIPELINE,
+            LimeLight.RED_LOCALIZATION_PIPELINE,
             new Pose2d(START_POSE_X, START_POSE_Y, START_POSE_HEADING)
     );
 
@@ -90,9 +91,10 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
         double OPEN_GATE_Y = 0;
         double OPEN_GATE_HEADING = Math.toRadians(0);
 
-        double BACK_TO_SHOOT_X = SHOOTING_POSE_X;
-        double BACK_TO_SHOOT_Y = SHOOTING_POSE_Y;
-        double BACK_TO_SHOOT_HEADING = SHOOTING_HEADING;
+        double GATE_X = 0;
+        double GATE_Y = 0;
+        double GATE_HEADING = Math.toRadians(0);
+
 
         // Build trajectories
         TrajectoryActionBuilder toArtifacts =
@@ -110,15 +112,23 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
                                 new TranslationalVelConstraint(INTAKE_VELOCITY)
                         );
 
-        TrajectoryActionBuilder openGate =
+        TrajectoryActionBuilder prepareOpenGate =
                 drive.actionBuilder(new Pose2d(COLLECT_POSE_X, COLLECT_POSE_Y, COLLECT_POSE_HEADING))
                         .strafeToLinearHeading(new Vector2d(OPEN_GATE_X, OPEN_GATE_Y), OPEN_GATE_HEADING);
+
+        TrajectoryActionBuilder openGate =
+                drive.actionBuilder(new Pose2d(OPEN_GATE_X, OPEN_GATE_Y, OPEN_GATE_HEADING))
+                        .strafeToLinearHeading(new Vector2d(GATE_X, GATE_Y), GATE_HEADING);
+
+        TrajectoryActionBuilder backFromGate =
+                drive.actionBuilder(new Pose2d(GATE_X, GATE_Y, GATE_HEADING))
+                        .strafeToLinearHeading (new Vector2d(COLLECT_POSE_X, COLLECT_POSE_Y), COLLECT_POSE_HEADING);
 
         TrajectoryActionBuilder backToShoot =
                 drive.actionBuilder(new Pose2d(COLLECT_POSE_X, COLLECT_POSE_Y, COLLECT_POSE_HEADING))
                         .strafeToLinearHeading(
-                                new Vector2d(BACK_TO_SHOOT_X, BACK_TO_SHOOT_Y),
-                                BACK_TO_SHOOT_HEADING
+                                new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
+                                SHOOTING_HEADING
                         );
 
         return new SequentialCommandGroup(
@@ -129,6 +139,9 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
                 new DriveActionCommand(collect),
                 farminator.intake.activateIntakeCommand(),
                 farminator.transfer.setEntireTransferPowerCommand(0),
+                new DriveActionCommand(prepareOpenGate),
+                new DriveActionCommand(openGate),
+                new DriveActionCommand(backFromGate),
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(

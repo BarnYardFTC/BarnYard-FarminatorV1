@@ -23,7 +23,7 @@ public class Blue_Close_ThreePlusNine {
     public static double SOUTH_COLLECT_POSE_Y = -53;
     public static double SOUTH_HEADING = Math.toRadians(270);
 
-    public static double LEFT_COLLECT_POSE_X = -11.8;
+    public static double LEFT_COLLECT_POSE_X = -12;
     public static double MID_COLLECT_POSE_X = 12;
     public static double RIGHT_COLLECT_POSE_X = 35;
 
@@ -44,72 +44,63 @@ public class Blue_Close_ThreePlusNine {
                 .setDimensions(13.157, 18.03044)
                 .build();
 
-        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(
+        TrajectoryActionBuilder path1;
+        path1 = myBot.getDrive().actionBuilder(
                         new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(
-                        new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
-                        SOUTH_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 7));
-
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(
-                        new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y, SOUTH_HEADING))
-                .strafeToLinearHeading(
-                        new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
-                        SOUTH_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 1));
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING, new TranslationalVelConstraint(defaultVel * 10)
+                , new ProfileAccelConstraint(-70, 70))
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), SOUTH_HEADING, new TranslationalVelConstraint(defaultVel * 10),
+                        new ProfileAccelConstraint(-70, 70));
 
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(
                         new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .splineToConstantHeading(
                         new Vector2d(GATE_POSE_X, SOUTH_COLLECT_POSE_Y),
                         new Rotation2d(3,-8),
-                        new TranslationalVelConstraint(defaultVel * 2)
+                        new TranslationalVelConstraint(defaultVel * 4),
+                        new ProfileAccelConstraint(-70, 70)
                 )
 
                 .strafeToLinearHeading(
                         new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
                         SHOOT_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 6));
+                        new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-110, 110));
 
         TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(
                         new Vector2d(MID_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
-                        SOUTH_HEADING, new TranslationalVelConstraint(defaultVel*7));
+                        SOUTH_HEADING, new TranslationalVelConstraint(defaultVel*12), new ProfileAccelConstraint(-110, 110))
 
-        TrajectoryActionBuilder path5 = myBot.getDrive().actionBuilder(
-                        new Pose2d(MID_COLLECT_POSE_X, SOUTH_READY_POSE_Y, SOUTH_HEADING))
                 .strafeToLinearHeading(
                         new Vector2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
                         SOUTH_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 1));
+                        new TranslationalVelConstraint(defaultVel * 3), new ProfileAccelConstraint(-70, 70));
 
         TrajectoryActionBuilder path6 = myBot.getDrive().actionBuilder(
                         new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
                         new Rotation2d(-2,-1),
-                        new TranslationalVelConstraint(defaultVel * 7));
+                        new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-110, 110));
 
         TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(
                         new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
-                        SOUTH_HEADING);
+                        SOUTH_HEADING, new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-110, 110))
 
-        TrajectoryActionBuilder path8 = myBot.getDrive().actionBuilder(
-                        new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y, SOUTH_HEADING))
                 .strafeToLinearHeading(
                         new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
                         SOUTH_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 1));
+                        new TranslationalVelConstraint(defaultVel * 3), new ProfileAccelConstraint(-70, 70));
 
         TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(
                         new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
                         new Rotation2d(-1,-1),
-                        new TranslationalVelConstraint(defaultVel * 7));
+                        new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-110, 110));
 
         TrajectoryActionBuilder path10 = myBot.getDrive().actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
@@ -121,15 +112,12 @@ public class Blue_Close_ThreePlusNine {
                 new SequentialAction(
                         new SleepAction(SHOOT_TIME),
                         path1.build(),
-                        path2.build(),
                         path3.build(),
                         new SleepAction(SHOOT_TIME),
                         path4.build(),
-                        path5.build(),
                         path6.build(),
                         new SleepAction(SHOOT_TIME),
                         path7.build(),
-                        path8.build(),
                         path9.build(),
                         new SleepAction(SHOOT_TIME),
                         path10.build()

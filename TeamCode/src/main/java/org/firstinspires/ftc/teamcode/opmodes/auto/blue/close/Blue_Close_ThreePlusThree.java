@@ -28,9 +28,9 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
 
-    public static double POSE1_X = -37;
-    public static double POSE1_Y = -48;
-    public static final double POSE1_HEADING = Math.toRadians(90);
+    public static double POSE1_X = -53.33;
+    public static double POSE1_Y = -45.5;
+    public static double POSE1_HEADING = Math.toRadians(230);
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
@@ -129,29 +129,22 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
-                                new DriveActionCommand(path1),
-                                new ParallelRaceGroup(
-                                        farminator.drive.alignToTagCommandAuto(),
-                                        new WaitCommand(500)
-                                ),
-                                farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME)
                         )
                 ),
                 farminator.shooter.turnOffInstant(),
-                new DriveActionCommand(path2),
                 new WaitCommand(500),
-                new ConditionalCommand(
-                        ppg(),
-                        new ConditionalCommand(
-                                pgp(),
-                                gpp(),
-                                () -> farminator.limelight.getGamePattern() == LimeLight.Pattern.PGP
-                        ),
-                        () -> farminator.limelight.getGamePattern() == null || farminator.limelight.getGamePattern() == LimeLight.Pattern.PPG
-                )
+
+                ppg()
+//                        new ConditionalCommand(
+//                                pgp(),
+//                                gpp(),
+//                                () -> farminator.limelight.getGamePattern() == LimeLight.Pattern.PGP
+//                        ),
+//                        () -> farminator.limelight.getGamePattern() == null || farminator.limelight.getGamePattern() == LimeLight.Pattern.PPG
+//                )
         ).schedule();
 
     }

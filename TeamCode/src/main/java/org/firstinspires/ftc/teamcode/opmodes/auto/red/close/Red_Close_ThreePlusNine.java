@@ -14,6 +14,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -30,7 +31,7 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
-            limelight.RED_LOCALIZATION_PIPELINE,
+            LimeLight.RED_LOCALIZATION_PIPELINE,
             new Pose2d(START_POSE_X, START_POSE_Y, START_POSE_HEADING)
     );
 

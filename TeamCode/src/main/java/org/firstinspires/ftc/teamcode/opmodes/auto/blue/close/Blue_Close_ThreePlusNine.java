@@ -90,14 +90,18 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 ),
                 farminator.shooter.turnOffInstant(),
                 new WaitCommand(500),
-                ppg(),
                 new DriveActionCommand(toGate),
                 new WaitCommand(500),
                 new DriveActionCommand(gateClose),
                 new WaitCommand(500),
                 new DriveActionCommand(gateFar),
                 new WaitCommand(500),
-                new DriveActionCommand(fromGate)
+                new DriveActionCommand(fromGate),
+                ppg(),
+                new WaitCommand(500),
+                pgp(),
+                new WaitCommand(500),
+                gpp()
         ).schedule();
 
 

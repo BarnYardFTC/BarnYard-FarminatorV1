@@ -104,8 +104,8 @@ public class Red_Close_ThreePlusNine {
                                         new SleepAction(SHOOT_TIME),
                                         path7.build(),
                                         path8.build(),
-                                        path9.build()
-
+                                        path9.build(),
+                                        path10.build()
 
                                 )
 

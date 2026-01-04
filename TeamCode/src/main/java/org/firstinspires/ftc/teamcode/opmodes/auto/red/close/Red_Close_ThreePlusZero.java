@@ -39,9 +39,9 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
     private RoadRunnerMecanumDrive drive;
 
 
-    public static final double POSE1_X = -37;
-    public static final double POSE1_Y = 43;
-    public static final double POSE1_HEADING = Math.toRadians(270);
+    public static final double POSE1_X = -53.333;
+    public static final double POSE1_Y = 45.5;
+    public static final double POSE1_HEADING = Math.toRadians(125);
     public static final double POSE2_HEADING = Math.toRadians(110);
 
     /** Shooter shooting pose */
@@ -88,7 +88,6 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 farminator.shooterHood.setHoodPosition(0.1),
                 new ParallelCommandGroup(
-                        new DriveActionCommand(path1),
                         new ParallelRaceGroup(
                                 farminator.shooter.runShooterClose(),   // continuous, never finishes on its own
                                 new SequentialCommandGroup(
@@ -98,7 +97,8 @@ public class Red_Close_ThreePlusZero extends CommandOpMode {
                                         new DriveActionCommand(path2)
                                 )
                         )
-                )
+                ),
+        new DriveActionCommand(path1)
         ).schedule();
 
 

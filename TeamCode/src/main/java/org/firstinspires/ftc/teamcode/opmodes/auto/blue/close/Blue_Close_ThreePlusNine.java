@@ -16,7 +16,6 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
-import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -28,38 +27,28 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
 
-    public static double POSE1_X = -37;
-    public static double POSE1_Y = -48;
-    public static final double POSE1_HEADING = Math.toRadians(90);
+    public static double START_X = -37;
+    public static double START_Y = -48;
+    public static final double START_HEADING = Math.toRadians(90);
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
             LimeLight.BLUE_LOCALIZATION_PIPELINE,
-            new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING)
+            new Pose2d(START_X, START_Y, START_HEADING)
     );
 
     public static final double SHOOTING_POSE_X = -57;
     public static final double SHOOTING_POSE_Y = -22;
     public static final double SHOOTING_HEADING = Math.toRadians(250);
 
-    public static final double POSE3_X = 11.5;
-    public static final double POSE3_Y = -17;
-    public static final double POSE3_HEADING = Math.toRadians(270);
+    double COLLECT_POS_X, COLLECT_POS_Y, COLLECTED_POS_X, COLLECTED_POS_Y;
 
-    public static final double POSE4_X = 11.5;
-    public static final double POSE4_Y = -62;
-    public static final double POSE4_HEADING = Math.toRadians(270);
-
-    public static final double POSE5_X = 11.5;
-    public static final double POSE5_Y = -40;
-    public static final double POSE5_HEADING = Math.toRadians(270);
-
-    public static final double OBELISK_POSE_X = -37.6;
-    public static final double OBELISK_POSE_Y = -13.34;
-    public static final double OBELISK_HEADING = Math.toRadians(163.48);
-
-
+    double COLLECTION_HEADING = Math.toRadians(270);
+    double GATE_X = 0;
+    double GATE_Y = 0;
+    double GATE_POS_X = 0;
+    double GATE_POS_Y = 0;
 
 
     public static int SCORE_TIME = 4000;
@@ -71,55 +60,20 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(COLLECTED_POS_X, START_Y, START_HEADING));
 
+        TrajectoryActionBuilder gateClose = drive.actionBuilder(new Pose2d(GATE_POS_X, GATE_POS_Y, COLLECTION_HEADING))
+                .strafeToLinearHeading(new Vector2d(GATE_X, GATE_Y), COLLECTION_HEADING);
 
-        TrajectoryActionBuilder path1 =
-                drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                        .strafeToLinearHeading(
-                                new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
-                                SHOOTING_HEADING
-                        );
+        TrajectoryActionBuilder gateFar = drive.actionBuilder(new Pose2d(GATE_X, GATE_Y, COLLECTION_HEADING))
+                .strafeToLinearHeading(new Vector2d(GATE_POS_X, GATE_POS_Y), COLLECTION_HEADING);
 
-        TrajectoryActionBuilder path2 =
-                drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
-                        .strafeToLinearHeading(
-                                new Vector2d(OBELISK_POSE_X, OBELISK_POSE_Y), OBELISK_HEADING
-                        );
+        TrajectoryActionBuilder toGate = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
+                .strafeToLinearHeading(new Vector2d(GATE_POS_X, GATE_POS_Y), COLLECTION_HEADING);
 
+        TrajectoryActionBuilder fromGate = drive.actionBuilder(new Pose2d(GATE_POS_X, GATE_POS_Y, COLLECTION_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING);
 
-        TrajectoryActionBuilder path3 =
-                drive.actionBuilder(new Pose2d(OBELISK_POSE_X, OBELISK_POSE_Y, OBELISK_HEADING))
-                        .strafeToLinearHeading(
-                                new Vector2d(POSE3_X, POSE3_Y),
-                                POSE3_HEADING
-                        );
-
-
-
-        TrajectoryActionBuilder path4 =
-                drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, POSE3_HEADING))
-                        .strafeToLinearHeading(
-                                new Vector2d(POSE4_X, POSE4_Y),
-                                POSE4_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
-                        );
-
-        TrajectoryActionBuilder path5 =
-                drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, POSE4_HEADING))
-                        .strafeToLinearHeading(
-                                new Vector2d(POSE5_X, POSE5_Y),
-                                POSE5_HEADING
-                        );
-
-
-
-        TrajectoryActionBuilder path6 =
-                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, POSE5_HEADING))
-                        .strafeToLinearHeading(
-                                new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
-                                SHOOTING_HEADING
-
-                        );
 
 
 
@@ -129,30 +83,23 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
-                                new DriveActionCommand(path1),
-                                new ParallelRaceGroup(
-                                        farminator.drive.alignToTagCommandAuto(),
-                                        new WaitCommand(500)
-                                ),
-                                farminator.drive.stop(),
                                 farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME)
                         )
                 ),
                 farminator.shooter.turnOffInstant(),
-                new DriveActionCommand(path2),
-                new WaitCommand(500),
-                new ConditionalCommand(
-                        ppg(),
-                        new ConditionalCommand(
-                                pgp(),
-                                gpp(),
-                                () -> farminator.limelight.getGamePattern() == LimeLight.Pattern.PGP
-                        ),
-                        () -> farminator.limelight.getGamePattern() == null || farminator.limelight.getGamePattern() == LimeLight.Pattern.PPG
-                )
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                new DriveActionCommand(toGate),
+                new DriveActionCommand(gateClose),
+                new DriveActionCommand(gateFar),
+//                new DriveActionCommand(fromGate),
+                ppg(),
+                pgp(),
+                gpp()
         ).schedule();
+
 
     }
 
@@ -160,23 +107,23 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     public SequentialCommandGroup ppg(){
 
         /* To artifacts pose */
-        double POSE3_X = -10;
-        double POSE3_Y = -17;
+        COLLECT_POS_X = -10;
+        COLLECT_POS_Y = -17;
 
         /* Collect artifacts pose */
-        double POSE4_X = -10;
-        double POSE4_Y = -58;
+        COLLECTED_POS_X = -10;
+        COLLECTED_POS_Y = -58;
 
         /* Define trajectory to artifacts pose */
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE3_X, POSE3_Y), Math.toRadians(270));
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(GATE_POS_X, GATE_POS_Y, COLLECTION_HEADING))
+                .strafeToLinearHeading(new Vector2d(COLLECT_POS_X, COLLECT_POS_Y), COLLECTION_HEADING);
 
         /* Define trajectory to collect artifacts pose */
-        TrajectoryActionBuilder path3 = drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, Math.toRadians(270)))
-                .strafeToLinearHeading(new Vector2d(POSE4_X, POSE4_Y), Math.toRadians(270), new TranslationalVelConstraint(INTAKE_VELOCITY));
+        TrajectoryActionBuilder path3 = drive.actionBuilder(new Pose2d(COLLECT_POS_X, COLLECT_POS_Y, COLLECTION_HEADING))
+                .strafeToLinearHeading(new Vector2d(COLLECTED_POS_X, COLLECTED_POS_Y), COLLECTION_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY));
 
         /* Define trajectory to returning to shooting pose */
-        TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, Math.toRadians(270)))
+        TrajectoryActionBuilder path4 = drive.actionBuilder(new Pose2d(COLLECTED_POS_X, COLLECTED_POS_Y, COLLECTION_HEADING))
                 .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING - Math.toRadians(20));
 
 
@@ -210,45 +157,42 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
 
     public SequentialCommandGroup pgp() {
 
-        double POSE3_X = 11.5;
-        double POSE3_Y = -17;
-        double POSE3_HEADING = Math.toRadians(270);
+        COLLECT_POS_X = 11.5;
+        COLLECT_POS_Y = -17;
 
-        double POSE4_X = 11.5;
-        double POSE4_Y = -62;
-        double POSE4_HEADING = Math.toRadians(270);
+        COLLECTED_POS_X = 11.5;
+        COLLECTED_POS_Y = -62;
 
         double POSE5_X = 11.5;
         double POSE5_Y = -40;
-        double POSE5_HEADING = Math.toRadians(270);
 
         TrajectoryActionBuilder path2 =
                 drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
                         .strafeToLinearHeading(
-                                new Vector2d(POSE3_X, POSE3_Y),
-                                POSE3_HEADING
+                                new Vector2d(COLLECT_POS_X, COLLECT_POS_Y),
+                                COLLECTION_HEADING
                         );
 
 
 
         TrajectoryActionBuilder path3 =
-                drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, POSE3_HEADING))
+                drive.actionBuilder(new Pose2d(COLLECT_POS_X, COLLECT_POS_Y, COLLECTION_HEADING))
                         .strafeToLinearHeading(
-                                new Vector2d(POSE4_X, POSE4_Y),
-                                POSE4_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
+                                new Vector2d(COLLECTED_POS_X, COLLECTED_POS_Y),
+                                COLLECTION_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
                         );
 
         TrajectoryActionBuilder path4 =
-                drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, POSE4_HEADING))
+                drive.actionBuilder(new Pose2d(COLLECTED_POS_X, COLLECTED_POS_Y, COLLECTION_HEADING))
                         .strafeToLinearHeading(
                                 new Vector2d(POSE5_X, POSE5_Y),
-                                POSE5_HEADING
+                                COLLECTION_HEADING
                         );
 
 
 
         TrajectoryActionBuilder path5 =
-                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, POSE5_HEADING))
+                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, COLLECTION_HEADING))
                         .strafeToLinearHeading(
                                 new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
                                 SHOOTING_HEADING
@@ -287,46 +231,43 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
 
     public SequentialCommandGroup gpp(){
 
-        double POSE3_X = 35;
-        double POSE3_Y = -17;
-        double POSE3_HEADING = Math.toRadians(270);
+        COLLECT_POS_X = 35;
+        COLLECT_POS_Y = -17;
 
-        double POSE4_X = 35;
-        double POSE4_Y = -62;
-        double POSE4_HEADING = Math.toRadians(270);
+        COLLECTED_POS_X = 35;
+        COLLECTED_POS_Y = -62;
 
         double POSE5_X = 35;
         double POSE5_Y = -40;
-        double POSE5_HEADING = Math.toRadians(270);
 
         TrajectoryActionBuilder path2 =
                 drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
                         .strafeToLinearHeading(
-                                new Vector2d(POSE3_X, POSE3_Y),
-                                POSE3_HEADING
+                                new Vector2d(COLLECT_POS_X, COLLECT_POS_Y),
+                                COLLECTION_HEADING
                         );
 
 
 
         TrajectoryActionBuilder path3 =
-                drive.actionBuilder(new Pose2d(POSE3_X, POSE3_Y, POSE3_HEADING))
+                drive.actionBuilder(new Pose2d(COLLECT_POS_X, COLLECT_POS_Y, COLLECTION_HEADING))
                         .strafeToLinearHeading(
-                                new Vector2d(POSE4_X, POSE4_Y),
-                                POSE4_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
+                                new Vector2d(COLLECTED_POS_X, COLLECTED_POS_Y),
+                                COLLECTION_HEADING, new TranslationalVelConstraint(INTAKE_VELOCITY)
                         );
 
 
         TrajectoryActionBuilder path4 =
-                drive.actionBuilder(new Pose2d(POSE4_X, POSE4_Y, POSE4_HEADING))
+                drive.actionBuilder(new Pose2d(COLLECTED_POS_X, COLLECTED_POS_Y, COLLECTION_HEADING))
                         .strafeToLinearHeading(
                                 new Vector2d(POSE5_X, POSE5_Y),
-                                POSE5_HEADING
+                                COLLECTION_HEADING
 
                         );
 
 
         TrajectoryActionBuilder path5 =
-                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, POSE5_HEADING))
+                drive.actionBuilder(new Pose2d(POSE5_X, POSE5_Y, COLLECTION_HEADING))
                         .strafeToLinearHeading(
                                 new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y),
                                 SHOOTING_HEADING

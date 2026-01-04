@@ -34,7 +34,7 @@ public class Red_Close_ThreePlusThree extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
-            Webcam.BLUE_LOCALIZATION_PIPELINE,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING)
     );
 
@@ -93,9 +93,9 @@ public class Red_Close_ThreePlusThree extends CommandOpMode {
                         new ConditionalCommand(
                                 pgp(),
                                 gpp(),
-                                () -> farminator.webcam.getGamePattern() == Webcam.Pattern.PGP
+                                () -> farminator.limelight.getGamePattern() == LimeLight.Pattern.PGP
                         ),
-                        () -> farminator.webcam.getGamePattern() == null || farminator.webcam.getGamePattern() == Webcam.Pattern.PPG
+                        () -> farminator.limelight.getGamePattern() == null || farminator.limelight.getGamePattern() == LimeLight.Pattern.PPG
                 )
         ).schedule();
     }

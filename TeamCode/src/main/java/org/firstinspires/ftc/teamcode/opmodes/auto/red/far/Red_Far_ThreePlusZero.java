@@ -49,7 +49,7 @@ public class Red_Far_ThreePlusZero extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
-            Webcam.BLUE_LOCALIZATION_PIPELINE,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
 
     @Override

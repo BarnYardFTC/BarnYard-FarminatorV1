@@ -38,7 +38,7 @@ public class AutoTest extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.TELEOP,
-            Webcam.BLUE_LOCALIZATION_PIPELINE,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING)
             );
 

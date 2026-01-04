@@ -17,17 +17,17 @@ public class BlinkinLED extends SubsystemBase {
     }
     /**WIP: func for periodic to update LEDs based on LimeLight input*/
     public void update(){
-        switch(BarnRobot.getInstance().limelight.llColor.getBackTransferArtifact()) {
-            case NONE:
-                setNeutral();
-                break;
-            case GREEN:
-                setGreen();
-                break;
-            case PURPLE:
-                setPurple();
-                break;
-        }
+//        switch(BarnRobot.getInstance().webcam.llColor.getBackTransferArtifact()) {
+//            case NONE:
+//                setNeutral();
+//                break;
+//            case GREEN:
+//                setGreen();
+//                break;
+//            case PURPLE:
+//                setPurple();
+//                break;
+//        }
     }
 
     private void setRed(){

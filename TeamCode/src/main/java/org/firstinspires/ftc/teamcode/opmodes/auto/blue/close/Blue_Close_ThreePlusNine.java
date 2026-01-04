@@ -89,18 +89,14 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                         )
                 ),
                 farminator.shooter.turnOffInstant(),
-                new WaitCommand(500),
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.transfer.setEntireTransferPowerCommand(0),
                 new DriveActionCommand(toGate),
-                new WaitCommand(500),
                 new DriveActionCommand(gateClose),
-                new WaitCommand(500),
                 new DriveActionCommand(gateFar),
-                new WaitCommand(500),
-                new DriveActionCommand(fromGate),
+//                new DriveActionCommand(fromGate),
                 ppg(),
-                new WaitCommand(500),
                 pgp(),
-                new WaitCommand(500),
                 gpp()
         ).schedule();
 
@@ -119,7 +115,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         COLLECTED_POS_Y = -58;
 
         /* Define trajectory to artifacts pose */
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(GATE_POS_X, GATE_POS_Y, COLLECTION_HEADING))
                 .strafeToLinearHeading(new Vector2d(COLLECT_POS_X, COLLECT_POS_Y), COLLECTION_HEADING);
 
         /* Define trajectory to collect artifacts pose */

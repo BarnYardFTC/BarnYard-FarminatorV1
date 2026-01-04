@@ -41,7 +41,7 @@ public class TestTeleop extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                Webcam.BLUE_LOCALIZATION_PIPELINE,
+                LimeLight.BLUE_LOCALIZATION_PIPELINE,
                 new Pose2d(0, 0, Math.toRadians(270)),
                 180
         );

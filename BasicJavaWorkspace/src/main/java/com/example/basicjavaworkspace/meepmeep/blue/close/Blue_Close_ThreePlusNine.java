@@ -11,13 +11,20 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class Blue_Close_ThreePlusNine {
 
     public static double SHOOT_TIME = 2;
-    public static double POSE1_X = -53.33;
-    public static double POSE1_Y = -45.5;
-    public static double POSE1_HEADING = Math.toRadians(230);
+    public static double STARTPOSE_X = -53.33;
+    public static double STARTPOSE_Y = -45.5;
+    public static double STARTPOSE_HEADING = Math.toRadians(235);
 
-    public static double POSE2_X = -23;
-    public static double POSE2_Y = -22;
-    public static double POSE2_HEADING = Math.toRadians(230);
+    public static double SHOOTPOSE_X = -23;
+    public static double SHOOTPOSE_Y = -22;
+    public static double SHOOTPOSE_HEADING = Math.toRadians(227);
+
+
+    public static double LEFTREADYPOSE_X = -13;
+    public static double LEFTREADYPOSE_Y = -22;
+    public static double SOUTHPOSE_HEADING = Math.toRadians(270);
+
+
 
     // -----------------------------
     // Main Simulation
@@ -31,8 +38,13 @@ public class Blue_Close_ThreePlusNine {
                 .setDimensions(13.157, 18.03044)
                 .build();
 
-        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
+        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(STARTPOSE_X, STARTPOSE_Y, STARTPOSE_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTPOSE_X, SHOOTPOSE_Y), SHOOTPOSE_HEADING);
+        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(SHOOTPOSE_X, SHOOTPOSE_Y, SHOOTPOSE_HEADING))
+                .strafeToLinearHeading(new Vector2d(LEFTREADYPOSE_X, LEFTREADYPOSE_Y), SOUTHPOSE_HEADING);
+        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(SHOOTPOSE_X, SHOOTPOSE_Y, SHOOTPOSE_HEADING))
+                .strafeToLinearHeading(new Vector2d(LEFTREADYPOSE_X, LEFTREADYPOSE_Y), SOUTHPOSE_HEADING);
+
 
 
 

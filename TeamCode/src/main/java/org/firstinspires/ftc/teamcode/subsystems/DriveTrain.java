@@ -349,6 +349,7 @@ public class DriveTrain extends SubsystemBase {
         BarnRobot.getInstance().telemetry.addData("pinpoint x", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
         BarnRobot.getInstance().telemetry.addData("pinpoint y", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
         BarnRobot.getInstance().telemetry.addData("pinpoint heading", getBotAbsoluteHeading());
+        BarnRobot.getInstance().telemetry.addData("distance from goal", getDistanceFromGoal());
     }
 
     // ============================================================

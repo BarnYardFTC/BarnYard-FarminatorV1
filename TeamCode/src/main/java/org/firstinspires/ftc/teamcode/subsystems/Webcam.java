@@ -125,182 +125,182 @@ public class Webcam extends SubsystemBase {
     }
 }
 //---------------------------------------------------------------------------------------------
-//    public static double MAX_UPDATE_DISTANCE = 1.5;
+    //    public static double MAX_UPDATE_DISTANCE = 1.5;
 
-//    public Position lastDetection;
-//    private final ElapsedTime poseUpdateTimer = new ElapsedTime();
-//
-//    public static final int BLUE_LOCALIZATION_PIPELINE = 1;
-//    public static final int RED_LOCALIZATION_PIPELINE = 2;
-//    private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;
-//
-//    public enum Pattern {
-//        PPG,
-//        PGP,
-//        GPP
-//    }
+    //    public Position lastDetection;
+    //    private final ElapsedTime poseUpdateTimer = new ElapsedTime();
+    //
+    //    public static final int BLUE_LOCALIZATION_PIPELINE = 1;
+    //    public static final int RED_LOCALIZATION_PIPELINE = 2;
+    //    private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;
+    //
+    //    public enum Pattern {
+    //        PPG,
+    //        PGP,
+    //        GPP
+    //    }
 
-//    private Pattern gamePattern;
+    //    private Pattern gamePattern;
 
-// CHANGE THESE TO MATCH YOUR CAMERA MOUNT!!!
+    // CHANGE THESE TO MATCH YOUR CAMERA MOUNT!!!
 
-//    public static double WEBCAM_X = 12;
-//    public static double WEBCAM_Y = 12;
-//    public static double WEBCAM_Z = 27.5;
-//
-//    private Position cameraPosition = new Position(
-//            DistanceUnit.CM,
-//            WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
-//    );
+    //    public static double WEBCAM_X = 12;
+    //    public static double WEBCAM_Y = 12;
+    //    public static double WEBCAM_Z = 27.5;
+    //
+    //    private Position cameraPosition = new Position(
+    //            DistanceUnit.CM,
+    //            WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
+    //    );
 
-//    private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(
-//            AngleUnit.DEGREES,
-//            0, -70, 0, 0
-//    );
-// Telemetry
-//        Position pos = getRobotPosition();
+    //    private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(
+    //            AngleUnit.DEGREES,
+    //            0, -70, 0, 0
+    //    );
+    // Telemetry
+    //        Position pos = getRobotPosition();
 
-//        BarnRobot.getInstance().telemetry.addData("Webcam pose x:", pos.x);
-//        BarnRobot.getInstance().telemetry.addData("Webcam pose y:", pos.y);
+    //        BarnRobot.getInstance().telemetry.addData("Webcam pose x:", pos.x);
+    //        BarnRobot.getInstance().telemetry.addData("Webcam pose y:", pos.y);
 
-//        BarnRobot.getInstance().telemetry.addData("Pattern:", getGamePattern());
-//-------------
+    //        BarnRobot.getInstance().telemetry.addData("Pattern:", getGamePattern());
+    //-------------
 
-//init
-//      cameraPosition = new Position(
-//                DistanceUnit.CM,
-//                WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
-//        );
-//
-//        aprilTag = new AprilTagProcessor.Builder()
-//                .setCameraPose(cameraPosition, cameraOrientation)
-//                .build();
-//        VisionPortal.Builder builder = new VisionPortal.Builder();
-//        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-//        builder.addProcessor(aprilTag);
-//        visionPortal = builder.build();
-//        lastDetection = new Position();
-
-
-
-/** Returns the full list of AprilTag detections */
-//    public List<AprilTagDetection> getDetections() {
-//        return aprilTag.getDetections();
-//    }
-
-/** Returns the first valid detection with field pose (ignores Obelisk tags) */
-//    public AprilTagDetection getBestDetection() {
-//        for (AprilTagDetection d : aprilTag.getDetections()) {
-//            if (d.metadata != null && !d.metadata.name.contains("Obelisk")) {
-//                if (d.id == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED ||
-//                d.id == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE){
-//                    return d;
-//                }
-//            }
-//        }
-//        return null;
-//    }
+    //init
+    //      cameraPosition = new Position(
+    //                DistanceUnit.CM,
+    //                WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
+    //        );
+    //
+    //        aprilTag = new AprilTagProcessor.Builder()
+    //                .setCameraPose(cameraPosition, cameraOrientation)
+    //                .build();
+    //        VisionPortal.Builder builder = new VisionPortal.Builder();
+    //        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
+    //        builder.addProcessor(aprilTag);
+    //        visionPortal = builder.build();
+    //        lastDetection = new Position();
 
 
-/** Updates MOTIF pattern based on the obelisk detections (slightly changed code from a func above) */
-//    public void updateGamePattern() {
-//        for (AprilTagDetection d : aprilTag.getDetections()) {
-//            if (d.metadata != null && d.metadata.name.contains("Obelisk")) {
-//                switch (d.metadata.id) {
-//                    case 21:
-//                        gamePattern = Pattern.GPP;
-//                        break;
-//                    case 22:
-//                        gamePattern = Pattern.PGP;
-//                        break;
-//                    case 23:
-//                        gamePattern = Pattern.PPG;
-//                        break;
-//                    default:
-//                        gamePattern = null;
-//                }
-//            }
-//        }
-//    }
 
-//    public Pattern getGamePattern() {
-//        return gamePattern;
-//    }
+    /** Returns the full list of AprilTag detections */
+    //    public List<AprilTagDetection> getDetections() {
+    //        return aprilTag.getDetections();
+    //    }
 
-/** Returns robot position in INCHES relative to the field, or null if no valid tag */
-//    public Position getRobotPosition() {
-//        AprilTagDetection d = getBestDetection();
-//        if (d == null) return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
-//        if (
-//                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
-//                        BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24
-//        ){
-//            return d.robotPose.getPosition();
-//        }
-//        else
-//            return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
-//    }
+    /** Returns the first valid detection with field pose (ignores Obelisk tags) */
+    //    public AprilTagDetection getBestDetection() {
+    //        for (AprilTagDetection d : aprilTag.getDetections()) {
+    //            if (d.metadata != null && !d.metadata.name.contains("Obelisk")) {
+    //                if (d.id == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED ||
+    //                d.id == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE){
+    //                    return d;
+    //                }
+    //            }
+    //        }
+    //        return null;
+    //    }
 
-/** Returns robot orientation in DEGREES relative to the field, or null if no valid tag */
-//    public YawPitchRollAngles getRobotOrientation() {
-//        AprilTagDetection d = getBestDetection();
-//        if (d == null) return new YawPitchRollAngles(AngleUnit.DEGREES, 0, 0, 0, 0);
-//        return d.robotPose.getOrientation();
-//    }
-//
-//    /** Updates the localizer with the current robot pose */
-//    public void updatePose(){
-//        if (getRobotPosition() != null){
-//            Pose2d currenrPose = new Pose2d(getRobotPosition().x, getRobotPosition().y, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
-//            BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
-//        }
-//    }
-//
-//    public boolean isLocalizationTagDetected(){
-//        AprilTagDetection d = getBestDetection();
-//        return isTagDetected() &&
-//                (BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
-//                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24);
-//    }
-//
-//    public boolean isTagDetected(){
-//        return getBestDetection() != null;
-//    }
-//
-//    /** Stop camera stream */
-//    public void stopStreaming() {
-//        if (visionPortal != null) visionPortal.stopStreaming();
-//    }
-//
-//    /** Resume camera stream */
-//    public void resumeStreaming() {
-//        if (visionPortal != null) visionPortal.resumeStreaming();
-//    }
-//
-//    /** Close the camera to save power */
-//    public void close() {
-//        if (visionPortal != null) visionPortal.close();
-//    }
-//
-//    /** Operate webcam. */
-//    @Override
-//    public void periodic() {
-//        if (isLocalizationTagDetected()
-//                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
-//                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
-//                BarnRobot.getInstance().drive.isRobotStatic()
-//                ) {
-//
-//            updatePose();
-//            poseUpdateTimer.reset();
-//        }
-//
-//        if (gamePattern == null) {
-//            updateGamePattern();
-//        }
-//
-//        displayTelemetry();
-//    }
+
+    /** Updates MOTIF pattern based on the obelisk detections (slightly changed code from a func above) */
+    //    public void updateGamePattern() {
+    //        for (AprilTagDetection d : aprilTag.getDetections()) {
+    //            if (d.metadata != null && d.metadata.name.contains("Obelisk")) {
+    //                switch (d.metadata.id) {
+    //                    case 21:
+    //                        gamePattern = Pattern.GPP;
+    //                        break;
+    //                    case 22:
+    //                        gamePattern = Pattern.PGP;
+    //                        break;
+    //                    case 23:
+    //                        gamePattern = Pattern.PPG;
+    //                        break;
+    //                    default:
+    //                        gamePattern = null;
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    public Pattern getGamePattern() {
+    //        return gamePattern;
+    //    }
+
+    /** Returns robot position in INCHES relative to the field, or null if no valid tag */
+    //    public Position getRobotPosition() {
+    //        AprilTagDetection d = getBestDetection();
+    //        if (d == null) return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
+    //        if (
+    //                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
+    //                        BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24
+    //        ){
+    //            return d.robotPose.getPosition();
+    //        }
+    //        else
+    //            return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
+    //    }
+
+    /** Returns robot orientation in DEGREES relative to the field, or null if no valid tag */
+    //    public YawPitchRollAngles getRobotOrientation() {
+    //        AprilTagDetection d = getBestDetection();
+    //        if (d == null) return new YawPitchRollAngles(AngleUnit.DEGREES, 0, 0, 0, 0);
+    //        return d.robotPose.getOrientation();
+    //    }
+    //
+    //    /** Updates the localizer with the current robot pose */
+    //    public void updatePose(){
+    //        if (getRobotPosition() != null){
+    //            Pose2d currenrPose = new Pose2d(getRobotPosition().x, getRobotPosition().y, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+    //            BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
+    //        }
+    //    }
+    //
+    //    public boolean isLocalizationTagDetected(){
+    //        AprilTagDetection d = getBestDetection();
+    //        return isTagDetected() &&
+    //                (BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
+    //                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 24);
+    //    }
+    //
+    //    public boolean isTagDetected(){
+    //        return getBestDetection() != null;
+    //    }
+    //
+    //    /** Stop camera stream */
+    //    public void stopStreaming() {
+    //        if (visionPortal != null) visionPortal.stopStreaming();
+    //    }
+    //
+    //    /** Resume camera stream */
+    //    public void resumeStreaming() {
+    //        if (visionPortal != null) visionPortal.resumeStreaming();
+    //    }
+    //
+    //    /** Close the camera to save power */
+    //    public void close() {
+    //        if (visionPortal != null) visionPortal.close();
+    //    }
+    //
+    //    /** Operate webcam. */
+    //    @Override
+    //    public void periodic() {
+    //        if (isLocalizationTagDetected()
+    //                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
+    //                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
+    //                BarnRobot.getInstance().drive.isRobotStatic()
+    //                ) {
+    //
+    //            updatePose();
+    //            poseUpdateTimer.reset();
+    //        }
+    //
+    //        if (gamePattern == null) {
+    //            updateGamePattern();
+    //        }
+    //
+    //        displayTelemetry();
+    //    }
 
 //------------------------------------------------------------------------------------------------------
 

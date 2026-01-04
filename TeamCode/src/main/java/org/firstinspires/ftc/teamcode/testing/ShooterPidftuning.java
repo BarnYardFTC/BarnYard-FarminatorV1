@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
@@ -30,7 +31,7 @@ public class ShooterPidftuning extends CommandOpMode {
     private OpModeData opModedata = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.TELEOP,
-            Webcam.BLUE_LOCALIZATION_PIPELINE,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(0,0,0)
             );
 

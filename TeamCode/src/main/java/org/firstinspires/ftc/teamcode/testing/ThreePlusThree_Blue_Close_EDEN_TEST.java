@@ -47,7 +47,7 @@ public class ThreePlusThree_Blue_Close_EDEN_TEST extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            Webcam.BLUE_LOCALIZATION_PIPELINE,
+            LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X,POSE1_Y, PERPENDICULAR_TO_DEPOT_HEADING));
 
     @Override

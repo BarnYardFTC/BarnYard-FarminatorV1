@@ -7,14 +7,15 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArtifactPipeline extends OpenCvPipeline {
 
     // --- COLOR BOUNDS (YCrCb) ---
-    public Scalar purpleLower = new Scalar(0, 127, 134);
-    public Scalar purpleUpper = new Scalar(255, 174, 162);
-    public Scalar greenLower = new Scalar(24, 52, 86);
-    public Scalar greenUpper = new Scalar(205, 114, 162);
+    public Scalar purpleLower = new Scalar(0, 127, 134); //83.6, 104.8, 134
+    public Scalar purpleUpper = new Scalar(255, 174, 162); // 150.2, 196.9, 167.2
+    public Scalar greenLower = new Scalar(24, 52, 86); // 0.0, 73.7, 86.0
+    public Scalar greenUpper = new Scalar(205, 114, 162); // 213.9, 119, 162.9
 
     // --- CONSTANTS ---
     private static final double MIN_AREA = 500;
@@ -22,6 +23,7 @@ public class ArtifactPipeline extends OpenCvPipeline {
 
     // --- PIPELINE STATE ---
     private final ArrayList<Artifact> artifacts = new ArrayList<>();
+    private final ArrayList<Double> artifactCoords = new ArrayList<Double>();
     private final Mat ycrcbMat = new Mat();
     private final Mat binaryMatPurple = new Mat();
     private final Mat binaryMatGreen = new Mat();
@@ -29,8 +31,11 @@ public class ArtifactPipeline extends OpenCvPipeline {
     private final Mat morphKernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
 
     private final Telemetry telemetry;
-    private double leftX = -1;
-    private double rightX = -1;
+    private double leftX1 = -1;
+    private double rightX1 = -1;
+    private double leftX2 = -1;
+    private double rightX2 = -1;
+
 
     public ArtifactPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -55,6 +60,7 @@ public class ArtifactPipeline extends OpenCvPipeline {
         // Find and store artifacts
         findArtifacts(binaryMatPurple, input, "purple");
         findArtifacts(binaryMatGreen, input, "green");
+        getAllArtifactsCoords();
 
         // Combine masks for visualization
         Core.bitwise_or(binaryMatPurple, binaryMatGreen, combinedMask);
@@ -67,8 +73,11 @@ public class ArtifactPipeline extends OpenCvPipeline {
         int greenCount = (int) artifacts.stream().filter(a -> a.color.equals("green")).count();
         telemetry.addData("Purple", purpleCount);
         telemetry.addData("Green", greenCount);
-        telemetry.addData("Left X", leftX);
-        telemetry.addData("Right X", rightX);
+        telemetry.addData("leftX1", leftX1);
+        telemetry.addData("rightX1", rightX1);
+        telemetry.addData("leftX2", leftX2);
+        telemetry.addData("rightX2", rightX2);
+
         telemetry.update();
 
         return output;
@@ -88,8 +97,6 @@ public class ArtifactPipeline extends OpenCvPipeline {
 
             boolean merged = rect.width > 200 * MERGE_WIDTH_MULTIPLIER;
             if (!merged) {
-                leftX = rect.x;
-                rightX = rect.x + rect.width;
                 addArtifact(rect, contour, output, color);
             } else {
                 // Split wide contour into two halves
@@ -128,6 +135,7 @@ public class ArtifactPipeline extends OpenCvPipeline {
         artifact.color = color;
         artifact.area = Imgproc.contourArea(contour);
         artifact.center = new Point(rect.x + rect.width / 2.0, rect.y + rect.height / 2.0);
+        artifact.boundingBox = new Rect(rect.x, rect.y, rect.width, rect.height);
         artifacts.add(artifact);
 
         // Draw rectangle and center dot
@@ -143,7 +151,33 @@ public class ArtifactPipeline extends OpenCvPipeline {
     public ArrayList<Artifact> getArtifacts() {
         return artifacts;
     }
+    public void getAllArtifactsCoords() {
+        if (!artifacts.isEmpty() && artifacts.size() <= 2) {
 
-    public double getLeftX() { return leftX; }
-    public double getRightX() { return rightX; }
+            artifactCoords.clear();
+            if (artifacts.size() == 1) {
+                for (Artifact artifact : artifacts) {
+                    leftX1 = artifact.boundingBox.x;
+                    rightX1 = artifact.boundingBox.x + artifact.boundingBox.width;
+                }
+            }
+            if (artifacts.size() == 2) {
+                for (Artifact artifact : artifacts) {
+                    double leftX = artifact.boundingBox.x;
+                    double rightX = artifact.boundingBox.x + artifact.boundingBox.width;
+                    artifactCoords.add(leftX);
+                    artifactCoords.add(rightX);
+                }
+                leftX1 = artifactCoords.get(0);
+                rightX1 = artifactCoords.get(1);
+                leftX2 = artifactCoords.get(2);
+                rightX2 = artifactCoords.get(3);
+            }
+        } else {
+            leftX1 = -1;
+            rightX1 = -1;
+            leftX2 = -1;
+            rightX2 = -1;
+        }
+    }
 }

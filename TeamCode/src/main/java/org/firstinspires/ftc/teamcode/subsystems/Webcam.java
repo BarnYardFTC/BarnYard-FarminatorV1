@@ -62,6 +62,17 @@ public class Webcam extends SubsystemBase {
 
         camera.setPipeline(pipeline);
 
+//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//            @Override
+//            public void onOpened() {
+//                camera.startStreaming(640, 480);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode) {
+//            }
+//        });
+
 
     }
 
@@ -117,6 +128,7 @@ public class Webcam extends SubsystemBase {
     /** Display webcam + pinpoint telemetry. */
     public void displayTelemetry() {
         System.out.println("Artifact X: " + pipeline.getLeftBorderX());
+
 
     }
 

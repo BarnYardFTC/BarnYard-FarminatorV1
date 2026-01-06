@@ -79,61 +79,50 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
 
         TrajectoryActionBuilder path1 = drive.actionBuilder(
                         new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING, new TranslationalVelConstraint(defaultVel * 10)
-                        , new ProfileAccelConstraint(-70, 70))
-                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), SOUTH_HEADING, new TranslationalVelConstraint(defaultVel * 10),
-                        new ProfileAccelConstraint(-70, 70));
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING)
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), SOUTH_HEADING);
 
         TrajectoryActionBuilder path3 = drive.actionBuilder(
                         new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .splineToConstantHeading(
                         new Vector2d(GATE_POSE_X, SOUTH_COLLECT_POSE_Y),
-                        new Rotation2d(3,-8),
-                        new TranslationalVelConstraint(defaultVel * 4),
-                        new ProfileAccelConstraint(-70, 70)
+                        new Rotation2d(3,-8)
                 )
                 .waitSeconds(0.5)
 
                 .strafeToLinearHeading(
                         new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
-                        SHOOT_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-100, 100));
-
+                        SHOOT_HEADING);
         TrajectoryActionBuilder path4 = drive.actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(
                         new Vector2d(MID_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
-                        SOUTH_HEADING, new TranslationalVelConstraint(defaultVel*12), new ProfileAccelConstraint(-100, 100))
-
+                        SOUTH_HEADING)
                 .strafeToLinearHeading(
                         new Vector2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
-                        SOUTH_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 3), new ProfileAccelConstraint(-70, 70));
-
+                        SOUTH_HEADING
+                        );
         TrajectoryActionBuilder path6 = drive.actionBuilder(
                         new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING - Math.toRadians(5)),
-                        new Rotation2d(-2,-1),
-                        new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-100, 100));
+                        new Rotation2d(-2,-1));
 
         TrajectoryActionBuilder path7 = drive.actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(
                         new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
-                        SOUTH_HEADING, new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-70, 70))
+                        SOUTH_HEADING)
 
                 .strafeToLinearHeading(
                         new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
-                        SOUTH_HEADING,
-                        new TranslationalVelConstraint(defaultVel * 2), new ProfileAccelConstraint(-70, 70));
+                        SOUTH_HEADING);
 
         TrajectoryActionBuilder path9 = drive.actionBuilder(
                         new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
-                        new Rotation2d(-1,-1),
-                        new TranslationalVelConstraint(defaultVel * 12), new ProfileAccelConstraint(-100, 100));
+                        new Rotation2d(-1,-1));
 
         TrajectoryActionBuilder path10 = drive.actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))

@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems.components.pipelines;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.subsystems.components.pipelines.Artifact;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ArtifactPipeline extends OpenCvPipeline {
 
@@ -31,11 +29,8 @@ public class ArtifactPipeline extends OpenCvPipeline {
     private final Mat morphKernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
 
     private final Telemetry telemetry;
-    private double leftX1 = -1;
-    private double rightX1 = -1;
-    private double leftX2 = -1;
-    private double rightX2 = -1;
-
+    private double shooterLeftX = -1;
+    private double middleLeftX = -1;
 
     public ArtifactPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -48,6 +43,9 @@ public class ArtifactPipeline extends OpenCvPipeline {
 
         // Convert to YCrCb
         Imgproc.cvtColor(input, ycrcbMat, Imgproc.COLOR_RGB2YCrCb);
+        if (!input.empty()){
+            telemetry.addData("ycr: ", input.get(0,0));
+        }
 
         // Apply color thresholds
         Core.inRange(ycrcbMat, purpleLower, purpleUpper, binaryMatPurple);
@@ -73,10 +71,8 @@ public class ArtifactPipeline extends OpenCvPipeline {
         int greenCount = (int) artifacts.stream().filter(a -> a.color.equals("green")).count();
         telemetry.addData("Purple", purpleCount);
         telemetry.addData("Green", greenCount);
-        telemetry.addData("leftX1", leftX1);
-        telemetry.addData("rightX1", rightX1);
-        telemetry.addData("leftX2", leftX2);
-        telemetry.addData("rightX2", rightX2);
+        telemetry.addData("leftPos", shooterLeftX);
+        telemetry.addData("rightPos", middleLeftX);
 
         telemetry.update();
 
@@ -98,27 +94,28 @@ public class ArtifactPipeline extends OpenCvPipeline {
             boolean merged = rect.width > 200 * MERGE_WIDTH_MULTIPLIER;
             if (!merged) {
                 addArtifact(rect, contour, output, color);
-            } else {
-                // Split wide contour into two halves
-                Mat roi = binary.submat(rect);
-                int midX = roi.cols() / 2;
-
-                Rect leftRect = new Rect(0, 0, midX, roi.rows());
-                Rect rightRect = new Rect(midX, 0, roi.cols() - midX, roi.rows());
-
-                ArrayList<MatOfPoint> leftContours = getContours(roi.submat(leftRect));
-                ArrayList<MatOfPoint> rightContours = getContours(roi.submat(rightRect));
-
-                for (MatOfPoint c : leftContours)
-                    if (Imgproc.contourArea(c) > MIN_AREA)
-                        addArtifact(relativeToGlobal(c, rect.x, rect.y), c, output, color);
-
-                for (MatOfPoint c : rightContours)
-                    if (Imgproc.contourArea(c) > MIN_AREA)
-                        addArtifact(relativeToGlobal(c, rect.x + midX, rect.y), c, output, color);
-
-                roi.release();
             }
+//            else {
+                // Split wide contour into two halves
+//                Mat roi = binary.submat(rect);
+//                int midX = roi.cols() / 2;
+//
+//                Rect leftRect = new Rect(0, 0, midX, roi.rows());
+//                Rect rightRect = new Rect(midX, 0, roi.cols() - midX, roi.rows());
+//
+//                ArrayList<MatOfPoint> leftContours = getContours(roi.submat(leftRect));
+//                ArrayList<MatOfPoint> rightContours = getContours(roi.submat(rightRect));
+//
+//                for (MatOfPoint c : leftContours)
+//                    if (Imgproc.contourArea(c) > MIN_AREA)
+//                        addArtifact(relativeToGlobal(c, rect.x, rect.y), c, output, color);
+//
+//                for (MatOfPoint c : rightContours)
+//                    if (Imgproc.contourArea(c) > MIN_AREA)
+//                        addArtifact(relativeToGlobal(c, rect.x + midX, rect.y), c, output, color);
+//
+//                roi.release();
+//            }
         }
     }
 
@@ -157,27 +154,45 @@ public class ArtifactPipeline extends OpenCvPipeline {
             artifactCoords.clear();
             if (artifacts.size() == 1) {
                 for (Artifact artifact : artifacts) {
-                    leftX1 = artifact.boundingBox.x;
-                    rightX1 = artifact.boundingBox.x + artifact.boundingBox.width;
+                    if (artifact.boundingBox.x < 320){
+                        shooterLeftX = artifact.boundingBox.x;
+                        middleLeftX = -1;
+                    }
+                    else {
+                        middleLeftX = artifact.boundingBox.x;
+                        shooterLeftX = -1;
+                    }
                 }
             }
             if (artifacts.size() == 2) {
                 for (Artifact artifact : artifacts) {
                     double leftX = artifact.boundingBox.x;
-                    double rightX = artifact.boundingBox.x + artifact.boundingBox.width;
                     artifactCoords.add(leftX);
-                    artifactCoords.add(rightX);
                 }
-                leftX1 = artifactCoords.get(0);
-                rightX1 = artifactCoords.get(1);
-                leftX2 = artifactCoords.get(2);
-                rightX2 = artifactCoords.get(3);
+                for (Double artifact: artifactCoords){
+                    if (artifact < 320){
+                        shooterLeftX = artifact;
+                    }
+                    else {
+                        middleLeftX = artifact;
+                    }
+                }
             }
         } else {
-            leftX1 = -1;
-            rightX1 = -1;
-            leftX2 = -1;
-            rightX2 = -1;
+            shooterLeftX = -1;
+            middleLeftX = -1;
         }
+    }
+    
+    public double getShooterArtifact() {
+        return shooterLeftX;
+    }
+
+    public double getMiddleArtifact(){
+        return middleLeftX;
+    }
+
+    public boolean isArtifactFound(){
+        return !artifacts.isEmpty();
     }
 }

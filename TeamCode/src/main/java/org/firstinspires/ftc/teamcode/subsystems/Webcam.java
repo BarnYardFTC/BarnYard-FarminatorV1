@@ -4,8 +4,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.components.pipelines.ArtifactDetection;
+import org.firstinspires.ftc.teamcode.subsystems.components.pipelines.ArtifactPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
@@ -16,7 +18,8 @@ public class Webcam extends SubsystemBase {
 //    private AprilTagProcessor aprilTag;
 //    private ArtifactDetection detector;
     private OpenCvCamera camera;
-    private ArtifactDetection pipeline;
+    private ArtifactPipeline pipeline;
+    private Telemetry telemetry;
 
 
     private double shooterLeftPixel;
@@ -58,7 +61,7 @@ public class Webcam extends SubsystemBase {
         camera = OpenCvCameraFactory.getInstance()
                 .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        pipeline = new ArtifactDetection();
+        pipeline = new ArtifactPipeline(telemetry);
 
         camera.setPipeline(pipeline);
 
@@ -76,48 +79,26 @@ public class Webcam extends SubsystemBase {
 
     }
 
-
-    public void ArtifactLeftPixel(){
-        if (pipeline.isArtifactFound()){
-            /** This logic for 2 artifacts in the robot(For the future) */
-//            for (int i=0; i<corners.size(); i++){
-//                if (i%3 == 0){
-//                    if (corners.get(i).get(0) > artifactPositions.MIDDLEPOS.getNumVal() && corners.get(i).get(0) <= artifactPositions.SHOOTPOSMIN.getNumVal()){
-//                        shooterLeftPixel = corners.get(i).get(0);
-//                    }
-//                    if (corners.get(i).get(0) > artifactPositions.INTAKEPOS.getNumVal() && corners.get(i).get(0) <= artifactPositions.MIDDLEPOS.getNumVal()){
-//                        middleLeftPixel = corners.get(i).get(0);
-//                    }
-//                    if (corners.get(i).get(0) <= artifactPositions.INTAKEPOS.getNumVal()){
-//                        intakeLeftPixel = corners.get(i).get(0);
-//                    }
-//                }
-//            }
-            shooterLeftPixel = pipeline.getLeftBorderX();
-        }
-    }
-
-
     /** Updates the current artifact readiness */
     public void ArtifactReadinessFunc(){
-        ArtifactLeftPixel();
         if (pipeline.isArtifactFound()){
-            currentShooterArtifactReadiness = artifactReadiness.READY;
-//            if (shooterLeftPixel > artifactPositions.SHOOTPOSMIN.getNumVal() && shooterPos == busyType.FREE){
-//                shooterPos = busyType.BUSY;
-//                telemetry.addLine("Artifact state is READY");
-//                ArtifactReadiness.remove(artifactReadiness.UNREADY);
-//                ArtifactReadiness.add(artifactReadiness.READY);
-//            }
-//            else{
-//                shooterPos = busyType.FREE;
-//                this.telemetry.addLine("Artifact state is UNREADY");
-//                ArtifactReadiness.remove(artifactReadiness.READY);
-//                ArtifactReadiness.add(artifactReadiness.UNREADY);
-//            }
+            if (pipeline.getShooterArtifact() > -1){
+                shooterPos = busyType.BUSY;
+            }
+            if (pipeline.getMiddleArtifact() > -1){
+                middlePos = busyType.BUSY;
+            }
+            if (pipeline.getMiddleArtifact() == -1){
+                middlePos = busyType.FREE;
+            }
+            if (pipeline.getShooterArtifact() == -1){
+                shooterPos = busyType.FREE;
+            }
+
         }
         else {
-            currentShooterArtifactReadiness = artifactReadiness.NOTHING;
+            shooterPos = busyType.FREE;
+            middlePos = busyType.FREE;
         }
 
     }
@@ -127,7 +108,7 @@ public class Webcam extends SubsystemBase {
 
     /** Display webcam + pinpoint telemetry. */
     public void displayTelemetry() {
-        System.out.println("Artifact X: " + pipeline.getLeftBorderX());
+//        System.out.println("Artifact X: " + pipeline.getLeftBorderX());
 
 
     }

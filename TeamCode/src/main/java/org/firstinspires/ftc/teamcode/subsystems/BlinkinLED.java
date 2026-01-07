@@ -21,7 +21,7 @@ public class BlinkinLED extends SubsystemBase {
     }
     /**WIP: func for periodic to update LEDs based on sensor input*/
     public void update(){
-        if (artifactPipeline.getShooterArtifact() == -1) {
+        if (BarnRobot.getInstance().webcam.getShooterX() == -1) {
             setNeutral();
         }
         else setGreen();

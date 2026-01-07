@@ -1,33 +1,30 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.subsystems.components.pipelines.ArtifactPipeline;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 
 public class BlinkinLED extends SubsystemBase {
-    private RevBlinkinLedDriver blinkin;
+    private final RevBlinkinLedDriver blinkin;
+    private ArtifactPipeline artifactPipeline;
     private RevBlinkinLedDriver.BlinkinPattern currentPattern = null;
     private long lastUpdateTime = 0;
     public BlinkinLED() {
         this.blinkin = BarnRobot.getInstance().robotHardware.blinkin;
         setNeutral();
     }
-    /**WIP: func for periodic to update LEDs based on LimeLight input*/
+    /**WIP: func for periodic to update LEDs based on sensor input*/
     public void update(){
-//        switch(BarnRobot.getInstance().webcam.llColor.getBackTransferArtifact()) {
-//            case NONE:
-//                setNeutral();
-//                break;
-//            case GREEN:
-//                setGreen();
-//                break;
-//            case PURPLE:
-//                setPurple();
-//                break;
-//        }
+        if (artifactPipeline.getShooterArtifact() == -1) {
+            setNeutral();
+        }
+        else setGreen();
     }
 
     private void setRed(){
@@ -42,6 +39,22 @@ public class BlinkinLED extends SubsystemBase {
     }
     private void setPurple(){
         setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+    }
+
+    public Command setRedCommand() {
+        return new InstantCommand(() -> setRed(), this);
+    }
+
+    public Command setBlueCommand() {
+        return new InstantCommand(() -> setBlue(), this);
+    }
+
+    public Command setGreenCommand() {
+        return new InstantCommand(() -> setGreen(), this);
+    }
+
+    public Command setPurpleCommand() {
+        return new InstantCommand(() -> setPurple(), this);
     }
 
     /**Sets LEDs to team color*/

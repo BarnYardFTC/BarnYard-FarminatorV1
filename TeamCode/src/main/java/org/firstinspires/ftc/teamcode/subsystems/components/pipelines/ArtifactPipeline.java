@@ -29,8 +29,8 @@ public class ArtifactPipeline extends OpenCvPipeline {
     private final Mat morphKernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
 
     private final Telemetry telemetry;
-    private double shooterLeftX = -1;
-    private double middleLeftX = -1;
+    private double shooterX = -1;
+    private double middleX = -1;
 
     public ArtifactPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -71,8 +71,8 @@ public class ArtifactPipeline extends OpenCvPipeline {
         int greenCount = (int) artifacts.stream().filter(a -> a.color.equals("green")).count();
         telemetry.addData("Purple", purpleCount);
         telemetry.addData("Green", greenCount);
-        telemetry.addData("leftPos", shooterLeftX);
-        telemetry.addData("rightPos", middleLeftX);
+        telemetry.addData("leftPos", shooterX);
+        telemetry.addData("rightPos", middleX);
 
         telemetry.update();
 
@@ -154,43 +154,45 @@ public class ArtifactPipeline extends OpenCvPipeline {
             artifactCoords.clear();
             if (artifacts.size() == 1) {
                 for (Artifact artifact : artifacts) {
-                    if (artifact.boundingBox.x < 320){
-                        shooterLeftX = artifact.boundingBox.x;
-                        middleLeftX = -1;
+                    if (artifact.boundingBox.x + artifact.boundingBox.width < 320){
+                        shooterX = artifact.boundingBox.x + artifact.boundingBox.width;
+                        middleX = -1;
                     }
-                    else {
-                        middleLeftX = artifact.boundingBox.x;
-                        shooterLeftX = -1;
+                    else if (artifact.boundingBox.x > 320) {
+                        middleX = artifact.boundingBox.x;
+                        shooterX = -1;
                     }
                 }
             }
             if (artifacts.size() == 2) {
                 for (Artifact artifact : artifacts) {
                     double leftX = artifact.boundingBox.x;
-                    artifactCoords.add(leftX);
-                }
-                for (Double artifact: artifactCoords){
-                    if (artifact < 320){
-                        shooterLeftX = artifact;
+                    double rightX = artifact.boundingBox.x + artifact.boundingBox.width;
+
+                    if (rightX < 320 && rightX > -1){
+                        shooterX = rightX;
+                        middleX = leftX;
                     }
-                    else {
-                        middleLeftX = artifact;
+                    else if (leftX > 320){
+                        middleX = leftX;
+                        shooterX = rightX;
                     }
                 }
             }
         } else {
-            shooterLeftX = -1;
-            middleLeftX = -1;
+            shooterX = -1;
+            middleX = -1;
         }
     }
     
     public double getShooterArtifact() {
-        return shooterLeftX;
+        return shooterX;
     }
 
     public double getMiddleArtifact(){
-        return middleLeftX;
+        return middleX;
     }
+    public int getArtifactCount(){return artifacts.size();}
 
     public boolean isArtifactFound(){
         return !artifacts.isEmpty();

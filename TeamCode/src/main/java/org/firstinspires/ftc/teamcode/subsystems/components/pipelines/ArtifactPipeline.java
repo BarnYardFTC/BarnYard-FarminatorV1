@@ -27,7 +27,8 @@ public class ArtifactPipeline extends OpenCvPipeline {
     private final Mat binaryMatGreen = new Mat();
     private final Mat combinedMask = new Mat();
     private final Mat morphKernel = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
-
+    int purpleShoot = 0;
+    int greenShoot = 0;
     private final Telemetry telemetry;
     private double shooterX = -1;
     private double middleX = -1;
@@ -73,6 +74,8 @@ public class ArtifactPipeline extends OpenCvPipeline {
         telemetry.addData("Green", greenCount);
         telemetry.addData("leftPos", shooterX);
         telemetry.addData("rightPos", middleX);
+        telemetry.addData("purpleShoot: ", purpleShoot);
+        telemetry.addData("GreenShot: ", greenShoot);
 
         telemetry.update();
 
@@ -156,10 +159,15 @@ public class ArtifactPipeline extends OpenCvPipeline {
                 for (Artifact artifact : artifacts) {
                     if (artifact.boundingBox.x + artifact.boundingBox.width < 320){
                         shooterX = artifact.boundingBox.x + artifact.boundingBox.width;
+                        purpleShoot = (int) artifacts.stream().filter(a -> a.color.equals("purple")).count();
+                        greenShoot = (int) artifacts.stream().filter(a -> a.color.equals("green")).count();
                         middleX = -1;
+                        greenShoot = 0;
                     }
                     else if (artifact.boundingBox.x > 320) {
                         middleX = artifact.boundingBox.x;
+                        purpleShoot = 0;
+                        greenShoot = 0;
                         shooterX = -1;
                     }
                 }
@@ -172,10 +180,14 @@ public class ArtifactPipeline extends OpenCvPipeline {
                     if (rightX < 320 && rightX > -1){
                         shooterX = rightX;
                         middleX = leftX;
+                        purpleShoot = (int) artifacts.stream().filter(a -> a.color.equals("purple")).count();
+                        greenShoot = (int) artifacts.stream().filter(a -> a.color.equals("green")).count();
                     }
                     else if (leftX > 320){
                         middleX = leftX;
                         shooterX = rightX;
+                        purpleShoot = 0;
+                        greenShoot = 0;
                     }
                 }
             }

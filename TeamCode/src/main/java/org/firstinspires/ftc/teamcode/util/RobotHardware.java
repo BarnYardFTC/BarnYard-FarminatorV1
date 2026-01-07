@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
@@ -101,6 +103,7 @@ public class RobotHardware {
 
 //    public IMU imu;
     public Limelight3A limelight;
+    public NormalizedColorSensor colorSensor;
 
 
     // ------------------------------------------------------------
@@ -246,6 +249,7 @@ public class RobotHardware {
 //        imu.initialize(IMU_PARAMETERS);
 //        imu.resetYaw();
         limelight = hw.get(Limelight3A.class, "limelight");
+        colorSensor = hw.get(NormalizedColorSensor.class, "colorSensor");
 
     }
 

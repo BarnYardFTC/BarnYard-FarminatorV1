@@ -45,6 +45,7 @@ public class BarnRobot extends Robot {
     public ShooterHood shooterHood;
     public Intake intake;
     public Webcam webcam;
+    public ColorSensor colorSensor;
     public BlinkinLED blinkin;
     public PinpointLocalizer pinpointLocalizer;
 
@@ -204,6 +205,7 @@ public class BarnRobot extends Robot {
     public void initBlinkin(){
         blinkin = new BlinkinLED();
     }
+    public void initColorSensor(){colorSensor = new ColorSensor();}
 
 
     // ------------------------------------------------------------
@@ -217,6 +219,5 @@ public class BarnRobot extends Robot {
     public void periodic() {
         pinpointLocalizer.update();
         telemetry.update();
-        blinkin.update();
     }
 }

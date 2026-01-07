@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
-@TeleOp(name = "LED test teleop", group = "test")
+@TeleOp(name = "LED test teleop 1", group = "test")
 @Config
 public class LEDAutoTest extends CommandOpMode {
 

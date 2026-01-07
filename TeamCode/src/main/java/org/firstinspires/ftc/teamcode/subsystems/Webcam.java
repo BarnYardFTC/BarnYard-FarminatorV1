@@ -103,7 +103,9 @@ public class Webcam extends SubsystemBase {
 
     }
 
-
+    public double getShooterX(){
+        return pipeline.getShooterArtifact();
+    }
 
 
     /** Display webcam + pinpoint telemetry. */

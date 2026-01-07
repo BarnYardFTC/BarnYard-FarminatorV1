@@ -44,14 +44,12 @@ public class OpModeData {
     /** Teleop constructor */
     public OpModeData(AllianceColor allianceColor,
                       OpModeType opModeType,
-                      int webcamPipeline,
                       Pose2d initialPose2d,
                       double fieldReferenceHeading) {
 
         this.allianceColor = allianceColor;
         this.fieldReferenceHeading = fieldReferenceHeading;
         this.opModeType = opModeType;
-        this.webcamPipeline = webcamPipeline;
         this.initialPose2d = initialPose2d;
     }
 
@@ -60,14 +58,12 @@ public class OpModeData {
     /** Autonomous constructor */
     public OpModeData(AllianceColor allianceColor,
                       OpModeType opModeType,
-                      int webcamPipeline,
                       Pose2d initialPose2d) {
 
         autoFinishPose = new Pose2d(0,0,0); //reset autoFinishPose
         this.initialPose2d = initialPose2d;
         this.allianceColor = allianceColor;
         this.opModeType = opModeType;
-        this.webcamPipeline = webcamPipeline;
 
         // Default val
         this.fieldReferenceHeading = 0;

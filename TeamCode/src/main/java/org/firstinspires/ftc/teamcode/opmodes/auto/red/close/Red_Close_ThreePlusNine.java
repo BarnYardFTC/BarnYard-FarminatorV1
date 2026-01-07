@@ -31,7 +31,6 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
-            LimeLight.RED_LOCALIZATION_PIPELINE,
             new Pose2d(START_POSE_X, START_POSE_Y, START_POSE_HEADING)
     );
 

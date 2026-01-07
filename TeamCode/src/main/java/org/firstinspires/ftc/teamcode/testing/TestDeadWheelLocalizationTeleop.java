@@ -17,7 +17,6 @@ public class TestDeadWheelLocalizationTeleop extends CommandOpMode {
     private OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.TELEOP,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(0,0,0)
     );
 

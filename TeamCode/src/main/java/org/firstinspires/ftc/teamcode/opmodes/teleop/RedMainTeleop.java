@@ -45,7 +45,6 @@ public class RedMainTeleop extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.RED,
                 OpModeData.OpModeType.TELEOP,
-                LimeLight.RED_LOCALIZATION_PIPELINE,
                 autoFinishPose,
                 90
         );

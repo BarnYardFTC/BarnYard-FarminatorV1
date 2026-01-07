@@ -1,12 +1,20 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 import java.util.List;
 
@@ -24,17 +32,13 @@ public class LimeLight extends SubsystemBase {
         - Right: 0
      */
 
-    /** Pipeline optimized for blue alliance localization. */
-    public static final int BLUE_LOCALIZATION_PIPELINE = 1;
-
-    /** Pipeline optimized for red alliance localization. */
-    public static final int RED_LOCALIZATION_PIPELINE = 2;
-
-    /** Pipeline used for detecting obelisk patterns. */
-    public static final int OBELISK_PIPELINE = 3;
-
     /** Maximum allowed staleness for vision data. */
     public static final int STANDARD_STALENESS_TOLERANCE = 100;
+
+    private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;
+
+    public Position lastDetection;
+    private final ElapsedTime poseUpdateTimer = new ElapsedTime();
 
     /** Polling frequency of the Limelight in Hz. */
     public static final int POLL_RATE_HZ = 100;
@@ -69,17 +73,14 @@ public class LimeLight extends SubsystemBase {
     /** Distance to goal in meters. */
     private double goalRange;
 
-    /** Currently active pipeline. */
-    public int currentPipeline;
-
     /**
      * Constructs the LimeLight subsystem and initializes default settings.
      */
-    public LimeLight(int pipeline) {
+    public LimeLight() {
         limelight = BarnRobot.getInstance().robotHardware.limelight;
         limelight.setPollRateHz(POLL_RATE_HZ);
-        switchPipeline(pipeline);
         Dyaw = 0;
+        resetData();
         start();
     }
 
@@ -89,24 +90,11 @@ public class LimeLight extends SubsystemBase {
         obeliskPattern = null;
         Dyaw = 0;
         goalRange = 0;
-        currentPipeline = BLUE_LOCALIZATION_PIPELINE;
     }
 
     /** Starts the Limelight processing loop. */
     public void start() {
         limelight.start();
-    }
-
-    /**
-     * Switches the Limelight to a specific pipeline.
-     *
-     * @param pipeline pipeline index to activate
-     */
-    public void switchPipeline(int pipeline) {
-        limelight.pipelineSwitch(pipeline);
-        currentPipeline = pipeline;
-        llResult = null;
-        frs = null;
     }
 
 
@@ -116,12 +104,9 @@ public class LimeLight extends SubsystemBase {
      * @return true if data is valid
      */
     public boolean isDataValid() {
-        if (currentPipeline == OBELISK_PIPELINE) {
-            return llResult != null && llResult.isValid();
-        } else {
-            return llResult != null && frs != null && !frs.isEmpty() && llResult.isValid()
-                    && llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
-        }
+        return llResult != null && frs != null && !frs.isEmpty() && llResult.isValid()
+            && llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
+
     }
 
     /**
@@ -217,7 +202,18 @@ public class LimeLight extends SubsystemBase {
      * @return true if a goal tag is detected
      */
     public boolean isGoalTagDetected() {
-        return (currentPipeline == BLUE_LOCALIZATION_PIPELINE || currentPipeline == RED_LOCALIZATION_PIPELINE) && isDataValid();
+        boolean frsContainsGoalTag = false;
+        if (isDataValid()){
+            for (LLResultTypes.FiducialResult fr: frs){
+                if (
+                        fr.getFiducialId() == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE ||
+                                fr.getFiducialId() == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED
+                )
+                    frsContainsGoalTag = true;
+            }
+        }
+
+        return isDataValid() && frsContainsGoalTag;
     }
 
     /** Updates Limelight results; should be called periodically. */
@@ -227,22 +223,41 @@ public class LimeLight extends SubsystemBase {
         if (llResult.isValid() && !llResult.getFiducialResults().isEmpty()) {
             frs = llResult.getFiducialResults();
         }
+        limelight.updateRobotOrientation(Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()));
+
+        if (isGoalTagDetected()
+                        && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
+                        BarnRobot.getInstance().drive.isRobotStatic()
+                        ) {
+
+                    updatePose();
+                    poseUpdateTimer.reset();
+                }
+    }
+
+        public void updatePose(){
+            if (getRobotFieldPose() != null){
+                Pose2d currenrPose = new Pose2d(getRobotFieldPose().getPosition().x / 0.0254 ,getRobotFieldPose().getPosition().y / 0.0254, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+                BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
+            }
+        }
+
+    public Pose3D getRobotFieldPose(){
+        if (isDataValid())
+            return llResult.getBotpose_MT2();
+        return null;
     }
 
     /** Outputs all relevant telemetry for the Limelight subsystem. */
     public void displayTelemetry() {
         BarnRobot robot = BarnRobot.getInstance();
-        robot.telemetry.addData("Detected", llResult != null && llResult.isValid());
         robot.telemetry.addData("Data Valid", isDataValid());
-        robot.telemetry.addData("Dyaw", Dyaw);
 
-        Pose3D pose = llResult != null ? llResult.getBotpose_MT2() : null;
-        if (pose != null) {
-            robot.telemetry.addData("Location", "(" + pose.getPosition().x + ", " + pose.getPosition().y + ")");
-        }
+        if (getRobotFieldPose() != null)
+            robot.telemetry.addData("MT2 POSITION", "(" + getRobotFieldPose().getPosition().x / 0.0254 + ", " + getRobotFieldPose().getPosition().y / 0.0254 + ")");
 
-        robot.telemetry.addData("Pattern", obeliskPattern);
-        robot.telemetry.addData("Range", getGoalRange());
+
+
     }
 
     /** @return current yaw offset to goal */

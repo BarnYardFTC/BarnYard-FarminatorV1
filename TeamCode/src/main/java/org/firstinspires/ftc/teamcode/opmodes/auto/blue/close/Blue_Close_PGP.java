@@ -42,7 +42,6 @@ public class Blue_Close_PGP extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            LimeLight.BLUE_LOCALIZATION_PIPELINE,
             new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING)
     );
 

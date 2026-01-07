@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
-@TeleOp(name = "LED test teleop", group = "test")
 @Config
 public class LEDTest extends CommandOpMode {
 
@@ -39,7 +38,6 @@ public class LEDTest extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                LimeLight.BLUE_LOCALIZATION_PIPELINE,
                 autoFinishPose,
                 270
         );

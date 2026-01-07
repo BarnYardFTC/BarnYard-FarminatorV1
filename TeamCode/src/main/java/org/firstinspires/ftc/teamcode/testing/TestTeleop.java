@@ -41,7 +41,6 @@ public class TestTeleop extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                LimeLight.BLUE_LOCALIZATION_PIPELINE,
                 new Pose2d(0, 0, Math.toRadians(270)),
                 180
         );
@@ -145,10 +144,8 @@ public class TestTeleop extends CommandOpMode {
     public void run() {
         super.run();
         farminator.drive.displayPinpointDataTelemetry();
-        farminator.webcam.displayTelemetry();
-        telemetry.addData("distance from goal", farminator.drive.getDistanceFromGoal());
-        telemetry.addData("shooter velocity", farminator.shooter.getVelocity());
-        farminator.shooterHood.displayTelemetry();
+        farminator.limelight.displayTelemetry();
+        farminator.telemetry.addData("absolute heading", farminator.drive.getBotAbsoluteHeading());
         farminator.periodic();
     }
 }

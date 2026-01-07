@@ -127,7 +127,7 @@ public class BarnRobot extends Robot {
 
         // Subsystem initialization
         initTransfer();
-        initLimeLight(opModeData.webcamPipeline);
+        initLimeLight();
         initShooter();
         initIntake();
         initDrivetrain(opMode.hardwareMap);
@@ -144,7 +144,7 @@ public class BarnRobot extends Robot {
 
     /** Sets up the webcam. */
     public void initWebcam(HardwareMap hw){
-        webcam = new Webcam(hw);
+//        webcam = new Webcam(hw);
     }
 
     /** Sets up the shooter system. */
@@ -193,8 +193,8 @@ public class BarnRobot extends Robot {
     }
 
     /** Sets up the LimeLight vision system. */
-    public void initLimeLight(int pipeline) {
-        limelight = new LimeLight(pipeline);
+    public void initLimeLight() {
+        limelight = new LimeLight();
     }
 
     /** Sets up the intake system. */

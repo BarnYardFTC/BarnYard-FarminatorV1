@@ -1,4 +1,151 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.far;
 
-public class Red_Far_ThreePlusThree {
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
+import com.seattlesolvers.solverslib.command.WaitUntilCommand;
+
+import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
+@Autonomous(name = "!BLUE THREE PLUS THREE FAR", group = "!main")
+
+public class Red_Far_ThreePlusThree  extends CommandOpMode {
+
+    public static double START_POSE_X = 60;
+    public static double START_POSE_Y = 15;
+    public static double START_HEADING = Math.toRadians(180);
+
+    public static double SHOOTING_POSE_X = 55;
+    public static double SHOOTING_POSE_Y = 10;
+    public static double SHOOT_HEADING = Math.toRadians(135);
+
+    public static double COLLECT_POSE_X = 60;
+    public static double COLLECT_POSE_Y = 60;
+    public static double COLLECT_HEADING = Math.toRadians(90);
+
+    public static double defaultVel = 50;
+
+
+    /** Robot and drive system instances */
+    private BarnRobot farminator;
+    private RoadRunnerMecanumDrive drive;
+
+
+
+    private final OpModeData opModeData = new OpModeData(
+            OpModeData.AllianceColor.BLUE,
+            OpModeData.OpModeType.AUTONOMOUS,
+            new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING)
+    );
+
+    public static int SCORE_TIME = 2200;
+
+    @Override
+    public void initialize() {
+
+        /** Initialize robot and drive system */
+        farminator = BarnRobot.getInstance();
+        farminator.init(this, opModeData);
+
+        farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
+        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
+
+        TrajectoryActionBuilder path1 = drive.actionBuilder(
+                        new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+
+
+        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING );
+
+        TrajectoryActionBuilder path3 = drive.actionBuilder(
+                        new Pose2d(COLLECT_POSE_X, COLLECT_POSE_Y,COLLECT_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+
+        ;
+
+
+
+        new SequentialCommandGroup(
+                new WaitUntilCommand(this::opModeIsActive),
+                shootCommandPath(path1),
+
+                intakeCommandPath(path2),
+
+                shootCommandPath(path3)
+        ).schedule();
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        farminator.periodic();
+    }
+
+    /**
+     * runs when the autonomous is finished
+     */
+    @Override
+    public void end(){
+        // store the finish heading of the auto
+        OpModeData.setAutoFinishPose(drive.localizer.getPose());
+    }
+
+    public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                        farminator.shooter.runShooterBasedOnDistance(),
+                        new SequentialCommandGroup(
+                                new DriveActionCommand(shootingPath),
+                                farminator.transfer.setEntireTransferPowerCommand(1),
+                                farminator.intake.activateIntakeCommand(),
+                                new WaitCommand(SCORE_TIME),
+                                farminator.transfer.setEntireTransferPowerCommand(0),
+                                farminator.intake.deactivateIntakeCommand()
+                        )
+                ),
+                farminator.shooter.turnOffInstant()
+        );
+    }
+
+    public Command shootCommand(){
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                        farminator.shooter.runShooterBasedOnDistance(),
+                        new SequentialCommandGroup(
+                                new WaitCommand(500),
+                                farminator.transfer.setEntireTransferPowerCommand(1),
+                                farminator.intake.activateIntakeCommand(),
+                                new WaitCommand(SCORE_TIME),
+                                farminator.transfer.setEntireTransferPowerCommand(0),
+                                farminator.intake.deactivateIntakeCommand()
+                        )
+                ),
+                farminator.shooter.turnOffInstant()
+        );
+    }
+
+    public Command intakeCommandPath(TrajectoryActionBuilder path){
+        return new SequentialCommandGroup(
+                farminator.intake.activateIntakeCommand(),
+                farminator.transfer.setFrontPowerCommand(1),
+                farminator.transfer.setBackPowerCommand(-0.1),
+                new DriveActionCommand(path),
+                farminator.transfer.setEntireTransferPowerCommand(0),
+                farminator.intake.customIntakeCommand(1)
+        );
+    }
+
+
 }
+
+

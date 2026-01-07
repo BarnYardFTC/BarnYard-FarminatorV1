@@ -10,6 +10,7 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class Blue_Far_ThreePlusThree {
+    public static long SHOOT_TIME = 2;
 
     public static double START_POSE_X = 60;
     public static double START_POSE_Y = -15;
@@ -39,13 +40,16 @@ public class Blue_Far_ThreePlusThree {
                 .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
         TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING );
+        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(COLLECT_POSE_X,COLLECT_POSE_Y,COLLECT_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
 
         // Run the trajectory
         myBot.runAction(
                 new SequentialAction(
                         path1.build(),
-                        path2.build()
+                        path2.build(),
+                        path3.build()
                 )
         );
 

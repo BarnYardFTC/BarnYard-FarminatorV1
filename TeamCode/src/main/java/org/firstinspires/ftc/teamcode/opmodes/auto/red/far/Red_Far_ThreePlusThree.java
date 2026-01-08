@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-@Autonomous(name = "!BLUE THREE PLUS THREE FAR", group = "!main")
+@Autonomous(name = "!RED THREE PLUS THREE FAR", group = "!main")
 
 public class Red_Far_ThreePlusThree  extends CommandOpMode {
 

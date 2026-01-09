@@ -24,4 +24,8 @@ public class ColorSensor {
         }
         return -1;
     }
+
+    public boolean isPosBusy(Telemetry telemetry){
+        return getArtifactDistance(telemetry) < 6;
+    }
 }

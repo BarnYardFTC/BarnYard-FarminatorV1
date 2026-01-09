@@ -28,13 +28,15 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
 
     public static double SHOOTING_POSE_X = 55;
     public static double SHOOTING_POSE_Y = -10;
-    public static double SHOOT_HEADING = Math.toRadians(215);
+    public static double SHOOT_HEADING = Math.toRadians(205);
 
-    public static double COLLECT_POSE_X = 60;
-    public static double COLLECT_POSE_Y = -60;
-    public static double COLLECT_HEADING = Math.toRadians(270);
+    public static double PRECOLLECT_Y = -50;
 
-        public static double defaultVel = 50;
+    public static double COLLECT_POSE_X = 50;
+    public static double COLLECT_POSE2_X =60 ;
+    public static double COLLECT_POSE_Y = -63;
+    public static double COLLECT_HEADING = Math.toRadians(300);
+
 
 
         /** Robot and drive system instances */
@@ -67,10 +69,12 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
 
 
             TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                    .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING );
+                    .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                    .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                    .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
 
             TrajectoryActionBuilder path3 = drive.actionBuilder(
-                            new Pose2d(COLLECT_POSE_X, COLLECT_POSE_Y,COLLECT_HEADING))
+                            new Pose2d(COLLECT_POSE2_X, COLLECT_POSE_Y,COLLECT_HEADING))
                     .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
             ;

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.components;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -154,6 +155,19 @@ public class MecanumDriveComponent {
 
     public void turnOnly(double turn) {
         setSpeed(0,0,turn);
+        translateSpeedToPower();
+    }
+
+    //func to maintain position, should be implemented
+    //the same way as turnOnly()
+    public void maintainPos(double turn, Pose2d stopPose) {
+        double speedX;
+        double speedY;
+        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+        //speed determination probably needs adjustment
+        speedX = (stopPose.position.x - currentPose.position.x);
+        speedY = (stopPose.position.y - currentPose.position.y);
+        setSpeed(speedX, speedY, turn);
         translateSpeedToPower();
     }
 }

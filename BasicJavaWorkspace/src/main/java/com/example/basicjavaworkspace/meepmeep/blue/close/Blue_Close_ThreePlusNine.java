@@ -105,7 +105,7 @@ public class Blue_Close_ThreePlusNine {
                         SOUTH_HEADING)
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING)
-                        , new Rotation2d(-1, -1))
+                        , new Rotation2d(-2, -1))
                 ;
 
         TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(

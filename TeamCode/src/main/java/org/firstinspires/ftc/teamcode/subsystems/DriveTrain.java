@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.app.VoiceInteractor;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.seattlesolvers.solverslib.command.Command;
@@ -11,6 +13,7 @@ import com.seattlesolvers.solverslib.controller.PIDController;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.PinpointLocalizer;
 
 @Config
 public class DriveTrain extends SubsystemBase {
@@ -186,49 +189,65 @@ public class DriveTrain extends SubsystemBase {
         return output;
     }
 
-    private void localizationBasedGoalAlignment(double spdX, double spdY){
+    public static double VELOCITY_LOOKAHEAD = 1.5;
 
-        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+    private void localizationBasedGoalAlignment(double spdX, double spdY) {
 
-        double currentX = currentPose.position.x * 0.0254;
-        double currentY = currentPose.position.y * 0.0254;
+        PinpointLocalizer localizer = BarnRobot.getInstance().pinpointLocalizer;
+
+        Pose2d pose = localizer.getPose();
+        Pose2d vel  = localizer.getPoseVelocity();
+
+        // Predict future position
+        double predictedX = (pose.position.x + vel.position.x * VELOCITY_LOOKAHEAD) * 0.0254;
+        double predictedY = (pose.position.y + vel.position.y * VELOCITY_LOOKAHEAD) * 0.0254;
+
         double currentHeading = getBotAbsoluteHeading();
+        double desiredHeading;
+        double tangentAngle;
 
-        double desiredHeading, tangentAngle;
+        if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED) {
 
-        if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED){
-            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2) {
-                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_2)/(RED_GOAL_Y - currentY)));
-            }
-            else {
-                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_1)/(RED_GOAL_Y - currentY)));
-            }
+            double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
+                    ? GOAL_X_2
+                    : GOAL_X_1;
+
+            tangentAngle = Math.toDegrees(
+                    Math.atan((predictedX - goalX) / (RED_GOAL_Y - predictedY))
+            );
+
             desiredHeading = 90 + tangentAngle;
-        }
-        else {
-            if (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2) {
-                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_2)/(currentY-BLUE_GOAL_Y)));
-            }
-            else {
-                tangentAngle = Math.toDegrees(Math.atan((currentX - GOAL_X_1)/(currentY-BLUE_GOAL_Y)));
-            }
+
+        } else {
+
+            double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
+                    ? GOAL_X_2
+                    : GOAL_X_1;
+
+            tangentAngle = Math.toDegrees(
+                    Math.atan((predictedX - goalX) / (predictedY - BLUE_GOAL_Y))
+            );
+
             desiredHeading = 270 - tangentAngle;
         }
 
         double diffYaw = desiredHeading - currentHeading;
-
-        BarnRobot.getInstance().telemetry.addData("dyaw", diffYaw);
-        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
         double turnSpd = diffToSpeed(diffYaw);
 
-        if (BarnRobot.getInstance().opmodeData.opModeType == OpModeData.OpModeType.TELEOP){
+        BarnRobot.getInstance().telemetry.addData("vel x", vel.position.x);
+        BarnRobot.getInstance().telemetry.addData("vel y", vel.position.y);
+        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
+        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
+        BarnRobot.getInstance().telemetry.addData("diffYaw", diffYaw);
+        BarnRobot.getInstance().telemetry.addData("vel", vel);
+
+        if (BarnRobot.getInstance().opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
             drive(spdX, spdY, turnSpd);
+        } else {
+            turnOnly(turnSpd);
         }
-        else turnOnly(turnSpd);
-
-
-
     }
+
 
     // ============================================================
     //                           COMMANDS

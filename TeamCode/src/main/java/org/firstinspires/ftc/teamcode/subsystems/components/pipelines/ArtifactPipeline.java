@@ -162,7 +162,6 @@ public class ArtifactPipeline extends OpenCvPipeline {
                         purpleShoot = (int) artifacts.stream().filter(a -> a.color.equals("purple")).count();
                         greenShoot = (int) artifacts.stream().filter(a -> a.color.equals("green")).count();
                         middleX = -1;
-                        greenShoot = 0;
                     }
                     else if (artifact.boundingBox.x > 320) {
                         middleX = artifact.boundingBox.x;

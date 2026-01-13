@@ -81,12 +81,10 @@ public class Red_Far_ThreePlusZero extends CommandOpMode {
                                         new WaitCommand(1000)
                                 ),
                                 farminator.drive.stop(),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME)
                         )
                 ),
-                farminator.transfer.setEntireTransferPowerCommand(0),
                 farminator.intake.deactivateIntakeCommand(),
                 farminator.shooter.turnOffInstant(),
                 new DriveActionCommand(path2)

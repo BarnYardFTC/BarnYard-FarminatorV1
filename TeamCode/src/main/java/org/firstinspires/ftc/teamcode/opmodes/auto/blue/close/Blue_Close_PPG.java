@@ -98,7 +98,6 @@ public class Blue_Close_PPG extends CommandOpMode {
                                         new WaitCommand(500)
                                 ),
                                 farminator.drive.stop(),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME)
                         )
@@ -106,11 +105,8 @@ public class Blue_Close_PPG extends CommandOpMode {
                 farminator.shooter.turnOffInstant(),
                 new DriveActionCommand(path2),
                 farminator.intake.activateIntakeCommand(),
-                farminator.transfer.setFrontPowerCommand(1),
-                farminator.transfer.setBackPowerCommand(-0.1),
                 new DriveActionCommand(path3),
                 farminator.intake.activateIntakeCommand(),
-                farminator.transfer.setEntireTransferPowerCommand(0),
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
@@ -120,12 +116,10 @@ public class Blue_Close_PPG extends CommandOpMode {
                                         new WaitCommand(500)
                                 ),
                                 farminator.drive.stop(),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 new WaitCommand(SCORE_TIME)
 
                         )
                 ),
-                farminator.transfer.setEntireTransferPowerCommand(0),
                 farminator.intake.deactivateIntakeCommand(),
                 farminator.shooter.turnOffInstant()
         ).schedule();

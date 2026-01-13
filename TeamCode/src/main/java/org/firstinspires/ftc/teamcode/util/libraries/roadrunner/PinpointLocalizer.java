@@ -23,8 +23,8 @@ public final class PinpointLocalizer implements Localizer {
     private Pose2d poseVelocity = new Pose2d(0, 0, 0);
 
     public static class Params {
-        public double parYTicks = -2209.54523542; // y position of the parallel encoder (in tick units)
-        public double perpXTicks = 2209.54523542; // x position of the perpendicular encoder (in tick units)
+        public double parYTicks = 0; // y position of the parallel encoder (in tick units)
+        public double perpXTicks = -2089.02; // x position of the perpendicular encoder (in tick units)
     }
 
     public static Params PARAMS = new Params();

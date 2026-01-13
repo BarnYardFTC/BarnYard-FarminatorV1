@@ -36,9 +36,7 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
 
         return new SequentialCommandGroup(
                 robot.intake.activateIntakeCommand(),
-                robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                 new WaitCommand(INTAKE_TIME),
-                robot.transfer.setEntireTransferPowerCommand(0),
                 robot.intake.deactivateIntakeCommand()
         );
     }
@@ -51,8 +49,7 @@ public class IntakeCommandGroup extends SequentialCommandGroup {
     public static Command intakeAndFrontTransferCommand() {
         BarnRobot robot = BarnRobot.getInstance();
         return new ParallelCommandGroup(
-                robot.intake.activateIntakeCommand(),
-                robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
+                robot.intake.activateIntakeCommand()
         );
     }
 

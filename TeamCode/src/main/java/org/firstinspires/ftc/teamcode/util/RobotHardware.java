@@ -1,20 +1,12 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-
-import org.firstinspires.ftc.teamcode.subsystems.BlinkinLED;
 
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
@@ -33,33 +25,16 @@ import org.firstinspires.ftc.teamcode.subsystems.BlinkinLED;
 /*
 Configuration:
 
-    Exapnsion hub motors:
-        0: leftFrontDrivetrain
-        1: intake
-        2: leftBackDrivetrain
-        3: shoterLeft
+    leftFrontDrivetrain - expansion hub 0 - yellow
+    rightFrontDrivetrain - control hub 0 - yellow
+    leftBackDrivetrain - expansion hub 1 - blue
+    rightBackDrivetrain - control hub 1 - blue
+    shooterLeft- expansion hub 2 - white
+    shooterRight - control hub 2 - white
+    Intake - control hub 3 - white big
+    rightGate - servo hub 1
+    leftGate - servo hub 2
 
-    Control hub motors:
-        0: rightBackDrivetrain
-        1: shooterRight
-        2: rightFrontDrivetrain
-        3:
-
-    Control hub i2c:
-        1: pinpoint
-
-    Servo Hub:
-        0:  leftBackTransfer
-        1: leftFrontTransfer
-        2: shooterHood
-        4: rightBackTransfer
-        5:  rightFrontTransfer
-
-    Webcam:
-        Webcam 1
-
-    Limelight
-        limelight
  */
 public class RobotHardware {
 
@@ -67,21 +42,13 @@ public class RobotHardware {
 
     public RevBlinkinLedDriver blinkin;
 
-    // ------------------------------------------------------------
-    // Transfer Servos
-    // ------------------------------------------------------------
-
-    public CRServo leftFrontTransfer;
-    public CRServo rightFrontTransfer;
-    public CRServo leftBackTransfer;
-    public CRServo rightBackTransfer;
 
     // ------------------------------------------------------------
     // Arms Servos
     // ------------------------------------------------------------
 
-    public Servo rightArm;
-    public Servo leftArm;
+    public Servo rightGate;
+    public Servo leftGate;
 
     // ------------------------------------------------------------
     // Drivetrain Motors
@@ -140,8 +107,8 @@ public class RobotHardware {
 
     private static final String BLINKIN_CONFIG_NAME = "blinkin";
 
-    private static final String RIGHT_ARM_CONFIG_NAME = "rightArm";
-    private static final String LEFT_ARM_CONFIG_NAME = "leftArm";
+    private static final String RIGHT_GATE_CONFIG_NAME = "rightGate";
+    private static final String LEFT_GATE_CONFIG_NAME = "leftGate";
 
 
 
@@ -176,7 +143,6 @@ public class RobotHardware {
         initSensors();
         initVoltageSensor();
         initBlinkinLed();
-        shooterHood = hw.get(Servo.class, "shooterHood");
     }
 
 
@@ -237,18 +203,11 @@ public class RobotHardware {
      * Initializes all continuous rotation servos and sets their direction.
      */
     private void initServos() {
-        leftFrontTransfer  = hw.get(CRServo.class, LEFT_FRONT_TRANSFER_CONFIG_NAME);
-        rightFrontTransfer = hw.get(CRServo.class, RIGHT_FRONT_TRANSFER_CONFIG_NAME);
-        leftBackTransfer   = hw.get(CRServo.class, LEFT_BACK_TRANSFER_CONFIG_NAME);
-        rightBackTransfer  = hw.get(CRServo.class, RIGHT_BACK_TRANSFER_CONFIG_NAME);
 
-        leftFrontTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBackTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
+//        shooterHood = hw.get(Servo.class, SHOOTER_HOOD_CONFIG_NAME);
 
-        shooterHood = hw.get(Servo.class, SHOOTER_HOOD_CONFIG_NAME);
-
-        rightArm = hw.get(Servo.class, RIGHT_ARM_CONFIG_NAME);
-        leftArm =hw.get(Servo.class, LEFT_ARM_CONFIG_NAME);
+        rightGate = hw.get(Servo.class, RIGHT_GATE_CONFIG_NAME);
+        leftGate =hw.get(Servo.class, LEFT_GATE_CONFIG_NAME);
     }
 
 
@@ -268,7 +227,7 @@ public class RobotHardware {
     }
 
     private void initBlinkinLed() {
-        blinkin = hw.get(RevBlinkinLedDriver.class, BLINKIN_CONFIG_NAME);
+//        blinkin = hw.get(RevBlinkinLedDriver.class, BLINKIN_CONFIG_NAME);
     }
 
     private void initVoltageSensor(){

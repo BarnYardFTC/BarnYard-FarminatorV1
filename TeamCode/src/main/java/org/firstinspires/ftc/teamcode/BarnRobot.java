@@ -37,7 +37,6 @@ public class BarnRobot extends Robot {
     // Subsystems
     // ------------------------------------------------------------
 
-    public Transfer transfer;
     public DriveTrain drive; // used in teleop
     public RoadRunnerMecanumDrive roadRunnerMecanumDrive; // used in auto
     public LimeLight limelight;
@@ -48,7 +47,7 @@ public class BarnRobot extends Robot {
     public ColorSensor colorSensor;
     public BlinkinLED blinkin;
     public PinpointLocalizer pinpointLocalizer;
-    public Arms arms;
+    public Gate gate;
 
 
 
@@ -129,15 +128,14 @@ public class BarnRobot extends Robot {
         gamepadEx2 = new GamepadEx(opMode.gamepad2);
 
         // Subsystem initialization
-        initTransfer();
         initLimeLight();
         initShooter();
         initIntake();
         initDrivetrain(opMode.hardwareMap);
-        initShooterHood();
+//        initShooterHood();
         initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
-        initBlinkin();
+//        initBlinkin();
         initArms();
     }
 
@@ -192,12 +190,7 @@ public class BarnRobot extends Robot {
     }
 
     public void initArms(){
-        arms = new Arms();
-    }
-
-    /** Sets up the transfer system. */
-    public void initTransfer() {
-        transfer = new Transfer();
+        gate = new Gate();
     }
 
     /** Sets up the LimeLight vision system. */

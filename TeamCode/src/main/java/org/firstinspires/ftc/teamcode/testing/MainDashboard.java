@@ -49,17 +49,6 @@ public class MainDashboard extends CommandOpMode {
         // kys nigga
         // ---------------------------------------------------------
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(
-                        new ParallelCommandGroup(
-                                farminator.transfer.setEntireTransferPowerCommand(-1)
-                        )
-                )
-                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(farminator.transfer.setEntireTransferPowerCommand(1))
-                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(farminator.shooterHood.lower());

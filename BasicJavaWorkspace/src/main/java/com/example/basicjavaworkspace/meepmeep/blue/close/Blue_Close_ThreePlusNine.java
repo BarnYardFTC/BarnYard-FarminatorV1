@@ -43,7 +43,7 @@ public class Blue_Close_ThreePlusNine {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .setDimensions(13.157, 18.03044)
+                .setDimensions(15.07, 16.961)
                 .build();
 
         TrajectoryActionBuilder path1;
@@ -60,7 +60,8 @@ public class Blue_Close_ThreePlusNine {
 
                 .strafeToLinearHeading(
                         new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
-                        SHOOT_HEADING);
+                        SHOOT_HEADING, new TranslationalVelConstraint(100)
+);
 //        ;
 
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(
@@ -72,20 +73,23 @@ public class Blue_Close_ThreePlusNine {
 
                 .strafeToLinearHeading(
                         new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
-                        SHOOT_HEADING);
+                        SHOOT_HEADING, new TranslationalVelConstraint(100)
+);
 
         TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(
-                        new Vector2d(MID_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
-                        SOUTH_HEADING)
+
+                .splineToLinearHeading(
+                        new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING),
+                        new Rotation2d(0, -4)
+                )
 
                 .strafeToLinearHeading(
-                        new Vector2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
-                        SOUTH_HEADING)
-                .splineToLinearHeading(
-                        new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
-                        new Rotation2d(-2, -1));
+                        new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
+                        SHOOT_HEADING, new TranslationalVelConstraint(100))
+//                .splineToLinearHeading(
+//                        new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
+//                        new Rotation2d(-2, -1));
         ;
 
         TrajectoryActionBuilder path6 = myBot.getDrive().actionBuilder(
@@ -96,17 +100,22 @@ public class Blue_Close_ThreePlusNine {
 
         TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(
-                        new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
-                        SOUTH_HEADING)
+//                .strafeToLinearHeading(
+//                        new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y),
+//                        SOUTH_HEADING)
+//
+//                .strafeToLinearHeading(
+//                        new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
+//                        SOUTH_HEADING)
+                .splineToLinearHeading(
+                        new Pose2d(RIGHT_COLLECT_POSE_X+5, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING),
+                        new Rotation2d(1, -3)
+                )
 
                 .strafeToLinearHeading(
-                        new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y),
-                        SOUTH_HEADING)
-                .splineToLinearHeading(
-                        new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING)
-                        , new Rotation2d(-2, -1))
-                ;
+                        new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
+                        SHOOT_HEADING, new TranslationalVelConstraint(150));
+
 
         TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(
                         new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))

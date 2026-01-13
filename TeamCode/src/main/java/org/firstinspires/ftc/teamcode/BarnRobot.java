@@ -48,6 +48,9 @@ public class BarnRobot extends Robot {
     public ColorSensor colorSensor;
     public BlinkinLED blinkin;
     public PinpointLocalizer pinpointLocalizer;
+    public Arms arms;
+
+
 
 
     // ------------------------------------------------------------
@@ -135,6 +138,7 @@ public class BarnRobot extends Robot {
         initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
         initBlinkin();
+        initArms();
     }
 
 
@@ -185,6 +189,10 @@ public class BarnRobot extends Robot {
     public void initShooterHood(){
         shooterHood = new ShooterHood();
         shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
+    }
+
+    public void initArms(){
+        arms = new Arms();
     }
 
     /** Sets up the transfer system. */

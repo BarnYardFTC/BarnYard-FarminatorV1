@@ -76,6 +76,12 @@ public class RobotHardware {
     public CRServo leftBackTransfer;
     public CRServo rightBackTransfer;
 
+    // ------------------------------------------------------------
+    // Arms Servos
+    // ------------------------------------------------------------
+
+    public Servo rightArm;
+    public Servo leftArm;
 
     // ------------------------------------------------------------
     // Drivetrain Motors
@@ -133,6 +139,11 @@ public class RobotHardware {
     private static final String SHOOTER_HOOD_CONFIG_NAME = "shooterHood";
 
     private static final String BLINKIN_CONFIG_NAME = "blinkin";
+
+    private static final String RIGHT_ARM_CONFIG_NAME = "rightArm";
+    private static final String LEFT_ARM_CONFIG_NAME = "leftArm";
+
+
 
 
 
@@ -235,6 +246,9 @@ public class RobotHardware {
         leftBackTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
 
         shooterHood = hw.get(Servo.class, SHOOTER_HOOD_CONFIG_NAME);
+
+        rightArm = hw.get(Servo.class, RIGHT_ARM_CONFIG_NAME);
+        leftArm =hw.get(Servo.class, LEFT_ARM_CONFIG_NAME);
     }
 
 

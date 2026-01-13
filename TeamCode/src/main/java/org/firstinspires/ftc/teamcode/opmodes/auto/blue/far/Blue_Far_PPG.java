@@ -90,7 +90,6 @@ public class Blue_Far_PPG extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
                                 farminator.shooter.runShooterBasedOnDistance(),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 new DriveActionCommand(path2),
                                 farminator.intake.activateIntakeCommand(),
                                 new DriveActionCommand(path3),
@@ -99,9 +98,7 @@ public class Blue_Far_PPG extends CommandOpMode {
                                 farminator.intake.deactivateIntakeCommand(),
                                 new DriveActionCommand(path5),
                                 farminator.shooter.runShooterBasedOnDistance(),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.shooter.turnOff(),
-                                farminator.transfer.setEntireTransferPowerCommand(0),
                                 new DriveActionCommand(path6)
 
 

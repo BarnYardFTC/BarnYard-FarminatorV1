@@ -21,11 +21,7 @@ public class Transfer extends SubsystemBase {
 
     // ------------------------------------------------------------
     // Hardware
-    // ------------------------------------------------------------
-    private final CRServo leftFrontTrans;
-    private final CRServo leftBackTrans;
-    private final CRServo rightFrontTrans;
-    private final CRServo rightBackTrans;
+    // -----------------------------------------------------------
 
     public static double DEFAULT_TRANSFER_POWER = 1;
 
@@ -38,14 +34,7 @@ public class Transfer extends SubsystemBase {
     // ------------------------------------------------------------
     public Transfer() {
         BarnRobot robot = BarnRobot.getInstance();
-        leftFrontTrans = robot.robotHardware.leftFrontTransfer;
-        leftBackTrans = robot.robotHardware.leftBackTransfer;
-        rightFrontTrans = robot.robotHardware.rightFrontTransfer;
-        rightBackTrans = robot.robotHardware.rightBackTransfer;
 
-        // Positive power = forward transfer; left servos reversed
-        leftFrontTrans.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBackTrans.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 
@@ -53,25 +42,7 @@ public class Transfer extends SubsystemBase {
     // Low-level control methods
     // ------------------------------------------------------------
 
-    /** Sets all four transfer servos to the given power. */
-    public void setAllTransferPower(double power) {
-        leftFrontTrans.setPower(power);
-        leftBackTrans.setPower(power);
-        rightFrontTrans.setPower(power);
-        rightBackTrans.setPower(power);
-    }
 
-    /** Sets only back transfer servos to the given power. */
-    public void setBackPower(double power) {
-        leftBackTrans.setPower(power);
-        rightBackTrans.setPower(power);
-    }
-
-    /** Sets only front transfer servos to the given power. */
-    public void setFrontPower(double power) {
-        leftFrontTrans.setPower(power);
-        rightFrontTrans.setPower(power);
-    }
 
     // ------------------------------------------------------------
     // High-level actions
@@ -81,15 +52,4 @@ public class Transfer extends SubsystemBase {
     // Command wrappers
     // ------------------------------------------------------------
 
-    public Command setFrontPowerCommand(double power){
-        return new InstantCommand(() -> setFrontPower(power), this);
-    }
-
-    public Command setBackPowerCommand(double power){
-        return new InstantCommand(() -> setBackPower(power), this);
-    }
-
-    public Command setEntireTransferPowerCommand(double power){
-        return new InstantCommand(() -> setAllTransferPower(power), this);
-    }
 }

@@ -80,17 +80,9 @@ public class RedMainTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(
                         new ParallelCommandGroup(
-                                farminator.transfer.setEntireTransferPowerCommand(-1 * Transfer.DEFAULT_TRANSFER_POWER)
                         )
-                )
-                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
+                );
 
-        // Right Bumper → Run all transfer motors forward
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(
-                        farminator.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER)
-                )
-                .whenInactive(farminator.transfer.setEntireTransferPowerCommand(0));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(farminator.shooterHood.lower());

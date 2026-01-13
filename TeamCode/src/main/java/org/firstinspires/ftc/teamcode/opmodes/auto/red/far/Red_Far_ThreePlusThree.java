@@ -112,10 +112,8 @@ public class Red_Far_ThreePlusThree  extends CommandOpMode {
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
                                 new DriveActionCommand(shootingPath),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME),
-                                farminator.transfer.setEntireTransferPowerCommand(0),
                                 farminator.intake.deactivateIntakeCommand()
                         )
                 ),
@@ -129,10 +127,8 @@ public class Red_Far_ThreePlusThree  extends CommandOpMode {
                         farminator.shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME),
-                                farminator.transfer.setEntireTransferPowerCommand(0),
                                 farminator.intake.deactivateIntakeCommand()
                         )
                 ),
@@ -143,10 +139,7 @@ public class Red_Far_ThreePlusThree  extends CommandOpMode {
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 farminator.intake.activateIntakeCommand(),
-                farminator.transfer.setFrontPowerCommand(1),
-                farminator.transfer.setBackPowerCommand(-0.1),
                 new DriveActionCommand(path),
-                farminator.transfer.setEntireTransferPowerCommand(0),
                 farminator.intake.customIntakeCommand(1)
         );
     }

@@ -43,10 +43,8 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         return new SequentialCommandGroup(
 //                robot.shooter.activateShooterCommand(),
                 new WaitCommand(SHOOT_PREP_TIME),
-                robot.transfer.setFrontPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                 robot.intake.activateIntakeCommand(),
                 new WaitCommand(TRANSFER_ALL_DURATION),
-                robot.transfer.setFrontPowerCommand(0),
 //                robot.shooter.deactivateShooterCommand(),
                 robot.intake.deactivateIntakeCommand()
         );
@@ -61,7 +59,6 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new ParallelCommandGroup(
-                robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
                 robot.intake.activateIntakeCommand()
         );
     }
@@ -77,14 +74,10 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
 
         return new SequentialCommandGroup(
                 new WaitUntilCommand(() -> robot.shooter.isReady()),
-                robot.transfer.setEntireTransferPowerCommand(1),
                 new WaitUntilCommand(() -> robot.shooter.isShotDetected(Shooter.SHOOTER_VELOCITY_RANGE_1)),
-                robot.transfer.setFrontPowerCommand(1),
                 new WaitCommand(1000),
-                robot.transfer.setBackPowerCommand(0),
                 robot.intake.activateIntakeCommand(),
                 new WaitCommand(TRANSFER_ONE_DURATION),
-                robot.transfer.setFrontPowerCommand(0),
                 robot.intake.deactivateIntakeCommand(),
                 new WaitCommand(2000)
         );
@@ -123,7 +116,6 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new ParallelCommandGroup(
-                robot.transfer.setEntireTransferPowerCommand(0),
                 robot.intake.deactivateIntakeCommand()
         );
     }
@@ -139,9 +131,7 @@ public class ShootSequenceCommandGroup extends SequentialCommandGroup {
         BarnRobot robot = BarnRobot.getInstance();
 
         return new SequentialCommandGroup(
-                robot.transfer.setEntireTransferPowerCommand(Transfer.DEFAULT_TRANSFER_POWER),
-                new WaitCommand(TRANSFER_ONE_DURATION),
-                robot.transfer.setEntireTransferPowerCommand(0)
+                new WaitCommand(TRANSFER_ONE_DURATION)
         );
     }
 }

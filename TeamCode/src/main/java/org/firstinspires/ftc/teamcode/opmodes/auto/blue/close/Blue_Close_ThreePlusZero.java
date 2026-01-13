@@ -85,12 +85,10 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                                         new WaitCommand(500)
                                 ),
                                 farminator.drive.stop(),
-                                farminator.transfer.setEntireTransferPowerCommand(1),
                                 farminator.intake.activateIntakeCommand(),
                                 new WaitCommand(SCORE_TIME)
                         )
                 ),
-                farminator.transfer.setEntireTransferPowerCommand(0),
                 farminator.intake.deactivateIntakeCommand(),
                 farminator.shooter.turnOffInstant()
         ).schedule();

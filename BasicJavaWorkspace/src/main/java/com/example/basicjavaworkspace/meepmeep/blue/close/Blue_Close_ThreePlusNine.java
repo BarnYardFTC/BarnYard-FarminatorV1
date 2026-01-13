@@ -49,10 +49,11 @@ public class Blue_Close_ThreePlusNine {
         TrajectoryActionBuilder path1;
         path1 = myBot.getDrive().actionBuilder(
                         new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-//              .splineToConstantHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING)
-//                .splineToConstantHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), new Rotation2d(2,-3))
-                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X,SOUTH_READY_POSE_Y+2.5), SOUTH_HEADING)
-                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), new Rotation2d(0,-3))
+                .strafeToLinearHeading(new Vector2d(START_POSE_X, START_POSE_Y+5), SOUTH_HEADING)
+              .splineToConstantHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING)
+                .splineToConstantHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), new Rotation2d(0,0))
+//                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X,SOUTH_READY_POSE_Y+2.5), SOUTH_HEADING)
+//                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), new Rotation2d(0,-3))
                 .splineToConstantHeading(
                         new Vector2d(GATE_POSE_X, SOUTH_COLLECT_POSE_Y),
                         new Rotation2d(3, -8)

@@ -54,6 +54,9 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     public static double ENDING_POSE_Y = -22;
     public static double defaultVel = 50;
 
+    public boolean shootPosBusyness = false;
+    public boolean midPosBusyness = false;
+
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
@@ -213,15 +216,18 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         return new SequentialCommandGroup(
             new ParallelRaceGroup(
                     farminator.shooter.runShooterBasedOnDistance(),
+                    farminator.gate.openCommand(),
                     new SequentialCommandGroup(
                             new WaitCommand(500),
                             farminator.intake.activateIntakeCommand(),
-                            new WaitCommand(SCORE_TIME),
+                            new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy() && !farminator.midColorSensor.isPosBusy()),
                             farminator.intake.deactivateIntakeCommand()
                     )
             ),
+                farminator.gate.closeCommand(),
                 farminator.shooter.turnOffInstant()
         );
+
     }
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){

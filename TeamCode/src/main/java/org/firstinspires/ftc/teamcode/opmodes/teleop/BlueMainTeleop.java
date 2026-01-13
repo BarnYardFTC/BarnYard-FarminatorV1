@@ -109,6 +109,10 @@ public class BlueMainTeleop extends CommandOpMode {
                 .whenPressed(farminator.shooterHood.raise());
 
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(new DriveActionCommand(farminator.roadRunnerMecanumDrive.actionBuilder(new Pose2d(farminator.pinpointLocalizer.getPose().position.x,farminator.pinpointLocalizer.getPose().position.y,farminator.pinpointLocalizer.getPose().heading.toDouble()))
+                        .strafeToLinearHeading(new Vector2d(36.5,33),farminator.pinpointLocalizer.getPose().heading.toDouble())));
+
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(

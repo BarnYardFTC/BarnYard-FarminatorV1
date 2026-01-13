@@ -158,8 +158,8 @@ public class BarnRobot extends Robot {
      * and sets its default driving command.
      */
     public void initDrivetrain(HardwareMap hw) {
-        if (opmodeData.opModeType == OpModeData.OpModeType.TELEOP) initDrivetrainTeleop();
-        else initDrivetrainAutonomous(hw);
+         initDrivetrainTeleop();
+         initDrivetrainAutonomous(hw);
     }
 
     /**

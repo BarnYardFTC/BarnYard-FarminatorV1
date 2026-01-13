@@ -34,8 +34,8 @@ import org.firstinspires.ftc.teamcode.subsystems.BlinkinLED;
 Configuration:
 
     Exapnsion hub motors:
-        0: intake
-        1: leftFrontDrivetrain
+        0: leftFrontDrivetrain
+        1: intake
         2: leftBackDrivetrain
         3: shoterLeft
 

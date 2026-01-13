@@ -22,6 +22,7 @@ public class Arms extends SubsystemBase {
         rightServo.setDirection(Servo.Direction.FORWARD);
         leftServo.setDirection(Servo.Direction.REVERSE);
         rightServo.scaleRange(MIN,MAX);
+        leftServo.scaleRange(MIN,MAX);
         stop();
     }
 

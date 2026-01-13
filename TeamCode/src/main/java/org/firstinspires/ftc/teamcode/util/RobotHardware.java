@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.teamcode.subsystems.ColorSensor;
+
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
  *
@@ -76,7 +78,8 @@ public class RobotHardware {
 
 //    public IMU imu;
     public Limelight3A limelight;
-    public NormalizedColorSensor colorSensor;
+    public NormalizedColorSensor shooterColorSensor;
+    public NormalizedColorSensor midColorSensor;
 
 
     // ------------------------------------------------------------
@@ -222,7 +225,8 @@ public class RobotHardware {
 //        imu.initialize(IMU_PARAMETERS);
 //        imu.resetYaw();
         limelight = hw.get(Limelight3A.class, "limelight");
-        colorSensor = hw.get(NormalizedColorSensor.class, "colorSensor");
+        shooterColorSensor = hw.get(NormalizedColorSensor.class, "shooterColorSensor");
+        midColorSensor = hw.get(NormalizedColorSensor.class, "midColorSensor");
 
     }
 

@@ -60,6 +60,7 @@ public class DriveTrain extends SubsystemBase {
     private static final double HEADING_EPSILON = Math.toRadians(1.0); // 1 degree
     private static final double VELOCITY_EPSILON = 0.01; // units/sec
     private static final double ANGULAR_VELOCITY_EPSILON = Math.toRadians(1.0); // rad/sec
+    private static final double SHOOTER_DIAMETER = 96;
 
     private double lastX = Double.NaN;
     private double lastY = Double.NaN;
@@ -191,6 +192,30 @@ public class DriveTrain extends SubsystemBase {
 
     public static double VELOCITY_LOOKAHEAD = 1.5;
 
+    private void localizationBasedGoalAlignment() {
+        PinpointLocalizer localizer = BarnRobot.getInstance().pinpointLocalizer;
+
+        Pose2d pose = localizer.getPose();
+        Pose2d vel = localizer.getPoseVelocity();
+
+        double currentHeading = getBotAbsoluteHeading();
+        double deltaAngle;
+        double finalHeading;
+
+        double artifactSpeed = calculateArtifactSpeed(BarnRobot.getInstance().shooter.getVelocity());
+
+
+
+    }
+
+    private double calculateArtifactSpeed(double rpm){
+        double speedMmPerSec = (Math.PI * SHOOTER_DIAMETER * rpm) / 60.0;
+
+        // 2. Convert mm/s to m/s (divide by 1000)
+        return speedMmPerSec / 1000.0;
+
+    }
+
     private void localizationBasedGoalAlignment(double spdX, double spdY) {
 
         PinpointLocalizer localizer = BarnRobot.getInstance().pinpointLocalizer;
@@ -199,6 +224,7 @@ public class DriveTrain extends SubsystemBase {
         Pose2d vel  = localizer.getPoseVelocity();
 
         // Predict future position
+
         double predictedX = (pose.position.x + vel.position.x * VELOCITY_LOOKAHEAD) * 0.0254;
         double predictedY = (pose.position.y + vel.position.y * VELOCITY_LOOKAHEAD) * 0.0254;
 

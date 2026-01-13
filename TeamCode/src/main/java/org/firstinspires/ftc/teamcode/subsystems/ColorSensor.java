@@ -1,31 +1,38 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.BarnRobot;
 
 public class ColorSensor {
 
     NormalizedColorSensor colorSensor;
 
-    public void init(HardwareMap hw){
-        colorSensor = hw.get(NormalizedColorSensor.class, "colorSensor");
+
+    public ColorSensor(){
+        colorSensor = BarnRobot.getInstance().robotHardware.shooterColorSensor;
         colorSensor.setGain(4);
     }
 
-    public double getArtifactDistance(Telemetry telemetry){
+    public void printArtifactDistance(Telemetry telemetry){
         if (colorSensor instanceof DistanceSensor){
             telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM));
-            return ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
         }
-        return -1;
     }
 
-    public boolean isPosBusy(Telemetry telemetry){
-        return getArtifactDistance(telemetry) < 6;
+    public double getArtifactDistance(){
+        if (colorSensor instanceof DistanceSensor){
+            return ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
+        }
+        else{
+            return -1;
+        }
+    }
+
+    public boolean isPosBusy(){
+        return getArtifactDistance() < 6;
     }
 }

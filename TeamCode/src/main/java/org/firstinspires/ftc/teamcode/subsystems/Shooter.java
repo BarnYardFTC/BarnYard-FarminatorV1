@@ -35,6 +35,7 @@ public class Shooter  extends SubsystemBase {
     public static double SHOOTING_RANGE_2 = 2.05;
     public static double SHOOTING_RANGE_3 = 2.8;
 
+    private double targetVelocity;
 
 
     public Shooter() {
@@ -66,22 +67,22 @@ public class Shooter  extends SubsystemBase {
         pidfController.setPIDF(p, 0, 0, f);
         double power;
         if (distance < SHOOTING_RANGE_1) {
-            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_1, getVelocity());
+            targetVelocity = SHOOTER_VELOCITY_RANGE_1;
         }
         else if (distance > SHOOTING_RANGE_1 && distance < SHOOTING_RANGE_2){
-            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_2, getVelocity());
+            targetVelocity = SHOOTER_VELOCITY_RANGE_2;
         }
         else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
-            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_3, getVelocity());
+            targetVelocity = SHOOTER_VELOCITY_RANGE_3;
         }
         else if (distance > SHOOTING_RANGE_3) {
-            power = pidfController.calculate(SHOOTER_VELOCITY_RANGE_4, getVelocity());
+            targetVelocity = SHOOTER_VELOCITY_RANGE_4;
         }
         else {
-            power = 0;
+            targetVelocity = getVelocity();
         }
-        setPower(power
-        );
+        power = pidfController.calculate(targetVelocity, getVelocity());
+        setPower(power);
     }
 
     private void operateShooterReverse(){
@@ -149,9 +150,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public boolean isReady() {
-        return (getVelocity() > SHOOTER_VELOCITY_RANGE_1 - 40 && getVelocity() < SHOOTER_VELOCITY_RANGE_1 + 40) ||
-                (getVelocity() > SHOOTER_VELOCITY_RANGE_2 - 40 && getVelocity() < SHOOTER_VELOCITY_RANGE_2 + 40) ||
-                (getVelocity() > SHOOTER_VELOCITY_RANGE_4 - 40 && getVelocity() < SHOOTER_VELOCITY_RANGE_4 + 40);
+        return (getVelocity() > targetVelocity - 40 && getVelocity() < targetVelocity + 40);
     }
 
     public boolean isShotDetected(double tgtRpm) {

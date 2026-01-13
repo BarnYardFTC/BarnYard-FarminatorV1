@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
@@ -76,7 +77,7 @@ public class TestTeleop extends CommandOpMode {
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.intake.activateIntakeCommand()
+                    CommandGroup.intakeCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
                         farminator.intake.deactivateIntakeCommand()
@@ -125,9 +126,7 @@ public class TestTeleop extends CommandOpMode {
 //                );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenActive(
-                        farminator.gate.goToTmpPos()
-                );
+                .whenPressed(CommandGroup.shootCommand());
 
 
     }

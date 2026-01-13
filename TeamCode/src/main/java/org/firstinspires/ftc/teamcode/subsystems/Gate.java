@@ -15,7 +15,7 @@ public class Gate extends SubsystemBase {
     private Servo rightServo;
     private Servo leftServo;
 
-    private final double MIN = 0;
+    private final double MIN = 0.88;
     private final double MAX = 1;
 
     public Gate(){
@@ -23,8 +23,6 @@ public class Gate extends SubsystemBase {
         leftServo = BarnRobot.getInstance().robotHardware.leftGate;
         rightServo.setDirection(Servo.Direction.FORWARD);
         leftServo.setDirection(Servo.Direction.REVERSE);
-        rightServo.scaleRange(MIN,MAX);
-        leftServo.scaleRange(MIN,MAX);
         close();
     }
 
@@ -42,8 +40,7 @@ public class Gate extends SubsystemBase {
     }
 
     private void close() {
-        rightServo.setPosition(MIN);
-        leftServo.setPosition(MIN);
+        setPosition(MIN);
     }
 
     public Command closeCommand(){

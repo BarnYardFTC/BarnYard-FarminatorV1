@@ -137,8 +137,8 @@ public class BarnRobot extends Robot {
         initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
 //        initBlinkin();
-        initArms();
-        initColorSensors();
+        initGate();
+//        initColorSensors();
     }
 
 
@@ -191,7 +191,7 @@ public class BarnRobot extends Robot {
         shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
     }
 
-    public void initArms(){
+    public void initGate(){
         gate = new Gate();
     }
 

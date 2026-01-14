@@ -300,6 +300,17 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
+    public Command driveNonFieldOrientedCommand(){
+        return new RunCommand(
+                () -> mecanumDriveComponent.driveNonFieldCentric(
+                                BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                                BarnRobot.getInstance().gamepadEx1.getLeftY(),
+                                BarnRobot.getInstance().gamepadEx1.getRightX()
+                        ), this
+        );
+
+    }
+
     /** Continuous alignment command (runs alignToGoal loop) */
     public Command alignToTagCommand() {
         return new RunCommand(() -> localizationBasedGoalAlignment(

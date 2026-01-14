@@ -166,16 +166,16 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 shootCommand(),
 
                 intakeCommandPath(path1),
-//
-//                shootCommandPath(path3),
+
+                shootCommandPath(path3),
 
                 intakeCommandPath(path4),
 
-//                shootCommandPath(path6),
+                shootCommandPath(path6),
 
                 intakeCommandPath(path7),
 
-//                shootCommandPath(path9),
+                shootCommandPath(path9),
                 new DriveActionCommand(path10)
 
 
@@ -201,13 +201,16 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
                         farminator.shooter.runShooterBasedOnDistance(),
+                        farminator.gate.openCommand(),
                         new SequentialCommandGroup(
                                 new DriveActionCommand(shootingPath),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 farminator.intake.activateIntakeCommand(),
-                                new WaitCommand(SCORE_TIME),
+                                new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy() && !farminator.midColorSensor.isPosBusy()),
                                 farminator.intake.deactivateIntakeCommand()
                         )
                 ),
+                farminator.gate.closeCommand(),
                 farminator.shooter.turnOffInstant()
         );
     }
@@ -218,7 +221,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                     farminator.shooter.runShooterBasedOnDistance(),
                     farminator.gate.openCommand(),
                     new SequentialCommandGroup(
-                            new WaitCommand(500),
+                            new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                             farminator.intake.activateIntakeCommand(),
                             new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy() && !farminator.midColorSensor.isPosBusy()),
                             farminator.intake.deactivateIntakeCommand()
@@ -234,7 +237,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         return new SequentialCommandGroup(
                 farminator.intake.activateIntakeCommand(),
                 new DriveActionCommand(path),
-                farminator.intake.customIntakeCommand(1)
+                farminator.intake.deactivateIntakeCommand()
         );
     }
 

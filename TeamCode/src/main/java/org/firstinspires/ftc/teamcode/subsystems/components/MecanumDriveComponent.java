@@ -153,6 +153,11 @@ public class MecanumDriveComponent {
         translateSpeedToPower();
     }
 
+    public void driveNonFieldCentric(double x, double y, double turn){
+        setSpeed(x, y, turn);
+        translateSpeedToPower();
+    }
+
     public void turnOnly(double turn) {
         setSpeed(0,0,turn);
         translateSpeedToPower();

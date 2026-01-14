@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp (name="LimelightTestingOPMode")
 @Config
+@Disabled
 public class LimelightOpMode extends CommandOpMode {
     private BarnRobot robot;
     @Override

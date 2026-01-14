@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name = "LED test teleop 1", group = "test")
 @Config
+@Disabled
 public class LEDAutoTest extends CommandOpMode {
 
     // ------------------------

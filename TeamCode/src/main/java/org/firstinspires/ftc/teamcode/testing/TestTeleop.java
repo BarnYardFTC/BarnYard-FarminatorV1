@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -28,6 +29,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  */
 @TeleOp(name = "TestTeleop", group = "test")
 @Config
+@Disabled
 public class TestTeleop extends CommandOpMode {
 
     // ------------------------

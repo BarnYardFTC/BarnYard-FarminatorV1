@@ -5,12 +5,14 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.TankDrive;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.tuning.TuningOpModes;
 @Config
+@Disabled
 @Autonomous(name="raodrunner tuning test", group="test")
 public class RoadRunnerTuningTest extends LinearOpMode {
     public static double radius = 10;

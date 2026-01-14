@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 
 @Config
+@Disabled
 @TeleOp(name = "shooter pidf tuner", group = "tuning")
 public class ShooterPidftuning extends CommandOpMode {
 

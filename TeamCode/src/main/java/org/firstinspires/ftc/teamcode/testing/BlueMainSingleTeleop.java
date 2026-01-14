@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "BlueMainSingleTeleop", group = "main")
+(name = "BlueMainSingleTeleop", group = "main")
 @Disabled
 @Config
 public class BlueMainSingleTeleop extends CommandOpMode {

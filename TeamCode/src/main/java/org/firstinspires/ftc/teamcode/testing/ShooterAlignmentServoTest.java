@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name = "ShooterAlignmentClassTest", group = "main")
 @Config
+@Disabled
 public class ShooterAlignmentServoTest extends CommandOpMode {
 
         // ------------------------

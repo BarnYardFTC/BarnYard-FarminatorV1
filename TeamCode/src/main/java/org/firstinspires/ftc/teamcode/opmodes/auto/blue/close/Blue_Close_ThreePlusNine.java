@@ -206,7 +206,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                                 new DriveActionCommand(shootingPath),
                                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 farminator.intake.activateIntakeCommand(),
-                                new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy() && !farminator.midColorSensor.isPosBusy()),
+                                new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy(6) && !farminator.midColorSensor.isPosBusy(6)),
                                 farminator.intake.deactivateIntakeCommand()
                         )
                 ),
@@ -223,7 +223,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                     new SequentialCommandGroup(
                             new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                             farminator.intake.activateIntakeCommand(),
-                            new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy() && !farminator.midColorSensor.isPosBusy()),
+                            new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy(6) && !farminator.midColorSensor.isPosBusy(6)),
                             farminator.intake.deactivateIntakeCommand()
                     )
             ),

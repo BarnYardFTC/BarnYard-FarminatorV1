@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -32,7 +33,20 @@ public class ColorSensor {
         }
     }
 
-    public boolean isPosBusy(){
-        return getArtifactDistance() < 6;
+    ElapsedTime timer = new ElapsedTime();
+    boolean hasTimerStarted = false;
+
+    public boolean isPosBusy(int distance){
+
+        if (!hasTimerStarted) {
+            timer.reset();
+            hasTimerStarted = true;
+        }
+
+        if (timer.seconds() < 0.05) {
+            return true;
+        }
+
+        return getArtifactDistance() < distance;
     }
 }

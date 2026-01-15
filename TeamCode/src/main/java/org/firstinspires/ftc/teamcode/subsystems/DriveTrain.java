@@ -92,7 +92,8 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void turnOnly(double turn){
-        mecanumDriveComponent.turnOnlc
+        mecanumDriveComponent.turnOnly(turn);
+    }
 
     public void maintainPos(double turn, Pose2d stopPose){
         mecanumDriveComponent.maintainPos(turn, stopPose);

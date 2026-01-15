@@ -29,7 +29,6 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  */
 @TeleOp(name = "TestTeleop", group = "test")
 @Config
-@Disabled
 public class TestTeleop extends CommandOpMode {
 
     // ------------------------

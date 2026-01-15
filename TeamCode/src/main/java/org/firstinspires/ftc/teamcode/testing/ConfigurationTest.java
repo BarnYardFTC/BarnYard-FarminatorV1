@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-(name = "Configuration Test", group = "test")
+@TeleOp(name = "Configuration Test", group = "test")
 @Disabled
 public class ConfigurationTest extends LinearOpMode {
 

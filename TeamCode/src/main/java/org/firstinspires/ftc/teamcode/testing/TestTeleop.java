@@ -106,9 +106,14 @@ public class TestTeleop extends CommandOpMode {
                         farminator.shooter.turnOff());
 
 
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+//                .toggleWhenActive(
+//                        farminator.drive.alignToTagCommand()
+//                );
+
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenActive(
-                        farminator.drive.alignToTagCommand()
+                        farminator.drive.maintainPosCommand(gamepad1.left_stick_x, farminator.pinpointLocalizer.getPose())
                 );
 
 

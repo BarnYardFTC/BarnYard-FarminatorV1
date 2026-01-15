@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDController;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
@@ -92,6 +93,10 @@ public class DriveTrain extends SubsystemBase {
 
     public void turnOnly(double turn){
         mecanumDriveComponent.turnOnly(turn);
+    }
+
+    public void maintainPos(double turn, Pose2d stopPose){
+        mecanumDriveComponent.maintainPos(turn, stopPose);
     }
 
     // ============================================================
@@ -242,7 +247,12 @@ public class DriveTrain extends SubsystemBase {
                     Math.atan((predictedX - goalX) / (RED_GOAL_Y - predictedY))
             );
 
-            desiredHeading = 90 + tangentAngle;
+            double shootWhileDriveCoef = 1;  //adjust ts
+            desiredHeading = //allat shit allows us to shoot while driving (in theory)
+                    (90 + tangentAngle) *
+                    getDistanceFromGoal() *
+                    (localizer.driver.getVelX(DistanceUnit.METER) + localizer.driver.getVelY(DistanceUnit.METER)) *
+                    shootWhileDriveCoef;
 
         } else {
 
@@ -327,6 +337,10 @@ public class DriveTrain extends SubsystemBase {
 
     public Command stop(){
         return new InstantCommand(() -> turnOnly(0));
+    }
+
+    public Command maintainPosCommand(double turn, Pose2d stopPose) {
+        return new RunCommand(() -> maintainPos(turn, stopPose), this);
     }
 
 

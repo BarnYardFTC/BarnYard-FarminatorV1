@@ -112,6 +112,9 @@ public class TestTeleop extends CommandOpMode {
         super.run();
         farminator.shooterHood.displayTelemetry();
         farminator.drive.displayPinpointDataTelemetry();
+        telemetry.addData("shooter sensor distance", farminator.shooterColorSensor.getArtifactDistance());
+        telemetry.addData("mid sensor distance", farminator.midColorSensor.getArtifactDistance());
+        telemetry.addData("intake sensor distance", farminator.intakeColoseSensor.getArtifactDistance());
         farminator.periodic();
     }
 }

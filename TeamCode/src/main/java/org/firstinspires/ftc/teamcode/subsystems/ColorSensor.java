@@ -13,8 +13,8 @@ public class ColorSensor {
     NormalizedColorSensor colorSensor;
 
 
-    public ColorSensor(){
-        colorSensor = BarnRobot.getInstance().robotHardware.shooterColorSensor;
+    public ColorSensor(NormalizedColorSensor colorSensor){
+        this.colorSensor = colorSensor;
         colorSensor.setGain(4);
     }
 

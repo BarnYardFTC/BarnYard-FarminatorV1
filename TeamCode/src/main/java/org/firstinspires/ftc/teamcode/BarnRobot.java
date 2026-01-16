@@ -46,6 +46,7 @@ public class BarnRobot extends Robot {
     public Webcam webcam;
     public ColorSensor shooterColorSensor;
     public ColorSensor midColorSensor;
+    public ColorSensor intakeColoseSensor;
     public BlinkinLED blinkin;
     public PinpointLocalizer pinpointLocalizer;
     public Gate gate;
@@ -139,7 +140,7 @@ public class BarnRobot extends Robot {
         initPinpointLocalizer(opMode.hardwareMap);
 //        initBlinkin();
         initGate();
-//        initColorSensors();
+        initColorSensors();
         initTransfer();
     }
 
@@ -178,7 +179,7 @@ public class BarnRobot extends Robot {
 
     public void initShooterHood(){
         shooterHood = new ShooterHood();
-//        shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
+        shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
     }
 
     public void initGate(){
@@ -199,8 +200,9 @@ public class BarnRobot extends Robot {
         blinkin = new BlinkinLED();
     }
     public void initColorSensors(){
-        shooterColorSensor = new ColorSensor();
-        midColorSensor = new ColorSensor();
+        shooterColorSensor = new ColorSensor(robotHardware.shooterColorSensor);
+        intakeColoseSensor = new ColorSensor(robotHardware.intakeColorSensor);
+        midColorSensor = new ColorSensor(robotHardware.midColorSensor);
     }
 
 

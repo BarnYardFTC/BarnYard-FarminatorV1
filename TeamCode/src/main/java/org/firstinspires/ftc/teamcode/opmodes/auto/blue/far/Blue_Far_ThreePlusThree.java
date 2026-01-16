@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
 
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.Blue_Close_ThreePlusNine.deactivateIntakeAndTransferCommand;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -7,12 +9,14 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -30,12 +34,13 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
     public static double SHOOTING_POSE_Y = -10;
     public static double SHOOT_HEADING = Math.toRadians(205);
 
-    public static double PRECOLLECT_Y = -50;
+    public static double PRECOLLECT_Y = -40;
+    public static int SHOOTING_TIME_MS = 2000;
 
-    public static double COLLECT_POSE_X = 50;
+    public static double COLLECT_POSE_X = 55;
     public static double COLLECT_POSE2_X =60 ;
-    public static double COLLECT_POSE_Y = -63;
-    public static double COLLECT_HEADING = Math.toRadians(300);
+    public static double COLLECT_POSE_Y = -55;
+    public static double COLLECT_HEADING = Math.toRadians(270);
 
 
 
@@ -106,20 +111,40 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
             OpModeData.setAutoFinishPose(drive.localizer.getPose());
         }
 
-        public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
-            return new SequentialCommandGroup(
-                    new ParallelRaceGroup(
-                            farminator.shooter.runShooterBasedOnDistance(),
-                            new SequentialCommandGroup(
-                                    new DriveActionCommand(shootingPath),
-                                    farminator.intake.activateIntakeCommand(),
-                                    new WaitCommand(SCORE_TIME),
-                                    farminator.intake.deactivateIntakeCommand()
-                            )
-                    ),
-                    farminator.shooter.turnOffInstant()
-            );
-        }
+    public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        new DriveActionCommand(shootingPath),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        CommandGroup.deactivateIntakeAndTransferCommand()
+                )
+        );
+    }
 
         public Command shootCommand(){
             return new SequentialCommandGroup(
@@ -136,13 +161,16 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
             );
         }
 
-        public Command intakeCommandPath(TrajectoryActionBuilder path){
-            return new SequentialCommandGroup(
-                    farminator.intake.activateIntakeCommand(),
-                    new DriveActionCommand(path),
-                    farminator.intake.customIntakeCommand(1)
-            );
-        }
+    public Command intakeCommandPath(TrajectoryActionBuilder path){
+        return new SequentialCommandGroup(
+                CommandGroup.intakeAndTransferCommand(),
+                new DriveActionCommand(path),
+                deactivateIntakeAndTransferCommand()
+        );
+    }
+    public static Command deactivateIntakeAndTransferCommand(){
+        return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
+    }
 
 
     }

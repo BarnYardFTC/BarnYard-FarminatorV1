@@ -62,6 +62,9 @@ public class RobotHardware {
     public DcMotorEx leftBackDrivetrain;
 
 
+    public DcMotorEx transfer;
+
+
     // ------------------------------------------------------------
     // Other Motors/Servos
     // ------------------------------------------------------------
@@ -112,6 +115,8 @@ public class RobotHardware {
 
     private static final String RIGHT_GATE_CONFIG_NAME = "rightGate";
     private static final String LEFT_GATE_CONFIG_NAME = "leftGate";
+
+    private static final String TRANSFER_CONFIG_NAME = "transfer";
 
 
 
@@ -195,6 +200,8 @@ public class RobotHardware {
         shooterLeft = hw.get(DcMotorEx.class, SHOOTER_LEFT_CONFIG_NAME);
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
+
+        transfer = hw.get(DcMotorEx.class, "transfer");
     }
 
 
@@ -207,7 +214,7 @@ public class RobotHardware {
      */
     private void initServos() {
 
-//        shooterHood = hw.get(Servo.class, SHOOTER_HOOD_CONFIG_NAME);
+        shooterHood = hw.get(Servo.class, SHOOTER_HOOD_CONFIG_NAME);
 
         rightGate = hw.get(Servo.class, RIGHT_GATE_CONFIG_NAME);
         leftGate =hw.get(Servo.class, LEFT_GATE_CONFIG_NAME);

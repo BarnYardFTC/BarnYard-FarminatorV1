@@ -49,6 +49,7 @@ public class BarnRobot extends Robot {
     public BlinkinLED blinkin;
     public PinpointLocalizer pinpointLocalizer;
     public Gate gate;
+    public Transfer transfer;
 
 
 
@@ -133,12 +134,13 @@ public class BarnRobot extends Robot {
         initShooter();
         initIntake();
         initDrivetrain(opMode.hardwareMap);
-//        initShooterHood();
+        initShooterHood();
         initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
 //        initBlinkin();
         initGate();
 //        initColorSensors();
+        initTransfer();
     }
 
 
@@ -162,24 +164,12 @@ public class BarnRobot extends Robot {
      * and sets its default driving command.
      */
     public void initDrivetrain(HardwareMap hw) {
-         initDrivetrainTeleop();
-         initDrivetrainAutonomous(hw);
-    }
-
-    /**
-     * Init drivetrain teleop
-     */
-    private void initDrivetrainTeleop(){
-        drive = new DriveTrain();
-    }
-
-    /**
-     * init
-     * @param hw hardwareMap
-     */
-    private void initDrivetrainAutonomous(HardwareMap hw){
         roadRunnerMecanumDrive = new RoadRunnerMecanumDrive(hw, opmodeData.initialPose2d);
         drive = new DriveTrain();
+    }
+
+    public void initTransfer(){
+        transfer = new Transfer();
     }
 
     private void initPinpointLocalizer(HardwareMap hw){
@@ -188,7 +178,7 @@ public class BarnRobot extends Robot {
 
     public void initShooterHood(){
         shooterHood = new ShooterHood();
-        shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
+//        shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
     }
 
     public void initGate(){

@@ -1,23 +1,21 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
+import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -104,29 +102,31 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
 
                 .splineToLinearHeading(
-                        new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING),
+                        new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y+8, SOUTH_HEADING),
                         new Rotation2d(0, -4)
                 );
 
 
 
         TrajectoryActionBuilder path5 = drive.actionBuilder(new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
-                .strafeToLinearHeading(
-                        new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
-                        SHOOT_HEADING, new TranslationalVelConstraint(100));
+                .splineToLinearHeading(
+                        new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
+                        new Rotation2d(-2,-1),
+                        new TranslationalVelConstraint(100));
 
         TrajectoryActionBuilder path7 = drive.actionBuilder(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
 
                 .splineToLinearHeading(
-                        new Pose2d(RIGHT_COLLECT_POSE_X+5, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING),
+                        new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y+15, SOUTH_HEADING),
                         new Rotation2d(1, -3)
                 );
 
         TrajectoryActionBuilder path8 = drive.actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X+5, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
-                .strafeToLinearHeading(
-                        new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
-                        SHOOT_HEADING, new TranslationalVelConstraint(150));
+                .splineToLinearHeading(
+                new Pose2d(ENDING_POSE_X, ENDING_POSE_Y, SHOOT_HEADING + Math.toRadians(15)),
+                new Rotation2d(-1.8,-1 ),
+                new TranslationalVelConstraint(150));
 
         TrajectoryActionBuilder path10 = drive.actionBuilder(
                                 new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
@@ -149,9 +149,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
 
                 intakeCommandPath(path7),
 
-                shootCommandPath(path8),
-                new DriveActionCommand(path10)
-
+                shootCommandPath(path8)
 
                 ).schedule();
     }
@@ -172,47 +170,84 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     }
 
     public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
-        return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        farminator.shooter.runShooterBasedOnDistance(),
-                        farminator.gate.openCommand(),
-                        new SequentialCommandGroup(
-                                new DriveActionCommand(shootingPath),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                farminator.intake.activateIntakeCommand(),
-                                new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy(6) && !farminator.midColorSensor.isPosBusy(6)),
-                                farminator.intake.deactivateIntakeCommand()
-                        )
-                ),
-                farminator.gate.closeCommand(),
-                farminator.shooter.turnOffInstant()
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        new DriveActionCommand(shootingPath),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        CommandGroup.deactivateIntakeAndTransferCommand()
+                )
         );
     }
 
-    public Command shootCommand(){
-        return new SequentialCommandGroup(
-            new ParallelRaceGroup(
-                    farminator.shooter.runShooterBasedOnDistance(),
-                    farminator.gate.openCommand(),
-                    new SequentialCommandGroup(
-                            new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                            farminator.intake.activateIntakeCommand(),
-                            new WaitUntilCommand(() -> !farminator.shooterColorSensor.isPosBusy(6) && !farminator.midColorSensor.isPosBusy(6)),
-                            farminator.intake.deactivateIntakeCommand()
-                    )
-            ),
-                farminator.gate.closeCommand(),
-                farminator.shooter.turnOffInstant()
+    public static int SHOOTING_TIME_MS = 2000;
+    private Command shootCommand() {
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        CommandGroup.deactivateIntakeAndTransferCommand()
+                )
         );
-
     }
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                farminator.intake.activateIntakeCommand(),
+                CommandGroup.intakeAndTransferCommand(),
                 new DriveActionCommand(path),
-                farminator.intake.deactivateIntakeCommand()
+                deactivateIntakeAndTransferCommand()
         );
+    }
+    public static Command deactivateIntakeAndTransferCommand(){
+        return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
     }
 
 

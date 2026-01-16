@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -9,47 +11,30 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
-/**
- * Transfer subsystem controls the four transfer CRServos on the robot.
- *
- * This subsystem allows activating/deactivating front, back, or all transfer servos individually
- * or together. Commands are provided to integrate with the command-based framework.
- */
-
 @Config // Allows tuning constants via dashboard
 public class Transfer extends SubsystemBase {
 
-    // ------------------------------------------------------------
-    // Hardware
-    // -----------------------------------------------------------
-
-    public static double DEFAULT_TRANSFER_POWER = 1;
-
-    // ------------------------------------------------------------
-    // Constants
-    // ------------------------------------------------------------
+    private DcMotorEx transferMotor;
 
     // ------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------
     public Transfer() {
         BarnRobot robot = BarnRobot.getInstance();
-
+        transferMotor = robot.robotHardware.transfer;
+        transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public Command activateTransfer(){
+        return new InstantCommand(() -> transferMotor.setPower(1));
+    }
 
-    // ------------------------------------------------------------
-    // Low-level control methods
-    // ------------------------------------------------------------
+    public Command deactivateTransfer(){
+        return new InstantCommand(() -> transferMotor.setPower(0));
+    }
 
-
-
-    // ------------------------------------------------------------
-    // High-level actions
-    // ------------------------------------------------------------
-
-    // ------------------------------------------------------------
-    // Command wrappers
-    // ------------------------------------------------------------
+    public Command customTransferCommand(double power){
+        return new InstantCommand(() -> transferMotor.setPower(power));
+    }
 
 }

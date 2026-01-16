@@ -79,13 +79,14 @@ public class Blue_Close_ThreePlusNine {
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
 
                 .splineToLinearHeading(
-                        new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING),
+                        new Pose2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y+8, SOUTH_HEADING),
                         new Rotation2d(0, -4)
                 )
 
-                .strafeToLinearHeading(
-                        new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
-                        SHOOT_HEADING, new TranslationalVelConstraint(100))
+                .splineToLinearHeading(
+                        new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
+                        new Rotation2d(-2,-1),
+                        new TranslationalVelConstraint(100))
 //                .splineToLinearHeading(
 //                        new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
 //                        new Rotation2d(-2, -1));
@@ -101,13 +102,14 @@ public class Blue_Close_ThreePlusNine {
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
 
                 .splineToLinearHeading(
-                        new Pose2d(RIGHT_COLLECT_POSE_X+5, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING),
+                        new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y+15, SOUTH_HEADING),
                         new Rotation2d(1, -3)
                 )
 
-                .strafeToLinearHeading(
-                        new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y),
-                        SHOOT_HEADING, new TranslationalVelConstraint(150));
+                .splineToLinearHeading(
+                        new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
+                        new Rotation2d(-1.8,-1 ),
+                        new TranslationalVelConstraint(150));
 
 
         TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(

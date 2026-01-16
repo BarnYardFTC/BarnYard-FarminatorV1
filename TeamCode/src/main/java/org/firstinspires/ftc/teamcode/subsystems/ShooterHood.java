@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class ShooterHood extends SubsystemBase {
     private Servo servo;
-    private final double MIN = 0.15;
+    private final double MIN = 0.3;
     private final double MAX = 1;
 
     InterpLUT range1Lut;

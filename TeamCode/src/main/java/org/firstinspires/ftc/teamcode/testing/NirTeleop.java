@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -65,7 +64,7 @@ public class NirTeleop extends CommandOpMode {
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        CommandGroup.intakeCommand()
+                        CommandGroup.intakeAndTransferCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
                         farminator.intake.deactivateIntakeCommand()

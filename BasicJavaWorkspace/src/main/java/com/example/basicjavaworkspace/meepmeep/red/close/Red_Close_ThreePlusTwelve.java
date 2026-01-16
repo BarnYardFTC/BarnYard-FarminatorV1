@@ -33,7 +33,7 @@ public class Red_Close_ThreePlusTwelve {
 
     public static double GATE_POSE_Y = 44;
 
-    public static double GATE_POSE_X = 0;
+    public static double GATE_POSE_X = 8;
 
     public static double ENDING_POSE_X = -40;
     public static double ENDING_POSE_Y = 22;

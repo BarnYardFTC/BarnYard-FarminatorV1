@@ -25,7 +25,7 @@ public class Blue_Close_ThreePlusTwelve {
     public static double SHOOT_HEADING = Math.toRadians(227);
 
     public static double SOUTH_READY_POSE_Y = -30;
-    public static double SOUTH_COLLECT_POSE_Y = -53;
+    public static double SOUTH_COLLECT_POSE_Y = -53+10;
 
     public static double SOUTH_HEADING = Math.toRadians(270);
 
@@ -58,10 +58,9 @@ public class Blue_Close_ThreePlusTwelve {
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
                         new Rotation2d(-2,-1),
-                        new TranslationalVelConstraint(100))
+                        new TranslationalVelConstraint(150))
 
-                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING)
-                .strafeToLinearHeading(new Vector2d(GATE_POSE_X, GATE_POSE_Y), SHOOT_HEADING);
+                .splineToConstantHeading(new Vector2d(GATE_POSE_X, GATE_POSE_Y), new Rotation2d(0,-4));
 
         TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(
                         new Pose2d(GATE_POSE_X, GATE_POSE_Y, SHOOT_HEADING))
@@ -69,18 +68,18 @@ public class Blue_Close_ThreePlusTwelve {
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
                         new Rotation2d(-2,-1),
-                        new TranslationalVelConstraint(100))
+                        new TranslationalVelConstraint(150))
 
 
                 .splineToLinearHeading(
-                        new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y+8, SOUTH_HEADING),
+                        new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y-8, SOUTH_HEADING),
                         new Rotation2d(0, -4)
                 )
 
                 .splineToLinearHeading(
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING),
                         new Rotation2d(-2,-1),
-                        new TranslationalVelConstraint(100))
+                        new TranslationalVelConstraint(150))
 
                 ;
 
@@ -89,8 +88,8 @@ public class Blue_Close_ThreePlusTwelve {
                         new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
 
                 .splineToLinearHeading(
-                        new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y+15, SOUTH_HEADING),
-                        new Rotation2d(1, -3)
+                        new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING),
+                        new Rotation2d(1.5, -2.6)
                 )
 
                 .splineToLinearHeading(

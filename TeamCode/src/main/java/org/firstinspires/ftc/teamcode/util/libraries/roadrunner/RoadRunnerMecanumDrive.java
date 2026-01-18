@@ -68,7 +68,7 @@ public final class RoadRunnerMecanumDrive {
 
         // feedforward parameters (in tick units)
         public double kS = 1.3876476377798888;
-        public double kV = 0.00026280388022159563;
+        public double kV = 0.000185;
         public double kA = 0.0001;
 
         // path profile parameters (in inches)
@@ -81,9 +81,9 @@ public final class RoadRunnerMecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 15;
-        public double lateralGain = 22;
-        public double headingGain = 10.5; // shared with turn
+        public double axialGain = 10;
+        public double lateralGain = 13;
+        public double headingGain = 15; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;

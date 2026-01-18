@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @Config
+@TeleOp(name = "LED Test", group = "Test")
 public class LEDTest extends CommandOpMode {
 
     // ------------------------

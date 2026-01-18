@@ -91,6 +91,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         farminator.init(this, opModeData);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
+
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
 
         // ===== Common objects (cleaner, no magic numbers) =====
@@ -170,29 +171,11 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
 
                 intakeCommandPath(path3),
 
-                new ParallelCommandGroup(
-                        shootCommandPath(path4),
-                        new SequentialCommandGroup(
-                                new ParallelRaceGroup(
-                                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                                        new WaitCommand(1000)
-                                ),
-                                BarnRobot.getInstance().intake.deactivateIntakeCommand()
-                        )
-                ),
+                shootCommandPathIntake(path4),
 
                 intakeCommandPath(path7),
 
-                new ParallelCommandGroup(
-                        shootCommandPath(path8),
-                        new SequentialCommandGroup(
-                                new ParallelRaceGroup(
-                                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                                        new WaitCommand(1000)
-                                ),
-                                BarnRobot.getInstance().intake.deactivateIntakeCommand()
-                        )
-                )
+                shootCommandPathIntake(path8)
 
                 ).schedule();
     }
@@ -216,6 +199,43 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
+                        new DriveActionCommand(shootingPath),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        new ParallelRaceGroup(
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                new WaitCommand(SHOOTING_TIME_MS)
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        CommandGroup.deactivateIntakeAndTransferCommand()
+                )
+        );
+    }
+
+    public Command shootCommandPathIntake(TrajectoryActionBuilder shootingPath){
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
                         new DriveActionCommand(shootingPath),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),

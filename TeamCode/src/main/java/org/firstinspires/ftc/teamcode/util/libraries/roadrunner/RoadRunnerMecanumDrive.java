@@ -64,11 +64,11 @@ public final class RoadRunnerMecanumDrive {
         // drive model parameters
         public double inPerTick = 0.00196;
         public double lateralInPerTick = 0.00137127453136457;
-        public double trackWidthTicks = 8872.587443293536;
+        public double trackWidthTicks = 7377.887648041375;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.0264140454734942;
-        public double kV = 0.000225;
+        public double kS = 1.3876476377798888;
+        public double kV = 0.00026280388022159563;
         public double kA = 0.0001;
 
         // path profile parameters (in inches)

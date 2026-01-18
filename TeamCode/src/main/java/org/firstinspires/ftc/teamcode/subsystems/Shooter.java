@@ -150,6 +150,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public boolean isReady() {
+        if (targetVelocity == 0) return false;
         return (getVelocity() > targetVelocity - 40 && getVelocity() < targetVelocity + 40);
     }
 

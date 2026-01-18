@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Disabled
 public final class TuningOpModes {
     public static final Class<?> DRIVE_CLASS = RoadRunnerMecanumDrive.class;
 
@@ -289,9 +288,9 @@ public final class TuningOpModes {
             throw new RuntimeException();
         }
 
-//        manager.register(metaForClass(AngularRampLogger.class), new AngularRampLogger(dvf));
+        manager.register(metaForClass(AngularRampLogger.class), new AngularRampLogger(dvf));
 //        manager.register(metaForClass(ForwardPushTest.class), new ForwardPushTest(dvf));
-//        manager.register(metaForClass(ForwardRampLogger.class), new ForwardRampLogger(dvf));
+        manager.register(metaForClass(ForwardRampLogger.class), new ForwardRampLogger(dvf));
 //        manager.register(metaForClass(LateralPushTest.class), new LateralPushTest(dvf));
 //        manager.register(metaForClass(LateralRampLogger.class), new LateralRampLogger(dvf));
 //        manager.register(metaForClass(ManualFeedforwardTuner.class), new ManualFeedforwardTuner(dvf));

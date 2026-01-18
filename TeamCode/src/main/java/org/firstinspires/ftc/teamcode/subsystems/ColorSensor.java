@@ -58,7 +58,7 @@ public class ColorSensor {
         }
 
         if (timer.seconds() < 0.05){return true;}
-        return getArtifactDistance() < 9;
+        return getArtifactDistance() < 8.8;
     }
 
     public boolean isMidPosBusy(){
@@ -68,7 +68,7 @@ public class ColorSensor {
         }
 
         if (timer.seconds() < 0.05){return true;}
-        return getArtifactDistance() < 5.5;
+        return getArtifactDistance() < 5.7;
     }
 
     public boolean isIntakePosBusy(){
@@ -81,12 +81,12 @@ public class ColorSensor {
         return getArtifactDistance() < 6.5;
     }
 
-    public posesIndexes getArtifactPoses() {
-        if (isShootPosBusy() && isMidPosBusy() && isIntakePosBusy()){posesIndex = posesIndexes.ALL;}
-        else if (isShootPosBusy() && isMidPosBusy()){posesIndex = posesIndexes.SHOOTMID;}
-        else if (isShootPosBusy()) {posesIndex = posesIndexes.SHOOTER;}
-        else if (isMidPosBusy()) {posesIndex = posesIndexes.MIDDLE;}
-        else if (isIntakePosBusy()) {posesIndex = posesIndexes.INTAKE;}
-        return posesIndex;
-    }
+//    public posesIndexes getArtifactPoses() {
+////        if (isShootPosBusy() && isMidPosBusy() && isIntakePosBusy()){posesIndex = posesIndexes.ALL;}
+////        else if (isShootPosBusy() && isMidPosBusy()){posesIndex = posesIndexes.SHOOTMID;}
+//        if (isShootPosBusy()) {posesIndex = posesIndexes.SHOOTER;}
+//        else if (isMidPosBusy()) {posesIndex = posesIndexes.MIDDLE;}
+//        else if (isIntakePosBusy()) {posesIndex = posesIndexes.INTAKE;}
+//        return posesIndex;
+//    }
 }

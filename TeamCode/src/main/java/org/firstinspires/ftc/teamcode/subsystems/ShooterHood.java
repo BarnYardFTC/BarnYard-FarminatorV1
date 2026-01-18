@@ -17,13 +17,11 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class ShooterHood extends SubsystemBase {
     private Servo servo;
-    private final double MIN = 0.3;
+    private final double MIN = 0.2;
     private final double MAX = 1;
 
     InterpLUT range1Lut;
     InterpLUT range2Lut;
-    InterpLUT range3Lut;
-    InterpLUT range4Lut;
 
     public static double SERVO_POSITION = 1;
 
@@ -39,40 +37,25 @@ public class ShooterHood extends SubsystemBase {
     private void initInterpLUT(){
         range1Lut = new InterpLUT();
         range2Lut = new InterpLUT();
-        range3Lut = new InterpLUT();
-        range4Lut = new InterpLUT();
 
         //Adding each val with a key
-        range1Lut.add(0.5, 0.15);
-        range1Lut.add(0.6, 0.2);
-        range1Lut.add(0.7, 0.3);
-        range1Lut.add(0.81, 0.4);
-        range1Lut.add(0.9, 0.45);
-        range1Lut.add(1, 0.55);
-        range1Lut.add(1.08, 0.7);
+        range1Lut.add(0.45, 0.35);
+        range1Lut.add(0.75, 0.4);
+        range1Lut.add(0.86, 0.45);
+        range1Lut.add(1.16, 0.5);
+        range1Lut.add(1.28, 0.6);
 
-        range2Lut.add(1.12,0.3);
-        range2Lut.add(1.24,0.35);
-        range2Lut.add(1.29,0.45);
-        range2Lut.add(1.4, 0.55);
-        range2Lut.add(1.5, 0.75);
-        range2Lut.add(1.6, 0.85);
-        range2Lut.add(1.7, 0.9);
-        range2Lut.add(1.79, 0.95);
-
-        range3Lut.add(1.8,0.2);
-        range3Lut.add(2,0.5);
-        range3Lut.add(3,0.7);
-
-        range4Lut.add(1,0.2);
-        range4Lut.add(2,0.5);
-        range4Lut.add(3,0.7);
+        range2Lut.add(1.35,0.5);
+        range2Lut.add(1.47,0.6);
+        range2Lut.add(1.6,0.7);
+        range2Lut.add(1.75, 0.8);
+        range2Lut.add(1.86, 1);
+        range2Lut.add(1.95, 1);
+        range2Lut.add(2.04, 1);
 
         //generating final equation
         range1Lut.createLUT();
         range2Lut.createLUT();
-        range3Lut.createLUT();
-        range4Lut.createLUT();
     }
 
     public void distanceDependentAngleRange1(double distance) {
@@ -186,14 +169,14 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private double capDistanceRange1(double distance){
-        if (distance <= 0.5) distance = 0.51;
-        else if (distance >= 1.08) distance = 1.079;
+        if (distance <= 0.45) distance = 0.46;
+        else if (distance >= 1.28) distance = 1.279;
         return distance;
     }
 
     private double capDistanceRange2(double distance){
-        if (distance <= 1.12) distance = 1.13;
-        else if (distance >= 1.79) distance = 1.78;
+        if (distance <= 1.35) distance = 1.36;
+        else if (distance >= 2.04) distance = 2.03;
         return distance;
     }
 

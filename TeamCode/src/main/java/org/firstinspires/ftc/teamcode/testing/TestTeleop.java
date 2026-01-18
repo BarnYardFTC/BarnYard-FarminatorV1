@@ -97,11 +97,15 @@ public class TestTeleop extends CommandOpMode {
                         new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
                 );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                        .toggleWhenActive(
+                                farminator.drive.alignToTagCommand());
+
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(CommandGroup.shootCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,270))));
+                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());

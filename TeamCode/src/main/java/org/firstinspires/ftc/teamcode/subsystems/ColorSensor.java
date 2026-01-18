@@ -6,12 +6,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.BarnRobot;
 
 public class ColorSensor {
 
     NormalizedColorSensor colorSensor;
+    public posesIndexes posesIndex;
 
+    public enum posesIndexes{SHOOTER, MIDDLE, INTAKE, SHOOTMID, SHOOTINTAKE, MIDINTAKE, ALL}
 
     public ColorSensor(NormalizedColorSensor colorSensor){
         this.colorSensor = colorSensor;
@@ -56,10 +57,8 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){
-            return true;
-        }
-        return getArtifactDistance() < 9;
+        if (timer.seconds() < 0.05){return true;}
+        return getArtifactDistance() < 8.8;
     }
 
     public boolean isMidPosBusy(){
@@ -68,10 +67,8 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){
-            return true;
-        }
-        return getArtifactDistance() < 5.5;
+        if (timer.seconds() < 0.05){return true;}
+        return getArtifactDistance() < 5.7;
     }
 
     public boolean isIntakePosBusy(){
@@ -80,9 +77,16 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){
-            return true;
-        }
+        if (timer.seconds() < 0.05){return true;}
         return getArtifactDistance() < 6.5;
     }
+
+//    public posesIndexes getArtifactPoses() {
+////        if (isShootPosBusy() && isMidPosBusy() && isIntakePosBusy()){posesIndex = posesIndexes.ALL;}
+////        else if (isShootPosBusy() && isMidPosBusy()){posesIndex = posesIndexes.SHOOTMID;}
+//        if (isShootPosBusy()) {posesIndex = posesIndexes.SHOOTER;}
+//        else if (isMidPosBusy()) {posesIndex = posesIndexes.MIDDLE;}
+//        else if (isIntakePosBusy()) {posesIndex = posesIndexes.INTAKE;}
+//        return posesIndex;
+//    }
 }

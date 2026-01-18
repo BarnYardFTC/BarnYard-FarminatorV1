@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -20,6 +22,9 @@ public class Intake extends SubsystemBase {
 
     /** Intake motor hardware object. */
     private final DcMotorEx intake;
+    private ColorSensor shooterSensor;
+    private ColorSensor midSensor;
+    private ColorSensor intakeSensor;
 
     /** Default power to run the intake. */
     public static double DEFAULT_POWER = 1;
@@ -29,8 +34,12 @@ public class Intake extends SubsystemBase {
      */
     public Intake() {
         this.intake = BarnRobot.getInstance().robotHardware.intake;
+        this.shooterSensor = BarnRobot.getInstance().shooterColorSensor;
+        this.midSensor = BarnRobot.getInstance().midColorSensor;
+        this.intakeSensor = BarnRobot.getInstance().intakeColoseSensor;
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
     }
 
     /**
@@ -60,6 +69,14 @@ public class Intake extends SubsystemBase {
      */
     public Command activateIntakeCommand() {
         return new InstantCommand(() -> setPower(DEFAULT_POWER), this);
+    }
+
+    public Command smartIntakeCommand(){    //Disable intake when there is enough artifacts in the robot
+        return new ConditionalCommand(
+                new InstantCommand(() -> setPower(0), this), // on true
+                new InstantCommand(() -> setPower(DEFAULT_POWER), this),             // on false
+                () -> this.shooterSensor.isShootPosBusy() && this.midSensor.isMidPosBusy() && this.intakeSensor.isIntakePosBusy()
+        );
     }
 
     /**

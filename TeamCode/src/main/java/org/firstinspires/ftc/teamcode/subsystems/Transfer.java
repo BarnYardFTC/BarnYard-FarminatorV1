@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -15,6 +16,9 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 public class Transfer extends SubsystemBase {
 
     private DcMotorEx transferMotor;
+    private ColorSensor shooterSensor;
+    private ColorSensor midSensor;
+    private ColorSensor intakeSensor;
 
     // ------------------------------------------------------------
     // Constructor
@@ -31,6 +35,14 @@ public class Transfer extends SubsystemBase {
 
     public Command deactivateTransfer(){
         return new InstantCommand(() -> transferMotor.setPower(0));
+    }
+
+    public Command smartTransfer(){  //Disable transfer when there is enough artifacts in the robot
+        return new ConditionalCommand(
+                new InstantCommand(() -> transferMotor.setPower(0), this), // on true
+                new InstantCommand(() -> transferMotor.setPower(1), this),             // on false
+                () -> this.shooterSensor.isShootPosBusy() && this.midSensor.isMidPosBusy()
+        );
     }
 
     public Command customTransferCommand(double power){

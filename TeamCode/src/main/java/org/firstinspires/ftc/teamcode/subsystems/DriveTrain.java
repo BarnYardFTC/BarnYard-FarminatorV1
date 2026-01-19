@@ -223,61 +223,59 @@ public class DriveTrain extends SubsystemBase {
 
     private void localizationBasedGoalAlignment(double spdX, double spdY) {
 
-        PinpointLocalizer localizer = BarnRobot.getInstance().pinpointLocalizer;
+        BarnRobot robot = BarnRobot.getInstance();
+        PinpointLocalizer localizer = robot.pinpointLocalizer;
 
         Pose2d pose = localizer.getPose();
         Pose2d vel  = localizer.getPoseVelocity();
 
-        // Predict future position
-
+        // --- Predict future position (meters) ---
         double predictedX = (pose.position.x + vel.position.x * VELOCITY_LOOKAHEAD) * 0.0254;
         double predictedY = (pose.position.y + vel.position.y * VELOCITY_LOOKAHEAD) * 0.0254;
 
         double currentHeading = getBotAbsoluteHeading();
-        double desiredHeading;
-        double tangentAngle;
 
-        if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED) {
+        // --- Alliance-dependent constants ---
+        boolean isRed = robot.opmodeData.allianceColor == OpModeData.AllianceColor.RED;
 
-            double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
-                    ? GOAL_X_2
-                    : GOAL_X_1;
+        double goalY = isRed ? RED_GOAL_Y : BLUE_GOAL_Y;
+        double baseHeading = isRed ? 90.0 : 270.0;
 
-            tangentAngle = Math.toDegrees(
-                    Math.atan((predictedX - goalX) / (RED_GOAL_Y - predictedY))
-            );
+        double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
+                ? GOAL_X_2
+                : GOAL_X_1;
 
-            double shootWhileDriveCoef = 1;  //adjust ts
-            desiredHeading = //allat shit allows us to shoot while driving (in theory)
-                    (90 + tangentAngle) *
-                    getDistanceFromGoal() *
-                    (localizer.driver.getVelX(DistanceUnit.METER) + localizer.driver.getVelY(DistanceUnit.METER)) *
-                    shootWhileDriveCoef;
+        // --- Geometry ---
+        double dx = goalX - predictedX;
+        double dy = goalY - predictedY;
 
-        } else {
+        double tangentAngle = Math.toDegrees(Math.atan2(dx, dy));
 
-            double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
-                    ? GOAL_X_2
-                    : GOAL_X_1;
+        // --- Shoot-while-driving lead ---
+        double shootWhileDriveCoef = 1.0; // tune
+        double velocityLead =
+                (vel.position.x * dx + vel.position.y * dy) * shootWhileDriveCoef;
 
-            tangentAngle = Math.toDegrees(
-                    Math.atan((predictedX - goalX) / (predictedY - BLUE_GOAL_Y))
-            );
+        // --- Final desired heading ---
+        double desiredHeading = baseHeading - tangentAngle + velocityLead;
 
-            desiredHeading = 270 - tangentAngle;
-        }
-
+        // --- Control ---
         double diffYaw = desiredHeading - currentHeading;
         double turnSpd = diffToSpeed(diffYaw);
 
-        BarnRobot.getInstance().telemetry.addData("vel x", vel.position.x);
-        BarnRobot.getInstance().telemetry.addData("vel y", vel.position.y);
-        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
-        BarnRobot.getInstance().telemetry.addData("desired heading", desiredHeading);
-        BarnRobot.getInstance().telemetry.addData("diffYaw", diffYaw);
-        BarnRobot.getInstance().telemetry.addData("vel", vel);
+        // --- Telemetry ---
+        robot.telemetry.addData("predictedX", predictedX);
+        robot.telemetry.addData("predictedY", predictedY);
+        robot.telemetry.addData("dx", dx);
+        robot.telemetry.addData("dy", dy);
+        robot.telemetry.addData("tangentAngle", tangentAngle);
+        robot.telemetry.addData("velocityLead", velocityLead);
+        robot.telemetry.addData("desiredHeading", desiredHeading);
+        robot.telemetry.addData("diffYaw", diffYaw);
+        robot.telemetry.addData("vel", vel);
 
-        if (BarnRobot.getInstance().opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
+        // --- Drive ---
+        if (robot.opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
             drive(spdX, spdY, turnSpd);
         } else {
             turnOnly(turnSpd);

@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
+import org.firstinspires.ftc.teamcode.commandGroups.TestSmartShootCommandGroup;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
@@ -39,7 +40,7 @@ public class TestTeleop extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                new Pose2d(0, 0, Math.toRadians(270)),
+                new Pose2d(0, 0, Math.toRadians(180)),
                 180
         );
 
@@ -51,7 +52,7 @@ public class TestTeleop extends CommandOpMode {
                 this,
                 opModeData
         );
-        //farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.defaultHoodCommand());
         farminator.drive.setDefaultCommand(farminator.drive.driveTwoDriversCommand());
 
 
@@ -64,22 +65,18 @@ public class TestTeleop extends CommandOpMode {
         // ------------------------
 
 
-
-
-
-
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                    CommandGroup.intakeAndTransferCommand()
+                        TestSmartShootCommandGroup.intakeAndTransferCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
-                        CommandGroup.deactivateIntakeAndTransferCommand ()
+                        TestSmartShootCommandGroup.deactivateIntakeAndTransferCommand ()
                 ));
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.intake.customIntakeCommand(-0.5)
+                        farminator.intake.smartIntakeCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
                         farminator.intake.deactivateIntakeCommand()
@@ -98,8 +95,8 @@ public class TestTeleop extends CommandOpMode {
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                        .toggleWhenActive(
-                                farminator.drive.alignToTagCommand());
+                .toggleWhenActive(
+                        farminator.drive.alignToTagCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(CommandGroup.shootCommand());
@@ -107,14 +104,14 @@ public class TestTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+//                .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());
 
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-//                .toggleWhenPressed(farminator.shooterHood.lower());
-//
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-//                .toggleWhenPressed(farminator.shooterHood.raise());
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()));
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()));
     }
 
     @Override
@@ -125,7 +122,6 @@ public class TestTeleop extends CommandOpMode {
         telemetry.addData("shooter sensor distance", farminator.shooterColorSensor.getArtifactDistance());
         telemetry.addData("mid sensor distance", farminator.midColorSensor.getArtifactDistance());
         telemetry.addData("intake sensor distance", farminator.intakeColorSensor.getArtifactDistance());
-        farminator.limelight.displayTelemetry();
         farminator.periodic();
     }
 }

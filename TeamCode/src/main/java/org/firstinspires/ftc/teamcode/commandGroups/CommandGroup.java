@@ -52,7 +52,7 @@ public class CommandGroup extends SequentialCommandGroup {
     }
 
     public static Command intakeAndTransferCommand(){
-        return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
+        return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransfer());
     }
 
     public static Command deactivateIntakeAndTransferCommand(){

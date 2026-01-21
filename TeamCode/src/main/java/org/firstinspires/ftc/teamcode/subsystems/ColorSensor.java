@@ -52,32 +52,32 @@ public class ColorSensor {
     }
 
     public boolean isShootPosBusy(){
-        if (hasTimerStarted){
-            timer.reset();
-            hasTimerStarted = true;
-        }
-
-        if (timer.seconds() < 0.05){return true;}
+//        if (hasTimerStarted){
+//            timer.reset();
+//            hasTimerStarted = true;
+//        }
+//
+//        if (timer.seconds() < 0.05){return true;}
         return getArtifactDistance() < 8.8;
     }
 
     public boolean isMidPosBusy(){
-        if (hasTimerStarted){
-            timer.reset();
-            hasTimerStarted = true;
-        }
-
-        if (timer.seconds() < 0.05){return true;}
+//        if (hasTimerStarted){
+//            timer.reset();
+//            hasTimerStarted = true;
+//        }
+//
+//        if (timer.seconds() < 0.05){return true;}
         return getArtifactDistance() < 5.7;
     }
 
     public boolean isIntakePosBusy(){
-        if (hasTimerStarted){
-            timer.reset();
-            hasTimerStarted = true;
-        }
-
-        if (timer.seconds() < 0.05){return true;}
+//        if (hasTimerStarted){
+//            timer.reset();
+//            hasTimerStarted = true;
+//        }
+//
+//        if (timer.seconds() < 0.05){return true;}
         return getArtifactDistance() < 6.5;
     }
 

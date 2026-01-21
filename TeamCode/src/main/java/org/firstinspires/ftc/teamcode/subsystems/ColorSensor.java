@@ -12,7 +12,15 @@ public class ColorSensor {
     NormalizedColorSensor colorSensor;
     public posesIndexes posesIndex;
 
-    public enum posesIndexes{SHOOTER, MIDDLE, INTAKE, SHOOTMID, SHOOTINTAKE, MIDINTAKE, ALL}
+    public enum posesIndexes{
+        SHOOTER,
+        MIDDLE,
+        INTAKE,
+        SHOOTMID,
+        SHOOTINTAKE,
+        MIDINTAKE,
+        ALL
+    }
 
     public ColorSensor(NormalizedColorSensor colorSensor){
         this.colorSensor = colorSensor;
@@ -26,12 +34,9 @@ public class ColorSensor {
     }
 
     public double getArtifactDistance(){
-        if (colorSensor instanceof DistanceSensor){
-            return ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
-        }
-        else{
-            return -1;
-        }
+        if (colorSensor instanceof DistanceSensor)return ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
+
+        else return -1;
     }
 
     ElapsedTime timer = new ElapsedTime();
@@ -44,9 +49,8 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05) {
-            return true;
-        }
+        if (timer.seconds() < 0.05) return true;
+
 
         return getArtifactDistance() < distance;
     }
@@ -57,7 +61,7 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){return true;}
+        if (timer.seconds() < 0.05)return true;
         return getArtifactDistance() < 8.8;
     }
 
@@ -67,7 +71,7 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){return true;}
+        if (timer.seconds() < 0.05)return true;
         return getArtifactDistance() < 5.7;
     }
 

@@ -8,6 +8,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -24,6 +26,10 @@ public class Shooter  extends SubsystemBase {
     private ShooterPIDFController pidfController;
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
+    private ColorSensor shooterSensor;
+    private ColorSensor midSensor;
+    private ColorSensor intakeSensor;
+
 
     public static double SHOOTER_VELOCITY_RANGE_4 = 1500; // only for far zone
     public static double SHOOTER_VELOCITY_RANGE_3 = 1250;
@@ -43,6 +49,10 @@ public class Shooter  extends SubsystemBase {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.shooterSensor = BarnRobot.getInstance().shooterColorSensor;
+        this.midSensor = BarnRobot.getInstance().midColorSensor;
+        this.intakeSensor = BarnRobot.getInstance().intakeColoseSensor;
+
 
         shooterLeft = BarnRobot.getInstance().robotHardware.shooterLeft;
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -124,6 +134,16 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooterDistanceBased(
                 distance
         ), this);
+    }
+
+    public Command smartIntakeCommand(){    //Disable intake when there is enough artifacts in the robot
+        return new ConditionalCommand(
+                new InstantCommand(() -> setPower(0), this), // on true
+                new RunCommand(() -> operateShooterDistanceBased(
+                        BarnRobot.getInstance().drive.getDistanceFromGoal()
+                )),          // on false
+                () -> this.shooterSensor.isShootPosBusy() && this.midSensor.isMidPosBusy() && this.intakeSensor.isIntakePosBusy()
+        );
     }
 
 

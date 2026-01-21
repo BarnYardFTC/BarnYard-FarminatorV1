@@ -82,13 +82,13 @@ public class RedMainTeleop extends CommandOpMode {
                         new ParallelCommandGroup(
                         )
                 );
-
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(farminator.shooterHood.lower());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(farminator.shooterHood.raise());
+//
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+//                .whenPressed(farminator.shooterHood.lower());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+//                .whenPressed(farminator.shooterHood.raise());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new DriveActionCommand(farminator.roadRunnerMecanumDrive.actionBuilder(new Pose2d(farminator.pinpointLocalizer.getPose().position.x,farminator.pinpointLocalizer.getPose().position.y,farminator.pinpointLocalizer.getPose().heading.toDouble()))

@@ -20,6 +20,8 @@ public class ShooterHood extends SubsystemBase {
     private final double MIN = 0.2;
     private final double MAX = 1;
 
+    private double servoPos = 1;
+
     InterpLUT range1Lut;
     InterpLUT range2Lut;
 
@@ -111,21 +113,33 @@ public class ShooterHood extends SubsystemBase {
         return new RunCommand(() -> autoHoodAlignmentFunc(), this);
     }
 
-    public Command lower() {
-        return new InstantCommand(() -> {
-            double newPos = servo.getPosition() - 0.1;
-            if (newPos < MIN) newPos = MIN;
-            servo.setPosition(newPos);
-        }, this);
+//    public Command lower() {
+//        return new InstantCommand(() -> {
+//            double newPos = servo.getPosition() - 0.15;
+//            if (newPos < MIN) newPos = MIN;
+//            servo.setPosition(newPos);
+//        }, this);
+//    }
+//
+//    public Command raise() {
+//        return new InstantCommand(() -> {
+//            double newPos = servo.getPosition() + 0.15;
+//            if (newPos > 1) newPos = 1;
+//            servo.setPosition(newPos);
+//        }, this);
+//    }
+
+    public void lower() {
+        servoPos -= 0.15;
+        if (servoPos < MIN) servoPos = MIN;
     }
 
-    public Command raise() {
-        return new InstantCommand(() -> {
-            double newPos = servo.getPosition() + 0.1;
-            if (newPos > 1) newPos = 1;
-            servo.setPosition(newPos);
-        }, this);
+    public void raise() {
+        servoPos += 0.15;
+        if (servoPos > MAX) servoPos = MAX;
     }
+
+
 
     public Command setHoodPosition(double position){
         if (position > MAX) position = MAX;
@@ -133,6 +147,13 @@ public class ShooterHood extends SubsystemBase {
         double finalPosition = position;
         return new InstantCommand(() ->
                 servo.setPosition(finalPosition), this);
+
+    }
+
+    public Command defaultHoodCommand(){
+        return new RunCommand(() -> {
+            servo.setPosition(servoPos);
+        }, this);
     }
 
     public Command returnToBase(){
@@ -166,6 +187,7 @@ public class ShooterHood extends SubsystemBase {
     public void displayTelemetry(){
         BarnRobot robot = BarnRobot.getInstance();
         robot.telemetry.addData("Position", servo.getPosition());
+        robot.telemetry.addData("Position2", servoPos);
     }
 
     private double capDistanceRange1(double distance){

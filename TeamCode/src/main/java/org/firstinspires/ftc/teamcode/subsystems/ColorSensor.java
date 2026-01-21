@@ -74,7 +74,7 @@ public class ColorSensor {
 
         if (timer.seconds() < 0.05){return true;}
 
-        return getArtifactDistance() < 5.7;
+        return getArtifactDistance() < 3;
     }
 
     public boolean isIntakePosBusy(){
@@ -86,7 +86,7 @@ public class ColorSensor {
 
         if (timer.seconds() < 0.05){return true;}
 
-        return getArtifactDistance() < 6.5;
+        return getArtifactDistance() < 6.2;
     }
 
 //    public posesIndexes getArtifactPoses() {

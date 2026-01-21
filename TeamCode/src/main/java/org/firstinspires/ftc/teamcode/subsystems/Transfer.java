@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 public class Transfer extends SubsystemBase {
 
     private DcMotorEx transferMotor;
-    private ColorSensor shooterSensor;
-    private ColorSensor midSensor;
+    private final ColorSensor shooterSensor;
+    private final ColorSensor midSensor;
     private ColorSensor intakeSensor;
 
     // ------------------------------------------------------------
@@ -26,6 +26,8 @@ public class Transfer extends SubsystemBase {
     public Transfer() {
         BarnRobot robot = BarnRobot.getInstance();
         transferMotor = robot.robotHardware.transfer;
+        shooterSensor = robot.shooterColorSensor;
+        midSensor = robot.midColorSensor;
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 

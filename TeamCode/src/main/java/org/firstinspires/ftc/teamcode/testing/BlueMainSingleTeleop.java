@@ -67,11 +67,11 @@ public class BlueMainSingleTeleop extends CommandOpMode {
         // ------------------------
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.shooterHood.lower());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(farminator.shooterHood.raise());
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+//                .whenPressed(farminator.shooterHood.lower());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+//                .whenPressed(farminator.shooterHood.raise());
 
 
         // Left Trigger → Intake active (transfer + intake)

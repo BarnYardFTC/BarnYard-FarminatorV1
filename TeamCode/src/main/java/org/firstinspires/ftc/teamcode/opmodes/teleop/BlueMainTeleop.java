@@ -96,12 +96,12 @@ public class BlueMainTeleop extends CommandOpMode {
         // Right Bumper → Run all transfer motors forward
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER);
 
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(farminator.shooterHood.lower());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(farminator.shooterHood.raise());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+//                .whenPressed(farminator.shooterHood.lower());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+//                .whenPressed(farminator.shooterHood.raise());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)

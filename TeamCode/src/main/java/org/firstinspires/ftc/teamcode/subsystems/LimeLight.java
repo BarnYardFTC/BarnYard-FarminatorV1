@@ -235,12 +235,12 @@ public class LimeLight extends SubsystemBase {
                 }
     }
 
-        public void updatePose(){
-            if (getRobotFieldPose() != null){
-                Pose2d currenrPose = new Pose2d(getRobotFieldPose().getPosition().x / 0.0254 ,getRobotFieldPose().getPosition().y / 0.0254, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
-                BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
-            }
+    public void updatePose(){
+        if (getRobotFieldPose() != null){
+            Pose2d currenrPose = new Pose2d(getRobotFieldPose().getPosition().x / 0.0254 ,getRobotFieldPose().getPosition().y / 0.0254, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+            BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
         }
+    }
 
     public Pose3D getRobotFieldPose(){
         if (isDataValid())

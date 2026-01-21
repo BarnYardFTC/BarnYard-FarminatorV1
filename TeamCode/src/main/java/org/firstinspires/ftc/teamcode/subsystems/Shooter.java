@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.DriveTrain.BLUE_GOAL_Y;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveTrain.GOAL_X_1;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveTrain.RED_GOAL_Y;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -16,7 +12,6 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.ShooterPIDFController;
 
 @Config
@@ -51,7 +46,7 @@ public class Shooter  extends SubsystemBase {
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.shooterSensor = BarnRobot.getInstance().shooterColorSensor;
         this.midSensor = BarnRobot.getInstance().midColorSensor;
-        this.intakeSensor = BarnRobot.getInstance().intakeColoseSensor;
+        this.intakeSensor = BarnRobot.getInstance().intakeColorSensor;
 
 
         shooterLeft = BarnRobot.getInstance().robotHardware.shooterLeft;

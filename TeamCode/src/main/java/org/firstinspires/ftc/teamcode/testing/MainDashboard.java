@@ -49,12 +49,12 @@ public class MainDashboard extends CommandOpMode {
         // kys nigga
         // ---------------------------------------------------------
 
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.shooterHood.lower());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(farminator.shooterHood.raise());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+//                .whenPressed(farminator.shooterHood.lower());
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+//                .whenPressed(farminator.shooterHood.raise());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(farminator.shooterHood.setHoodPosition(1));

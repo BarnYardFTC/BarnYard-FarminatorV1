@@ -6,28 +6,30 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.BarnRobot;
 
 public class ColorSensor {
 
-    NormalizedColorSensor colorSensor;
+    private final NormalizedColorSensor colorSensor;
+
     public posesIndexes posesIndex;
 
     public enum posesIndexes{SHOOTER, MIDDLE, INTAKE, SHOOTMID, SHOOTINTAKE, MIDINTAKE, ALL}
 
     public ColorSensor(NormalizedColorSensor colorSensor){
         this.colorSensor = colorSensor;
-        colorSensor.setGain(4);
+        this.colorSensor.setGain(4);
     }
 
-    public void printArtifactDistance(Telemetry telemetry){
-        if (colorSensor instanceof DistanceSensor){
-            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM));
-        }
-    }
+//    public void printArtifactDistance(Telemetry telemetry){
+//        if (colorSensor instanceof DistanceSensor){
+//            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM));
+//        }
+//    }
 
     public double getArtifactDistance(){
-        if (colorSensor instanceof DistanceSensor){
-            return ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
+        if (this.colorSensor instanceof DistanceSensor){
+            return ((DistanceSensor) this.colorSensor).getDistance(DistanceUnit.CM);
         }
         else{
             return -1;
@@ -52,32 +54,38 @@ public class ColorSensor {
     }
 
     public boolean isShootPosBusy(){
-        if (hasTimerStarted){
+
+        if (!hasTimerStarted){
             timer.reset();
             hasTimerStarted = true;
         }
 
         if (timer.seconds() < 0.05){return true;}
+
         return getArtifactDistance() < 8.8;
     }
 
     public boolean isMidPosBusy(){
-        if (hasTimerStarted){
+
+        if (!hasTimerStarted){
             timer.reset();
             hasTimerStarted = true;
         }
 
         if (timer.seconds() < 0.05){return true;}
+
         return getArtifactDistance() < 5.7;
     }
 
     public boolean isIntakePosBusy(){
-        if (hasTimerStarted){
+
+        if (!hasTimerStarted){
             timer.reset();
             hasTimerStarted = true;
         }
 
         if (timer.seconds() < 0.05){return true;}
+
         return getArtifactDistance() < 6.5;
     }
 

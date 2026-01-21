@@ -41,7 +41,7 @@ public class Transfer extends SubsystemBase {
         return new ConditionalCommand(
                 new InstantCommand(() -> transferMotor.setPower(0), this), // on true
                 new InstantCommand(() -> transferMotor.setPower(1), this),             // on false
-                () -> this.shooterSensor.isShootPosBusy() && this.midSensor.isMidPosBusy()
+                () -> shooterSensor.isShootPosBusy() && midSensor.isMidPosBusy()
         );
     }
 

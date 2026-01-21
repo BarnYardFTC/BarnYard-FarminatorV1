@@ -51,7 +51,7 @@ public class TestTeleop extends CommandOpMode {
                 this,
                 opModeData
         );
-        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        //farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
         farminator.drive.setDefaultCommand(farminator.drive.driveTwoDriversCommand());
 
 
@@ -109,6 +109,12 @@ public class TestTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .toggleWhenPressed(farminator.shooterHood.lower());
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .toggleWhenPressed(farminator.shooterHood.raise());
     }
 
     @Override
@@ -119,6 +125,7 @@ public class TestTeleop extends CommandOpMode {
         telemetry.addData("shooter sensor distance", farminator.shooterColorSensor.getArtifactDistance());
         telemetry.addData("mid sensor distance", farminator.midColorSensor.getArtifactDistance());
         telemetry.addData("intake sensor distance", farminator.intakeColoseSensor.getArtifactDistance());
+        farminator.limelight.displayTelemetry();
         farminator.periodic();
     }
 }

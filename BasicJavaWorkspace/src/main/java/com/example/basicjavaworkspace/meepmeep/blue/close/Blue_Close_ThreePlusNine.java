@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.*;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
-
 import java.lang.Math;
 
 public class Blue_Close_ThreePlusNine {
@@ -106,7 +105,7 @@ public class Blue_Close_ThreePlusNine {
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(startPose)
                 .strafeToLinearHeading(startNudge, SOUTH_HEADING)
                 .splineToConstantHeading(leftReady, SOUTH_HEADING)
-                // keep Rotation2d hardcoded (as requested)
+                // Keep Rotation2d hardcoded (as requested)
                 .splineToConstantHeading(leftCollect, new Rotation2d(0, 0))
                 .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, -8))
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);

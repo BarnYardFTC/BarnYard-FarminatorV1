@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -74,6 +75,6 @@ public class CommandGroup extends SequentialCommandGroup {
     }
 
     public static Command shootCommandPreset(int n){
-        return new RunCommand(() -> shootPreset(n));
+        return new InstantCommand(() -> shootPreset(n));
     }
 }

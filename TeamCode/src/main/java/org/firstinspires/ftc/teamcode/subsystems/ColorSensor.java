@@ -1,103 +1,151 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.BarnRobot;
 
+/**
+ * ColorSensor subsystem wrapper.
+ *
+ * <p>
+ * This class provides a clean and efficient interface for determining whether
+ * an artifact is present at various robot positions using a REV Color Sensor.
+ * </p>
+ *
+ * <p>
+ * To reduce CPU load and avoid excessive I2C traffic, distance readings are
+ * rate-limited and cached. The physical sensor is queried only once every
+ * {@link #COLOR_SENSOR_WAIT_SECONDS} seconds, while callers can safely poll
+ * the {@code is*Busy()} methods every loop.
+ * </p>
+ *
+ * <p>
+ * If the sensor is not present or does not support distance measurement,
+ * this subsystem fails gracefully by reporting no artifact present.
+ * </p>
+ */
 public class ColorSensor {
 
-    private final NormalizedColorSensor colorSensor;
-
-    public posesIndexes posesIndex;
-
-    public enum posesIndexes{SHOOTER, MIDDLE, INTAKE, SHOOTMID, SHOOTINTAKE, MIDINTAKE, ALL}
-
+    /**
+     * Minimum time (in seconds) between physical sensor reads.
+     */
     public static double COLOR_SENSOR_WAIT_SECONDS = 0.5;
 
-    public ColorSensor(NormalizedColorSensor colorSensor){
+    /**
+     * Distance thresholds (cm) for each robot position.
+     */
+    private static final double SHOOTER_DISTANCE_CM = 8.8;
+    private static final double MIDDLE_DISTANCE_CM  = 3.0;
+    private static final double INTAKE_DISTANCE_CM  = 6.2;
+
+    /**
+     * Hardware color sensor instance.
+     */
+    private final NormalizedColorSensor colorSensor;
+
+    /**
+     * Timer used to rate-limit sensor reads.
+     */
+    private final ElapsedTime sensorTimer = new ElapsedTime();
+
+    /**
+     * Cached distance reading (cm).
+     */
+    private double cachedDistanceCm = Double.POSITIVE_INFINITY;
+
+    /**
+     * Creates a new ColorSensor subsystem.
+     *
+     * @param colorSensor the REV color sensor from the hardware map
+     */
+    public ColorSensor(NormalizedColorSensor colorSensor) {
         this.colorSensor = colorSensor;
-        this.colorSensor.setGain(4);
+
+        if (this.colorSensor != null) {
+            this.colorSensor.setGain(4);
+        }
+
+        sensorTimer.reset();
     }
 
-//    public void printArtifactDistance(Telemetry telemetry){
-//        if (colorSensor instanceof DistanceSensor){
-//            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM));
-//        }
-//    }
-
-    public double getArtifactDistance(){
-        if (this.colorSensor == null){return 100;}
-        if (this.colorSensor instanceof DistanceSensor){
-            return ((DistanceSensor) this.colorSensor).getDistance(DistanceUnit.CM);
+    /**
+     * Reads the physical distance sensor if the rate limit has expired.
+     * Otherwise, returns the cached value.
+     *
+     * @return cached distance to the nearest object (cm)
+     */
+    private double getArtifactDistanceTimed() {
+        if (sensorTimer.seconds() >= COLOR_SENSOR_WAIT_SECONDS) {
+            sensorTimer.reset();
+            cachedDistanceCm = readDistanceSensor();
         }
-        else{
-            return 100;
-        }
+        return cachedDistanceCm;
     }
 
-    ElapsedTime timer = new ElapsedTime();
-    boolean hasTimerStarted = false;
-
-    public boolean isPosBusy(int distance){
-
-        if (!hasTimerStarted) {
-            timer.reset();
-            hasTimerStarted = true;
+    /**
+     * Reads the distance sensor directly.
+     *
+     * <p>
+     * This method should NOT be called repeatedly in a loop.
+     * Use {@link #getArtifactDistanceTimed()} instead.
+     * </p>
+     *
+     * @return distance in centimeters, or {@link Double#POSITIVE_INFINITY}
+     *         if the sensor is unavailable
+     */
+    private double readDistanceSensor() {
+        if (colorSensor instanceof DistanceSensor) {
+            return ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM);
         }
-
-        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS) {
-            return true;
-        }
-
-        return getArtifactDistance() < distance;
+        return Double.POSITIVE_INFINITY;
     }
 
-    public boolean isShootPosBusy(){
-
-        if (!hasTimerStarted){
-            timer.reset();
-            hasTimerStarted = true;
-        }
-
-        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS){return true;}
-
-        return getArtifactDistance() < 8.8;
+    /**
+     * Determines whether an artifact is present at the shooter position.
+     *
+     * @return {@code true} if an artifact is detected
+     */
+    public boolean isShootPosBusy() {
+        return getArtifactDistanceTimed() < SHOOTER_DISTANCE_CM;
     }
 
-    public boolean isMidPosBusy(){
-
-        if (!hasTimerStarted){
-            timer.reset();
-            hasTimerStarted = true;
-        }
-
-        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS){return true;}
-
-        return getArtifactDistance() < 3;
+    /**
+     * Determines whether an artifact is present at the middle position.
+     *
+     * @return {@code true} if an artifact is detected
+     */
+    public boolean isMidPosBusy() {
+        return getArtifactDistanceTimed() < MIDDLE_DISTANCE_CM;
     }
 
-    public boolean isIntakePosBusy(){
-
-        if (!hasTimerStarted){
-            timer.reset();
-            hasTimerStarted = true;
-        }
-
-        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS){return true;}
-
-        return getArtifactDistance() < 6.2;
+    /**
+     * Determines whether an artifact is present at the intake position.
+     *
+     * @return {@code true} if an artifact is detected
+     */
+    public boolean isIntakePosBusy() {
+        return getArtifactDistanceTimed() < INTAKE_DISTANCE_CM;
     }
 
-//    public posesIndexes getArtifactPoses() {
-////        if (isShootPosBusy() && isMidPosBusy() && isIntakePosBusy()){posesIndex = posesIndexes.ALL;}
-////        else if (isShootPosBusy() && isMidPosBusy()){posesIndex = posesIndexes.SHOOTMID;}
-//        if (isShootPosBusy()) {posesIndex = posesIndexes.SHOOTER;}
-//        else if (isMidPosBusy()) {posesIndex = posesIndexes.MIDDLE;}
-//        else if (isIntakePosBusy()) {posesIndex = posesIndexes.INTAKE;}
-//        return posesIndex;
-//    }
+    /**
+     * Generic artifact presence check with a custom distance threshold.
+     *
+     * @param distanceCm distance threshold in centimeters
+     * @return {@code true} if an artifact is detected
+     */
+    public boolean isPosBusy(double distanceCm) {
+        return getArtifactDistanceTimed() < distanceCm;
+    }
+
+    /**
+     * Returns the most recently cached distance measurement.
+     *
+     * @return cached distance in centimeters
+     */
+    public double getCachedDistanceCm() {
+        return cachedDistanceCm;
+    }
 }

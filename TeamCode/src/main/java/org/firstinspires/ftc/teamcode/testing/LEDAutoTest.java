@@ -58,18 +58,18 @@ public class LEDAutoTest extends CommandOpMode {
         farminator.drive.setDefaultCommand(farminator.drive.driveTwoDriversCommand());
 
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.blinkin.setRedCommand());
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(farminator.blinkin.setBlueCommand());
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(farminator.blinkin.setGreenCommand());
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(farminator.blinkin.setPurpleCommand());
+//
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
+//                .whenPressed(farminator.blinkin.setRedCommand());
+//
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
+//                .whenPressed(farminator.blinkin.setBlueCommand());
+//
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+//                .whenPressed(farminator.blinkin.setGreenCommand());
+//
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+//                .whenPressed(farminator.blinkin.setPurpleCommand());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class LEDAutoTest extends CommandOpMode {
         telemetry.addData("heading", BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("blinkin last update time", farminator.blinkin.getLastUpdateTime());
         farminator.periodic();
-        farminator.blinkin.update();
+//        farminator.blinkin.update();
         rumpleGamepadsEndgame();
     }
 

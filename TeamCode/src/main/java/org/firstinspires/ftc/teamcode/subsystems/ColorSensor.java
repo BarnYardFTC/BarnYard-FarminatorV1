@@ -16,6 +16,8 @@ public class ColorSensor {
 
     public enum posesIndexes{SHOOTER, MIDDLE, INTAKE, SHOOTMID, SHOOTINTAKE, MIDINTAKE, ALL}
 
+    public static double COLOR_SENSOR_WAIT_SECONDS = 0.5;
+
     public ColorSensor(NormalizedColorSensor colorSensor){
         this.colorSensor = colorSensor;
         this.colorSensor.setGain(4);
@@ -47,7 +49,7 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05) {
+        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS) {
             return true;
         }
 
@@ -61,7 +63,7 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){return true;}
+        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS){return true;}
 
         return getArtifactDistance() < 8.8;
     }
@@ -73,7 +75,7 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){return true;}
+        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS){return true;}
 
         return getArtifactDistance() < 3;
     }
@@ -85,7 +87,7 @@ public class ColorSensor {
             hasTimerStarted = true;
         }
 
-        if (timer.seconds() < 0.05){return true;}
+        if (timer.seconds() < COLOR_SENSOR_WAIT_SECONDS){return true;}
 
         return getArtifactDistance() < 6.2;
     }

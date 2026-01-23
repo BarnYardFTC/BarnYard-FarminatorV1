@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 import android.app.appsearch.BatchResultCallback;
 import android.net.wifi.WifiAvailableChannel;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -28,7 +30,8 @@ public class CommandGroup extends SequentialCommandGroup {
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
-                        intakeAndTransferCommand(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
                         new WaitUntilCommand(() -> !robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),
                         deactivateIntakeAndTransferCommand()

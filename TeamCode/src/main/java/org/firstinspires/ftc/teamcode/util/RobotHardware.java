@@ -240,7 +240,7 @@ public class RobotHardware {
     }
 
     private void initBlinkinLed() {
-        blinkin = hw.get(RevBlinkinLedDriver.class, BLINKIN_CONFIG_NAME);
+//        blinkin = hw.get(RevBlinkinLedDriver.class, BLINKIN_CONFIG_NAME);
     }
 
     private void initVoltageSensor(){

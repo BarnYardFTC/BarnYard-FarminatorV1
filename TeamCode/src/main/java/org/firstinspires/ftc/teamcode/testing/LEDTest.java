@@ -64,17 +64,17 @@ public class LEDTest extends CommandOpMode {
 
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(farminator.blinkin.setRedCommand());
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(farminator.blinkin.setBlueCommand());
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(farminator.blinkin.setGreenCommand());
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(farminator.blinkin.setPurpleCommand());
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
+//                .whenPressed(farminator.blinkin.setRedCommand());
+//
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
+//                .whenPressed(farminator.blinkin.setBlueCommand());
+//
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.A)
+//                .whenPressed(farminator.blinkin.setGreenCommand());
+//
+//        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+//                .whenPressed(farminator.blinkin.setPurpleCommand());
     }
 
     @Override

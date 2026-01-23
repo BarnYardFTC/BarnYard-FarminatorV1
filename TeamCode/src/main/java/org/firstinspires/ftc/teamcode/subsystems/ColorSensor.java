@@ -28,11 +28,12 @@ public class ColorSensor {
 //    }
 
     public double getArtifactDistance(){
+        if (this.colorSensor == null){return 100;}
         if (this.colorSensor instanceof DistanceSensor){
             return ((DistanceSensor) this.colorSensor).getDistance(DistanceUnit.CM);
         }
         else{
-            return -1;
+            return 100;
         }
     }
 

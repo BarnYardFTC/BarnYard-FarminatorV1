@@ -234,33 +234,9 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        new DriveActionCommand(shootingPath),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
+                        CommandGroup.intakeAndTransferCommand(),
                         BarnRobot.getInstance().gate.closeCommand(),
                         CommandGroup.deactivateIntakeAndTransferCommand()
                 )
@@ -274,28 +250,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
+                        CommandGroup.intakeAndTransferCommand(),
                         BarnRobot.getInstance().gate.closeCommand(),
                         CommandGroup.deactivateIntakeAndTransferCommand()
                 )

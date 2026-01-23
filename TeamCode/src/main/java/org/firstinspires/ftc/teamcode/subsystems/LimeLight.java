@@ -78,8 +78,8 @@ public class LimeLight extends SubsystemBase {
      */
     public LimeLight() {
         limelight = BarnRobot.getInstance().robotHardware.limelight;
+        poseUpdateTimer.reset();
         limelight.setPollRateHz(POLL_RATE_HZ);
-        Dyaw = 0;
         resetData();
         start();
     }
@@ -106,7 +106,6 @@ public class LimeLight extends SubsystemBase {
     public boolean isDataValid() {
         return llResult != null && frs != null && !frs.isEmpty() && llResult.isValid()
             && llResult.getStaleness() < STANDARD_STALENESS_TOLERANCE;
-
     }
 
     /**
@@ -203,17 +202,19 @@ public class LimeLight extends SubsystemBase {
      */
     public boolean isGoalTagDetected() {
         boolean frsContainsGoalTag = false;
-        if (isDataValid()){
+        if (frs != null){
             for (LLResultTypes.FiducialResult fr: frs){
                 if (
-                        fr.getFiducialId() == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE ||
-                                fr.getFiducialId() == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED
+                        (fr.getFiducialId() == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE )||
+                                (fr.getFiducialId() == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED)
                 )
                     frsContainsGoalTag = true;
             }
         }
 
-        return isDataValid() && frsContainsGoalTag;
+
+
+        return frsContainsGoalTag;
     }
 
     /** Updates Limelight results; should be called periodically. */
@@ -233,17 +234,18 @@ public class LimeLight extends SubsystemBase {
                     updatePose();
                     poseUpdateTimer.reset();
                 }
+
     }
 
     public void updatePose(){
-        if (getRobotFieldPose() != null){
-            Pose2d currenrPose = new Pose2d(getRobotFieldPose().getPosition().x / 0.0254 ,getRobotFieldPose().getPosition().y / 0.0254, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+        if (llResult.getBotpose_MT2() != null){
+            Pose2d currenrPose = new Pose2d(llResult.getBotpose_MT2().getPosition().x / 0.0254 ,llResult.getBotpose_MT2().getPosition().y / 0.0254, BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
             BarnRobot.getInstance().pinpointLocalizer.setPose(currenrPose);
         }
     }
 
     public Pose3D getRobotFieldPose(){
-        if (isDataValid())
+        if (llResult.getBotpose_MT2() != null)
             return llResult.getBotpose_MT2();
         return null;
     }
@@ -253,10 +255,9 @@ public class LimeLight extends SubsystemBase {
         BarnRobot robot = BarnRobot.getInstance();
         robot.telemetry.addData("Data Valid", isDataValid());
 
-        if (getRobotFieldPose() != null)
-            robot.telemetry.addData("MT2 POSITION", "(" + getRobotFieldPose().getPosition().x / 0.0254 + ", " + getRobotFieldPose().getPosition().y / 0.0254 + ")");
-
-
+        robot.telemetry.addData("llResult != null", limelight.getLatestResult() != null);
+        if (llResult.getBotpose_MT2() != null && isGoalTagDetected())
+            robot.telemetry.addData("MT2 POSITION", "(" + llResult.getBotpose_MT2().getPosition().x / 0.0254 + ", " + llResult.getBotpose_MT2().getPosition().y / 0.0254 + ")");
 
     }
 

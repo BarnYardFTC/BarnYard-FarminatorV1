@@ -68,10 +68,10 @@ public class SmartTeleop extends CommandOpMode {
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        TestSmartShootCommandGroup.intakeAndTransferCommand()
+                        CommandGroup.smartIntakeAndTransferCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
-                        TestSmartShootCommandGroup.deactivateIntakeAndTransferCommand ()
+                        CommandGroup.deactivateIntakeAndTransferCommand ()
                 ));
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
@@ -119,9 +119,6 @@ public class SmartTeleop extends CommandOpMode {
         super.run();
         farminator.shooterHood.displayTelemetry();
         farminator.drive.displayPinpointDataTelemetry();
-        telemetry.addData("shooter sensor distance", farminator.shooterColorSensor.getArtifactDistance());
-        telemetry.addData("mid sensor distance", farminator.midColorSensor.getArtifactDistance());
-        telemetry.addData("intake sensor distance", farminator.intakeColorSensor.getArtifactDistance());
         farminator.periodic();
     }
 }

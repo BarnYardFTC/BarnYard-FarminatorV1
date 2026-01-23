@@ -119,10 +119,14 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooter(velocity), this);
     }
 
+    public double customDistance = 0;
     public RunCommand runShooterBasedOnDistance(){
-        return new RunCommand(() -> operateShooterDistanceBased(
-                BarnRobot.getInstance().drive.getDistanceFromGoal()
-        ), this);
+        if (customDistance == 0){
+            return new RunCommand(() -> operateShooterDistanceBased(
+                    BarnRobot.getInstance().drive.getDistanceFromGoal()
+            ), this);
+        }
+        else return new RunCommand(() -> operateShooterDistanceBased(customDistance), this);
     }
 
     public RunCommand runShooterBasedOnConstantDistance(double distance){
@@ -137,7 +141,7 @@ public class Shooter  extends SubsystemBase {
                 new RunCommand(() -> operateShooterDistanceBased(
                         BarnRobot.getInstance().drive.getDistanceFromGoal()
                 )),          // on false
-                () -> this.shooterSensor.isShootPosBusy() && this.midSensor.isMidPosBusy() && this.intakeSensor.isIntakePosBusy()
+                () -> true
         );
     }
 
@@ -172,5 +176,10 @@ public class Shooter  extends SubsystemBase {
     public boolean isShotDetected(double tgtRpm) {
         return getVelocity() < tgtRpm - 60;
     }
+
+
+     public void setCustomVelocity(double velocity){
+            operateShooter(velocity);
+     }
 
 }

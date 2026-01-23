@@ -133,6 +133,7 @@ public class BarnRobot extends Robot {
         // Subsystem initialization
         initLimeLight();
         initShooter();
+        initColorSensors();
         initIntake();
         initDrivetrain(opMode.hardwareMap);
         initShooterHood();
@@ -140,7 +141,6 @@ public class BarnRobot extends Robot {
         initPinpointLocalizer(opMode.hardwareMap);
         initBlinkin();
         initGate();
-        initColorSensors();
         initTransfer();
     }
 
@@ -203,6 +203,7 @@ public class BarnRobot extends Robot {
         shooterColorSensor = new ColorSensor(robotHardware.shooterColorSensor);
         intakeColorSensor = new ColorSensor(robotHardware.intakeColorSensor);
         midColorSensor = new ColorSensor(robotHardware.midColorSensor);
+        telemetry.addLine("I Pidr");
     }
 
 

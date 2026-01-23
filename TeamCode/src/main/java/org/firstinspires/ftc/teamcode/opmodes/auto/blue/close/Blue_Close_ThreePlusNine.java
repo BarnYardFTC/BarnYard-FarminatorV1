@@ -133,6 +133,9 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 .splineToConstantHeading(leftCollect, new Rotation2d(0, 0))
                 .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, -8));
 
+        TrajectoryActionBuilder testpath = drive.actionBuilder(startPose)
+                .strafeToLinearHeading(new Vector2d(0,0), SOUTH_HEADING);
+
         TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
@@ -160,24 +163,31 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                                 new Vector2d(ENDING_POSE_X, ENDING_POSE_Y),
                                 SHOOT_HEADING);
 
-
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                shootCommand(),
-
-                intakeCommandPath(path1),
-
-                shootCommandPath(path2),
-
-                intakeCommandPath(path3),
-
-                shootCommandPathIntake(path4),
-
-                intakeCommandPath(path7),
-
-                shootCommandPathIntake(path8)
-
+                new DriveActionCommand(drive.actionBuilder(new Pose2d(0,0,0))
+                        .strafeToLinearHeading(new Vector2d(0, 30), Math.toRadians(90))),
+                intakeCommandPath(testpath)
                 ).schedule();
+
+//        new SequentialCommandGroup(
+//                new WaitUntilCommand(this::opModeIsActive),
+//                shootCommand(),
+//                new WaitCommand(500),
+//                intakeCommandPath(testpath)
+////                intakeCommandPath(path1),
+////
+////                shootCommandPath(path2),
+////
+////                intakeCommandPath(path3),
+////
+////                shootCommandPathIntake(path4),
+////
+////                intakeCommandPath(path7),
+////
+////                shootCommandPathIntake(path8)
+//
+//                ).schedule();
     }
 
     @Override
@@ -230,9 +240,10 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        new WaitCommand(1500),
                         BarnRobot.getInstance().gate.openCommand(),
-                        CommandGroup.intakeAndTransferCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
                         new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),
                         CommandGroup.deactivateIntakeAndTransferCommand()

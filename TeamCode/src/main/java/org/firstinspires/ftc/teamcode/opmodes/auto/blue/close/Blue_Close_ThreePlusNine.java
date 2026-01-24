@@ -34,7 +34,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     public static double SHOOT_POSE_Y = -22;
     public static double SHOOT_HEADING = Math.toRadians(227);
 
-    public static double SOUTH_READY_POSE_Y = -30;
+    public static double SOUTH_READY_POSE_Y = 30;
     public static double SOUTH_COLLECT_POSE_Y = -53;
 
     public static double SOUTH_HEADING = Math.toRadians(270);
@@ -163,31 +163,31 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                                 new Vector2d(ENDING_POSE_X, ENDING_POSE_Y),
                                 SHOOT_HEADING);
 
-        new SequentialCommandGroup(
-                new WaitUntilCommand(this::opModeIsActive),
-                new DriveActionCommand(drive.actionBuilder(new Pose2d(0,0,0))
-                        .strafeToLinearHeading(new Vector2d(0, 30), Math.toRadians(90))),
-                intakeCommandPath(testpath)
-                ).schedule();
-
 //        new SequentialCommandGroup(
 //                new WaitUntilCommand(this::opModeIsActive),
-//                shootCommand(),
-//                new WaitCommand(500),
+//                new DriveActionCommand(drive.actionBuilder(new Pose2d(0,0,0))
+//                        .strafeToLinearHeading(new Vector2d(0, 30), Math.toRadians(90))),
 //                intakeCommandPath(testpath)
-////                intakeCommandPath(path1),
-////
-////                shootCommandPath(path2),
-////
-////                intakeCommandPath(path3),
-////
-////                shootCommandPathIntake(path4),
-////
-////                intakeCommandPath(path7),
-////
-////                shootCommandPathIntake(path8)
-//
 //                ).schedule();
+
+        new SequentialCommandGroup(
+                new WaitUntilCommand(this::opModeIsActive),
+                shootCommand(),
+                new WaitCommand(500),
+//                intakeCommandPath(testpath)
+                intakeCommandPath(path1),
+//
+                shootCommandPath(path2),
+//
+                intakeCommandPath(path3),
+
+                shootCommandPathIntake(path4),
+
+                intakeCommandPath(path7),
+
+                shootCommandPathIntake(path8)
+
+                ).schedule();
     }
 
     @Override
@@ -215,7 +215,8 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                         CommandGroup.intakeAndTransferCommand(),
                         new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand()
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        BarnRobot.getInstance().shooter.turnOffInstant()
                 )
         );
     }
@@ -230,7 +231,8 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                         BarnRobot.getInstance().gate.openCommand(),
                         new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand()
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        BarnRobot.getInstance().shooter.turnOffInstant()
                 )
         );
     }
@@ -246,7 +248,8 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                         BarnRobot.getInstance().intake.activateIntakeCommand(),
                         new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand()
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        BarnRobot.getInstance().shooter.turnOffInstant()
                 )
         );
     }

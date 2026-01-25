@@ -64,7 +64,7 @@ public class NirTeleop extends CommandOpMode {
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        CommandGroup.intakeAndTransferCommand()
+                        CommandGroup.intakeAndTransferGateCommand()
                 ))
                 .whenInactive(new ParallelCommandGroup(
                         farminator.intake.deactivateIntakeCommand()

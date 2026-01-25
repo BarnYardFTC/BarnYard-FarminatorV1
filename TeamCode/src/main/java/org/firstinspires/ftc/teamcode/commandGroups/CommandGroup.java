@@ -1,17 +1,11 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
 
-import android.app.appsearch.BatchResultCallback;
-import android.net.wifi.WifiAvailableChannel;
-
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
@@ -44,8 +38,12 @@ public class CommandGroup extends SequentialCommandGroup {
         );
     }
 
-    public static Command intakeAndTransferCommand(){
-        return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransfer());
+    public static Command intakeAndTransferGateCommand(){
+        return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
+    }
+
+    public static Command intakeAndTransferActivateCommand(){
+        return new ParallelCommandGroup(BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
     }
 
     public static boolean robotContainsArtifacts(){

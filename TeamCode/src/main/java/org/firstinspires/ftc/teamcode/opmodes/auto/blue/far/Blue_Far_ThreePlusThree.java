@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.Blue_Close_ThreePlusNine.deactivateIntakeAndTransferCommand;
-
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -163,7 +160,7 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.intakeAndTransferCommand(),
+                CommandGroup.intakeAndTransferGateCommand(),
                 new DriveActionCommand(path),
                 deactivateIntakeAndTransferCommand()
         );

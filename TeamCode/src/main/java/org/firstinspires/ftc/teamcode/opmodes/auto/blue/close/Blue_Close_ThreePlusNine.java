@@ -230,7 +230,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
-                        CommandGroup.intakeAndTransferCommand(),
+                        CommandGroup.intakeAndTransferGateCommand(),
                         new DriveActionCommand(path),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
@@ -268,7 +268,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.intakeAndTransferCommand(),
+                CommandGroup.intakeAndTransferGateCommand(),
                 new DriveActionCommand(path),
                 deactivateIntakeAndTransferCommand()
         );

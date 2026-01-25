@@ -271,7 +271,7 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
 
     public Command intakeCommandPath(TrajectoryActionBuilder path) {
         return new SequentialCommandGroup(
-                CommandGroup.intakeAndTransferCommand(),
+                CommandGroup.intakeAndTransferGateCommand(),
                 new DriveActionCommand(path),
                 deactivateIntakeAndTransferCommand()
         );

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.far;
 
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -177,7 +176,7 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.intakeAndTransferCommand(),
+                CommandGroup.intakeAndTransferGateCommand(),
                 new DriveActionCommand(path),
                 deactivateIntakeAndTransferCommand()
         );

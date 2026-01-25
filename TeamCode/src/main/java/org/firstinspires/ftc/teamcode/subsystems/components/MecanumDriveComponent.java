@@ -33,6 +33,9 @@ public class MecanumDriveComponent {
     private static final double SLOW_SPEED = 0.5;
     private static final double FAST_SPEED = 1.0;
 
+    private static final double speedMultiplier = 1;
+    private static final double turnMultiplier = 1;
+
     /* =========================
        CONSTRUCTOR
        ========================= */
@@ -166,12 +169,10 @@ public class MecanumDriveComponent {
     //func to maintain position, should be implemented
     //the same way as turnOnly()
     public void maintainPos(double turn, Pose2d stopPose) {
-        double speedX;
-        double speedY;
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
-        //speed determination probably needs adjustment
-        speedX = (stopPose.position.x - currentPose.position.x);
-        speedY = (stopPose.position.y - currentPose.position.y);
+        double speedX = (stopPose.position.x - currentPose.position.x) * speedMultiplier;
+        double speedY = (stopPose.position.y - currentPose.position.y) * speedMultiplier;
+        turn += Math.toDegrees(stopPose.heading.toDouble() - currentPose.heading.toDouble()) * turnMultiplier;
         setSpeed(speedX, speedY, turn);
         translateSpeedToPower();
     }

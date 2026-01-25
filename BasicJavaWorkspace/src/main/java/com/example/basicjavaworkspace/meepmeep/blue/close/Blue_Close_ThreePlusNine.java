@@ -32,7 +32,7 @@ public class Blue_Close_ThreePlusNine {
     public static double MID_COLLECT_POSE_X = 12;
     public static double RIGHT_COLLECT_POSE_X = 35;
 
-    public static double GATE_POSE_X = 0;
+    public static double GATE_POSE_X = -5;
     public static double GATE_POSE_Y = -44; // currently unused in your paths
 
     public static double ENDING_POSE_X = -40;
@@ -99,38 +99,50 @@ public class Blue_Close_ThreePlusNine {
         );
 
         TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(VEL_TO_SHOOT);
-        // ================== PATHS (only what you run) ==================
 
-        // Start -> Left collect -> Gate -> Shoot
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(startPose)
                 .strafeToLinearHeading(startNudge, SOUTH_HEADING)
                 .splineToConstantHeading(leftReady, SOUTH_HEADING)
-                // Keep Rotation2d hardcoded (as requested)
+                // keep Rotation2d hardcoded (as requested)
                 .splineToConstantHeading(leftCollect, new Rotation2d(0, 0))
-                .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, -8))
+                .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, -8));
+
+        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
-        // Shoot -> Mid collect -> Shoot
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3))
+        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(shootPose)
+                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
+
+        TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(midCollectPose)
                 .splineToLinearHeading(shootPose, new Rotation2d(-2, -1), fastToShoot);
 
-        // Shoot -> Right collect -> End
-        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2))
+        TrajectoryActionBuilder path5 = myBot.getDrive().actionBuilder(shootPose)
+                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));
+
+        TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(rightCollectPose)
                 .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
+
+//        new SequentialCommandGroup(
+//                new WaitUntilCommand(this::opModeIsActive),
+//                new DriveActionCommand(drive.actionBuilder(new Pose2d(0,0,0))
+//                        .strafeToLinearHeading(new Vector2d(0, 30), Math.toRadians(90))),
+//                intakeCommandPath(testpath)
+//                ).schedule();
+//
+
+
 
         // ================== RUN ==================
         myBot.runAction(new SequentialAction(
                 new SleepAction(SHOOT_TIME_SEC),
                 path1.build(),
-
-                new SleepAction(SHOOT_TIME_SEC),
                 path2.build(),
-
                 new SleepAction(SHOOT_TIME_SEC),
-
                 path3.build(),
+                path4.build(),
+                new SleepAction(SHOOT_TIME_SEC),
+                path5.build(),
+                path7.build(),
 
                 new SleepAction(SHOOT_TIME_SEC)
         ));

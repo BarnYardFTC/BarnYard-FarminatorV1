@@ -45,8 +45,7 @@ public class CommandGroup extends SequentialCommandGroup {
     }
 
     public static boolean robotContainsArtifacts(){
-        return BarnRobot.getInstance().intakeColorSensor.isIntakePosBusy() ||
-                BarnRobot.getInstance().midColorSensor.isMidPosBusy() ||
+        return BarnRobot.getInstance().midColorSensor.isMidPosBusy() ||
                 BarnRobot.getInstance().shooterColorSensor.isShootPosBusy();
     }
 

@@ -133,7 +133,7 @@ public class BarnRobot extends Robot {
         // Subsystem initialization
         initLimeLight();
         initShooter();
-        initColorSensors();
+//        initColorSensors();
         initIntake();
         initDrivetrain(opMode.hardwareMap);
         initShooterHood();

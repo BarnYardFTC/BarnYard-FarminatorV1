@@ -33,7 +33,7 @@ public class CommandGroup extends SequentialCommandGroup {
                         BarnRobot.getInstance().gate.openCommand(),
                         BarnRobot.getInstance().intake.activateIntakeCommand(),
                         BarnRobot.getInstance().transfer.activateTransfer(),
-                        new WaitUntilCommand(() -> !robotContainsArtifacts()),
+                        new WaitCommand(1500),
                         BarnRobot.getInstance().gate.closeCommand(),
                         deactivateIntakeAndTransferCommand()
             )
@@ -62,15 +62,15 @@ public class CommandGroup extends SequentialCommandGroup {
 
     public static void shootPreset(int n){
         if (n == 1){
-                BarnRobot.getInstance().shooterHood.setCustomPosition(0.4);
-                BarnRobot.getInstance().shooter.customDistance = 1050;
+            BarnRobot.getInstance().shooterHood.setCustomPosition(0.4);
+            BarnRobot.getInstance().shooter.customDistance = 1.2;
         }
         else if (n == 2){
             BarnRobot.getInstance().shooterHood.setCustomPosition(1);
-            BarnRobot.getInstance().shooter.customDistance = 1250;
+            BarnRobot.getInstance().shooter.customDistance = 2.2;
         } else if (n == 3){
             BarnRobot.getInstance().shooterHood.setCustomPosition(1);
-            BarnRobot.getInstance().shooter.customDistance = 1500;
+            BarnRobot.getInstance().shooter.customDistance = 3;
         }
     }
 

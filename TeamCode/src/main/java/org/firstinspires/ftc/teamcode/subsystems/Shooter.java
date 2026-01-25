@@ -120,13 +120,17 @@ public class Shooter  extends SubsystemBase {
     }
 
     public double customDistance = 0;
-    public RunCommand runShooterBasedOnDistance(){
+    private void leonGay(){
         if (customDistance == 0){
-            return new RunCommand(() -> operateShooterDistanceBased(
+            operateShooterDistanceBased(
                     BarnRobot.getInstance().drive.getDistanceFromGoal()
-            ), this);
+            );
         }
-        else return new RunCommand(() -> operateShooterDistanceBased(customDistance), this);
+        else operateShooterDistanceBased(customDistance);
+    }
+
+    public RunCommand runShooterBasedOnDistance(){
+        return new RunCommand(() -> leonGay(), this);
     }
 
     public RunCommand runShooterBasedOnConstantDistance(double distance){

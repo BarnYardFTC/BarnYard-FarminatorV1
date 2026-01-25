@@ -204,7 +204,7 @@ public class ShooterHood extends SubsystemBase {
 
 
     public void setCustomPosition(double position){
-        setHoodPosition(position);
+        servoPos = position;
     }
 
 

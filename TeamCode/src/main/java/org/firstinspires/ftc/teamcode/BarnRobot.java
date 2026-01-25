@@ -131,7 +131,7 @@ public class BarnRobot extends Robot {
         gamepadEx2 = new GamepadEx(opMode.gamepad2);
 
         // Subsystem initialization
-        initLimeLight();
+//        initLimeLight();
         initShooter();
 //        initColorSensors();
         initIntake();

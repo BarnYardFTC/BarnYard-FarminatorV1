@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.commandGroups.TestSmartShootCommandGroup;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
+import java.util.function.BooleanSupplier;
+
 /**
  * BlueMainTeleop
  *
@@ -54,6 +56,7 @@ public class TestTeleop extends CommandOpMode {
         );
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.defaultHoodCommand());
         farminator.drive.setDefaultCommand(farminator.drive.driveTwoDriversCommand());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 
 
         // ==========================================================
@@ -89,6 +92,12 @@ public class TestTeleop extends CommandOpMode {
 //                .toggleWhenActive(
 //                        farminator.drive.maintainPosCommand(gamepad1.left_stick_x, farminator.pinpointLocalizer.getPose())
 //                );
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
+                .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
+
+
+
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
@@ -116,9 +125,6 @@ public class TestTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new InstantCommand(() -> BarnRobot.getInstance().shooter.customDistance = 0));
-
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(CommandGroup.shootCommandPreset(1));
 
@@ -137,10 +143,6 @@ public class TestTeleop extends CommandOpMode {
         farminator.shooter.displayTelemetry();
         telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
-//        telemetry.addData("shooter sensor distance", farminator.shooterColorSensor.getArtifactDistance());
-//        telemetry.addData("mid sensor distance", farminator.midColorSensor.getArtifactDistance());
-//        telemetry.addData("intake sensor distance", farminator.intakeColorSensor.getArtifactDistance());
-        BarnRobot.getInstance().limelight.displayTelemetry();
         farminator.periodic();
     }
 }

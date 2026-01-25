@@ -43,7 +43,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     public static double MID_COLLECT_POSE_X = 12;
     public static double RIGHT_COLLECT_POSE_X = 35;
 
-    public static double GATE_POSE_X = 0;
+    public static double GATE_POSE_X = -3;
     public static double GATE_POSE_Y = -44; // currently unused in your paths
 
     public static double ENDING_POSE_X = -40;

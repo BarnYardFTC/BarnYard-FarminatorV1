@@ -26,9 +26,9 @@ public class Shooter  extends SubsystemBase {
     private ColorSensor intakeSensor;
 
 
-    public static double SHOOTER_VELOCITY_RANGE_4 = 1500; // only for far zone
-    public static double SHOOTER_VELOCITY_RANGE_3 = 1150;
-    public static double SHOOTER_VELOCITY_RANGE_2 = 1100;
+    public static double SHOOTER_VELOCITY_RANGE_4 = 1450; // only for far zone
+    public static double SHOOTER_VELOCITY_RANGE_3 = 1100;
+    public static double SHOOTER_VELOCITY_RANGE_2 = 1050;
     public static double SHOOTER_VELOCITY_RANGE_1 = 950;
 
 
@@ -55,6 +55,8 @@ public class Shooter  extends SubsystemBase {
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         pidfController = new ShooterPIDFController(p, 0, 0, f);
+
+        customDistance = 1.2;
     }
 
     private void setPower(double power) {
@@ -119,7 +121,7 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooter(velocity), this);
     }
 
-    public double customDistance = 0;
+    public double customDistance = 1.2;
     private void leonGay(){
         if (customDistance == 0){
             operateShooterDistanceBased(

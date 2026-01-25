@@ -69,69 +69,50 @@ public class Blue_Close_ThreePlusSix {
                 .setDimensions(BOT_WIDTH, BOT_HEIGHT)
                 .build();
 
-        // ===== Common objects (cleaner, no magic numbers) =====
-        Pose2d startPose = new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING);
+        //---LEFT CYCLE
 
-        Vector2d startNudge = new Vector2d(START_POSE_X, START_POSE_Y + START_Y_NUDGE);
+        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING);
+        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING);
+        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y, SOUTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), SOUTH_HEADING);
+        TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X,SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING, new TranslationalVelConstraint(25) );
+        // --- MID CYCLE
+        TrajectoryActionBuilder path5 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING);
+        TrajectoryActionBuilder path6 = myBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X, SOUTH_READY_POSE_Y, SOUTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(MID_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), SOUTH_HEADING);
+        TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(new Pose2d(MID_COLLECT_POSE_X,SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING, new TranslationalVelConstraint(25) );
+        TrajectoryActionBuilder path8 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X-20, SHOOT_POSE_Y), SHOOT_HEADING);
+////             --- RIGHT CYCLE
+//        TrajectoryActionBuilder path8 = myBot.getDrive().actionBuilder(new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING))
+//                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), SOUTH_HEADING);
+//        TrajectoryActionBuilder path9 = myBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y, SOUTH_HEADING))
+//                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), SOUTH_HEADING);
+//        TrajectoryActionBuilder path10 = myBot.getDrive().actionBuilder(new Pose2d(RIGHT_COLLECT_POSE_X,SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
+//                .strafeToLinearHeading(new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y), SHOOT_HEADING, new TranslationalVelConstraint(25) );
 
-        Vector2d leftReady = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
-        Vector2d leftCollect = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y);
-        Vector2d gateAtCollectY = new Vector2d(GATE_POSE_X, SOUTH_COLLECT_POSE_Y);
 
-        Vector2d shootVec = new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y);
-        Pose2d shootPose = new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING);
-
-        Pose2d midCollectPose = new Pose2d(
-                MID_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y + MID_Y_OFFSET,
-                SOUTH_HEADING
-        );
-
-        Pose2d rightCollectPose = new Pose2d(
-                RIGHT_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y + RIGHT_Y_OFFSET,
-                SOUTH_HEADING
-        );
-
-        Pose2d endPose = new Pose2d(
-                ENDING_POSE_X,
-                ENDING_POSE_Y,
-                SHOOT_HEADING + END_HEADING_OFFSET_RAD
-        );
-
-        TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(VEL_TO_SHOOT);
-        // ================== PATHS (only what you run) ==================
-
-        // Start -> Left collect -> Gate -> Shoot
-        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(startPose)
-                .strafeToLinearHeading(startNudge, SOUTH_HEADING)
-                .splineToConstantHeading(leftReady, SOUTH_HEADING)
-                // Keep Rotation2d hardcoded (as requested)
-                .splineToConstantHeading(leftCollect, new Rotation2d(0, 0))
-                .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
-        // Shoot -> Mid collect -> Shoot
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3))
-                .splineToLinearHeading(shootPose, new Rotation2d(-2, -1), fastToShoot);
-//
-//        // Shoot -> Right collect -> End
-//        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(shootPose)
-//                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2))
-//                .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
 
         // ================== RUN ==================
         myBot.runAction(new SequentialAction(
                 new SleepAction(SHOOT_TIME_SEC),
                 path1.build(),
-
-                new SleepAction(SHOOT_TIME_SEC),
                 path2.build(),
-
+                path3.build(),
+                path4.build(),
                 new SleepAction(SHOOT_TIME_SEC),
-//
-//              path3.build(),
-
-                new SleepAction(SHOOT_TIME_SEC)
+                path5.build(),
+                path6.build(),
+                path7.build(),
+                new SleepAction(SHOOT_TIME_SEC),
+                path8.build()
+//                path9.build(),
+//                path10.build(),
         ));
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)

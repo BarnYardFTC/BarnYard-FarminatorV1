@@ -288,14 +288,14 @@ public final class TuningOpModes {
             throw new RuntimeException();
         }
 
-//        manager.register(metaForClass(AngularRampLogger.class), new AngularRampLogger(dvf));
-//        manager.register(metaForClass(ForwardPushTest.class), new ForwardPushTest(dvf));
-//        manager.register(metaForClass(ForwardRampLogger.class), new ForwardRampLogger(dvf));
-//        manager.register(metaForClass(LateralPushTest.class), new LateralPushTest(dvf));
-//        manager.register(metaForClass(LateralRampLogger.class), new LateralRampLogger(dvf));
-//        manager.register(metaForClass(ManualFeedforwardTuner.class), new ManualFeedforwardTuner(dvf));
-//        manager.register(metaForClass(MecanumMotorDirectionDebugger.class), new MecanumMotorDirectionDebugger(dvf));
-//        manager.register(metaForClass(DeadWheelDirectionDebugger.class), new DeadWheelDirectionDebugger(dvf));
+        manager.register(metaForClass(AngularRampLogger.class), new AngularRampLogger(dvf));
+        manager.register(metaForClass(ForwardPushTest.class), new ForwardPushTest(dvf));
+        manager.register(metaForClass(ForwardRampLogger.class), new ForwardRampLogger(dvf));
+        manager.register(metaForClass(LateralPushTest.class), new LateralPushTest(dvf));
+        manager.register(metaForClass(LateralRampLogger.class), new LateralRampLogger(dvf));
+        manager.register(metaForClass(ManualFeedforwardTuner.class), new ManualFeedforwardTuner(dvf));
+        manager.register(metaForClass(MecanumMotorDirectionDebugger.class), new MecanumMotorDirectionDebugger(dvf));
+        manager.register(metaForClass(DeadWheelDirectionDebugger.class), new DeadWheelDirectionDebugger(dvf));
 //
 //        manager.register(metaForClass(ManualFeedbackTuner.class), ManualFeedbackTuner.class);
 //        manager.register(metaForClass(SplineTest.class), SplineTest.class);
@@ -309,8 +309,10 @@ public final class TuningOpModes {
         FtcDashboard.getInstance().withConfigRoot(configRoot -> {
             for (Class<?> c : Arrays.asList(
                     AngularRampLogger.class,
+                    ForwardPushTest.class,
                     ForwardRampLogger.class,
                     LateralRampLogger.class,
+                    DeadWheelDirectionDebugger.class,
                     ManualFeedforwardTuner.class,
                     MecanumMotorDirectionDebugger.class,
                     ManualFeedbackTuner.class

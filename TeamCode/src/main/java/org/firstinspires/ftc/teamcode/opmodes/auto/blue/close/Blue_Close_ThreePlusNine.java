@@ -66,7 +66,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     private static final double MID_Y_OFFSET = 8.0;
     private static final double RIGHT_Y_OFFSET = 15.0;
 
-    private static final double VEL_TO_SHOOT = 150.0;
+    private static final double VEL_TO_SHOOT = 100.0;
 
     private static final double END_HEADING_OFFSET_RAD = Math.toRadians(15);
 
@@ -133,6 +133,9 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 .splineToConstantHeading(leftCollect, new Rotation2d(0, 0))
                 .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, -8));
 
+        TrajectoryActionBuilder testpath = drive.actionBuilder(startPose)
+                .strafeToLinearHeading(new Vector2d(0,0), SOUTH_HEADING);
+
         TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
@@ -160,22 +163,29 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                                 new Vector2d(ENDING_POSE_X, ENDING_POSE_Y),
                                 SHOOT_HEADING);
 
+//        new SequentialCommandGroup(
+//                new WaitUntilCommand(this::opModeIsActive),
+//                new DriveActionCommand(drive.actionBuilder(new Pose2d(0,0,0))
+//                        .strafeToLinearHeading(new Vector2d(0, 30), Math.toRadians(90))),
+//                intakeCommandPath(testpath)
+//                ).schedule();
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 shootCommand(),
-
+                new WaitCommand(500),
+//                intakeCommandPath(testpath)
                 intakeCommandPath(path1),
-
+//
                 shootCommandPath(path2),
-
+//
                 intakeCommandPath(path3),
 
                 shootCommandPathIntake(path4),
 
-                intakeCommandPath(path7),
+                intakeCommandPath(path5),
 
-                shootCommandPathIntake(path8)
+                shootCommandPathIntake(path7)
 
                 ).schedule();
     }
@@ -196,47 +206,60 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     }
 
     public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
-        return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new SequentialCommandGroup(
-                        new DriveActionCommand(shootingPath),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        CommandGroup.intakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand()
-                )
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                    BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                    new SequentialCommandGroup(
+                            new DriveActionCommand(shootingPath),
+                            new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                            BarnRobot.getInstance().gate.openCommand(),
+                            CommandGroup.intakeAndTransferCommand(),
+                            new WaitCommand(SHOOTING_TIME_MS),
+    //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                            BarnRobot.getInstance().gate.closeCommand(),
+                            CommandGroup.deactivateIntakeAndTransferCommand()
+                    )
+                ),
+                BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 
     public Command shootCommandPathIntake(TrajectoryActionBuilder path){
-        return new ParallelRaceGroup(
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
                         CommandGroup.intakeAndTransferCommand(),
                         new DriveActionCommand(path),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
-                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                        new WaitCommand(SHOOTING_TIME_MS),
+//                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),
                         CommandGroup.deactivateIntakeAndTransferCommand()
                 )
+                ),
+                BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 
     public static int SHOOTING_TIME_MS = 2000;
     private Command shootCommand() {
-        return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        CommandGroup.intakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand()
-                )
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
+                    BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                    new SequentialCommandGroup(
+                            new WaitCommand(1500),
+                            BarnRobot.getInstance().gate.openCommand(),
+                            BarnRobot.getInstance().transfer.activateTransfer(),
+                            BarnRobot.getInstance().intake.activateIntakeCommand(),
+                            new WaitCommand(SHOOTING_TIME_MS),
+    //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                            BarnRobot.getInstance().gate.closeCommand(),
+                            CommandGroup.deactivateIntakeAndTransferCommand()
+                    )
+        ),
+            BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 

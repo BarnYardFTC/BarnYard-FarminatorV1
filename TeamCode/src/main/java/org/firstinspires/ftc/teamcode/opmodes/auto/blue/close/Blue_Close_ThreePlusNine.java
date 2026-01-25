@@ -34,8 +34,8 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     public static double SHOOT_POSE_Y = -22;
     public static double SHOOT_HEADING = Math.toRadians(227);
 
-    public static double SOUTH_READY_POSE_Y = -30;
-    public static double SOUTH_COLLECT_POSE_Y = -53;
+    public static double SOUTH_READY_POSE_Y = -25;
+    public static double SOUTH_COLLECT_POSE_Y = -63;
 
     public static double SOUTH_HEADING = Math.toRadians(270);
 
@@ -213,7 +213,8 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                             new DriveActionCommand(shootingPath),
                             new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                             BarnRobot.getInstance().gate.openCommand(),
-                            CommandGroup.intakeAndTransferCommand(),
+                            BarnRobot.getInstance().intake.activateIntakeCommand(),
+                            BarnRobot.getInstance().transfer.activateTransfer(),
                             new WaitCommand(SHOOTING_TIME_MS),
     //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                             BarnRobot.getInstance().gate.closeCommand(),
@@ -233,6 +234,8 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                         new DriveActionCommand(path),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
+                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+                        BarnRobot.getInstance().transfer.activateTransfer(),
                         new WaitCommand(SHOOTING_TIME_MS),
 //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),

@@ -68,7 +68,10 @@ public class TestTeleop extends CommandOpMode {
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
-                        CommandGroup.smartIntakeAndTransferCommand()
+                        new ParallelCommandGroup(
+                                farminator.intake.activateIntakeCommand(),
+                                farminator.transfer.activateTransfer()
+                        )
                 )
                 .whenInactive(
                         CommandGroup.deactivateIntakeAndTransferCommand()
@@ -114,7 +117,7 @@ public class TestTeleop extends CommandOpMode {
                 .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                        .whenPressed(new InstantCommand(() -> BarnRobot.getInstance().shooter.customDistance = 0));
+                .whenPressed(new InstantCommand(() -> BarnRobot.getInstance().shooter.customDistance = 0));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(CommandGroup.shootCommandPreset(1));
@@ -131,6 +134,8 @@ public class TestTeleop extends CommandOpMode {
         super.run();
         farminator.shooterHood.displayTelemetry();
         farminator.drive.displayPinpointDataTelemetry();
+        farminator.shooter.displayTelemetry();
+        telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
 //        telemetry.addData("shooter sensor distance", farminator.shooterColorSensor.getArtifactDistance());
 //        telemetry.addData("mid sensor distance", farminator.midColorSensor.getArtifactDistance());

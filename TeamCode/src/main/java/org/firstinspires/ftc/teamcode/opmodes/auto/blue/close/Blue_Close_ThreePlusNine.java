@@ -34,7 +34,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     public static double SHOOT_POSE_Y = -22;
     public static double SHOOT_HEADING = Math.toRadians(227);
 
-    public static double SOUTH_READY_POSE_Y = 30;
+    public static double SOUTH_READY_POSE_Y = -30;
     public static double SOUTH_COLLECT_POSE_Y = -53;
 
     public static double SOUTH_HEADING = Math.toRadians(270);
@@ -66,7 +66,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     private static final double MID_Y_OFFSET = 8.0;
     private static final double RIGHT_Y_OFFSET = 15.0;
 
-    private static final double VEL_TO_SHOOT = 150.0;
+    private static final double VEL_TO_SHOOT = 100.0;
 
     private static final double END_HEADING_OFFSET_RAD = Math.toRadians(15);
 
@@ -183,9 +183,9 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
 
                 shootCommandPathIntake(path4),
 
-                intakeCommandPath(path7),
+                intakeCommandPath(path5),
 
-                shootCommandPathIntake(path8)
+                shootCommandPathIntake(path7)
 
                 ).schedule();
     }
@@ -206,51 +206,60 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
     }
 
     public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
-        return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new SequentialCommandGroup(
-                        new DriveActionCommand(shootingPath),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        CommandGroup.intakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        BarnRobot.getInstance().shooter.turnOffInstant()
-                )
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                    BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                    new SequentialCommandGroup(
+                            new DriveActionCommand(shootingPath),
+                            new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                            BarnRobot.getInstance().gate.openCommand(),
+                            CommandGroup.intakeAndTransferCommand(),
+                            new WaitCommand(SHOOTING_TIME_MS),
+    //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                            BarnRobot.getInstance().gate.closeCommand(),
+                            CommandGroup.deactivateIntakeAndTransferCommand()
+                    )
+                ),
+                BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 
     public Command shootCommandPathIntake(TrajectoryActionBuilder path){
-        return new ParallelRaceGroup(
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
                         CommandGroup.intakeAndTransferCommand(),
                         new DriveActionCommand(path),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
-                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                        new WaitCommand(SHOOTING_TIME_MS),
+//                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        BarnRobot.getInstance().shooter.turnOffInstant()
+                        CommandGroup.deactivateIntakeAndTransferCommand()
                 )
+                ),
+                BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 
     public static int SHOOTING_TIME_MS = 2000;
     private Command shootCommand() {
-        return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new SequentialCommandGroup(
-                        new WaitCommand(1500),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        BarnRobot.getInstance().shooter.turnOffInstant()
-                )
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
+                    BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                    new SequentialCommandGroup(
+                            new WaitCommand(1500),
+                            BarnRobot.getInstance().gate.openCommand(),
+                            BarnRobot.getInstance().transfer.activateTransfer(),
+                            BarnRobot.getInstance().intake.activateIntakeCommand(),
+                            new WaitCommand(SHOOTING_TIME_MS),
+    //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                            BarnRobot.getInstance().gate.closeCommand(),
+                            CommandGroup.deactivateIntakeAndTransferCommand()
+                    )
+        ),
+            BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 

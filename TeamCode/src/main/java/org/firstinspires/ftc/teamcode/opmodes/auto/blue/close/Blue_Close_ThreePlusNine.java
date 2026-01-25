@@ -216,7 +216,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                             BarnRobot.getInstance().intake.activateIntakeCommand(),
                             BarnRobot.getInstance().transfer.activateTransfer(),
                             new WaitCommand(SHOOTING_TIME_MS),
-    //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+//                            new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                             BarnRobot.getInstance().gate.closeCommand(),
                             CommandGroup.deactivateIntakeAndTransferCommand()
                     )
@@ -246,7 +246,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
         );
     }
 
-    public static int SHOOTING_TIME_MS = 2000;
+    public static int SHOOTING_TIME_MS = 1500;
     private Command shootCommand() {
         return new SequentialCommandGroup(
             new ParallelRaceGroup(

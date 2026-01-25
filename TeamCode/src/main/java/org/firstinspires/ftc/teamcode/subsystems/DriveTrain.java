@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDController;
 
@@ -46,6 +47,8 @@ public class DriveTrain extends SubsystemBase {
 
 
     public static double MIN_TURNING_SPEED = 0.06;
+
+    private Pose2d stopPose;
 
 
     /** Field coordinates for the target goal. */
@@ -95,9 +98,6 @@ public class DriveTrain extends SubsystemBase {
         mecanumDriveComponent.turnOnly(turn);
     }
 
-    public void maintainPos(double turn, Pose2d stopPose){
-        mecanumDriveComponent.maintainPos(turn, stopPose);
-    }
 
     // ============================================================
     //                      AUTO ALIGNMENT LOGIC
@@ -337,10 +337,15 @@ public class DriveTrain extends SubsystemBase {
         return new InstantCommand(() -> turnOnly(0));
     }
 
-    public Command maintainPosCommand(double turn, Pose2d stopPose) {
-        return new RunCommand(() -> maintainPos(turn, stopPose), this);
+    public Command maintainPosCommand() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    stopPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+                }),
+                new RunCommand(() -> mecanumDriveComponent.maintainPos(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(), stopPose), this)
+        );
     }
-
 
     public Command resetPinpointTracking(){
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);

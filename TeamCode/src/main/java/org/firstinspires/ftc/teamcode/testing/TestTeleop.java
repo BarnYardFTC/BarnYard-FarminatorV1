@@ -110,9 +110,6 @@ public class TestTeleop extends CommandOpMode {
 //                .toggleWhenActive(
 //                        farminator.drive.alignToTagCommand());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(CommandGroup.shootCommand());
-
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
 
@@ -125,13 +122,13 @@ public class TestTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(CommandGroup.shootCommandPreset(1));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(CommandGroup.shootCommandPreset(2));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(CommandGroup.shootCommandPreset(3));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)

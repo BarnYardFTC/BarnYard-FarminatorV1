@@ -38,7 +38,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
     public static double LEFT_COLLECT_POSE_X = -11.5;
     public static double MID_COLLECT_POSE_X = 12;
-    public static double GATE_POSE_X = 0;
+    public static double GATE_POSE_X = -2;
     public static double GATE_POSE_Y = -44; // currently unused in your paths
 
     public static double ENDING_POSE_X = -40;
@@ -85,6 +85,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
+        farminator.shooterHood.setDefaultCommand(BarnRobot.getInstance().shooterHood.setHoodCloseToGoalPos());
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
@@ -123,10 +124,9 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 .strafeToLinearHeading(startNudge, SOUTH_HEADING)
                 .splineToConstantHeading(leftReady, SOUTH_HEADING)
                 // keep Rotation2d hardcoded (as requested)
-                .splineToConstantHeading(leftCollect, new Rotation2d(0, 0))
-                .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, -8));
+                .splineToConstantHeading(leftCollect, new Rotation2d(0, 0));
 
-        TrajectoryActionBuilder gateToShoot = drive.actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
+        TrajectoryActionBuilder leftToShoot = drive.actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
         TrajectoryActionBuilder collectMidArts = drive.actionBuilder(shootPose)
@@ -143,7 +143,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
                 intakeCommandPath(collectLeftArts),
 
-                shootCommandPath(gateToShoot),
+                shootCommandPath(leftToShoot),
 
                 intakeCommandPath(collectMidArts),
 
@@ -221,7 +221,8 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                                 new WaitCommand(SHOOTING_TIME_MS),
                                 //new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                                 BarnRobot.getInstance().gate.closeCommand(),
-                                CommandGroup.deactivateIntakeAndTransferCommand()
+                                CommandGroup.deactivateIntakeAndTransferCommand(),
+                                BarnRobot.getInstance().shooterHood.setHoodPosition(0.85)
                         )
                 ),
                 BarnRobot.getInstance().shooter.turnOffInstant()

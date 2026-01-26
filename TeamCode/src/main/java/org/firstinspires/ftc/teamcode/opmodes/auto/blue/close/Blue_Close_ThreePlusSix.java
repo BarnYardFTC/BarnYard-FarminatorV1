@@ -38,7 +38,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
     public static double LEFT_COLLECT_POSE_X = -11.5;
     public static double MID_COLLECT_POSE_X = 12;
-    public static double GATE_POSE_X = -3;
+    public static double GATE_POSE_X = 0;
     public static double GATE_POSE_Y = -44; // currently unused in your paths
 
     public static double ENDING_POSE_X = -40;
@@ -166,7 +166,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         // store the finish heading of the auto
         OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
-    public static int SHOOTING_TIME_MS = 1500;
+    public static int SHOOTING_TIME_MS = 2000;
 
 
     //       =========== Intake and Shoot CommandPaths ===========
@@ -196,7 +196,9 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                         new SequentialCommandGroup(
                                 CommandGroup.intakeAndTransferActivateCommand(),
                                 new DriveActionCommand(path),
+                                CommandGroup.deactivateIntakeAndTransferCommand(),
                                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                CommandGroup.intakeAndTransferActivateCommand(),
                                 BarnRobot.getInstance().gate.openCommand(),
                                 new WaitCommand(SHOOTING_TIME_MS),
 //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
@@ -213,6 +215,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 new ParallelRaceGroup(
                         BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 BarnRobot.getInstance().gate.openCommand(),
                                 CommandGroup.intakeAndTransferActivateCommand(),
                                 new WaitCommand(SHOOTING_TIME_MS),
@@ -227,7 +230,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.intakeAndTransferGateCommand(),
+                CommandGroup.smartIntakeAndTransferCommand(),
                 new DriveActionCommand(path),
                 CommandGroup.deactivateIntakeAndTransferCommand()
         );

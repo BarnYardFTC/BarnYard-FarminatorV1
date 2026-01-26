@@ -14,6 +14,7 @@ public class Gate extends SubsystemBase {
     public static double tmpPos = 0;
     private Servo rightServo;
     private Servo leftServo;
+    private boolean isOpen = false;
 
     private final double MIN = 0.88;
     private final double MAX = 1;
@@ -33,6 +34,7 @@ public class Gate extends SubsystemBase {
 
     private void open() {
         setPosition(MAX);
+        isOpen = true;
     }
 
     public Command openCommand(){
@@ -41,6 +43,7 @@ public class Gate extends SubsystemBase {
 
     private void close() {
         setPosition(MIN);
+        isOpen = false;
     }
 
     public Command closeCommand(){
@@ -52,8 +55,8 @@ public class Gate extends SubsystemBase {
     }
 
     public void displayTelemetry(){
-        BarnRobot.getInstance().telemetry.addData("leftGatePos", leftServo.getPosition());
-        BarnRobot.getInstance().telemetry.addData("rightGatePos", rightServo.getPosition());
+        BarnRobot.getInstance().telemetry.addData("gate open:", isOpen);
+        BarnRobot.getInstance().telemetry.addData("Gate Pos", rightServo.getPosition());
     }
 
 }

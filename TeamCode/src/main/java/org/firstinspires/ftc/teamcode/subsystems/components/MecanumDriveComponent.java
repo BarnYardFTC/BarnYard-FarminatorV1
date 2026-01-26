@@ -31,6 +31,7 @@ public class MecanumDriveComponent {
        ========================= */
 
     private static final double SLOW_SPEED = 0.4;
+    private static double turnModifier = 1;
     private static final double FAST_SPEED = 1.0;
 
     private static final double speedMultiplier = 1;
@@ -77,10 +78,13 @@ public class MecanumDriveComponent {
        ========================= */
     public void activateSlowMode() {
         speedModifier = SLOW_SPEED;
+        turnModifier = 0.5;
     }
 
     public void activateFastMode() {
         speedModifier = FAST_SPEED;
+        turnModifier = 1;
+
     }
 
 
@@ -157,7 +161,7 @@ public class MecanumDriveComponent {
     }
 
     public void driveNonFieldCentric(double x, double y, double turn){
-        setSpeed(x, y, turn);
+        setSpeed(x, y, turn * turnModifier);
         translateSpeedToPower();
     }
 

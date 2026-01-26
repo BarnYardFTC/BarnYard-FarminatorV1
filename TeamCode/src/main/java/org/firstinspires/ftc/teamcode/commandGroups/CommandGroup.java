@@ -21,16 +21,15 @@ public class CommandGroup extends SequentialCommandGroup {
     public static Command shootCommand(){
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().gamepadEx1.wasJustPressed(GamepadKeys.Button.Y)),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        deactivateIntakeAndTransferCommand()
-                ),
+//                new SequentialCommandGroup(
+//                        new WaitUntilCommand(() -> BarnRobot.getInstance().gamepadEx1.wasJustPressed(GamepadKeys.Button.Y)),
+//                        BarnRobot.getInstance().gate.closeCommand(),
+//                        deactivateIntakeAndTransferCommand()
+//                ),
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
+                        intakeAndTransferActivateCommand(),
                         new WaitCommand(1500),
                         BarnRobot.getInstance().gate.closeCommand(),
                         deactivateIntakeAndTransferCommand()

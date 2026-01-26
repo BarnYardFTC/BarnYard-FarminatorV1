@@ -46,6 +46,10 @@ public class Gate extends SubsystemBase {
         isOpen = false;
     }
 
+    public boolean isClosed(){
+        return !isOpen;
+    }
+
     public Command closeCommand(){
         return new InstantCommand(() -> close(), this);
     }

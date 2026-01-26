@@ -28,7 +28,7 @@ public class Shooter  extends SubsystemBase {
 
     public static double SHOOTER_VELOCITY_RANGE_4 = 1450; // only for far zone
     public static double SHOOTER_VELOCITY_RANGE_3 = 1200;
-    public static double SHOOTER_VELOCITY_RANGE_2 = 1150;
+    public static double SHOOTER_VELOCITY_RANGE_2 = 1035;
     public static double SHOOTER_VELOCITY_RANGE_1 = 950;
 
 

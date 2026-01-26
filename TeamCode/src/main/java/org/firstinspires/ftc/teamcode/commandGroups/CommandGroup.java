@@ -21,18 +21,14 @@ public class CommandGroup extends SequentialCommandGroup {
     public static Command shootCommand(){
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-//                new SequentialCommandGroup(
-//                        new WaitUntilCommand(() -> BarnRobot.getInstance().gamepadEx1.wasJustPressed(GamepadKeys.Button.Y)),
-//                        BarnRobot.getInstance().gate.closeCommand(),
-//                        deactivateIntakeAndTransferCommand()
-//                ),
                 new SequentialCommandGroup(
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
                         intakeAndTransferActivateCommand(),
                         new WaitCommand(1500),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        deactivateIntakeAndTransferCommand()
+                        deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
             )
         );
     }
@@ -64,14 +60,14 @@ public class CommandGroup extends SequentialCommandGroup {
 
     public static void shootPreset(int n){
         if (n == 1){
-            BarnRobot.getInstance().shooterHood.setCustomPosition(0.4);
+//            BarnRobot.getInstance().shooterHood.setCustomPosition(0.4);
             BarnRobot.getInstance().shooter.customDistance = 1.2;
         }
         else if (n == 2){
-            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
+//            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
             BarnRobot.getInstance().shooter.customDistance = 2.2;
         } else if (n == 3){
-            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
+//            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
             BarnRobot.getInstance().shooter.customDistance = 3;
         }
     }

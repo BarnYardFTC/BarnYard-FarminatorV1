@@ -99,14 +99,6 @@ public class TestTeleop extends CommandOpMode {
 
 
 
-
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
-                .toggleWhenActive(
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()),
-                        new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode())
-                );
-
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .toggleWhenActive(
                         new RunCommand(() -> farminator.drive.maintainPosCommand()),

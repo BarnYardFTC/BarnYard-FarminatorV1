@@ -123,13 +123,22 @@ public class TestTeleop extends CommandOpMode {
                 .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(CommandGroup.shootCommandPreset(1));
+                .whenPressed(new ParallelCommandGroup(
+                        CommandGroup.shootCommandPreset(1),
+                        rumbleCommand()
+                ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(CommandGroup.shootCommandPreset(2));
+                .whenPressed(new ParallelCommandGroup(
+                        CommandGroup.shootCommandPreset(2),
+                        rumbleCommand()
+                ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(CommandGroup.shootCommandPreset(3));
+                .whenPressed(new ParallelCommandGroup(
+                        CommandGroup.shootCommandPreset(3),
+                        rumbleCommand()
+                ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(CommandGroup.shootCommand());
@@ -143,7 +152,12 @@ public class TestTeleop extends CommandOpMode {
         farminator.shooter.displayTelemetry();
         telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
+
         farminator.periodic();
+    }
+
+    private InstantCommand rumbleCommand() {
+        return new InstantCommand(() -> gamepad1.rumble(200));
     }
 }
 

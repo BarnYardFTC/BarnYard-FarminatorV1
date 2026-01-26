@@ -85,8 +85,10 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        farminator.shooterHood.setDefaultCommand(BarnRobot.getInstance().shooterHood.setHoodCloseToGoalPos());
+        farminator.shooterHood.setDefaultCommand(BarnRobot.getInstance().shooterHood.defaultHoodCommand());
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
+
+        farminator.shooterHood.setHoodPosNoLimit(1);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
 
@@ -212,6 +214,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
     private Command shootCommand() {
         return new SequentialCommandGroup(
+                BarnRobot.getInstance().shooterHood.setHoodPosition(0.1),
                 new ParallelRaceGroup(
                         BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(

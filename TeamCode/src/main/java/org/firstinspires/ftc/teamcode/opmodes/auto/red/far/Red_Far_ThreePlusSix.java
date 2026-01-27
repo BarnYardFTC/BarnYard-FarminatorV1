@@ -22,10 +22,6 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
 
 public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
-
-
-
-
     public static double START_POSE_X = 60;
     public static double START_POSE_Y = 15;
     public static double START_HEADING = Math.toRadians(180);
@@ -37,10 +33,10 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
     public static double PRECOLLECT_Y = 40;
     public static int    SHOOTING_TIME_MS = 2000;
 
-    public static double COLLECT_POSE_X = 45;
-    public static double COLLECT_POSE2_X = 10 ;
+    public static double COLLECT_POSE_X = 47;
+    public static double COLLECT_POSE2_X = 10;
     public static double COLLECT_POSE_Y = 55;
-    public static double RIGHT_COLLECT_POSE_X = 32;
+    public static double RIGHT_COLLECT_POSE_X = 26;
 
     public static double NORTH_READY_POSE_Y = 22;
     public static double NORTH_COLLECT_POSE_Y = 53;

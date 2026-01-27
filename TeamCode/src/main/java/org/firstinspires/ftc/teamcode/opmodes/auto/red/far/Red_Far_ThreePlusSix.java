@@ -28,9 +28,10 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
     public static double SHOOTING_POSE_X = 55;
     public static double SHOOTING_POSE_Y = 10;
-    public static double SHOOT_HEADING = Math.toRadians(160);
+    public static double SHOOT_HEADING = Math.toRadians(156);
+    public static double SHOOT_HEADING2 = Math.toRadians(155);
 
-    public static double PRECOLLECT_Y = 40;
+    public static double PRECOLLECT_Y = 33;
     public static int    SHOOTING_TIME_MS = 2000;
 
     public static double COLLECT_POSE_X = 48;
@@ -75,10 +76,12 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
                 .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING - Math.toRadians(3));
 
 
-        TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING - Math.toRadians(5)))
+        TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
 
         TrajectoryActionBuilder angleToShoot = drive.actionBuilder(
@@ -193,6 +196,7 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
         return new SequentialCommandGroup(
                 CommandGroup.smartIntakeAndTransferCommand(),
                 new DriveActionCommand(path),
+                new WaitCommand(500),
                 CommandGroup.deactivateIntakeAndTransferCommand()
         );
     }

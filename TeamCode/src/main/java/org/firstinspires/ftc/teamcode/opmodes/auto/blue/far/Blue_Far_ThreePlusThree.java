@@ -31,14 +31,15 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
 
     public static double SHOOTING_POSE_X = 55;
     public static double SHOOTING_POSE_Y = -10;
-    public static double SHOOT_HEADING = Math.toRadians(203);
+    public static double SHOOT_HEADING = Math.toRadians(204);
+    public static double SHOOT_HEADING2 = Math.toRadians(205);
 
-    public static double PRECOLLECT_Y = -40;
+    public static double PRECOLLECT_Y = -33;
     public static int    SHOOTING_TIME_MS = 2000;
 
-    public static double COLLECT_POSE_X = 55;
-    public static double COLLECT_POSE2_X =60 ;
-    public static double COLLECT_POSE_Y = -55;
+    public static double COLLECT_POSE_X = 52;
+    public static double COLLECT_POSE2_X =60;
+    public static double COLLECT_POSE_Y = -53;
     public static double COLLECT_HEADING = Math.toRadians(270);
 
     public static double RIGHT_COLLECT_POSE_X = 32;
@@ -70,13 +71,15 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
 
         TrajectoryActionBuilder startToShoot = drive.actionBuilder(
                         new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING2);
 
 
         TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
 
         TrajectoryActionBuilder angleToShoot = drive.actionBuilder(
@@ -139,6 +142,7 @@ public class Blue_Far_ThreePlusThree  extends CommandOpMode {
         return new SequentialCommandGroup(
                 CommandGroup.smartIntakeAndTransferCommand(),
                 new DriveActionCommand(path),
+                new WaitCommand(500),
                 CommandGroup.deactivateIntakeAndTransferCommand()
         );
     }

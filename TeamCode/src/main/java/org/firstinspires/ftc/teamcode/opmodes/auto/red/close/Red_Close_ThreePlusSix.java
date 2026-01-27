@@ -36,7 +36,7 @@ public class Red_Close_ThreePlusSix extends CommandOpMode {
 
     public static double NORTH_HEADING = Math.toRadians(90);
 
-    public static double LEFT_COLLECT_POSE_X = -11.5;
+    public static double LEFT_COLLECT_POSE_X = -13;
     public static double MID_COLLECT_POSE_X = 12;
     public static double GATE_POSE_X = -2;
     public static double GATE_POSE_Y = -44; // currently unused in your paths
@@ -115,7 +115,7 @@ public class Red_Close_ThreePlusSix extends CommandOpMode {
         Pose2d endPose = new Pose2d(
                 ENDING_POSE_X,
                 ENDING_POSE_Y,
-                SHOOT_HEADING + END_HEADING_OFFSET_RAD
+                SHOOT_HEADING - END_HEADING_OFFSET_RAD
         );
 
 
@@ -137,10 +137,10 @@ public class Red_Close_ThreePlusSix extends CommandOpMode {
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
         TrajectoryActionBuilder collectMidArts = drive.actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
+                .splineToLinearHeading(midCollectPose, new Rotation2d(0, 3));
 
         TrajectoryActionBuilder midToShoot = drive.actionBuilder(midCollectPose)
-                .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
+                .splineToLinearHeading(endPose, new Rotation2d(-1.8, 1), fastToShoot);
 
 
         //         ===== Commands =====

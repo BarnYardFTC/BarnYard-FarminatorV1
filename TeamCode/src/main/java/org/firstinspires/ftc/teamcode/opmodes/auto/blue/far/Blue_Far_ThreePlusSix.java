@@ -98,7 +98,7 @@ public class Blue_Far_ThreePlusSix  extends CommandOpMode {
 
         TrajectoryActionBuilder finalPos   = drive.actionBuilder(
                         new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
 
 

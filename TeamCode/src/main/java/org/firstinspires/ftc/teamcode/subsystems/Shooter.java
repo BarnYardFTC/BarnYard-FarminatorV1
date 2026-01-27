@@ -26,7 +26,7 @@ public class Shooter  extends SubsystemBase {
     private ColorSensor intakeSensor;
 
 
-    public static double SHOOTER_VELOCITY_RANGE_4 = 1450; // only for far zone
+    public static double SHOOTER_VELOCITY_RANGE_4 = 1350; // only for far zone
     public static double SHOOTER_VELOCITY_RANGE_3 = 1150;
     public static double SHOOTER_VELOCITY_RANGE_2 = 1035;
     public static double SHOOTER_VELOCITY_RANGE_1 = 950;
@@ -67,6 +67,7 @@ public class Shooter  extends SubsystemBase {
     private void operateShooter(double velocity){
         pidfController.setPIDF(p, 0, 0, f);
         double power = pidfController.calculate(velocity, getVelocity());
+        targetVelocity = velocity;
         setPower(power);
     }
 
@@ -177,6 +178,11 @@ public class Shooter  extends SubsystemBase {
     public boolean isReady() {
         if (targetVelocity == 0) return false;
         return (getVelocity() > targetVelocity - 40 && getVelocity() < targetVelocity + 40);
+    }
+
+    public boolean isReadyCustom(double velocity){
+        if (velocity == 0) return false;
+        return (getVelocity() > velocity - 40 && getVelocity() < velocity + 40);
     }
 
     public boolean isShotDetected(double tgtRpm) {

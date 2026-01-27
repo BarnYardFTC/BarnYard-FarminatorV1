@@ -1,5 +1,4 @@
 package com.example.basicjavaworkspace.meepmeep.blue.far;
-
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -8,18 +7,34 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class Blue_Far_ThreePlusSix {
-    public static double POSE1_X = -37;
-    public static double POSE1_Y = -53;
-    public static double POSE1_HEADING = Math.toRadians(90);
 
-    public static double POSE2_X = -40;
-    public static double POSE2_Y = -15;
-    public static double POSE2_HEADING = Math.toRadians(250);
 
-    // -----------------------------
-    // Main Simulation
-    // -----------------------------
+public class Blue_Far_ThreePlusSix   {
+
+
+
+    public static double START_POSE_X = 60;
+    public static double START_POSE_Y = -15;
+    public static double START_HEADING = Math.toRadians(180);
+
+    public static double SHOOTING_POSE_X = 55;
+    public static double SHOOTING_POSE_Y = -10;
+    public static double SHOOT_HEADING = Math.toRadians(205);
+
+    public static double PRECOLLECT_Y = -40;
+    public static int    SHOOTING_TIME_MS = 2000;
+
+    public static double COLLECT_POSE_X = 55;
+    public static double COLLECT_POSE2_X =60 ;
+    public static double COLLECT_POSE_Y = -55;
+    public static double COLLECT_HEADING = Math.toRadians(270);
+
+    public static double RIGHT_COLLECT_POSE_X = 35;
+
+    public static double SOUTH_READY_POSE_Y = -31.5;
+    public static double SOUTH_COLLECT_POSE_Y = -53;
+
+
     public static void main(String[] args) {
 
         MeepMeep meepMeep = new MeepMeep(800);
@@ -29,17 +44,41 @@ public class Blue_Far_ThreePlusSix {
                 .setDimensions(13.157, 18.03044)
                 .build();
 
-        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(POSE2_X, POSE2_Y), POSE2_HEADING);
+
+
+        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(
+                        new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+
+
+        TrajectoryActionBuilder path2 =  myBot.getDrive().actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
+
+        TrajectoryActionBuilder path3 =  myBot.getDrive().actionBuilder(
+                        new Pose2d(COLLECT_POSE2_X, COLLECT_POSE_Y,COLLECT_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+        TrajectoryActionBuilder path4 =  myBot.getDrive().actionBuilder(
+                        new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), COLLECT_HEADING);
+
+        TrajectoryActionBuilder path5 =  myBot.getDrive().actionBuilder(
+                        new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, COLLECT_HEADING))
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
 
 
         // Run the trajectory
         myBot.runAction(
                 new SequentialAction(
-                        path1.build()
-                )
-        );
+                path1.build(),
+                path2.build(),
+                path3.build(),
+                path4.build(),
+                path5.build()
+        ));
 
         // MeepMeep visualization
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
@@ -50,3 +89,5 @@ public class Blue_Far_ThreePlusSix {
     }
 
 }
+
+

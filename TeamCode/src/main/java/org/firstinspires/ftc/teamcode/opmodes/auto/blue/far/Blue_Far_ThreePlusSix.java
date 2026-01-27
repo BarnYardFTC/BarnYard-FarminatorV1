@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -19,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 @Autonomous(name = "!BLUE THREE PLUS SIX FAR", group = "!main")
-@Disabled
+
 public class Blue_Far_ThreePlusSix  extends CommandOpMode {
 
 
@@ -30,19 +31,19 @@ public class Blue_Far_ThreePlusSix  extends CommandOpMode {
 
     public static double SHOOTING_POSE_X = 55;
     public static double SHOOTING_POSE_Y = -10;
-    public static double SHOOT_HEADING = Math.toRadians(205);
+    public static double SHOOT_HEADING = Math.toRadians(204);
 
     public static double PRECOLLECT_Y = -40;
-    public static int SHOOTING_TIME_MS = 2000;
+    public static int    SHOOTING_TIME_MS = 2000;
 
     public static double COLLECT_POSE_X = 55;
     public static double COLLECT_POSE2_X =60 ;
     public static double COLLECT_POSE_Y = -55;
     public static double COLLECT_HEADING = Math.toRadians(270);
 
-    public static double RIGHT_COLLECT_POSE_X = 35;
+    public static double RIGHT_COLLECT_POSE_X = 32;
 
-    public static double SOUTH_READY_POSE_Y = -31.5;
+    public static double SOUTH_READY_POSE_Y = 0;
     public static double SOUTH_COLLECT_POSE_Y = -53;
 
 
@@ -59,7 +60,7 @@ public class Blue_Far_ThreePlusSix  extends CommandOpMode {
             new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING)
     );
 
-    public static int SCORE_TIME = 2200;
+
 
     @Override
     public void initialize() {
@@ -71,25 +72,27 @@ public class Blue_Far_ThreePlusSix  extends CommandOpMode {
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
 
-        TrajectoryActionBuilder path1 = drive.actionBuilder(
+        TrajectoryActionBuilder startToShoot = drive.actionBuilder(
                         new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
                 .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
 
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+        TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
 
-        TrajectoryActionBuilder path3 = drive.actionBuilder(
+        TrajectoryActionBuilder angleToShoot = drive.actionBuilder(
                         new Pose2d(COLLECT_POSE2_X, COLLECT_POSE_Y,COLLECT_HEADING))
                 .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
-        TrajectoryActionBuilder path4 = drive.actionBuilder(
+
+        TrajectoryActionBuilder rightCollect = drive.actionBuilder(
                         new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
                 .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), COLLECT_HEADING);
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), COLLECT_HEADING, new TranslationalVelConstraint(30));
 
-        TrajectoryActionBuilder path5 = drive.actionBuilder(
+        TrajectoryActionBuilder rightToShoot   = drive.actionBuilder(
                         new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, COLLECT_HEADING))
                 .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
@@ -99,94 +102,98 @@ public class Blue_Far_ThreePlusSix  extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                shootCommandPath(path1),
+                shootCommandPath(startToShoot),
 
-                intakeCommandPath(path2),
+                intakeCommandPath(angleCollect),
 
-                shootCommandPath(path3),
+                shootCommandPath(angleToShoot),
 
-                intakeCommandPath(path4),
+                intakeCommandPath(rightCollect),
 
-                shootCommandPath(path5)
+                shootCommandPath(rightToShoot)
         ).schedule();
     }
 
 
-    @Override
-    public void run() {
-        super.run();
-        farminator.periodic();
-    }
-
-    /**
-     * runs when the autonomous is finished
-     */
     @Override
     public void end(){
         // store the finish heading of the auto
         OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
 
+
+
+
+
+    //       =========== Intake and Shoot CommandPaths ===========
     public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
-        return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new SequentialCommandGroup(
-                        new DriveActionCommand(shootingPath),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        new ParallelRaceGroup(
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                        ),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand()
-                )
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                        BarnRobot.getInstance().shooter.runShooterFar(),
+                        new SequentialCommandGroup(
+                                new DriveActionCommand(shootingPath),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReadyCustom(1350)),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                CommandGroup.intakeAndTransferActivateCommand(),
+                                new WaitCommand(SHOOTING_TIME_MS),
+//                            new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                                BarnRobot.getInstance().gate.closeCommand(),
+                                CommandGroup.deactivateIntakeAndTransferCommand()
+                        )
+                ),
+                BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 
-    public Command shootCommand(){
+    public Command shootCommandPathIntake(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
-                        farminator.shooter.runShooterBasedOnDistance(),
+                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
-                                new WaitCommand(500),
-                                farminator.intake.activateIntakeCommand(),
-                                new WaitCommand(SCORE_TIME),
-                                farminator.intake.deactivateIntakeCommand()
+                                CommandGroup.intakeAndTransferActivateCommand(),
+                                new DriveActionCommand(path),
+                                CommandGroup.deactivateIntakeAndTransferCommand(),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                CommandGroup.intakeAndTransferActivateCommand(),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                new WaitCommand(SHOOTING_TIME_MS),
+//                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                                BarnRobot.getInstance().gate.closeCommand(),
+                                CommandGroup.deactivateIntakeAndTransferCommand()
                         )
                 ),
-                farminator.shooter.turnOffInstant()
+                BarnRobot.getInstance().shooter.turnOffInstant()
+        );
+    }
+
+    private Command shootCommand() {
+        return new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                CommandGroup.intakeAndTransferActivateCommand(),
+                                new WaitCommand(SHOOTING_TIME_MS),
+                                //new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                                BarnRobot.getInstance().gate.closeCommand(),
+                                CommandGroup.deactivateIntakeAndTransferCommand(),
+                                BarnRobot.getInstance().shooterHood.setHoodPosition(0.85)
+                        )
+                ),
+                BarnRobot.getInstance().shooter.turnOffInstant()
         );
     }
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.intakeAndTransferGateCommand(),
+                CommandGroup.smartIntakeAndTransferCommand(),
                 new DriveActionCommand(path),
-                deactivateIntakeAndTransferCommand()
+                CommandGroup.deactivateIntakeAndTransferCommand()
         );
     }
-    public static Command deactivateIntakeAndTransferCommand(){
-        return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
-    }
+
+
 
 
 }

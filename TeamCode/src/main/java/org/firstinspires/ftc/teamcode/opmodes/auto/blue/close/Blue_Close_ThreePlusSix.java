@@ -131,7 +131,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         TrajectoryActionBuilder collectLeftArts = drive.actionBuilder(shootPose)
                 .strafeToLinearHeading(leftReady, SOUTH_HEADING)
                 // keep Rotation2d hardcoded (as requested)
-                .strafeToConstantHeading(leftCollect, new TranslationalVelConstraint(60));
+                .strafeToConstantHeading(leftCollect, new TranslationalVelConstraint(40));
 
         TrajectoryActionBuilder leftToShoot = drive.actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);

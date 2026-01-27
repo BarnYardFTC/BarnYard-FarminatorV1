@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -20,6 +21,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 @Config
+@Disabled
 @Autonomous (name = "3+3 Close test PPG BLUE ", group = "main")
 public class Blue_Close_PPG extends CommandOpMode {
     /* Robot and drive system instances */

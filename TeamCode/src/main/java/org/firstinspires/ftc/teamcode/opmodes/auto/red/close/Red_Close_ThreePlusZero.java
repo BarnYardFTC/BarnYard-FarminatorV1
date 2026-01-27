@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -32,6 +33,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
  */
 @Config
 @Autonomous(name = "3+0 Close Red", group = "main")
+@Disabled
 public class Red_Close_ThreePlusZero extends CommandOpMode {
 
     /** Robot and drive system instances */

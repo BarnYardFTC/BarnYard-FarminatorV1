@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
@@ -20,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-
+@Disabled
 @Autonomous(name = "!BLUE THREE PLUS THREE", group = "!main")
 public class Blue_Close_ThreePlusThree extends CommandOpMode {
 

@@ -31,8 +31,7 @@ public class ShooterHood extends SubsystemBase {
     public ShooterHood(){
         servo = BarnRobot.getInstance().robotHardware.shooterHood;
         servo.setDirection(Servo.Direction.REVERSE);    // Change if needed
-        servo.scaleRange(MIN,MAX);
-        servo.setPosition(MAX);
+        servo.setPosition(1);
         initInterpLUT();
     }
 

@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 @Autonomous(name = "!RED THREE PLUS NINE", group = "!main")
+@Disabled
 public class Red_Close_ThreePlusNine extends CommandOpMode {
 
     // ================== FIELD / POSES ==================

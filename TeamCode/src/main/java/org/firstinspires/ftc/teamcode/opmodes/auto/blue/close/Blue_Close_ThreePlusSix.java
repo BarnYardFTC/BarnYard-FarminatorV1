@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name = "!!3+6Final", group = "!main")
+@Autonomous(name = "!!3+6Final Blue", group = "!main")
 public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
     public static double START_POSE_X = -53.333;
@@ -84,11 +84,8 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         /** Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
-
-        farminator.shooterHood.setDefaultCommand(BarnRobot.getInstance().shooterHood.defaultHoodCommand());
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
 
-        farminator.shooterHood.setHoodPosNoLimit(1);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
 
@@ -110,6 +107,11 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 SOUTH_HEADING
         );
 
+        Pose2d leftReadyPose = new Pose2d(
+                LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y, SOUTH_HEADING
+        );
+
+
         Pose2d endPose = new Pose2d(
                 ENDING_POSE_X,
                 ENDING_POSE_Y,
@@ -122,13 +124,16 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
 
         //         ===== Paths =====
-        TrajectoryActionBuilder collectLeftArts = drive.actionBuilder(startPose)
+        TrajectoryActionBuilder firstShoot = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(startNudge, SOUTH_HEADING)
-                .splineToConstantHeading(leftReady, SOUTH_HEADING)
-                // keep Rotation2d hardcoded (as requested)
-                .splineToConstantHeading(leftCollect, new Rotation2d(0, 0));
+                .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
-        TrajectoryActionBuilder leftToShoot = drive.actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
+        TrajectoryActionBuilder collectLeftArts = drive.actionBuilder(shootPose)
+                .strafeToLinearHeading(leftReady, SOUTH_HEADING)
+                // keep Rotation2d hardcoded (as requested)
+                .strafeToConstantHeading(leftCollect, new TranslationalVelConstraint(60));
+
+        TrajectoryActionBuilder leftToShoot = drive.actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
         TrajectoryActionBuilder collectMidArts = drive.actionBuilder(shootPose)
@@ -141,7 +146,10 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         //         ===== Commands =====
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                shootCommand(),
+
+                BarnRobot.getInstance().shooterHood.setHoodPosition(0.85),
+
+                shootCommandPath(firstShoot),
 
                 intakeCommandPath(collectLeftArts),
 
@@ -214,9 +222,8 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
     private Command shootCommand() {
         return new SequentialCommandGroup(
-                BarnRobot.getInstance().shooterHood.setHoodPosition(0.1),
                 new ParallelRaceGroup(
-                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                        BarnRobot.getInstance().shooter.runShooter(900),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 BarnRobot.getInstance().gate.openCommand(),
@@ -224,8 +231,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                                 new WaitCommand(SHOOTING_TIME_MS),
                                 //new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
                                 BarnRobot.getInstance().gate.closeCommand(),
-                                CommandGroup.deactivateIntakeAndTransferCommand(),
-                                BarnRobot.getInstance().shooterHood.setHoodPosition(0.85)
+                                CommandGroup.deactivateIntakeAndTransferCommand()
                         )
                 ),
                 BarnRobot.getInstance().shooter.turnOffInstant()

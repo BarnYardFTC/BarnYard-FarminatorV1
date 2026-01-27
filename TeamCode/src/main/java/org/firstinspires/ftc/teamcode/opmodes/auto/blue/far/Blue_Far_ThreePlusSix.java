@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 @Autonomous(name = "!BLUE THREE PLUS SIX FAR", group = "!main")
-
+@Disabled
 public class Blue_Far_ThreePlusSix  extends CommandOpMode {
 
 

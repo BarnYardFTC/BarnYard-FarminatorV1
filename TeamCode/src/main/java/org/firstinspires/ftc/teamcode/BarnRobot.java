@@ -137,9 +137,9 @@ public class BarnRobot extends Robot {
         initIntake();
         initDrivetrain(opMode.hardwareMap);
         initShooterHood();
-        initWebcam(opMode.hardwareMap);
+//        initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
-        initBlinkin();
+//        initBlinkin();
         initGate();
         initTransfer();
     }

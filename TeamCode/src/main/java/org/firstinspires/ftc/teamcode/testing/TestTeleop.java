@@ -57,7 +57,7 @@ public class TestTeleop extends CommandOpMode {
         );
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.defaultHoodCommand());
         farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand());
-        farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 
 
         // ==========================================================
@@ -161,8 +161,8 @@ public class TestTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
-                        farminator.shooter.runShooterBasedOnDistance(),
-                        farminator.shooter.turnOff()
+                        farminator.shooter.turnOff(),
+                        farminator.shooter.runShooterBasedOnDistance()
                 );
     }
 

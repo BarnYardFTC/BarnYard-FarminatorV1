@@ -28,15 +28,15 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
     public static double SHOOTING_POSE_X = 55;
     public static double SHOOTING_POSE_Y = 10;
-    public static double SHOOT_HEADING = Math.toRadians(155);
+    public static double SHOOT_HEADING = Math.toRadians(160);
 
     public static double PRECOLLECT_Y = 40;
     public static int    SHOOTING_TIME_MS = 2000;
 
-    public static double COLLECT_POSE_X = 47;
-    public static double COLLECT_POSE2_X = 10;
-    public static double COLLECT_POSE_Y = 55;
-    public static double RIGHT_COLLECT_POSE_X = 26;
+    public static double COLLECT_POSE_X = 48;
+    public static double COLLECT_POSE2_X = 42;
+    public static double COLLECT_POSE_Y = 59;
+    public static double RIGHT_COLLECT_POSE_X = 21;
 
     public static double NORTH_READY_POSE_Y = 22;
     public static double NORTH_COLLECT_POSE_Y = 53;
@@ -72,10 +72,10 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
         TrajectoryActionBuilder startToShoot = drive.actionBuilder(
                         new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING - Math.toRadians(3));
 
 
-        TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+        TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING - Math.toRadians(5)))
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
@@ -83,19 +83,19 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
         TrajectoryActionBuilder angleToShoot = drive.actionBuilder(
                         new Pose2d(COLLECT_POSE2_X, COLLECT_POSE_Y,COLLECT_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING + Math.toRadians(4));
 
         TrajectoryActionBuilder rightCollect = drive.actionBuilder(
-                        new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+                        new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING + Math.toRadians(4)))
                 .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_READY_POSE_Y), COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y), COLLECT_HEADING, new TranslationalVelConstraint(30));
 
         TrajectoryActionBuilder rightToShoot   = drive.actionBuilder(
                         new Pose2d(RIGHT_COLLECT_POSE_X, NORTH_COLLECT_POSE_Y, COLLECT_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING + Math.toRadians(4));
 
         TrajectoryActionBuilder finalPos   = drive.actionBuilder(
-                        new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
+                        new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING + Math.toRadians(4)))
                 .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
 

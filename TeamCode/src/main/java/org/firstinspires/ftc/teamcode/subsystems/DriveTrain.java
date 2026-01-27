@@ -339,9 +339,9 @@ public class DriveTrain extends SubsystemBase {
 
     public Command maintainPosCommand() {
         return new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    stopPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
-                }),
+                new InstantCommand(() ->
+                    stopPose = BarnRobot.getInstance().pinpointLocalizer.getPose()
+                ),
                 new RunCommand(() -> mecanumDriveComponent.maintainPos(
                         BarnRobot.getInstance().gamepadEx1.getLeftX(), stopPose), this)
         );

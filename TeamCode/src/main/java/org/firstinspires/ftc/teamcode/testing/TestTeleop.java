@@ -106,8 +106,8 @@ public class TestTeleop extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .toggleWhenActive(
-                        new RunCommand(() -> farminator.drive.maintainPosCommand()),
-                        new RunCommand(() -> farminator.drive.maintainPosCommand())
+                        new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.maintainPosCommand())),
+                        new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand()))
                 );
 
 
@@ -167,6 +167,7 @@ public class TestTeleop extends CommandOpMode {
         farminator.shooter.displayTelemetry();
         telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
+        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
 
         farminator.periodic();
     }

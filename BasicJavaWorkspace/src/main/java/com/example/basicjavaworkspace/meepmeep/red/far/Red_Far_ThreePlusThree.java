@@ -2,6 +2,7 @@ package com.example.basicjavaworkspace.meepmeep.red.far;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
@@ -49,6 +50,7 @@ public class Red_Far_ThreePlusThree {
             myBot.runAction(
                     new SequentialAction(
                             path1.build(),
+                            new SleepAction(1),
                             path2.build(),
                             path3.build()
                     )

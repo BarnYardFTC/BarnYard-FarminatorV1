@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-@Autonomous(name = "!RED THREE PLUS SIX FAR", group = "!main")
+@Autonomous(name = "!GV3+6 RED FAR", group = "!main")
 
 public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
@@ -29,7 +29,6 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
     public static double SHOOTING_POSE_X = 55;
     public static double SHOOTING_POSE_Y = 10;
     public static double SHOOT_HEADING = Math.toRadians(156);
-    public static double SHOOT_HEADING2 = Math.toRadians(155);
 
     public static double PRECOLLECT_Y = 33;
     public static int    SHOOTING_TIME_MS = 2000;
@@ -73,14 +72,14 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
         TrajectoryActionBuilder startToShoot = drive.actionBuilder(
                         new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING - Math.toRadians(3));
+                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING );
 
 
         TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
 

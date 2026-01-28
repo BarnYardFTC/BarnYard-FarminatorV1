@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-@Autonomous(name = "!BLUE THREE PLUS SIX FAR", group = "!main")
+@Autonomous(name = "!GV3+6 BLUE FAR", group = "!main")
 
 public class Blue_Far_ThreePlusSix  extends CommandOpMode {
 
@@ -79,12 +79,12 @@ public class Blue_Far_ThreePlusSix  extends CommandOpMode {
 
 
         TrajectoryActionBuilder angleCollect = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y),COLLECT_HEADING )
+                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING );
 
         TrajectoryActionBuilder angleToShoot = drive.actionBuilder(
                         new Pose2d(COLLECT_POSE2_X, COLLECT_POSE_Y,COLLECT_HEADING))

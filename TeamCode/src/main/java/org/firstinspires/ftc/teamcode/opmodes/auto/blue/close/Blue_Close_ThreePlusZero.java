@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
  */
 @Config
 @Disabled
-@Autonomous(name = "3+0 Close Blue", group = "main")
+@Autonomous(name = "GV3+0 BLUE CLOSE", group = "main")
 public class Blue_Close_ThreePlusZero extends CommandOpMode {
 
     /** Robot and drive system instances */

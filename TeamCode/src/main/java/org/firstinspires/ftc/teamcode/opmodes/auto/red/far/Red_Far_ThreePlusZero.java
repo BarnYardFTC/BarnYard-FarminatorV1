@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-@Autonomous(name = "!3+0 RED FAR", group = "!main")
+@Autonomous(name = "!GV3+0 RED FAR", group = "!main")
 
 public class Red_Far_ThreePlusZero  extends CommandOpMode {
 
@@ -34,7 +34,7 @@ public class Red_Far_ThreePlusZero  extends CommandOpMode {
     public static int    SHOOTING_TIME_MS = 2000;
 
     public static double FINISH_X = 30;
-    public static double FINISH_Y = 9;
+    public static double FINISH_Y = -9;
 
     public static double RIGHT_COLLECT_POSE_X = 21;
 
@@ -68,8 +68,7 @@ public class Red_Far_ThreePlusZero  extends CommandOpMode {
 
         TrajectoryActionBuilder finalPos   = drive.actionBuilder(
                         new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING + Math.toRadians(4)))
-                .strafeToLinearHeading(new Vector2d(FINISH_X, FINISH_Y), SHOOT_HEADING);
-
+                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
 
 
 

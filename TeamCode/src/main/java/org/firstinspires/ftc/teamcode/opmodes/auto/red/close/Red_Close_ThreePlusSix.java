@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name = "!!3+6Final Red", group = "!main")
+@Autonomous(name = "!GV3+6 RED CLOSE", group = "!main")
 public class Red_Close_ThreePlusSix extends CommandOpMode {
 
     public static double START_POSE_X = -53.333;

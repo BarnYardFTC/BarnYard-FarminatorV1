@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 @Disabled
-@Autonomous(name = "!BLUE THREE PLUS THREE", group = "!main")
+@Autonomous(name = "!GV3+3 BLUE CLOSE", group = "!main")
 public class Blue_Close_ThreePlusThree extends CommandOpMode {
 
     /** Robot and drive system instances */

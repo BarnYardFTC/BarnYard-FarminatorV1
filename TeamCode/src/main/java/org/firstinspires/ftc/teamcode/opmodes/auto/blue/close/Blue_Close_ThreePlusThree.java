@@ -226,6 +226,7 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
         );
     }
 
+
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 CommandGroup.smartIntakeAndTransferCommand(),

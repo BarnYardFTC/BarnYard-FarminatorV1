@@ -132,7 +132,8 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
                 .strafeToConstantHeading(leftCollect, new TranslationalVelConstraint(40));
 
         TrajectoryActionBuilder leftToShoot = drive.actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, SOUTH_HEADING))
-                .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
+                .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
+
 
 
 

@@ -39,18 +39,14 @@ public class BarnRobot extends Robot {
 
     public DriveTrain drive; // used in teleop
     public RoadRunnerMecanumDrive roadRunnerMecanumDrive; // used in auto
-    public LimeLight limelight;
     public Shooter shooter;
     public ShooterHood shooterHood;
     public Intake intake;
-    public Webcam webcam;
-    public ColorSensor shooterColorSensor;
-    public ColorSensor midColorSensor;
-    public ColorSensor intakeColorSensor;
-    public BlinkinLED blinkin;
-    public PinpointLocalizer pinpointLocalizer;
-    public Gate gate;
     public Transfer transfer;
+    public Gate gate;
+
+    public PinpointLocalizer pinpointLocalizer;
+
 
 
 
@@ -131,15 +127,11 @@ public class BarnRobot extends Robot {
         gamepadEx2 = new GamepadEx(opMode.gamepad2);
 
         // Subsystem initialization
-//        initLimeLight();
         initShooter();
-//        initColorSensors();
         initIntake();
         initDrivetrain(opMode.hardwareMap);
         initShooterHood();
-//        initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
-//        initBlinkin();
         initGate();
         initTransfer();
     }
@@ -148,11 +140,6 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
     // Subsystem Initializers
     // ------------------------------------------------------------
-
-    /** Sets up the webcam. */
-    public void initWebcam(HardwareMap hw){
-//        webcam = new Webcam(hw);
-    }
 
     /** Sets up the shooter system. */
     public void initShooter() {
@@ -186,24 +173,9 @@ public class BarnRobot extends Robot {
         gate = new Gate();
     }
 
-    /** Sets up the LimeLight vision system. */
-    public void initLimeLight() {
-        limelight = new LimeLight();
-    }
-
     /** Sets up the intake system. */
     public void initIntake() {
         intake = new Intake();
-    }
-
-    public void initBlinkin(){
-        blinkin = new BlinkinLED();
-    }
-    public void initColorSensors(){
-        shooterColorSensor = new ColorSensor(robotHardware.shooterColorSensor);
-        intakeColorSensor = new ColorSensor(robotHardware.intakeColorSensor);
-        midColorSensor = new ColorSensor(robotHardware.midColorSensor);
-        telemetry.addLine("I Pidr");
     }
 
 

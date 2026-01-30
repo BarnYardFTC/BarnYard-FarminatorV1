@@ -21,9 +21,7 @@ public class Shooter  extends SubsystemBase {
     private ShooterPIDFController pidfController;
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
-    private ColorSensor shooterSensor;
-    private ColorSensor midSensor;
-    private ColorSensor intakeSensor;
+
 
 
     public static double SHOOTER_VELOCITY_RANGE_4 = 1350; // only for far zone
@@ -44,9 +42,6 @@ public class Shooter  extends SubsystemBase {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        this.shooterSensor = BarnRobot.getInstance().shooterColorSensor;
-        this.midSensor = BarnRobot.getInstance().midColorSensor;
-        this.intakeSensor = BarnRobot.getInstance().intakeColorSensor;
 
 
         shooterLeft = BarnRobot.getInstance().robotHardware.shooterLeft;
@@ -123,7 +118,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public double customDistance = 1.2;
-    private void leonGay(){
+    private void shooterSpeedOnDistance(){
         if (customDistance == 0){
             operateShooterDistanceBased(
                     BarnRobot.getInstance().drive.getDistanceFromGoal()
@@ -133,7 +128,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public RunCommand runShooterBasedOnDistance(){
-        return new RunCommand(() -> leonGay(), this);
+        return new RunCommand(() -> shooterSpeedOnDistance(), this);
     }
 
     public RunCommand runShooterBasedOnConstantDistance(double distance){
@@ -141,17 +136,6 @@ public class Shooter  extends SubsystemBase {
                 distance
         ), this);
     }
-
-    public Command smartIntakeCommand(){    //Disable intake when there is enough artifacts in the robot
-        return new ConditionalCommand(
-                new InstantCommand(() -> setPower(0), this), // on true
-                new RunCommand(() -> operateShooterDistanceBased(
-                        BarnRobot.getInstance().drive.getDistanceFromGoal()
-                )),          // on false
-                () -> true
-        );
-    }
-
 
 
 

@@ -194,7 +194,7 @@ public class Red_Far_ThreePlusSix  extends CommandOpMode {
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.smartIntakeAndTransferCommand(),
+                CommandGroup.intakeAndTransferActivateCommand(),
                 new DriveActionCommand(path),
                 new WaitCommand(500),
                 CommandGroup.deactivateIntakeAndTransferCommand()

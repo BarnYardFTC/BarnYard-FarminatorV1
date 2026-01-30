@@ -240,7 +240,7 @@ public class Red_Close_ThreePlusSix extends CommandOpMode {
 
     public Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.smartIntakeAndTransferCommand(),
+                CommandGroup.intakeAndTransferActivateCommand(),
                 new DriveActionCommand(path),
                 CommandGroup.deactivateIntakeAndTransferCommand()
         );

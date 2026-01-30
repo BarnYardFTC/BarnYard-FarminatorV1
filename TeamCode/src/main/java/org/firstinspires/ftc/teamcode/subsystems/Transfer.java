@@ -16,9 +16,6 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 public class Transfer extends SubsystemBase {
 
     private DcMotorEx transferMotor;
-    private final ColorSensor shooterSensor;
-    private final ColorSensor midSensor;
-    private ColorSensor intakeSensor;
 
     // ------------------------------------------------------------
     // Constructor
@@ -26,8 +23,6 @@ public class Transfer extends SubsystemBase {
     public Transfer() {
         BarnRobot robot = BarnRobot.getInstance();
         transferMotor = robot.robotHardware.transfer;
-        shooterSensor = robot.shooterColorSensor;
-        midSensor = robot.midColorSensor;
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -37,15 +32,6 @@ public class Transfer extends SubsystemBase {
 
     public Command deactivateTransfer(){
         return new InstantCommand(() -> transferMotor.setPower(0));
-    }
-
-    public Command smartTransfer(){  //Disable transfer when there is enough artifacts in the robot
-        return new ConditionalCommand(
-                new InstantCommand(() -> transferMotor.setPower(0), this), // on true
-                new InstantCommand(() -> transferMotor.setPower(1), this),             // on false
-                () -> false
-//                () -> shooterSensor.isShootPosBusy() && midSensor.isMidPosBusy()
-        );
     }
 
     public Command customTransferCommand(double power){

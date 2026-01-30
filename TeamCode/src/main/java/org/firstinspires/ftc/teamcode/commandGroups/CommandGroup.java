@@ -41,18 +41,10 @@ public class CommandGroup extends SequentialCommandGroup {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
     }
 
-    public static boolean robotContainsArtifacts(){
-        return BarnRobot.getInstance().midColorSensor.isMidPosBusy() ||
-                BarnRobot.getInstance().shooterColorSensor.isShootPosBusy();
-    }
-
     public static Command deactivateIntakeAndTransferCommand(){
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
     }
 
-    public static Command smartIntakeAndTransferCommand(){
-        return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransfer());
-    }
 
 
 

@@ -176,7 +176,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 AutoController.shootCommand(),
                 new WaitCommand(500),
-                AutoController. intakeCommandPath(path1),
+                AutoController.intakeCommandPath(path1),
 //
                 AutoController.shootCommandPath(path2),
 //

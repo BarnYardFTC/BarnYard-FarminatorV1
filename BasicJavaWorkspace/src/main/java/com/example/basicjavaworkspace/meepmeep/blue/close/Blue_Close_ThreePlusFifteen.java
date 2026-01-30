@@ -34,8 +34,17 @@ public class Blue_Close_ThreePlusFifteen {
     public static double MID_COLLECT_POSE_X = 12;
     public static double RIGHT_COLLECT_POSE_X = 35;
 
+    public static double LOAD_ZONE_COLLECTION_MID_X=62;
+    public static double LOAD_ZONE_COLLECTION_RIGHT_X=59;
+    public static double LOAD_ZONE_COLLECTION_LEFT_X=65;
+    public static double LOAD_ZONE_COLLECTION_Y=-62;
+
     public static double GATE_POSE_X = -5;
     public static double GATE_POSE_Y = -44; // currently unused in your paths
+
+    public static double GATE_COLLECTION_X = 10;
+    public static double GATE_COLLECTION_Y = -60;
+
 
     public static double ENDING_POSE_X = -40;
     public static double ENDING_POSE_Y = -22;
@@ -102,34 +111,74 @@ public class Blue_Close_ThreePlusFifteen {
                 SOUTH_HEADING
         );
 
+
+        Pose2d gatePose = new Pose2d(
+                GATE_POSE_X,
+                GATE_POSE_Y-MID_Y_OFFSET,
+                NORTH_HEADING
+        );
+
         Pose2d endPose = new Pose2d(
                 ENDING_POSE_X,
                 ENDING_POSE_Y,
                 SHOOT_HEADING + END_HEADING_OFFSET_RAD
         );
 
+        Pose2d gateCollectPose = new Pose2d(
+                GATE_COLLECTION_X,
+                GATE_COLLECTION_Y,
+                SHOOT_HEADING + END_HEADING_OFFSET_RAD
+        );
+        Pose2d LoadCollectMidPose = new Pose2d(
+                LOAD_ZONE_COLLECTION_MID_X,
+                LOAD_ZONE_COLLECTION_Y,
+                SOUTH_HEADING
+        );
+
+        Pose2d LoadCollectLeftPose = new Pose2d(
+                LOAD_ZONE_COLLECTION_LEFT_X,
+                LOAD_ZONE_COLLECTION_Y,
+                SOUTH_HEADING
+        );
+        Pose2d LoadCollectRightPose = new Pose2d(
+                LOAD_ZONE_COLLECTION_RIGHT_X,
+                LOAD_ZONE_COLLECTION_Y,
+                SOUTH_HEADING
+        );
+
+
         TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(VEL_TO_SHOOT);
 
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(startPose)
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING)
-                .strafeToLinearHeading(shootVec, SOUTH_HEADING)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3))
-                .splineToConstantHeading(gateAtCollectYVec, new Rotation2d(3, -4));
+                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
 
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(gateAtCollectYVec.x, gateAtCollectYVec.y, SOUTH_HEADING))
+        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(midCollectPose)
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(0, -3));
 
-        TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(midCollectPose)
-                .splineToLinearHeading(shootPose, new Rotation2d(-2, -1), fastToShoot);
+        TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(leftCollectPose)
+                .splineToLinearHeading(shootPose, new Rotation2d(-2, -1), fastToShoot)
+                .splineToConstantHeading(gateAtCollectYVec, new Rotation2d(0,-3))
+                .splineToLinearHeading(gateCollectPose, new Rotation2d(0,-5))
+                .splineToLinearHeading(shootPose, new Rotation2d(-2,-2), fastToShoot);
+
+
 
         TrajectoryActionBuilder path5 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));
+                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -3));
 
         TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(rightCollectPose)
-                .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
+                .splineToLinearHeading(shootPose, new Rotation2d(-2, -2), fastToShoot);
+
+//        TrajectoryActionBuilder path8 = myBot.getDrive().actionBuilder(shootPose);
+//                .splineToConstantHeading(LoadCollectMidPose, new Rotation2d(0,3);
+//                .splineToConstantHeading(LoadCollectLeftPose, new Rotation2d(0,3)
+//                .splineToConstantHeading(LoadCollectRightPose, new Rotation2d(0,3);
+
+
 
 
 

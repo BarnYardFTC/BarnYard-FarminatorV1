@@ -15,6 +15,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
@@ -149,15 +150,15 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
                 BarnRobot.getInstance().shooterHood.setHoodPosition(0.85),
 
-                shootCommandPath(firstShoot),
+                AutoController.shootCommandPath(firstShoot),
 
-                intakeCommandPath(collectLeftArts),
+                AutoController.intakeCommandPath(collectLeftArts),
 
-                shootCommandPath(leftToShoot),
+                AutoController.shootCommandPath(leftToShoot),
 
-                intakeCommandPath(collectMidArts),
+                AutoController.intakeCommandPath(collectMidArts),
 
-                shootCommandPathIntake(midToShoot)
+                AutoController.shootCommandPathIntake(midToShoot)
 
         ).schedule();
     }
@@ -177,74 +178,6 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
     public static int SHOOTING_TIME_MS = 2000;
-
-
-    //       =========== Intake and Shoot CommandPaths ===========
-    public Command shootCommandPath(TrajectoryActionBuilder shootingPath){
-        return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                        new SequentialCommandGroup(
-                                new DriveActionCommand(shootingPath),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                CommandGroup.intakeAndTransferActivateCommand(),
-                                new WaitCommand(SHOOTING_TIME_MS),
-//                            new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                CommandGroup.deactivateIntakeAndTransferCommand()
-                        )
-                ),
-                BarnRobot.getInstance().shooter.turnOffInstant()
-        );
-    }
-
-    public Command shootCommandPathIntake(TrajectoryActionBuilder path){
-        return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                        new SequentialCommandGroup(
-                                CommandGroup.intakeAndTransferActivateCommand(),
-                                new DriveActionCommand(path),
-                                CommandGroup.deactivateIntakeAndTransferCommand(),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                CommandGroup.intakeAndTransferActivateCommand(),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                new WaitCommand(SHOOTING_TIME_MS),
-//                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                CommandGroup.deactivateIntakeAndTransferCommand()
-                        )
-                ),
-                BarnRobot.getInstance().shooter.turnOffInstant()
-        );
-    }
-
-    private Command shootCommand() {
-        return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        BarnRobot.getInstance().shooter.runShooter(900),
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                CommandGroup.intakeAndTransferActivateCommand(),
-                                new WaitCommand(SHOOTING_TIME_MS),
-                                //new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                CommandGroup.deactivateIntakeAndTransferCommand()
-                        )
-                ),
-                BarnRobot.getInstance().shooter.turnOffInstant()
-        );
-    }
-
-    public Command intakeCommandPath(TrajectoryActionBuilder path){
-        return new SequentialCommandGroup(
-                CommandGroup.smartIntakeAndTransferCommand(),
-                new DriveActionCommand(path),
-                CommandGroup.deactivateIntakeAndTransferCommand()
-        );
-    }
 
 
 }

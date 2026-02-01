@@ -117,7 +117,7 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooter(velocity), this);
     }
 
-    public double customDistance = 1.2;
+    public double customDistance = 0;
     private void shooterSpeedOnDistance(){
         if (customDistance == 0){
             operateShooterDistanceBased(

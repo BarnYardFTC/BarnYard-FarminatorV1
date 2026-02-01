@@ -45,6 +45,8 @@ public class BarnRobot extends Robot {
     public Transfer transfer;
     public Gate gate;
 
+    public LimeLight limelight;
+
     public PinpointLocalizer pinpointLocalizer;
 
 
@@ -134,6 +136,8 @@ public class BarnRobot extends Robot {
         initPinpointLocalizer(opMode.hardwareMap);
         initGate();
         initTransfer();
+
+        initLimeLight();
     }
 
 
@@ -176,6 +180,10 @@ public class BarnRobot extends Robot {
     /** Sets up the intake system. */
     public void initIntake() {
         intake = new Intake();
+    }
+
+    public void initLimeLight() {
+        limelight = new LimeLight();
     }
 
 

@@ -226,6 +226,8 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
+
+
     public Command resetPinpointTracking(){
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);
     }

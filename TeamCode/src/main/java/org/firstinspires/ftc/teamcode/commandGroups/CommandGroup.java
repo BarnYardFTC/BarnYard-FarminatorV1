@@ -33,6 +33,21 @@ public class CommandGroup extends SequentialCommandGroup {
         );
     }
 
+    public static Command shootLocalizedCommand(){
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        intakeAndTransferActivateCommand(),
+                        new WaitCommand(1500),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                )
+        );
+    }
+
     public static Command intakeAndTransferGateCommand(){
         return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
     }

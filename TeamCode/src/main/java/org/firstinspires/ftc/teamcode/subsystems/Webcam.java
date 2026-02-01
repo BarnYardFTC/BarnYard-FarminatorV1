@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.util.Size;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -53,9 +55,9 @@ public class Webcam extends SubsystemBase {
 
 // CHANGE THESE TO MATCH YOUR CAMERA MOUNT!!!
 
-    public static double WEBCAM_X = 12;
-    public static double WEBCAM_Y = 12;
-    public static double WEBCAM_Z = 27.5;
+    public static double WEBCAM_X = 11.5;
+    public static double WEBCAM_Y = 17.75;
+    public static double WEBCAM_Z = 31.5;
 
     private Position cameraPosition = new Position(
             DistanceUnit.CM,
@@ -64,9 +66,13 @@ public class Webcam extends SubsystemBase {
 
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(
             AngleUnit.DEGREES,
-            0, -70, 0, 0
+            0, -64 , 0, 0
     );
 
+    double fx = 500;
+    double fy = 500;
+    double cx = 320;
+    double cy = 240;
 
     public Webcam(HardwareMap hw) {
         initArtFinder(hw);
@@ -74,38 +80,21 @@ public class Webcam extends SubsystemBase {
 
     private void initArtFinder(HardwareMap hardwareMap) {
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance()
-                .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        cameraPosition = new Position(
-                DistanceUnit.CM,
-                WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
-        );
+        cameraPosition = new Position(DistanceUnit.CM, WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0);
 
         aprilTag = new AprilTagProcessor.Builder()
+                .setLensIntrinsics(fx, fy, cx, cy)
                 .setCameraPose(cameraPosition, cameraOrientation)
                 .build();
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-        builder.addProcessor(aprilTag);
-        visionPortal = builder.build();
+
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCameraResolution(new Size(640, 480))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .addProcessor(aprilTag)
+                .build();
+
         lastDetection = new Position();
-
-
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                camera.startStreaming(640, 480);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-            }
-        });
-
-
     }
 
     /** Returns the full list of AprilTag detections */

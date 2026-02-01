@@ -137,7 +137,7 @@ public class BarnRobot extends Robot {
         initIntake();
         initDrivetrain(opMode.hardwareMap);
         initShooterHood();
-//        initWebcam(opMode.hardwareMap);
+        initWebcam(opMode.hardwareMap);
         initPinpointLocalizer(opMode.hardwareMap);
 //        initBlinkin();
         initGate();
@@ -151,7 +151,7 @@ public class BarnRobot extends Robot {
 
     /** Sets up the webcam. */
     public void initWebcam(HardwareMap hw){
-//        webcam = new Webcam(hw);
+        webcam = new Webcam(hw);
     }
 
     /** Sets up the shooter system. */

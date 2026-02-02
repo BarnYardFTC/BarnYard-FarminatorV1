@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -35,6 +36,7 @@ import java.util.List;
  * - If your SDK exposes corner points, this uses them. If not, it uses a bounding-box
  *   approximation from values that are typically present.
  */
+@Disabled
 @TeleOp(name = "Calibrate: AprilTag Intrinsics (MJPEG 640x480)", group = "Calibration")
 public class AprilTagIntrinsicsCalibrator extends LinearOpMode {
 

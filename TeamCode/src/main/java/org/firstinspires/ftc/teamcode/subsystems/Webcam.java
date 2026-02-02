@@ -34,8 +34,6 @@ public class Webcam extends SubsystemBase {
 //    private ArtifactDetection detector;
     private OpenCvCamera camera;
 //    private ArtifactPipeline pipeline;
-    private Telemetry telemetry;
-
     public static double MAX_UPDATE_DISTANCE = 1.5;
 
     public Position lastDetection;
@@ -200,24 +198,22 @@ public class Webcam extends SubsystemBase {
     @Override
     public void periodic() {
         if (isLocalizationTagDetected()
-                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
-                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
-                BarnRobot.getInstance().drive.isRobotStatic()
+//                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
+//                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
+//                BarnRobot.getInstance().drive.isRobotStatic()
                 ) {
 
             updatePose();
             poseUpdateTimer.reset();
         }
-
-        displayTelemetry();
     }
 
 
     /** Display webcam + pinpoint telemetry. */
     public void displayTelemetry() {
-        telemetry.addData("Robot orintation: ", getRobotOrientation().getYaw());
-        telemetry.addData("Robot x: ", getRobotPosition().x);
-        telemetry.addData("Robot y: ", getRobotPosition().y);
+        BarnRobot.getInstance().telemetry.addData("Robot orintation: ", getRobotOrientation().getYaw());
+        BarnRobot.getInstance().telemetry.addData("Robot x: ", getRobotPosition().x);
+        BarnRobot.getInstance().telemetry.addData("Robot y: ", getRobotPosition().y);
     }
 
 }

@@ -17,7 +17,7 @@ public class TestDeadWheelLocalizationTeleop extends CommandOpMode {
     private BarnRobot farminator;
 
     private OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
+            OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.TELEOP,
             new Pose2d(0,0,0)
     );

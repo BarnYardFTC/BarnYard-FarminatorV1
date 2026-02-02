@@ -25,9 +25,6 @@ public class OpModeData {
     /** The robot’s starting heading on the field at the beginning of the OpMode. */
     public Pose2d initialPose2d;
 
-    /**Pipeline of limelight*/
-    public int webcamPipeline;
-
     /**the heading in which the autonomous has ended*/
     private static Pose2d autoFinishPose;
 

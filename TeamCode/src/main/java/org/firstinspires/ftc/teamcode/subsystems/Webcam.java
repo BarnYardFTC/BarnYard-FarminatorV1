@@ -104,8 +104,8 @@ public class Webcam extends SubsystemBase {
     public AprilTagDetection getBestDetection() {
         for (AprilTagDetection d : aprilTag.getDetections()) {
             if (d.metadata != null && !d.metadata.name.contains("Obelisk")) {
-                if (d.id == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED ||
-                d.id == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE){
+                if ((d.id == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED) ||
+                        (d.id == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE)){
                     return d;
                 }
             }
@@ -144,8 +144,8 @@ public class Webcam extends SubsystemBase {
         AprilTagDetection d = getBestDetection();
         if (d == null) return new Position(DistanceUnit.INCH, 0, 0, 0, 0);
         if (
-                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
-                        BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.RED_LOCALIZATION_PIPELINE && d.id == 24
+                BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE && d.id == 20 ||
+                        BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED && d.id == 24
         ){
             return d.robotPose.getPosition();
         }
@@ -171,8 +171,8 @@ public class Webcam extends SubsystemBase {
     public boolean isLocalizationTagDetected(){
         AprilTagDetection d = getBestDetection();
         return isTagDetected() &&
-                (BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.BLUE_LOCALIZATION_PIPELINE && d.id == 20 ||
-                BarnRobot.getInstance().opmodeData.webcamPipeline == Webcam.RED_LOCALIZATION_PIPELINE && d.id == 24);
+                (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE&& d.id == 20 ||
+                BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED && d.id == 24);
     }
 
     public boolean isTagDetected(){
@@ -197,11 +197,16 @@ public class Webcam extends SubsystemBase {
     /** Operate webcam. */
     @Override
     public void periodic() {
+
         if (isLocalizationTagDetected()
 //                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
 //                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
 //                BarnRobot.getInstance().drive.isRobotStatic()
                 ) {
+
+            AprilTagDetection d = getBestDetection();
+            BarnRobot.getInstance().telemetry.addData("Robot x: ", d.robotPose.getPosition().x);
+            BarnRobot.getInstance().telemetry.addData("Robot y: ", d.robotPose.getPosition().y);
 
             updatePose();
             poseUpdateTimer.reset();
@@ -220,235 +225,3 @@ public class Webcam extends SubsystemBase {
 //---------------------------------------------------------------------------------------------
 //
 //-------------
-
-//init
-//
-//
-
-
-
-
-//------------------------------------------------------------------------------------------------------
-
-//
-//
-//import com.qualcomm.robotcore.hardware.HardwareMap;
-//
-//import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-//import org.firstinspires.ftc.teamcode.subsystems.Webcam.AprilTagDetectionPipeline;
-//import org.openftc.apriltag.AprilTagDetection;
-//import org.openftc.apriltag.AprilTagPose;
-//import org.openftc.easyopencv.OpenCvCamera;
-//import org.openftc.easyopencv.OpenCvCameraFactory;
-//import org.openftc.easyopencv.OpenCvCameraRotation;
-//import org.openftc.easyopencv.OpenCvWebcam;
-//
-//
-//public class WebCam {
-//    private OpenCvWebcam internalWebcam;
-//    private AprilTagDetectionPipeline aprilTagPipeline;
-//    protected double yaw,roll,yawInDegrees;
-//
-//
-//
-//    public double robotYaw;
-//    public boolean whereIsTag = false;
-//    public boolean isTagDetectedABoolean = false;
-//    private final int cameraCenterX = 320;
-//
-//
-//    public WebCam(HardwareMap hardwareMap) {
-//
-//        int cameraMonitorViewId = hardwareMap.appContext.getResources()
-//                .getIdentifier("cameraMonitorViewId", "id",
-//                        hardwareMap.appContext.getPackageName());
-//
-//
-//        internalWebcam = OpenCvCameraFactory.getInstance()
-//                .createWebcam(
-//                        hardwareMap.get(WebcamName.class, "Webcam 1"),
-//                        cameraMonitorViewId
-//                );
-//
-//        aprilTagPipeline = new AprilTagDetectionPipeline();
-//
-//        internalWebcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//            @Override
-//            public void onOpened() {
-//
-//                internalWebcam.setPipeline(aprilTagPipeline);
-//
-//                internalWebcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
-//            }
-//
-//            @Override
-//            public void onError(int errorCode) {
-//            }
-//        });
-//
-//    }
-//
-//    public AprilTagDetection getLatestDetection() {
-//        if (aprilTagPipeline.getDetectedTag() != null) {
-//            isTagDetectedABoolean = true;
-//            return aprilTagPipeline.getDetectedTag();
-//        }
-//        else {
-//            return null;
-//        }
-//    }
-//
-//    public Pattern getPattern() {
-//        switch (getLatestDetection().id) {
-//            case 21: return Pattern.GPP;
-//            case 22: return Pattern.PGP;
-//            case 23: return Pattern.PPG;
-//            default: return null;
-//        }
-//    }
-//
-//    public double isTagDetected(){
-//        if (getLatestDetection() != null){
-//            return 1;
-//        }
-//        return 0;
-//    }
-//
-//    public AprilTagPose getPose() {
-//        return aprilTagPipeline.getPose();
-//    }
-//
-//
-////    public AprilTagPose getPose(){
-////        AprilTagDetection detection = getLatestDetection();
-////        if (detection != null && detection.pose != null && detection.pose.R != null) {
-////            return getLatestDetection().pose;
-////        }
-////
-////        return null;
-////    }
-//
-//    public double getYaw(){
-//        AprilTagPose pose = getPose();
-//        if (pose != null) {
-//            roll = 0.0;
-//            yaw = Math.atan2(-(pose.R).get(0,1), (pose.R).get(1,1));
-//            double yawInDegrees = Math.toDegrees(yaw);
-//            return yawInDegrees;
-//        }
-//
-//        return 0;
-//
-//    }
-//
-//    public double getDistance() {
-//        if (getLatestDetection() != null) {
-//            if (cameraCenterX > getLatestDetection().center.x) {
-//                whereIsTag = true;
-//                return cameraCenterX - getLatestDetection().center.x;
-//            } else {
-//                return getLatestDetection().center.x - cameraCenterX;
-//            }
-//
-//        }
-//        return 0;
-//
-//    }
-//
-//
-//
-//    public double[] calculateRobotPos(double tag_field_x, double tag_field_y, double tag_camera_x_m, double tag_camera_z_m, double robot_heading){
-//        double tag_camera_x = tag_camera_x_m * 100.0;
-//        double tag_camera_z = tag_camera_z_m * 100.0;
-//
-//        double rotated_tag_X = tag_camera_x * Math.cos(robot_heading) - tag_camera_z * Math.sin(robot_heading);
-//        double rotated_tag_Y = tag_camera_x* Math.sin(robot_heading) + tag_camera_z * Math.cos(robot_heading);
-//
-//        double robot_X = tag_field_x - rotated_tag_X;
-//        double robot_Y = tag_field_y - rotated_tag_Y;
-//
-//        return new double[]{robot_X, robot_Y};
-//    }
-//
-//    public double getRobotYaw(){
-//        if (getLatestDetection() != null) {
-//            if (whereIsTag) {
-//                robotYaw = getYaw() + getDistance();
-//            }
-//            else{
-//                robotYaw = getYaw() - getDistance();
-//            }
-//
-////            double[] robotPos = calculateRobotPos(tagPoseX, tagPoseY, detectedTag.pose.x, detectedTag.pose.z, robotYaw);  this is how to use calculateRobotPos()
-//
-//        return robotYaw;
-//        }
-//        return 0;
-//    }
-//
-//
-//
-//
-//
-//    public OpenCvWebcam getInternalWebcam() {
-//        return internalWebcam;
-//    }
-//}
-//
-
-//------------------------------------------------------------------------------------
-//    public void ArtifactReadinessFunc(){
-//        if (pipeline.isArtifactFound()){
-//            if (pipeline.getShooterArtifact() > -1){
-//                shooterPos = busyType.BUSY;
-//            }
-//            if (pipeline.getMiddleArtifact() > -1){
-//                middlePos = busyType.BUSY;
-//            }
-//            if (pipeline.getMiddleArtifact() == -1){
-//                middlePos = busyType.FREE;
-//            }
-//            if (pipeline.getShooterArtifact() == -1){
-//                shooterPos = busyType.FREE;
-//            }
-//
-//        }
-//        else {
-//            shooterPos = busyType.FREE;
-//            middlePos = busyType.FREE;
-//        }
-//
-//    }
-//
-//    public double getShooterX(){
-//        return pipeline.getShooterArtifact();
-//    }
-//
-//    public Enum<artifactReadiness> getArtifactReadiness(){
-//        return currentShooterArtifactReadiness;
-//    }
-//
-//    private double shooterLeftPixel;
-//private double middleLeftPixel;
-//
-//private busyType shooterPos = busyType.FREE;
-//private busyType middlePos = busyType.FREE;
-//
-//private artifactReadiness currentMiddleArtifactReadiness = artifactReadiness.NOTHING;
-//private artifactReadiness currentShooterArtifactReadiness = artifactReadiness.NOTHING;
-//
-//public enum artifactReadiness {READY, UNREADY, NOTHING}
-//private enum busyType {BUSY, FREE}
-//
-//public enum artifactPositions {
-//    SHOOTPOSMIN(800), MIDDLEPOS(500);
-//    private int numVal;
-//
-//    artifactPositions(int numVal) {
-//        this.numVal = numVal;
-//    }
-//
-//    public int getNumVal() {
-//        return numVal;
-//    }
-//}

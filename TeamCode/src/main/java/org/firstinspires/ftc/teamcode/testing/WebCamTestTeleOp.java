@@ -16,7 +16,7 @@ public class WebCamTestTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
         OpModeData opModeData = new OpModeData(
-                OpModeData.AllianceColor.BLUE,
+                OpModeData.AllianceColor.RED,
                 OpModeData.OpModeType.TELEOP,
                 new Pose2d(0, 0, Math.toRadians(180)),
                 180
@@ -34,6 +34,6 @@ public class WebCamTestTeleOp extends CommandOpMode {
         super.run();
 
         farminator.periodic();
-        farminator.webcam.displayTelemetry();
+//        farminator.webcam.displayTelemetry();
     }
 }

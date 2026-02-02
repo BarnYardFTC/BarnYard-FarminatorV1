@@ -21,32 +21,23 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.PinpointLocalize
 public class DriveTrain extends SubsystemBase {
 
     // ============================================================
-    //                       CONSTANTS
+    //                       CONSTANTS / TUNING
     // ============================================================
 
+    // Yaw PID (deg -> output turn)
     public static double pYaw = 0.03, dYaw = 0.0008;
+
+    // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
     public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.35;
 
-    // ============================================================
-    //                       HARDWARE
-    // ============================================================
-
-    public final MecanumDriveComponent mecanumDriveComponent;
-
-    // ============================================================
-    //                       CONTROL VARIABLES
-    // ============================================================
-
-    private final PIDController pidControllerYaw;
-    private final double initialBotHeading;
-
+    // Minimum turning speed clamp (helps overcome friction / deadband)
     public static double MIN_TURNING_SPEED = 0.06;
 
-    private Pose2d stopPose;
+    // Lookahead time (sec) for predicting future position during "shoot while driving"
+    public static double VELOCITY_LOOKAHEAD = 1.5;
 
-
-    /** Field coordinates for the target goal. */
+    /** Field coordinates for the target goal. (meters) */
     public static final double GOAL_X_1 = -1.72;
     public static final double GOAL_X_2 = -1.65;
     public static final double BLUE_GOAL_Y = -1.45;
@@ -59,13 +50,40 @@ public class DriveTrain extends SubsystemBase {
     private static final double HEADING_EPSILON = Math.toRadians(1.0); // 1 degree
     private static final double VELOCITY_EPSILON = 0.01; // units/sec
     private static final double ANGULAR_VELOCITY_EPSILON = Math.toRadians(1.0); // rad/sec
+
+    // NOTE: not used in this class currently, kept for future use
     private static final double SHOOTER_DIAMETER = 96;
 
+    // ============================================================
+    //                       HARDWARE / COMPONENTS
+    // ============================================================
+
+    public final MecanumDriveComponent mecanumDriveComponent;
+
+    // ============================================================
+    //                       STATE / CONTROL VARIABLES
+    // ============================================================
+
+    private double lastTurnSpeed = 0;
+
+    // Limelight visibility state
+    private boolean lastLimelightValid;
+    private boolean tagJustVanished;
+
+    // PID controller for yaw correction
+    private final PIDController pidControllerYaw;
+
+    // NOTE: currently unused, kept because you may want to reference initial alignment
+    private final double initialBotHeading;
+
+    // Maintain-position mode storage
+    private Pose2d stopPose;
+
+    // Static detection state
     private double lastX = Double.NaN;
     private double lastY = Double.NaN;
     private double lastHeading = Double.NaN;
     private long lastTimeNs = 0;
-
 
     // ============================================================
     //                       CONSTRUCTOR
@@ -79,27 +97,145 @@ public class DriveTrain extends SubsystemBase {
     }
 
     // ============================================================
-    //                          DRIVING
+    //                          LOW-LEVEL DRIVE API
     // ============================================================
 
+    /** Field-centric drive wrapper */
     public void drive(double x, double y, double turn) {
         mecanumDriveComponent.driveFieldCentric(x, y, turn);
     }
 
-    public void turnOnly(double turn){
+    /** Rotate in place wrapper */
+    public void turnOnly(double turn) {
         mecanumDriveComponent.turnOnly(turn);
     }
 
+    // ============================================================
+    //                          TURN CONTROL HELPERS
+    // ============================================================
+
+    /**
+     * Converts yaw error into turn speed using PID.
+     * NOTE: yawDiff is expected in "degrees-like" space in your codebase:
+     * - diffToSpeed uses PIDController directly, and you compare yawDiff > 1
+     * Keep consistent with Limelight.getDyaw() and desiredHeading math.
+     */
     private double diffToSpeed(double yawDiff) {
         double output = pidControllerYaw.calculate(yawDiff, 0);
-        if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1)
+
+        // Clamp small outputs to a minimum so the robot actually turns
+        if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1) {
             output = Math.copySign(MIN_TURNING_SPEED, output);
+        }
+
         return output;
     }
 
-    public static double VELOCITY_LOOKAHEAD = 1.5;
+    /**
+     * When tag is NOT visible: decide which direction/speed to spin to re-acquire it.
+     * Uses heading + alliance-based "zone" logic.
+     */
+    private double determineFinalTurnSpeed() {
+        double heading = BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble();
 
+        double lowerBound, upperBound;
 
+        // Set alliance-specific angle zone
+        switch (BarnRobot.getInstance().opmodeData.allianceColor) {
+            case BLUE:
+                lowerBound = 180;
+                upperBound = 270;
+                break;
+            case RED:
+                lowerBound = 90;
+                upperBound = 180;
+                break;
+            default:
+                return 0;
+        }
+
+        lastTurnSpeed = getTurnSpeed(heading, lowerBound, upperBound);
+        return lastTurnSpeed;
+    }
+
+    /**
+     * Returns "search turn speed" based on whether we're inside the alliance zone or outside it.
+     * - Inside zone: bounce between edges (and optionally reverse when tag just vanished)
+     * - Outside zone: rotate shortest path toward nearest boundary
+     */
+    private double getTurnSpeed(double heading, double lower, double upper) {
+        double margin = 3.0; // degrees tolerance
+        double speedTurn;
+
+        boolean insideZone = heading >= lower && heading <= upper;
+
+        if (insideZone) {
+            // Keep the same direction as last time by default
+            if (lastTurnSpeed > 0) speedTurn = ALIGNMENT_TURNING_SPEED_INZONE;
+            else speedTurn = -ALIGNMENT_TURNING_SPEED_INZONE;
+
+            if (tagJustVanished) {
+                // Reverse when you just missed the tag
+                speedTurn *= -1;
+            } else {
+                // Reverse when hitting far edge
+                boolean hitUpper = speedTurn < 0 && heading >= upper - margin;
+                boolean hitLower = speedTurn > 0 && heading <= lower + margin;
+                if (hitUpper || hitLower) speedTurn *= -1;
+            }
+
+        } else {
+            // Outside zone → rotate shortest path toward nearest boundary
+            double distToLower = angularDistanceDeg(heading, lower);
+            double distToUpper = angularDistanceDeg(heading, upper);
+            speedTurn = (distToLower <= distToUpper)
+                    ? -ALIGNMENT_TURNING_SPEED_OUTZONE
+                    : ALIGNMENT_TURNING_SPEED_OUTZONE;
+        }
+
+        return speedTurn;
+    }
+
+    /** Small helper: smallest circular distance between two headings (deg) */
+    private double angularDistanceDeg(double a, double b) {
+        double d = Math.abs((b - a) % 360.0);
+        return (d > 180) ? 360 - d : d;
+    }
+
+    // ============================================================
+    //                          ALIGNMENT LOGIC
+    // ============================================================
+
+    /** Main entry: aligns robot to the AprilTag or approximate direction */
+    private void alignToGoal(double x, double y) {
+        boolean valid = BarnRobot.getInstance().limelight.isGoalTagDetected();
+        tagJustVanished = false;
+
+        double turnSpeed;
+
+        if (!valid) {
+            // If tag just lost sight, turn in opposite direction (controlled by getTurnSpeed())
+            if (lastLimelightValid) tagJustVanished = true;
+            turnSpeed = determineFinalTurnSpeed();
+        } else {
+            // Tag visible -> use yaw error from Limelight
+            double yawDiff = BarnRobot.getInstance().limelight.getDyaw();
+            turnSpeed = diffToSpeed(yawDiff);
+        }
+
+        // Drive with heading correction
+        drive(x, y, turnSpeed);
+        lastLimelightValid = valid;
+
+        BarnRobot.getInstance().telemetry.addData("lamlam:", valid);
+    }
+
+    /**
+     * Alignment that uses localization + a predicted future position to aim at goal.
+     * Works for:
+     * - TELEOP: drive(spdX, spdY, turnSpd)
+     * - AUTO:   turnOnly(turnSpd)
+     */
     private void localizationBasedGoalAlignment(double spdX, double spdY) {
 
         BarnRobot robot = BarnRobot.getInstance();
@@ -161,11 +297,11 @@ public class DriveTrain extends SubsystemBase {
         }
     }
 
+    // ============================================================
+    //                           COMMANDS (in a clean order)
+    // ============================================================
 
-    // ============================================================
-    //                           COMMANDS
-    // ============================================================
-    /** Default manual field-centric drive */
+    /** Default manual field-centric drive (1 driver) */
     public Command driveOneDriverCommand() {
         return new RunCommand(
                 () -> drive(
@@ -177,90 +313,142 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
-    public Command driveTwoDriversCommand(){
+    /** Field-centric drive (2 drivers summed) */
+    public Command driveTwoDriversCommand() {
         return new RunCommand(
                 () -> drive(
                         BarnRobot.getInstance().gamepadEx2.getLeftX() + BarnRobot.getInstance().gamepadEx1.getLeftX(),
                         BarnRobot.getInstance().gamepadEx2.getLeftY() + BarnRobot.getInstance().gamepadEx1.getLeftY(),
                         BarnRobot.getInstance().gamepadEx2.getRightX() + BarnRobot.getInstance().gamepadEx1.getRightX()
-                ), this
+                ),
+                this
         );
     }
 
-    public Command driveNonFieldOrientedCommand(){
+    /** Robot-centric drive (no field orientation) */
+    public Command driveNonFieldOrientedCommand() {
         return new RunCommand(
                 () -> mecanumDriveComponent.driveNonFieldCentric(
-                                BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                                BarnRobot.getInstance().gamepadEx1.getLeftY(),
-                                BarnRobot.getInstance().gamepadEx1.getRightX()
-                        ), this
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY(),
+                        BarnRobot.getInstance().gamepadEx1.getRightX()
+                ),
+                this
         );
-
     }
 
-    /** Continuous alignment command (runs alignToGoal loop) */
+    /** Continuous alignment using localization-based aiming */
     public Command alignToTagCommand() {
-        return new RunCommand(() -> localizationBasedGoalAlignment(
-                BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                BarnRobot.getInstance().gamepadEx1.getLeftY())
-                , this);
+        return new RunCommand(
+                () -> localizationBasedGoalAlignment(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY()
+                ),
+                this
+        );
     }
 
+    /** Continuous alignment using Limelight tag yaw (fallback search when tag lost) */
+    public Command alignToTagLamLamCommand() {
+        return new RunCommand(
+                () -> alignToGoal(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY()
+                ),
+                this
+        );
+    }
+
+    /** Auto version: alignment with zero translation (turn only) */
     public RunCommand alignToTagCommandAuto() {
-        return new RunCommand(() -> localizationBasedGoalAlignment(
-                0,0)
-                , this);
+        return new RunCommand(
+                () -> localizationBasedGoalAlignment(0, 0),
+                this
+        );
     }
 
-    public Command stop(){
+    /** Stops rotation (turn = 0). NOTE: does not explicitly stop translation if something else drives it. */
+    public Command stop() {
         return new InstantCommand(() -> turnOnly(0));
     }
 
+    /** Saves current pose and then runs a hold/maintain loop (uses maintainPos in component) */
     public Command maintainPosCommand() {
         return new SequentialCommandGroup(
                 new InstantCommand(() ->
-                    stopPose = BarnRobot.getInstance().pinpointLocalizer.getPose()
+                        stopPose = BarnRobot.getInstance().pinpointLocalizer.getPose()
                 ),
                 new RunCommand(() -> mecanumDriveComponent.maintainPos(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(), stopPose), this)
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        stopPose
+                ), this)
         );
     }
 
+    // ----------------------------
+    // Localization / Pinpoint / Limelight helper commands
+    // ----------------------------
 
+    public Command updatePinpointCommand() {
+        return new InstantCommand(() -> BarnRobot.getInstance().limelight.updatePose(), this);
+    }
 
-    public Command resetPinpointTracking(){
+    public Command resetPinpointCommand() {
+        return new InstantCommand(() -> BarnRobot.getInstance().limelight.getRobotFieldPose(), this);
+    }
+
+    public Command resetPinpointTracking() {
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);
     }
 
     public Command reset() {
-        return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.setPose(new Pose2d(BarnRobot.getInstance().pinpointLocalizer.getPose().position.x, BarnRobot.getInstance().pinpointLocalizer.getPose().position.y, 0)));
+        return new InstantCommand(() ->
+                BarnRobot.getInstance().pinpointLocalizer.setPose(
+                        new Pose2d(
+                                BarnRobot.getInstance().pinpointLocalizer.getPose().position.x,
+                                BarnRobot.getInstance().pinpointLocalizer.getPose().position.y,
+                                0
+                        )
+                )
+        );
     }
 
-    public Command updatePinpointPose(Pose2d pose2d){
+    public Command updatePinpointPose(Pose2d pose2d) {
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.setPose(pose2d));
     }
 
-    public double getDistanceFromGoal(){
-        double currentPoseX = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x * 0.0254; // conversion from inch to meter
-        double currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // conversion from inch to meter
-        
+    // ============================================================
+    //                           GEOMETRY / MEASUREMENTS
+    // ============================================================
+
+    /** Distance from current robot pose to goal (meters). Uses alliance to choose goalY. */
+    public double getDistanceFromGoal() {
+        double currentPoseX = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x * 0.0254; // inch -> meter
+        double currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // inch -> meter
 
         if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE)
             return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, BLUE_GOAL_Y);
-        else return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, RED_GOAL_Y);
+        else
+            return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, RED_GOAL_Y);
     }
 
+    /** Generic distance helper */
     public double calcDistance(double xG, double yG, double xR, double yR) {
         return Math.sqrt((xG - xR) * (xG - xR) + (yG - yR) * (yG - yR));
     }
 
-    public double getBotAbsoluteHeading(){
-        double heading;
-        heading = Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
+    /** Absolute heading in degrees [0, 360) */
+    public double getBotAbsoluteHeading() {
+        double heading = Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble());
         if (heading < 0) return heading + 360;
         return heading;
     }
 
+    // ============================================================
+    //                           STATIC DETECTION
+    // ============================================================
+
+    /** Returns true if robot is basically not moving (based on delta pose over time). */
     public boolean isRobotStatic() {
         double y = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y;
         double x = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x;
@@ -296,13 +484,18 @@ public class DriveTrain extends SubsystemBase {
                 && angularVelocity < ANGULAR_VELOCITY_EPSILON;
     }
 
+    /** Wrap radians to [-pi, pi] */
     private double angleWrap(double radians) {
         while (radians > Math.PI) radians -= 2 * Math.PI;
         while (radians < -Math.PI) radians += 2 * Math.PI;
         return radians;
     }
 
-    public void displayPinpointDataTelemetry(){
+    // ============================================================
+    //                           TELEMETRY
+    // ============================================================
+
+    public void displayPinpointDataTelemetry() {
         BarnRobot.getInstance().telemetry.addData("pinpoint x", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
         BarnRobot.getInstance().telemetry.addData("pinpoint y", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
         BarnRobot.getInstance().telemetry.addData("pinpoint heading", getBotAbsoluteHeading());
@@ -315,6 +508,7 @@ public class DriveTrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // Keep PID values hot-reloadable from Dashboard
         pidControllerYaw.setPID(pYaw, 0, dYaw);
     }
 }

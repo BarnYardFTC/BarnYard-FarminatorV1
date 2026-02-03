@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
@@ -147,5 +148,9 @@ public class ColorSensor {
      */
     public double getCachedDistanceCm() {
         return cachedDistanceCm;
+    }
+
+    public void displayTelemetry(Telemetry telemetry, String name){
+        telemetry.addData("Distanse to", name, getCachedDistanceCm());
     }
 }

@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //import org.firstinspires.ftc.teamcode.subsystems.components.pipelines.ArtifactDetection;
 //import org.firstinspires.ftc.teamcode.subsystems.components.pipelines.ArtifactPipeline;
@@ -17,13 +16,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.util.HorizontalLineOverlay;
+import org.firstinspires.ftc.teamcode.util.SquareOverlay;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.List;
 
@@ -54,9 +52,11 @@ public class Webcam extends SubsystemBase {
 
 // CHANGE THESE TO MATCH YOUR CAMERA MOUNT!!!
 
-    public static double WEBCAM_X = 11.5;
-    public static double WEBCAM_Y = 17.75;
-    public static double WEBCAM_Z = 31.5;
+//    public static double WEBCAM_X = 11.5;
+    public static double WEBCAM_X = -5.1;
+//    public static double WEBCAM_Y = 17.75;
+    public static double WEBCAM_Y = 7.3;
+    public static double WEBCAM_Z = 31.1;
 
     private Position cameraPosition = new Position(
             DistanceUnit.CM,
@@ -91,7 +91,7 @@ public class Webcam extends SubsystemBase {
                 .setCameraResolution(new Size(640, 480))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .addProcessor(aprilTag)
-                .addProcessor(new HorizontalLineOverlay())
+                .addProcessor(new SquareOverlay())
                 .build();
 
 

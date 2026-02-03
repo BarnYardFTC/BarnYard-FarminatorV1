@@ -10,17 +10,17 @@ import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibra
 import org.firstinspires.ftc.vision.VisionProcessor;
 
 @Config
-public class HorizontalLineOverlay implements VisionProcessor {
+public class SquareOverlay implements VisionProcessor {
 
     // 🔧 Adjustable from FTC Dashboard
-    public static int CENTER_X = 320;   // square center X
-    public static int CENTER_Y = 240;   // square center Y
-    public static int SIZE = 150;       // square side length
+    public static int CENTER_X = 230;   // square center X
+    public static int CENTER_Y = 383;   // square center Y
+    public static int SIZE = 140;       // square side length
     public static int THICKNESS = 6;
 
     private final Paint paint = new Paint();
 
-    public HorizontalLineOverlay() {
+    public SquareOverlay() {
         paint.setColor(Color.GREEN);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(THICKNESS);

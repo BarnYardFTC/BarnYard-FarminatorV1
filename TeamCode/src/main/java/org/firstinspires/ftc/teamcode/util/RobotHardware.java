@@ -237,7 +237,7 @@ public class RobotHardware {
     private void initSensors() {
         imu = hw.get(IMU.class, "imu");
         imu.initialize(IMU_PARAMETERS);
-//        imu.resetYaw();
+        imu.resetYaw();
 //        limelight = hw.get(Limelight3A.class, "limelight");
 //        shooterColorSensor = hw.get(NormalizedColorSensor.class, "colorSensorShooter");
 //        intakeColorSensor = hw.get(NormalizedColorSensor.class, "colorSensorIntake");

@@ -21,9 +21,9 @@ public class Intake extends SubsystemBase {
 
     /** Intake motor hardware object. */
     private final DcMotorEx intake;
-    private final ColorSensor shooterSensor;
-    private final ColorSensor midSensor;
-    private final ColorSensor intakeSensor;
+//    private final ColorSensor shooterSensor;
+//    private final ColorSensor midSensor;
+//    private final ColorSensor intakeSensor;
 
     /** Default power to run the intake. */
     public static double DEFAULT_POWER = 1;
@@ -33,9 +33,9 @@ public class Intake extends SubsystemBase {
      */
     public Intake() {
         this.intake = BarnRobot.getInstance().robotHardware.intake;
-        shooterSensor = BarnRobot.getInstance().shooterColorSensor;
-        midSensor = BarnRobot.getInstance().midColorSensor;
-        intakeSensor = BarnRobot.getInstance().intakeColorSensor;
+//        shooterSensor = BarnRobot.getInstance().shooterColorSensor;
+//        midSensor = BarnRobot.getInstance().midColorSensor;
+//        intakeSensor = BarnRobot.getInstance().intakeColorSensor;
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 

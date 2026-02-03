@@ -36,4 +36,10 @@ public class WebCamTestTeleOp extends CommandOpMode {
         farminator.periodic();
 //        farminator.webcam.displayTelemetry();
     }
+
+    @Override
+    public void initialize_loop(){
+        telemetry.addData("imu heading", farminator.robotHardware.imu.getRobotYawPitchRollAngles().getYaw());
+        telemetry.update();
+    }
 }

@@ -2,13 +2,17 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.subsystems.ColorSensor;
+
+import java.nio.charset.CharacterCodingException;
 
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
@@ -128,12 +132,13 @@ public class RobotHardware {
     // ------------------------------------------------------------
 
     /** Default IMU orientation settings for the control hub placement. */
-//    public final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
-//            new RevHubOrientationOnRobot(
-//                    RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-//                    RevHubOrientationOnRobot.UsbFacingDirection.UP
-//            )
-//    );
+    public IMU imu;
+    public final IMU.Parameters IMU_PARAMETERS = new IMU.Parameters(
+            new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                    RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+            )
+    );
 
 
     // ------------------------------------------------------------
@@ -230,7 +235,8 @@ public class RobotHardware {
      * Initializes the IMU and Limelight sensors.
      */
     private void initSensors() {
-//        imu.initialize(IMU_PARAMETERS);
+        imu = hw.get(IMU.class, "imu");
+        imu.initialize(IMU_PARAMETERS);
 //        imu.resetYaw();
 //        limelight = hw.get(Limelight3A.class, "limelight");
 //        shooterColorSensor = hw.get(NormalizedColorSensor.class, "colorSensorShooter");

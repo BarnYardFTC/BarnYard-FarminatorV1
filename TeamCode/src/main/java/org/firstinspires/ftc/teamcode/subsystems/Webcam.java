@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.HorizontalLineOverlay;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -90,7 +91,9 @@ public class Webcam extends SubsystemBase {
                 .setCameraResolution(new Size(640, 480))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .addProcessor(aprilTag)
+                .addProcessor(new HorizontalLineOverlay())
                 .build();
+
 
         lastDetection = new Position();
     }
@@ -200,8 +203,8 @@ public class Webcam extends SubsystemBase {
 
         if (isLocalizationTagDetected()
 //                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
-//                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
-//                BarnRobot.getInstance().drive.isRobotStatic()
+                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
+                BarnRobot.getInstance().drive.isRobotStatic()
                 ) {
 
             AprilTagDetection d = getBestDetection();
@@ -225,3 +228,4 @@ public class Webcam extends SubsystemBase {
 //---------------------------------------------------------------------------------------------
 //
 //-------------
+

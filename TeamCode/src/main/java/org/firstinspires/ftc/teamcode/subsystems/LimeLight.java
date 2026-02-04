@@ -225,13 +225,10 @@ public class LimeLight extends SubsystemBase {
         robot.telemetry.addData("llResult != null", limelight.getLatestResult() != null);
         robot.telemetry.addData("goal detected", isGoalTagDetected());
         robot.telemetry.addData("llResult.getBotpose_MT2() != null", llResult.getBotpose_MT2() != null);
-        robot.telemetry.addData("llresult", limelight.getLatestResult());
-
 
         if (llResult.getBotpose_MT2() != null && isGoalTagDetected())
-            robot.telemetry.addData("MT2 POSITION", "(" + llResult.getBotpose_MT2().getPosition().x / 0.0254 + ", " + llResult.getBotpose_MT2().getPosition().y / 0.0254 + ")");
-            robot.telemetry.addData("pos:", getRobotFieldPose().getPosition().y + " " + getRobotFieldPose().getPosition().x + " " + getRobotFieldPose().getOrientation());
-            robot.telemetry.addData("pos:", getRobotFieldPose().getPosition().toString());
+            robot.telemetry.addData("MT1 POSITION", "(" + llResult.getBotpose().getPosition().x / 0.0254 + ", " + llResult.getBotpose().getPosition().y / 0.0254 + ")");
+
 
     }
 

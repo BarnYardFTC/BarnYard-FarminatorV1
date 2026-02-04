@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-
+@TeleOp(name = "ColorSensorsTestOpMode", group = "test")
 public class ColorSensorsTestOpMode extends CommandOpMode {
 
     private BarnRobot farminator;

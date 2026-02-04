@@ -33,10 +33,12 @@ public class ColorSensorsTestOpMode extends CommandOpMode {
     public void run() {
         super.run();
 
-        farminator.periodic();
+
         farminator.shooterColorSensor.displayTelemetry(telemetry, "shooter");
         farminator.midColorSensor.displayTelemetry(telemetry, "mid");
         farminator.intakeColorSensor.displayTelemetry(telemetry, "intake");
+
+        farminator.periodic();
     }
 
 

@@ -197,6 +197,7 @@ public class BarnRobot extends Robot {
      */
     public void periodic() {
         pinpointLocalizer.update();
+        limelight.periodic();
         telemetry.update();
     }
 }

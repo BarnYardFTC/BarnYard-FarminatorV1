@@ -29,6 +29,7 @@ public class LimeLight extends SubsystemBase {
      */
 
     /** Maximum allowed staleness for vision data. */
+
     public static final int STANDARD_STALENESS_TOLERANCE = 100;
 
     private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;
@@ -66,6 +67,7 @@ public class LimeLight extends SubsystemBase {
     public LimeLight() {
         limelight = BarnRobot.getInstance().robotHardware.limelight;
         poseUpdateTimer.reset();
+        limelight.pipelineSwitch(7);
         limelight.setPollRateHz(POLL_RATE_HZ);
         resetData();
         start();
@@ -169,11 +171,11 @@ public class LimeLight extends SubsystemBase {
         boolean frsContainsGoalTag = false;
         if (frs != null){
             for (LLResultTypes.FiducialResult fr: frs){
-                if (
-                        (fr.getFiducialId() == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE )||
-                                (fr.getFiducialId() == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED)
-                )
-                    frsContainsGoalTag = true;
+//                if (
+//                        (fr.getFiducialId() == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE )||
+//                                (fr.getFiducialId() == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED)
+//                )
+                frsContainsGoalTag = true;
             }
         }
 
@@ -221,8 +223,15 @@ public class LimeLight extends SubsystemBase {
         robot.telemetry.addData("Data Valid", isDataValid());
 
         robot.telemetry.addData("llResult != null", limelight.getLatestResult() != null);
+        robot.telemetry.addData("goal detected", isGoalTagDetected());
+        robot.telemetry.addData("llResult.getBotpose_MT2() != null", llResult.getBotpose_MT2() != null);
+        robot.telemetry.addData("llresult", limelight.getLatestResult());
+
+
         if (llResult.getBotpose_MT2() != null && isGoalTagDetected())
             robot.telemetry.addData("MT2 POSITION", "(" + llResult.getBotpose_MT2().getPosition().x / 0.0254 + ", " + llResult.getBotpose_MT2().getPosition().y / 0.0254 + ")");
+            robot.telemetry.addData("pos:", getRobotFieldPose().getPosition().y + " " + getRobotFieldPose().getPosition().x + " " + getRobotFieldPose().getOrientation());
+            robot.telemetry.addData("pos:", getRobotFieldPose().getPosition().toString());
 
     }
 

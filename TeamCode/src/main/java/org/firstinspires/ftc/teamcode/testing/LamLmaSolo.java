@@ -15,7 +15,7 @@ public class LamLmaSolo extends CommandOpMode {
     // ------------------------
     // Robot Instance
     // ------------------------
-    private BarnRobot farminator;
+    private BarnRobot farminator = BarnRobot.getInstance();
 
     @Override
     public void initialize() {

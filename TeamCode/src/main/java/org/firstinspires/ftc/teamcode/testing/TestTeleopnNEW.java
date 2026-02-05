@@ -107,6 +107,12 @@ public class TestTeleopnNEW extends CommandOpMode {
                         new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand()))
                 );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(farminator.kickStand.raiseCommand());
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(farminator.kickStand.lowerCommand());
+
 
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
 //                .toggleWhenActive(
@@ -115,18 +121,6 @@ public class TestTeleopnNEW extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
                 new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
 
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-//                .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(new ParallelCommandGroup(

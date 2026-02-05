@@ -49,6 +49,8 @@ public class RobotHardware {
 
     public Servo rightGate;
     public Servo leftGate;
+    public Servo rightKickStand;
+    public Servo leftKickStand;
 
     // ------------------------------------------------------------
     // Drivetrain Motors
@@ -103,6 +105,9 @@ public class RobotHardware {
     private static final String RIGHT_FRONT_DRIVETRAIN_CONFIG_NAME = "rightFrontDrivetrain";
     private static final String LEFT_BACK_DRIVETRAIN_CONFIG_NAME =   "leftBackDrivetrain";
     private static final String RIGHT_BACK_DRIVETRAIN_CONFIG_NAME =  "rightBackDrivetrain";
+
+    private static final String RIGHT_KICKSTAND_CONFIG_NAME = "kickStandRight";
+    private static final String LEFT_KICKSTAND_CONFIG_NAME = "kickStandLeft";
 
     private static final String SHOOTER_RIGHT_CONFIG_NAME = "shooterRight";
     private static final String INTAKE_CONFIG_NAME = "intake";
@@ -217,6 +222,10 @@ public class RobotHardware {
 
         rightGate = hw.get(Servo.class, RIGHT_GATE_CONFIG_NAME);
         leftGate =hw.get(Servo.class, LEFT_GATE_CONFIG_NAME);
+
+        rightKickStand = hw.get(Servo.class, RIGHT_KICKSTAND_CONFIG_NAME);
+        leftKickStand = hw.get(Servo.class, LEFT_KICKSTAND_CONFIG_NAME);
+
     }
 
 

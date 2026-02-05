@@ -45,6 +45,7 @@ public class BarnRobot extends Robot {
     public Intake intake;
     public Transfer transfer;
     public Gate gate;
+    public KickStand kickStand;
     public ColorSensor shooterSensor;
     public ColorSensor midSensor;
     public ColorSensor intakeSensor;
@@ -139,6 +140,7 @@ public class BarnRobot extends Robot {
         initGate();
         initTransfer();
         initColorSensors();
+        initKickStand();
     }
 
 
@@ -161,6 +163,9 @@ public class BarnRobot extends Robot {
         drive = new DriveTrain();
     }
 
+    public void initKickStand(){
+        kickStand = new KickStand();
+    }
     public void initTransfer(){
         transfer = new Transfer();
     }

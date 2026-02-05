@@ -14,8 +14,23 @@ public class GovnoTesting extends CommandOpMode {
     private BarnRobot farminator;
     @Override
     public void initialize() {
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+        farminator = BarnRobot.getInstance();
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .toggleWhenActive(
+                        farminator.shooter.runShooter(1000)
+                );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 RobotCommands.collectCommand()
+        );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                RobotCommands.collectStopCommand()
+        );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                RobotCommands.shootAllCommand()
         );
     }
     @Override

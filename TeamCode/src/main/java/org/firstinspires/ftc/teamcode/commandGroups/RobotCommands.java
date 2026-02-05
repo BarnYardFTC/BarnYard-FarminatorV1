@@ -17,13 +17,16 @@ import java.util.function.BooleanSupplier;
  */
 @Config
 public class RobotCommands {
-    //WIP: currently only represents approximate class structure
+
     /** Timings for intake and shooter in milliseconds. */
     public static int TRANSFER_ONE_DURATION = 1500;
     public static int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
 
-    /** Shoots one artifact when shooter is ready */
-    public static Command shootOneCommand() {
+    /**
+     * Shoots one artifact when shooter is ready,
+     * not meant for using outside of the class
+     */
+    private static Command shootOneCommand() {
         return new SequentialCommandGroup(
                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                 BarnRobot.getInstance().intake.activateIntakeCommand(),
@@ -34,9 +37,10 @@ public class RobotCommands {
         );
     }
 
-    /** Shoots three artifacts */
+    /** Opens the gate shoots three artifacts */
     public static Command shootAllCommand() {
         return new SequentialCommandGroup(
+                BarnRobot.getInstance().gate.openCommand(),
                 shootOneCommand(),
                 shootOneCommand(),
                 shootOneCommand()

@@ -40,7 +40,7 @@ public class Webcam extends SubsystemBase {
 
     public static final int BLUE_LOCALIZATION_PIPELINE = 1;
     public static final int RED_LOCALIZATION_PIPELINE = 2;
-    private static final double POSE_UPDATE_INTERVAL_SEC = 5.0;
+    private static final double POSE_UPDATE_INTERVAL_SEC = 1.0;
 
     public enum Pattern {
         PPG,
@@ -173,7 +173,7 @@ public class Webcam extends SubsystemBase {
 
     public boolean isLocalizationTagDetected(){
         AprilTagDetection d = getBestDetection();
-        return isTagDetected() &&
+        return isTagDetected() && d != null &&
                 (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE&& d.id == 20 ||
                 BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED && d.id == 24);
     }
@@ -202,14 +202,9 @@ public class Webcam extends SubsystemBase {
     public void periodic() {
 
         if (isLocalizationTagDetected()
-//                && BarnRobot.getInstance().drive.getDistanceFromGoal() < MAX_UPDATE_DISTANCE
                 && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
                 BarnRobot.getInstance().drive.isRobotStatic()
                 ) {
-
-            AprilTagDetection d = getBestDetection();
-            BarnRobot.getInstance().telemetry.addData("Robot x: ", d.robotPose.getPosition().x);
-            BarnRobot.getInstance().telemetry.addData("Robot y: ", d.robotPose.getPosition().y);
 
             updatePose();
             poseUpdateTimer.reset();

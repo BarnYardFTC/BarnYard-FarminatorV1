@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
@@ -44,6 +45,9 @@ public class BarnRobot extends Robot {
     public Intake intake;
     public Transfer transfer;
     public Gate gate;
+    public ColorSensor shooterSensor;
+    public ColorSensor midSensor;
+    public ColorSensor intakeSensor;
 
     public PinpointLocalizer pinpointLocalizer;
 
@@ -134,6 +138,7 @@ public class BarnRobot extends Robot {
         initPinpointLocalizer(opMode.hardwareMap);
         initGate();
         initTransfer();
+        initColorSensors();
     }
 
 
@@ -162,6 +167,12 @@ public class BarnRobot extends Robot {
 
     private void initPinpointLocalizer(HardwareMap hw){
         pinpointLocalizer = new PinpointLocalizer(hw, RoadRunnerMecanumDrive.PARAMS.inPerTick, opmodeData.initialPose2d);
+    }
+
+    private void initColorSensors(){
+        shooterSensor = new ColorSensor(robotHardware.shooterColorSensor);
+        midSensor = new ColorSensor(robotHardware.midColorSensor);
+        intakeSensor = new ColorSensor(robotHardware.intakeColorSensor);
     }
 
     public void initShooterHood(){

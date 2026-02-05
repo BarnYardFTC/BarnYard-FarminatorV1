@@ -150,7 +150,7 @@ public class ColorSensor {
         return cachedDistanceCm;
     }
 
-    public void displayTelemetry(Telemetry telemetry, String name){
-        telemetry.addData("Distanse to " + name, getArtifactDistanceTimed());
+    public void displayTelemetry(Telemetry telemetry, String name, double distance){
+        telemetry.addData("is " + name + " busy: ", isPosBusy(distance));
     }
 }

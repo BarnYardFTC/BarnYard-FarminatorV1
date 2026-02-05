@@ -173,7 +173,7 @@ public class Webcam extends SubsystemBase {
 
     public boolean isLocalizationTagDetected(){
         AprilTagDetection d = getBestDetection();
-        return isTagDetected() &&
+        return isTagDetected() && d != null &&
                 (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE&& d.id == 20 ||
                 BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED && d.id == 24);
     }

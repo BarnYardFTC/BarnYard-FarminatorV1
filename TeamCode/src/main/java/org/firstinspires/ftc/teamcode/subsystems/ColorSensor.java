@@ -151,6 +151,6 @@ public class ColorSensor {
     }
 
     public void displayTelemetry(Telemetry telemetry, String name){
-        telemetry.addData("Distanse to", name, getCachedDistanceCm());
+        telemetry.addData("Distanse to " + name, getArtifactDistanceTimed());
     }
 }

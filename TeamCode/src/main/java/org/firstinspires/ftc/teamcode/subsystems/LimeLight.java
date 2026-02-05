@@ -225,11 +225,13 @@ public class LimeLight extends SubsystemBase {
         robot.telemetry.addData("llResult != null", limelight.getLatestResult() != null);
         robot.telemetry.addData("goal detected", isGoalTagDetected());
         robot.telemetry.addData("llResult.getBotpose_MT2() != null", llResult.getBotpose_MT2() != null);
-
+// && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC
         if (llResult.getBotpose_MT2() != null && isGoalTagDetected())
             robot.telemetry.addData("MT1 POSITION", "(" + llResult.getBotpose().getPosition().x / 0.0254 + ", " + llResult.getBotpose().getPosition().y / 0.0254 + ")");
+            robot.telemetry.addData("MT2 POSITION", "(" + llResult.getBotpose_MT2().getPosition().x / 0.0254 + ", " + llResult.getBotpose_MT2().getPosition().y / 0.0254 + ")");
 
 
+        poseUpdateTimer.reset();
     }
 
     /** @return current yaw offset to goal */

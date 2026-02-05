@@ -46,6 +46,7 @@ public class BarnRobot extends Robot {
     public Gate gate;
 
     public LimeLight limelight;
+    public Webcam webcam;
 
     public PinpointLocalizer pinpointLocalizer;
 
@@ -138,6 +139,7 @@ public class BarnRobot extends Robot {
         initTransfer();
 
         initLimeLight();
+        initWebcam(opMode.hardwareMap);
     }
 
 
@@ -146,6 +148,10 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
 
     /** Sets up the shooter system. */
+    public void initWebcam(HardwareMap hw){
+        webcam = new Webcam(hw);
+    }
+
     public void initShooter() {
         shooter = new Shooter();
         shooter.setDefaultCommand(shooter.turnOff());
@@ -198,6 +204,7 @@ public class BarnRobot extends Robot {
     public void periodic() {
         pinpointLocalizer.update();
         limelight.periodic();
+        webcam.periodic();
         telemetry.update();
     }
 }

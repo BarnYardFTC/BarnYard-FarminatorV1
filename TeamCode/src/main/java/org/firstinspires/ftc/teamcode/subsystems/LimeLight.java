@@ -190,11 +190,11 @@ public class LimeLight extends SubsystemBase {
         boolean frsContainsGoalTag = false;
         if (frs != null){
             for (LLResultTypes.FiducialResult fr: frs){
-//                if (
-//                        (fr.getFiducialId() == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE )||
-//                                (fr.getFiducialId() == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED)
-//                )
-                frsContainsGoalTag = true;
+                if (
+                        (fr.getFiducialId() == 20 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE )||
+                                (fr.getFiducialId() == 24 && BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.RED)
+                )
+                    frsContainsGoalTag = true;
             }
         }
         return frsContainsGoalTag;
@@ -204,9 +204,7 @@ public class LimeLight extends SubsystemBase {
     @Override
     public void periodic() {
         llResult = limelight.getLatestResult();
-        if (llResult.isValid() && !llResult.getFiducialResults().isEmpty()) {
-            frs = llResult.getFiducialResults();
-        }
+        frs = llResult.getFiducialResults();
         limelight.updateRobotOrientation(Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()));
 
         if (isGoalTagDetected()
@@ -225,11 +223,11 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
-    public Pose3D getRobotFieldPose(){
-        if (llResult.getBotpose_MT2() != null)
-            return llResult.getBotpose_MT2();
-        return null;
-    }
+//    public Pose3D getRobotFieldPose(){
+//        if (llResult.getBotpose_MT2() != null)
+//            return llResult.getBotpose_MT2();
+//        return null;
+//    }
 
     /** Outputs all relevant telemetry for the Limelight subsystem. */
     public void displayTelemetry() {
@@ -238,8 +236,8 @@ public class LimeLight extends SubsystemBase {
         robot.telemetry.addData("llResult != null", limelight.getLatestResult() != null);
         robot.telemetry.addData("goal detected", isGoalTagDetected());
 // && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC
-        if (llResult.getBotpose_MT2() != null && isGoalTagDetected()) {
-            robot.telemetry.addData("MT1 POSITION", "(" + llResult.getBotpose().getPosition().x / 0.0254 + ", " + llResult.getBotpose().getPosition().y / 0.0254 + ")");
+        if (isGoalTagDetected()) {
+//            robot.telemetry.addData("MT1 POSITION", "(" + llResult.getBotpose().getPosition().x / 0.0254 + ", " + llResult.getBotpose().getPosition().y / 0.0254 + ")");
             robot.telemetry.addData("distance", getGoalDistance());
             robot.telemetry.addData("yaw", getGoalYaw());
          }

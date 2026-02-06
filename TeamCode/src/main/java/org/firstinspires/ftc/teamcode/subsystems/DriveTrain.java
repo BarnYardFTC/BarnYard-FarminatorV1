@@ -29,7 +29,10 @@ public class DriveTrain extends SubsystemBase {
 
     // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
-    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.35;
+    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.1;
+
+    private boolean searchingForTag = true;
+
 
     // Minimum turning speed clamp (helps overcome friction / deadband)
     public static double MIN_TURNING_SPEED = 0.06;
@@ -64,7 +67,7 @@ public class DriveTrain extends SubsystemBase {
     //                       STATE / CONTROL VARIABLES
     // ============================================================
 
-    private double lastTurnSpeed = 0;
+    private double lastTurnSpeed = ALIGNMENT_TURNING_SPEED_INZONE;
 
     // Limelight visibility state
     private boolean lastLimelightValid;
@@ -163,40 +166,45 @@ public class DriveTrain extends SubsystemBase {
      * - Outside zone: rotate shortest path toward nearest boundary
      */
     private double getTurnSpeed(double lower, double upper) {
-        double margin = 3.0; // degrees tolerance
+        double heading = Math.toDegrees(
+                BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()
+        );
+        double edgeMargin = 5.0;   // how close to edge before flipping
         double speedTurn;
-        double heading = BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble();
-        BarnRobot.getInstance().telemetry.addData("heading lamlam", heading);
-
-
         boolean insideZone = heading >= lower && heading <= upper;
-
-        if (insideZone) {
-            // Keep the same direction as last time by default
-            if (lastTurnSpeed > 0) speedTurn = ALIGNMENT_TURNING_SPEED_INZONE;
-            else speedTurn = -ALIGNMENT_TURNING_SPEED_INZONE;
-
-            if (tagJustVanished) {
-                // Reverse when you just missed the tag
-                speedTurn *= -1;
-            } else {
-                // Reverse when hitting far edge
-                boolean hitUpper = speedTurn < 0 && heading >= upper - margin;
-                boolean hitLower = speedTurn > 0 && heading <= lower + margin;
-                if (hitUpper || hitLower) speedTurn *= -1;
-            }
-
-        } else {
-            // Outside zone → rotate shortest path toward nearest boundary
+        if (!insideZone) {
+            // --- OUTSIDE ZONE: go to nearest boundary (fast) ---
             double distToLower = angularDistanceDeg(heading, lower);
             double distToUpper = angularDistanceDeg(heading, upper);
-            speedTurn = (distToLower <= distToUpper)
+            speedTurn = (distToLower < distToUpper)
                     ? -ALIGNMENT_TURNING_SPEED_OUTZONE
                     : ALIGNMENT_TURNING_SPEED_OUTZONE;
-        }
+            // Set search direction memory for when we enter zone
+            lastTurnSpeed = speedTurn;
+            return speedTurn;
 
+        }
+        // --- INSIDE ZONE: sweep back and forth slowly ---
+
+        // If we somehow had no direction yet, pick one
+        if (lastTurnSpeed == 0) {
+            lastTurnSpeed = ALIGNMENT_TURNING_SPEED_INZONE;
+        }
+        speedTurn = Math.signum(lastTurnSpeed) * ALIGNMENT_TURNING_SPEED_INZONE;
+        // Flip if we just lost the tag (forces re-scan opposite side)
+        if (tagJustVanished) {
+            speedTurn *= -1;
+        }
+        // Flip ONLY when actually reaching the zone edges
+        boolean nearUpperEdge = heading >= upper - edgeMargin;
+        boolean nearLowerEdge = heading <= lower + edgeMargin;
+        if ((speedTurn > 0 && nearUpperEdge) || (speedTurn < 0 && nearLowerEdge)) {
+            speedTurn *= -1;
+        }
+        lastTurnSpeed = speedTurn;
         return speedTurn;
     }
+
 
     /** Small helper: smallest circular distance between two headings (deg) */
     private double angularDistanceDeg(double a, double b) {
@@ -211,25 +219,29 @@ public class DriveTrain extends SubsystemBase {
     /** Main entry: aligns robot to the AprilTag or approximate direction */
     private void alignToGoal(double x, double y) {
         boolean valid = BarnRobot.getInstance().limelight.isGoalTagDetected();
-        tagJustVanished = false;
 
         double turnSpeed;
 
-        if (!valid) {
-            // If tag just lost sight, turn in opposite direction (controlled by getTurnSpeed())
-            if (lastLimelightValid) tagJustVanished = true;
-            turnSpeed = determineFinalTurnSpeed();
-        } else {
-            // Tag visible -> use yaw error from Limelight
+        if (valid) {
+            searchingForTag = false;  // We see tag → tracking mode
             double yawDiff = BarnRobot.getInstance().limelight.getGoalYaw();
             turnSpeed = diffToSpeed(yawDiff);
+        } else {
+            if (!searchingForTag) {
+                // We JUST lost the tag → re-enter search mode
+                searchingForTag = true;
+                tagJustVanished = true;
+            } else {
+                tagJustVanished = false;
+            }
+
+            turnSpeed = determineFinalTurnSpeed(); // pure search behavior
         }
 
-        // Drive with heading correction
         drive(x, y, turnSpeed);
         lastLimelightValid = valid;
-
     }
+
 
     /**
      * Alignment that uses localization + a predicted future position to aim at goal.
@@ -394,9 +406,9 @@ public class DriveTrain extends SubsystemBase {
         return new InstantCommand(() -> BarnRobot.getInstance().limelight.updatePose(), this);
     }
 
-    public Command resetPinpointCommand() {
-        return new InstantCommand(() -> BarnRobot.getInstance().limelight.getRobotFieldPose(), this);
-    }
+//    public Command resetPinpointCommand() {
+//        return new InstantCommand(() -> BarnRobot.getInstance().limelight.getRobotFieldPose(), this);
+//    }
 
     public Command resetPinpointTracking() {
         return new InstantCommand(() -> BarnRobot.getInstance().pinpointLocalizer.driver.resetPosAndIMU(), this);

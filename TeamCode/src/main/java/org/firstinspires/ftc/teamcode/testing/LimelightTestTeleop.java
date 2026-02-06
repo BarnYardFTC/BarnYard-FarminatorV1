@@ -122,8 +122,8 @@ public class LimelightTestTeleop extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(farminator.drive.updatePinpointCommand());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(farminator.drive.resetPinpointCommand());
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+//                .whenPressed(farminator.drive.resetPinpointCommand());
     }
 
     private void bindShooterControls() {

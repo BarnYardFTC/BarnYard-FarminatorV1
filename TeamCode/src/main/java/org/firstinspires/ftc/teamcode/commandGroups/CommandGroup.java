@@ -58,6 +58,8 @@ public class CommandGroup extends SequentialCommandGroup {
 
 
 
+
+
     public static void shootPreset(int n){
         if (n == 1){
 //            BarnRobot.getInstance().shooterHood.setCustomPosition(0.4);

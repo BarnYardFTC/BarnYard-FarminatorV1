@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
+package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
+
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
@@ -8,12 +9,12 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-public class blueCloseTemp {
+public class blueFarTemp {
 
     public static final int SHOOT_TIME_MS =1500;
-    public static final Pose2d startPose = new Pose2d( -53.333, -45.5, 225);
-    public static final Pose2d shootPose = new Pose2d(-23, -22, 227);
-//    public static final Pose2d leftReadyPose = new Pose2d(-11.5, -25, 270);
+    public static final Pose2d startPose = new Pose2d( 60, -15, 225);
+    public static final Pose2d shootPose = new Pose2d(45, 0, 227);
+    //    public static final Pose2d leftReadyPose = new Pose2d(-11.5, -25, 270);
 //    public static final Pose2d midReadyPose = new Pose2d(-11.5, -25, 270);
 //    public static final Pose2d rightReadyPose = new Pose2d(34.5, -25, 270);
     public static final Pose2d leftCollectPose = new Pose2d(-11.5, -63, 270);
@@ -33,7 +34,7 @@ public class blueCloseTemp {
     public static final Pose2d rightLoadZoneReady = new Pose2d(52, -57, 270);
     public static final Pose2d midLoadZoneReady = new Pose2d(54, -57, 270);
 
-// paths nigga ----------------------------------------------------------------- no ai stamp only rawdogging
+    // paths nigga ----------------------------------------------------------------- no ai stamp only rawdogging
     public static TrajectoryActionBuilder goShoot;
     public static TrajectoryActionBuilder goPark;
     public static TrajectoryActionBuilder goCollectLeft;
@@ -89,7 +90,7 @@ public class blueCloseTemp {
                 .splineToConstantHeading(rightLoadZoneCollect.component1(),rightLoadZoneCollect.component2());
         goShoot = takeFromLoadZone.endTrajectory()
                 .splineToConstantHeading(shootVec, 270);//vec,h
-         new WaitCommand(SHOOT_TIME_MS);  //change to smart shooting later niggers
+        new WaitCommand(SHOOT_TIME_MS);  //change to smart shooting later niggers
     }
 
     public static void GateCollectnShoot(RoadRunnerMecanumDrive drive){

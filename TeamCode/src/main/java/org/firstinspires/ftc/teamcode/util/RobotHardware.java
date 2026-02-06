@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.firstinspires.ftc.teamcode.subsystems.ColorSensor;
-
 /**
  * RobotHardware handles all the low-level hardware setup for the robot.
  *

@@ -122,6 +122,16 @@ public class LimeLight extends SubsystemBase {
         return largest.getTargetPoseCameraSpace().getPosition().z;
     }
 
+    public double getGoalYaw(){
+        LLResultTypes.FiducialResult largest = frs.get(0);
+        for (LLResultTypes.FiducialResult fr : frs) {
+            if (fr.getTargetArea() > largest.getTargetArea()) {
+                largest = fr;
+            }
+        }
+        return largest.getTargetPoseCameraSpace().getPosition().x;
+    }
+
     /**
      * Maps a fiducial ID to an obelisk pattern.
      *
@@ -171,9 +181,6 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
-
-
-
     /**
      * Checks if the Limelight currently sees a goal tag.
      *
@@ -190,9 +197,6 @@ public class LimeLight extends SubsystemBase {
                 frsContainsGoalTag = true;
             }
         }
-
-
-
         return frsContainsGoalTag;
     }
 
@@ -209,11 +213,9 @@ public class LimeLight extends SubsystemBase {
                 && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
                 BarnRobot.getInstance().drive.isRobotStatic()
         ) {
-
             updatePose();
             poseUpdateTimer.reset();
         }
-
     }
 
     public void updatePose(){
@@ -233,14 +235,13 @@ public class LimeLight extends SubsystemBase {
     public void displayTelemetry() {
         BarnRobot robot = BarnRobot.getInstance();
         robot.telemetry.addData("Data Valid", isDataValid());
-
         robot.telemetry.addData("llResult != null", limelight.getLatestResult() != null);
         robot.telemetry.addData("goal detected", isGoalTagDetected());
-        robot.telemetry.addData("llResult.getBotpose_MT2() != null", llResult.getBotpose_MT2() != null);
 // && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC
         if (llResult.getBotpose_MT2() != null && isGoalTagDetected()) {
             robot.telemetry.addData("MT1 POSITION", "(" + llResult.getBotpose().getPosition().x / 0.0254 + ", " + llResult.getBotpose().getPosition().y / 0.0254 + ")");
             robot.telemetry.addData("distance", getGoalDistance());
+            robot.telemetry.addData("yaw", getGoalYaw());
          }
 
         poseUpdateTimer.reset();

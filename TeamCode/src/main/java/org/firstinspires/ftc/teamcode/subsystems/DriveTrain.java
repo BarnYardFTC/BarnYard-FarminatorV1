@@ -102,6 +102,7 @@ public class DriveTrain extends SubsystemBase {
 
     /** Field-centric drive wrapper */
     public void drive(double x, double y, double turn) {
+        lastLimelightValid = false;
         mecanumDriveComponent.driveFieldCentric(x, y, turn);
     }
 
@@ -136,8 +137,6 @@ public class DriveTrain extends SubsystemBase {
      * Uses heading + alliance-based "zone" logic.
      */
     private double determineFinalTurnSpeed() {
-        double heading = BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble();
-
         double lowerBound, upperBound;
 
         // Set alliance-specific angle zone
@@ -154,7 +153,7 @@ public class DriveTrain extends SubsystemBase {
                 return 0;
         }
 
-        lastTurnSpeed = getTurnSpeed(heading, lowerBound, upperBound);
+        lastTurnSpeed = getTurnSpeed(lowerBound, upperBound);
         return lastTurnSpeed;
     }
 
@@ -163,9 +162,12 @@ public class DriveTrain extends SubsystemBase {
      * - Inside zone: bounce between edges (and optionally reverse when tag just vanished)
      * - Outside zone: rotate shortest path toward nearest boundary
      */
-    private double getTurnSpeed(double heading, double lower, double upper) {
+    private double getTurnSpeed(double lower, double upper) {
         double margin = 3.0; // degrees tolerance
         double speedTurn;
+        double heading = BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble();
+        BarnRobot.getInstance().telemetry.addData("heading lamlam", heading);
+
 
         boolean insideZone = heading >= lower && heading <= upper;
 
@@ -219,7 +221,7 @@ public class DriveTrain extends SubsystemBase {
             turnSpeed = determineFinalTurnSpeed();
         } else {
             // Tag visible -> use yaw error from Limelight
-            double yawDiff = BarnRobot.getInstance().limelight.getDyaw();
+            double yawDiff = BarnRobot.getInstance().limelight.getGoalYaw();
             turnSpeed = diffToSpeed(yawDiff);
         }
 
@@ -227,7 +229,6 @@ public class DriveTrain extends SubsystemBase {
         drive(x, y, turnSpeed);
         lastLimelightValid = valid;
 
-        BarnRobot.getInstance().telemetry.addData("lamlam:", valid);
     }
 
     /**

@@ -29,7 +29,7 @@ public class DriveTrain extends SubsystemBase {
 
     // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
-    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.1;
+    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.3;
 
     private boolean searchingForTag = true;
 
@@ -166,10 +166,8 @@ public class DriveTrain extends SubsystemBase {
      * - Outside zone: rotate shortest path toward nearest boundary
      */
     private double getTurnSpeed(double lower, double upper) {
-        double heading = Math.toDegrees(
-                BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()
-        );
-        double edgeMargin = 5.0;   // how close to edge before flipping
+        double heading = getBotAbsoluteHeading();
+        double edgeMargin = 0.1;   // how close to edge before flipping
         double speedTurn;
         boolean insideZone = heading >= lower && heading <= upper;
         if (!insideZone) {
@@ -292,15 +290,15 @@ public class DriveTrain extends SubsystemBase {
         double turnSpd = diffToSpeed(diffYaw);
 
         // --- Telemetry ---
-        robot.telemetry.addData("predictedX", predictedX);
-        robot.telemetry.addData("predictedY", predictedY);
-        robot.telemetry.addData("dx", dx);
-        robot.telemetry.addData("dy", dy);
-        robot.telemetry.addData("tangentAngle", tangentAngle);
-        robot.telemetry.addData("velocityLead", velocityLead);
-        robot.telemetry.addData("desiredHeading", desiredHeading);
-        robot.telemetry.addData("diffYaw", diffYaw);
-        robot.telemetry.addData("vel", vel);
+//        robot.telemetry.addData("predictedX", predictedX);
+//        robot.telemetry.addData("predictedY", predictedY);
+//        robot.telemetry.addData("dx", dx);
+//        robot.telemetry.addData("dy", dy);
+//        robot.telemetry.addData("tangentAngle", tangentAngle);
+//        robot.telemetry.addData("velocityLead", velocityLead);
+//        robot.telemetry.addData("desiredHeading", desiredHeading);
+//        robot.telemetry.addData("diffYaw", diffYaw);
+//        robot.telemetry.addData("vel", vel);
 
         // --- Drive ---
         if (robot.opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {

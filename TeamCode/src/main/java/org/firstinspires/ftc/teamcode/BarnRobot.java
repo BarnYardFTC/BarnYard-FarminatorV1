@@ -46,9 +46,8 @@ public class BarnRobot extends Robot {
     public Transfer transfer;
     public Gate gate;
     public KickStand kickStand;
-    public ColorSensor shooterSensor;
-    public ColorSensor midSensor;
-    public ColorSensor intakeSensor;
+    public ColorSensor colorSensor;
+    public BlinkinLED leds;
 
     public PinpointLocalizer pinpointLocalizer;
 
@@ -141,6 +140,7 @@ public class BarnRobot extends Robot {
         initTransfer();
         initColorSensors();
         initKickStand();
+        initBlinkinLeds();
     }
 
 
@@ -175,9 +175,11 @@ public class BarnRobot extends Robot {
     }
 
     private void initColorSensors(){
-        shooterSensor = new ColorSensor(robotHardware.shooterColorSensor);
-        midSensor = new ColorSensor(robotHardware.midColorSensor);
-        intakeSensor = new ColorSensor(robotHardware.intakeColorSensor);
+        colorSensor = new ColorSensor();
+    }
+
+    private void initBlinkinLeds(){
+        leds = new BlinkinLED();
     }
 
     public void initShooterHood(){

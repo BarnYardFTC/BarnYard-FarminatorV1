@@ -168,9 +168,6 @@ public class TestTeleopnNEW extends CommandOpMode {
         telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
         telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-        farminator.shooterSensor.displayTelemetry(telemetry, "shooter", 8.8);
-        farminator.midSensor.displayTelemetry(telemetry, "mid", 3.0);
-        farminator.intakeSensor.displayTelemetry(telemetry, "intake", 6.2);
 
         farminator.periodic();
     }

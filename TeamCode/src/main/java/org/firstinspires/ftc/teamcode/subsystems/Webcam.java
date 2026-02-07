@@ -247,7 +247,7 @@ public class Webcam extends SubsystemBase {
                 && BarnRobot.getInstance().drive.isRobotStatic()
                 && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
 
-            updatePose();
+//            updatePose();
             poseUpdateTimer.reset();
         }
     }

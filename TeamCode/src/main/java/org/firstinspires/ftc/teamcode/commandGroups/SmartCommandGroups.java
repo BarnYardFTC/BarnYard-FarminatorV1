@@ -22,7 +22,7 @@ public class SmartCommandGroups {
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
                         CommandGroup.intakeAndTransferActivateCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().colorSensor.isRobotFull()),
+                        new WaitUntilCommand(() ->BarnRobot.getInstance().colorSensor.isShootAndMidIn()),
                         BarnRobot.getInstance().gate.closeCommand(),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
                 )

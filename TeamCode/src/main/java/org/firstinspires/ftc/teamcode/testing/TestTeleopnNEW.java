@@ -99,6 +99,12 @@ public class TestTeleopnNEW extends CommandOpMode {
                 .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
                 .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                        .whileActiveOnce(
+                                SmartCommandGroups.smartShootCommand()
+                        );
+
+
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)

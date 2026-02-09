@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -205,6 +208,11 @@ public class ColorSensor {
 
     public boolean isShootAndMidIn(){
         return isShootPosBusy() && isMidPosBusy();
+    }
+
+    public Command artifactsChecking(){
+        return new InstantCommand(this::isShootAndMidIn) {
+        };
     }
 
     /**

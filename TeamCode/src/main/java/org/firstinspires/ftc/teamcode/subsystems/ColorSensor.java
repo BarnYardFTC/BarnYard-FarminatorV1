@@ -208,7 +208,7 @@ public class ColorSensor {
     }
 
     public boolean isRobotFull(){
-        return isMidPosBusy() && isOnlyShootPosBusy() && isIntakePosBusy();
+        return isMidPosBusy() && isShootPosBusy() && isIntakePosBusy();
     }
 
     public boolean isOnlyShootAndMidBusy(){

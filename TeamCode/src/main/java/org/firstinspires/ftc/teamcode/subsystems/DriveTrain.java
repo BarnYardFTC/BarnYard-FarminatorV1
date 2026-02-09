@@ -125,15 +125,23 @@ public class DriveTrain extends SubsystemBase {
      * Keep consistent with Limelight.getDyaw() and desiredHeading math.
      */
     private double diffToSpeed(double yawDiff) {
-        double output = pidControllerYaw.calculate(yawDiff, 0);
 
-        // Clamp small outputs to a minimum so the robot actually turns
-        if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1) {
+        // PID tries to drive yawDiff → 0
+        double output = pidControllerYaw.calculate(0, yawDiff);
+
+        // Deadband so we don't twitch near zero
+        if (Math.abs(yawDiff) < 1.0) {
+            return 0;
+        }
+
+        // Ensure minimum turning power to overcome friction
+        if (Math.abs(output) < MIN_TURNING_SPEED) {
             output = Math.copySign(MIN_TURNING_SPEED, output);
         }
 
         return output;
     }
+
 
     /**
      * When tag is NOT visible: decide which direction/speed to spin to re-acquire it.

@@ -64,27 +64,27 @@ public class ShooterHood extends SubsystemBase {
         double position = range1Lut.get(distance);
 
         BarnRobot.getInstance().telemetry.addData("range dependent position close", position);
-//        setPosition(position);
-        servoPos = position;
+        setPosition(position);
+//        servoPos = position;
     }
 
     public void distanceDependentAngleRange2(double distance) {
         distance = capDistanceRange2(distance);
         double position = range2Lut.get(distance);
 
-//        setPosition(position);
-        servoPos = position;
+        setPosition(position);
+//        servoPos = position;
     }
 
 
     public void distanceDependentAngleRange3() {
-//        setPosition(MAX);
-        servoPos = MAX;
+        setPosition(MAX);
+//        servoPos = MAX;
     }
 
     public void distanceDependentAngleRange4() {
-//        setPosition(MAX);
-        servoPos = MIN;
+        setPosition(MAX);
+//        servoPos = MIN;
     }
 
     public void autoHoodAlignmentFunc(){
@@ -108,7 +108,7 @@ public class ShooterHood extends SubsystemBase {
             distanceDependentAngleRange4();
         }
         else if (distance == -1) {
-            return;
+            setPosition(MIN);
         }
     }
 

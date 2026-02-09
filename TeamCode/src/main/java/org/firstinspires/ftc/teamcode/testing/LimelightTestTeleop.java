@@ -152,6 +152,7 @@ public class LimelightTestTeleop extends CommandOpMode {
         farminator.shooterHood.displayTelemetry();
         farminator.drive.displayPinpointDataTelemetry();
         farminator.shooter.displayTelemetry();
+        farminator.limelight.displayTelemetry();
 
         telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
@@ -218,4 +219,5 @@ public class LimelightTestTeleop extends CommandOpMode {
         //                        BarnRobot.getInstance().gate.closeCommand()
         //                ));
     }
+
 }

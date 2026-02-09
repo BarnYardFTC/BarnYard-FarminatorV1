@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -7,6 +8,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.RobotCommands;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 @TeleOp(name = "Cmd", group = "test")
 public class GovnoTesting extends CommandOpMode {
@@ -14,7 +16,19 @@ public class GovnoTesting extends CommandOpMode {
     private BarnRobot farminator;
     @Override
     public void initialize() {
+        OpModeData opModeData = new OpModeData(
+                OpModeData.AllianceColor.BLUE,
+                OpModeData.OpModeType.TELEOP,
+                new Pose2d(0, 0, Math.toRadians(180)),
+                180
+        );
         farminator = BarnRobot.getInstance();
+        farminator.init(
+                this,
+                opModeData
+        );
+
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenActive(
@@ -37,5 +51,6 @@ public class GovnoTesting extends CommandOpMode {
     public void run() {
         super.run();
         farminator.periodic();
+        RobotCommands.displayTelemetry();
     }
 }

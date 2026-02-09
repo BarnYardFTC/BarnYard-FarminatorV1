@@ -176,7 +176,7 @@ public class BarnRobot extends Robot {
 
     public void initShooterHood(){
         shooterHood = new ShooterHood();
-        shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
+        shooterHood.setDefaultCommand(shooterHood.defaultHoodCommand());
     }
 
     public void initGate(){

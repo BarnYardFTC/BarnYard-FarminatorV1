@@ -64,26 +64,31 @@ public class ShooterHood extends SubsystemBase {
         double position = range1Lut.get(distance);
 
         BarnRobot.getInstance().telemetry.addData("range dependent position close", position);
-        servo.setPosition(position);
+//        setPosition(position);
+        servoPos = position;
     }
 
     public void distanceDependentAngleRange2(double distance) {
         distance = capDistanceRange2(distance);
         double position = range2Lut.get(distance);
 
-        servo.setPosition(position);
+//        setPosition(position);
+        servoPos = position;
     }
 
+
     public void distanceDependentAngleRange3() {
-        servo.setPosition(1);
+//        setPosition(MAX);
+        servoPos = MAX;
     }
 
     public void distanceDependentAngleRange4() {
-        servo.setPosition(1);
+//        setPosition(MAX);
+        servoPos = MIN;
     }
 
     public void autoHoodAlignmentFunc(){
-        double distance = BarnRobot.getInstance().drive.getDistanceFromGoal();
+        double distance = BarnRobot.getInstance().limelight.getGoalDistance();
 
         autoHoodAlignmentConstantDistance(distance);
 
@@ -102,10 +107,13 @@ public class ShooterHood extends SubsystemBase {
         else if (distance > SHOOTING_RANGE_3) {
             distanceDependentAngleRange4();
         }
+        else if (distance == -1) {
+            return;
+        }
     }
 
     public Command setHoodCloseToGoalPos(){
-        return new RunCommand(() -> servo.setPosition(0.1), this);
+        return new RunCommand(() -> setPosition(MIN), this);
     }
 
     public Command setHoodPosNoLimit(double position){
@@ -210,6 +218,7 @@ public class ShooterHood extends SubsystemBase {
         else if (distance >= 2.04) distance = 2.03;
         return distance;
     }
+
 
 
     public void setCustomPosition(double position){

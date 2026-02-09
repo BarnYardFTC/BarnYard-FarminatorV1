@@ -247,66 +247,66 @@ public class DriveTrain extends SubsystemBase {
      * - TELEOP: drive(spdX, spdY, turnSpd)
      * - AUTO:   turnOnly(turnSpd)
      */
-    private void localizationBasedGoalAlignment(double spdX, double spdY) {
-
-        BarnRobot robot = BarnRobot.getInstance();
-        PinpointLocalizer localizer = robot.pinpointLocalizer;
-
-        Pose2d pose = localizer.getPose();
-        Pose2d vel  = localizer.getPoseVelocity();
-
-        // --- Predict future position (meters) ---
-        double predictedX = (pose.position.x + vel.position.x * VELOCITY_LOOKAHEAD) * 0.0254;
-        double predictedY = (pose.position.y + vel.position.y * VELOCITY_LOOKAHEAD) * 0.0254;
-
-        double currentHeading = getBotAbsoluteHeading();
-
-        // --- Alliance-dependent constants ---
-        boolean isRed = robot.opmodeData.allianceColor == OpModeData.AllianceColor.RED;
-
-        double goalY = isRed ? RED_GOAL_Y : BLUE_GOAL_Y;
-        double baseHeading = isRed ? 90.0 : 270.0;
-
-        double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
-                ? GOAL_X_2
-                : GOAL_X_1;
-
-        // --- Geometry ---
-        double dx = goalX - predictedX;
-        double dy = goalY - predictedY;
-
-        double tangentAngle = Math.toDegrees(Math.atan2(dx, dy));
-
-        // --- Shoot-while-driving lead ---
-        double shootWhileDriveCoef = 1.0; // tune
-        double velocityLead =
-                (vel.position.x * dx + vel.position.y * dy) * shootWhileDriveCoef;
-
-        // --- Final desired heading ---
-        double desiredHeading = baseHeading - tangentAngle + velocityLead;
-
-        // --- Control ---
-        double diffYaw = desiredHeading - currentHeading;
-        double turnSpd = diffToSpeed(diffYaw);
-
-        // --- Telemetry ---
-//        robot.telemetry.addData("predictedX", predictedX);
-//        robot.telemetry.addData("predictedY", predictedY);
-//        robot.telemetry.addData("dx", dx);
-//        robot.telemetry.addData("dy", dy);
-//        robot.telemetry.addData("tangentAngle", tangentAngle);
-//        robot.telemetry.addData("velocityLead", velocityLead);
-//        robot.telemetry.addData("desiredHeading", desiredHeading);
-//        robot.telemetry.addData("diffYaw", diffYaw);
-//        robot.telemetry.addData("vel", vel);
-
-        // --- Drive ---
-        if (robot.opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
-            drive(spdX, spdY, turnSpd);
-        } else {
-            turnOnly(turnSpd);
-        }
-    }
+//    private void localizationBasedGoalAlignment(double spdX, double spdY) {
+//
+//        BarnRobot robot = BarnRobot.getInstance();
+//        PinpointLocalizer localizer = robot.pinpointLocalizer;
+//
+//        Pose2d pose = localizer.getPose();
+//        Pose2d vel  = localizer.getPoseVelocity();
+//
+//        // --- Predict future position (meters) ---
+//        double predictedX = (pose.position.x + vel.position.x * VELOCITY_LOOKAHEAD) * 0.0254;
+//        double predictedY = (pose.position.y + vel.position.y * VELOCITY_LOOKAHEAD) * 0.0254;
+//
+//        double currentHeading = getBotAbsoluteHeading();
+//
+//        // --- Alliance-dependent constants ---
+//        boolean isRed = robot.opmodeData.allianceColor == OpModeData.AllianceColor.RED;
+//
+//        double goalY = isRed ? RED_GOAL_Y : BLUE_GOAL_Y;
+//        double baseHeading = isRed ? 90.0 : 270.0;
+//
+//        double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
+//                ? GOAL_X_2
+//                : GOAL_X_1;
+//
+//        // --- Geometry ---
+//        double dx = goalX - predictedX;
+//        double dy = goalY - predictedY;
+//
+//        double tangentAngle = Math.toDegrees(Math.atan2(dx, dy));
+//
+//        // --- Shoot-while-driving lead ---
+//        double shootWhileDriveCoef = 1.0; // tune
+//        double velocityLead =
+//                (vel.position.x * dx + vel.position.y * dy) * shootWhileDriveCoef;
+//
+//        // --- Final desired heading ---
+//        double desiredHeading = baseHeading - tangentAngle + velocityLead;
+//
+//        // --- Control ---
+//        double diffYaw = desiredHeading - currentHeading;
+//        double turnSpd = diffToSpeed(diffYaw);
+//
+//        // --- Telemetry ---
+////        robot.telemetry.addData("predictedX", predictedX);
+////        robot.telemetry.addData("predictedY", predictedY);
+////        robot.telemetry.addData("dx", dx);
+////        robot.telemetry.addData("dy", dy);
+////        robot.telemetry.addData("tangentAngle", tangentAngle);
+////        robot.telemetry.addData("velocityLead", velocityLead);
+////        robot.telemetry.addData("desiredHeading", desiredHeading);
+////        robot.telemetry.addData("diffYaw", diffYaw);
+////        robot.telemetry.addData("vel", vel);
+//
+//        // --- Drive ---
+//        if (robot.opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
+//            drive(spdX, spdY, turnSpd);
+//        } else {
+//            turnOnly(turnSpd);
+//        }
+//    }
 
     // ============================================================
     //                           COMMANDS (in a clean order)
@@ -349,15 +349,15 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /** Continuous alignment using localization-based aiming */
-    public Command alignToTagCommand() {
-        return new RunCommand(
-                () -> localizationBasedGoalAlignment(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx1.getLeftY()
-                ),
-                this
-        );
-    }
+//    public Command alignToTagCommand() {
+//        return new RunCommand(
+//                () -> localizationBasedGoalAlignment(
+//                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+//                        BarnRobot.getInstance().gamepadEx1.getLeftY()
+//                ),
+//                this
+//        );
+//    }
 
     /** Continuous alignment using Limelight tag yaw (fallback search when tag lost) */
     public Command alignToTagLamLamCommand() {
@@ -371,12 +371,12 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /** Auto version: alignment with zero translation (turn only) */
-    public RunCommand alignToTagCommandAuto() {
-        return new RunCommand(
-                () -> localizationBasedGoalAlignment(0, 0),
-                this
-        );
-    }
+//    public RunCommand alignToTagCommandAuto() {
+//        return new RunCommand(
+//                () -> localizationBasedGoalAlignment(0, 0),
+//                this
+//        );
+//    }
 
     /** Stops rotation (turn = 0). NOTE: does not explicitly stop translation if something else drives it. */
     public Command stop() {

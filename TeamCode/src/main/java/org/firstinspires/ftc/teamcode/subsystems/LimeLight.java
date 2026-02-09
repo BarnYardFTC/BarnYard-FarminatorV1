@@ -236,14 +236,14 @@ public class LimeLight extends SubsystemBase {
     /** Outputs all relevant telemetry for the Limelight subsystem. */
     public void displayTelemetry() {
         BarnRobot robot = BarnRobot.getInstance();
-        robot.telemetry.addData("Data Valid", isDataValid());
-        robot.telemetry.addData("llResult != null", limelight.getLatestResult() != null);
-        robot.telemetry.addData("goal detected", isGoalTagDetected());
+        robot.telemetry.addData("Limelight Data Valid", isDataValid());
+        robot.telemetry.addData("Limelight llResult != null", limelight.getLatestResult() != null);
+        robot.telemetry.addData("Limelight goal detected", isGoalTagDetected());
 // && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC
         if (isGoalTagDetected()) {
-//            robot.telemetry.addData("MT1 POSITION", "(" + llResult.getBotpose().getPosition().x / 0.0254 + ", " + llResult.getBotpose().getPosition().y / 0.0254 + ")");
-            robot.telemetry.addData("distance", getGoalDistance());
-            robot.telemetry.addData("yaw", getGoalYaw());
+            robot.telemetry.addData("Limelight llAngle", llResult.getBotpose().getOrientation());
+            robot.telemetry.addData("Limelight distance", getGoalDistance());
+            robot.telemetry.addData("Limelight yaw", getGoalYaw());
          }
 
         poseUpdateTimer.reset();

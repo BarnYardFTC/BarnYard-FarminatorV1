@@ -23,100 +23,64 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 /**
- * <h2>Webcam Vision Subsystem</h2>
+ * Webcam Vision Subsystem
  *
- * <p>
- * This subsystem manages all robot vision processing using the FTC VisionPortal API.
- * It is responsible for:
- * </p>
- *
- * <ul>
- *   <li>Detecting AprilTags for field localization</li>
- *   <li>Determining MOTIF game pattern using Obelisk tags</li>
- *   <li>Providing robot pose updates to the Pinpoint localizer</li>
- *   <li>Managing camera streaming lifecycle</li>
- * </ul>
- *
- * <p>
- * The subsystem is designed to update localization only when the robot is static
- * to avoid injecting motion blur or bad pose estimates.
- * </p>
+ * Handles:
+ * - AprilTag field localization
+ * - MOTIF pattern detection
+ * - Goal alignment yaw calculation (field-based)
+ * - Safe pose correction when robot is static
  */
 @Config
 public class Webcam extends SubsystemBase {
 
-    /** Minimum time between consecutive pose corrections (seconds). */
-    private static final double POSE_UPDATE_INTERVAL_SEC = 1.0;
+    /* ---------------- FIELD CONSTANTS ---------------- */
 
-    /** Maximum detection distance (meters) allowed for pose updates. */
+    /** Goal X position on field (inches) */
+    private static final double GOAL_X = -64.96;
+
+    /** Goal Y positions depending on alliance (inches) */
+    private static final double BLUE_GOAL_Y = -1.45;
+    private static final double RED_GOAL_Y  =  1.45;
+
+    /* ---------------- VISION CONSTANTS ---------------- */
+
+    private static final double POSE_UPDATE_INTERVAL_SEC = 1.0;
     public static double MAX_UPDATE_DISTANCE = 1.5;
 
-    /** Camera streaming resolution. */
     private static final Size CAMERA_RESOLUTION = new Size(640, 480);
 
-    /** Camera X offset from robot center (cm). */
     public static double WEBCAM_X = -5.1;
-
-    /** Camera Y offset from robot center (cm). */
     public static double WEBCAM_Y = 7.3;
-
-    /** Camera Z height from robot base (cm). */
     public static double WEBCAM_Z = 31.1;
 
-    /** Camera orientation relative to robot frame. */
     private static final YawPitchRollAngles CAMERA_ORIENTATION =
             new YawPitchRollAngles(AngleUnit.DEGREES, 0, -64, 0, 0);
 
-    /** Camera intrinsic focal length (x). */
-    private static final double FX = 500;
+    private static final double FX = 500, FY = 500, CX = 320, CY = 240;
 
-    /** Camera intrinsic focal length (y). */
-    private static final double FY = 500;
+    /* ---------------- STATE ---------------- */
 
-    /** Camera optical center X. */
-    private static final double CX = 320;
-
-    /** Camera optical center Y. */
-    private static final double CY = 240;
-
-    /** VisionPortal instance handling camera and processors. */
     private VisionPortal visionPortal;
-
-    /** AprilTag processor for detection and pose estimation. */
     private AprilTagProcessor aprilTag;
-
-    /** Timer controlling how frequently localization updates occur. */
     private final ElapsedTime poseUpdateTimer = new ElapsedTime();
 
-    /** Current detected MOTIF pattern from Obelisk tags. */
+    /** Current detected MOTIF pattern */
     private Pattern gamePattern;
 
-    /**
-     * Represents the possible MOTIF game patterns detected via Obelisk AprilTags.
-     */
-    public enum Pattern {
-        /** Purple–Purple–Green */
-        PPG,
-        /** Purple–Green–Purple */
-        PGP,
-        /** Green–Purple–Purple */
-        GPP
-    }
+    /** Field-based yaw offset to goal (degrees) */
+    private double dYaw = 0;
 
-    /**
-     * Constructs the Webcam subsystem and initializes vision processing.
-     *
-     * @param hardwareMap FTC hardware map used to access the webcam device
-     */
+    /* ---------------- GAME PATTERN ENUM ---------------- */
+
+    public enum Pattern { PPG, PGP, GPP }
+
+    /* ---------------- INIT ---------------- */
+
     public Webcam(HardwareMap hardwareMap) {
         initVision(hardwareMap);
     }
 
-    /**
-     * Initializes the VisionPortal and attaches the AprilTag processor.
-     *
-     * @param hardwareMap FTC hardware map
-     */
     private void initVision(HardwareMap hardwareMap) {
         Position cameraPosition = new Position(
                 DistanceUnit.CM, WEBCAM_X, WEBCAM_Y, WEBCAM_Z, 0
@@ -136,20 +100,12 @@ public class Webcam extends SubsystemBase {
                 .build();
     }
 
-    /**
-     * Returns all currently visible AprilTag detections.
-     *
-     * @return list of detected AprilTags
-     */
+    /* ---------------- APRILTAG ACCESS ---------------- */
+
     public List<AprilTagDetection> getDetections() {
         return aprilTag.getDetections();
     }
 
-    /**
-     * Returns the best AprilTag detection usable for localization based on alliance.
-     *
-     * @return valid localization AprilTag or {@code null} if none detected
-     */
     public AprilTagDetection getBestDetection() {
         for (AprilTagDetection d : aprilTag.getDetections()) {
             if (d.metadata == null || d.metadata.name.contains("Obelisk")) continue;
@@ -166,55 +122,48 @@ public class Webcam extends SubsystemBase {
         return null;
     }
 
-    /**
-     * Updates the detected MOTIF pattern using Obelisk AprilTag IDs.
-     */
-    public void updateGamePattern() {
-        for (AprilTagDetection d : aprilTag.getDetections()) {
-            if (d.metadata == null || !d.metadata.name.contains("Obelisk")) continue;
-
-            switch (d.metadata.id) {
-                case 21: gamePattern = Pattern.GPP; break;
-                case 22: gamePattern = Pattern.PGP; break;
-                case 23: gamePattern = Pattern.PPG; break;
-                default: gamePattern = null;
-            }
-        }
+    public boolean isLocalizationTagDetected() {
+        return getBestDetection() != null;
     }
 
-    /**
-     * @return the currently detected MOTIF pattern, or {@code null} if none found
-     */
-    public Pattern getGamePattern() {
-        return gamePattern;
-    }
+    /* ---------------- GOAL ALIGNMENT ---------------- */
 
     /**
-     * Returns the robot's estimated field position using AprilTag localization.
-     *
-     * @return robot field position in inches
+     * Updates the yaw offset required for the robot to face the goal.
+     * Positive = turn left, Negative = turn right
      */
-    public Position getRobotPosition() {
+    private void updateGoalYaw() {
         AprilTagDetection d = getBestDetection();
-        return d != null ? d.robotPose.getPosition()
-                : new Position(DistanceUnit.INCH, 0, 0, 0, 0);
+        if (d == null) return;
+
+        double robotX = d.robotPose.getPosition().x;
+        double robotY = d.robotPose.getPosition().y;
+
+        double goalY = BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE
+                ? BLUE_GOAL_Y
+                : RED_GOAL_Y;
+
+        double angleToGoal = Math.toDegrees(Math.atan2(goalY - robotY, GOAL_X - robotX));
+
+        double robotHeading = Math.toDegrees(
+                BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()
+        );
+
+        dYaw = angleWrap(angleToGoal - robotHeading);
     }
 
-    /**
-     * Returns the robot's field orientation using AprilTag localization.
-     *
-     * @return yaw/pitch/roll angles in degrees
-     */
-    public YawPitchRollAngles getRobotOrientation() {
-        AprilTagDetection d = getBestDetection();
-        return d != null ? d.robotPose.getOrientation()
-                : new YawPitchRollAngles(AngleUnit.DEGREES, 0, 0, 0, 0);
+    private double angleWrap(double degrees) {
+        while (degrees > 180) degrees -= 360;
+        while (degrees < -180) degrees += 360;
+        return degrees;
     }
 
-    /**
-     * Pushes the AprilTag-derived pose into the Pinpoint localizer.
-     * Only heading from odometry is preserved to avoid abrupt rotation jumps.
-     */
+    public double getGoalYawOffset() {
+        return dYaw;
+    }
+
+    /* ---------------- POSE UPDATE ---------------- */
+
     public void updatePose() {
         AprilTagDetection d = getBestDetection();
         if (d == null) return;
@@ -228,21 +177,49 @@ public class Webcam extends SubsystemBase {
         BarnRobot.getInstance().pinpointLocalizer.setPose(newPose);
     }
 
-    /**
-     * Checks if a valid localization AprilTag is currently visible.
-     *
-     * @return true if a localization tag is detected
-     */
-    public boolean isLocalizationTagDetected() {
-        return getBestDetection() != null;
+    /* ---------------- GAME PATTERN ---------------- */
+
+    public void updateGamePattern() {
+        for (AprilTagDetection d : aprilTag.getDetections()) {
+            if (d.metadata == null || !d.metadata.name.contains("Obelisk")) continue;
+
+            switch (d.metadata.id) {
+                case 21: gamePattern = Pattern.GPP; break;
+                case 22: gamePattern = Pattern.PGP; break;
+                case 23: gamePattern = Pattern.PPG; break;
+                default: gamePattern = null;
+            }
+        }
     }
 
-    /**
-     * Called automatically by the command framework scheduler.
-     * Performs periodic pose updates when safe.
-     */
+    public Pattern getGamePattern() {
+        return gamePattern;
+    }
+
+    /* ---------------- DISTANCE TO GOAL ---------------- */
+
+    public double getDistanceToGoal() {
+        AprilTagDetection d = getBestDetection();
+        if (d == null) return -1;
+
+        double goalY = BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE
+                ? BLUE_GOAL_Y
+                : RED_GOAL_Y;
+
+        double dx = GOAL_X - d.robotPose.getPosition().x;
+        double dy = goalY - d.robotPose.getPosition().y;
+
+        return Math.hypot(dx, dy);
+    }
+
+    /* ---------------- PERIODIC ---------------- */
+
     @Override
     public void periodic() {
+        if (isLocalizationTagDetected()) {
+            updateGoalYaw();
+        }
+
         if (isLocalizationTagDetected()
                 && BarnRobot.getInstance().drive.isRobotStatic()
                 && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
@@ -252,27 +229,28 @@ public class Webcam extends SubsystemBase {
         }
     }
 
-    /** Stops the camera stream. */
+    /* ---------------- CAMERA CONTROL ---------------- */
+
     public void stopStreaming() {
         if (visionPortal != null) visionPortal.stopStreaming();
     }
 
-    /** Resumes the camera stream. */
     public void resumeStreaming() {
         if (visionPortal != null) visionPortal.resumeStreaming();
     }
 
-    /** Fully closes the camera and releases resources. */
     public void close() {
         if (visionPortal != null) visionPortal.close();
     }
 
-    /**
-     * Adds AprilTag-based localization telemetry to the driver station.
-     */
+    /* ---------------- TELEMETRY ---------------- */
+
     public void displayTelemetry() {
-        BarnRobot.getInstance().telemetry.addData("Robot Yaw", getRobotOrientation().getYaw());
-        BarnRobot.getInstance().telemetry.addData("Robot X", getRobotPosition().x);
-        BarnRobot.getInstance().telemetry.addData("Robot Y", getRobotPosition().y);
+        BarnRobot robot = BarnRobot.getInstance();
+        AprilTagDetection d = getBestDetection();
+        robot.telemetry.addData("Webcam Robot X", d != null ? d.robotPose.getPosition().x : "N/A");
+        robot.telemetry.addData("Webcam Robot Y", d != null ? d.robotPose.getPosition().y : "N/A");
+        robot.telemetry.addData("Webcam Goal dYaw", dYaw);
+        robot.telemetry.addData("Webcam Goal Distance", getDistanceToGoal());
     }
 }

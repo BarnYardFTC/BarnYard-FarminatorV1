@@ -43,7 +43,7 @@ public class LimelightTestTeleop extends CommandOpMode {
         // ==========================================================
         // Default Commands
         // ==========================================================
-//        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 

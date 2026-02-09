@@ -176,7 +176,7 @@ public class BarnRobot extends Robot {
 
     public void initShooterHood(){
         shooterHood = new ShooterHood();
-        shooterHood.setDefaultCommand(shooterHood.defaultHoodCommand());
+//        shooterHood.setDefaultCommand(shooterHood.defaultHoodCommand());
     }
 
     public void initGate(){
@@ -203,9 +203,6 @@ public class BarnRobot extends Robot {
      */
     public void periodic() {
         pinpointLocalizer.update();
-        limelight.periodic();
-        limelight.displayTelemetry();
-        webcam.periodic();
         telemetry.update();
     }
 }

@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
+import org.firstinspires.ftc.teamcode.commandGroups.SmartCommandGroups;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
@@ -70,8 +71,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
                         new ParallelCommandGroup(
-                                farminator.intake.activateIntakeCommand(),
-                                farminator.transfer.activateTransfer(),
+                                SmartCommandGroups.smartTransferAndIntake(),
                                 BarnRobot.getInstance().gate.closeCommand()
                         )
                 )
@@ -147,7 +147,7 @@ public class TestTeleopnNEW extends CommandOpMode {
                 ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(CommandGroup.shootCommand());
+                .whenPressed(SmartCommandGroups.smartShootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
@@ -168,9 +168,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
         telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-        farminator.shooterSensor.displayTelemetry(telemetry, "shooter", 8.8);
-        farminator.midSensor.displayTelemetry(telemetry, "mid", 3.0);
-        farminator.intakeSensor.displayTelemetry(telemetry, "intake", 6.2);
+        farminator.colorSensor.displayTelemetry(telemetry);
 
         farminator.periodic();
     }

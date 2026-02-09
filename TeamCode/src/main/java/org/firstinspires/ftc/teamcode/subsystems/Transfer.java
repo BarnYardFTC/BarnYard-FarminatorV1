@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 public class Transfer extends SubsystemBase {
 
     private DcMotorEx transferMotor;
+    private ColorSensor colorSensor;
 
     // ------------------------------------------------------------
     // Constructor
@@ -23,6 +24,7 @@ public class Transfer extends SubsystemBase {
     public Transfer() {
         BarnRobot robot = BarnRobot.getInstance();
         transferMotor = robot.robotHardware.transfer;
+        this.colorSensor = new ColorSensor();
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -36,6 +38,14 @@ public class Transfer extends SubsystemBase {
 
     public Command customTransferCommand(double power){
         return new InstantCommand(() -> transferMotor.setPower(power));
+    }
+
+    public Command smartTransferCommand(){
+        return new ConditionalCommand(
+                new InstantCommand(() -> transferMotor.setPower(0)),
+                new InstantCommand(() -> transferMotor.setPower(1)),
+                this.colorSensor::isShootAndMidIn
+        );
     }
 
 }

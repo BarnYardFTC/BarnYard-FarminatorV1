@@ -11,7 +11,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
-import org.firstinspires.ftc.teamcode.commandGroups.SmartCommandGroups;
+import org.firstinspires.ftc.teamcode.commandGroups.RobotCommands;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
@@ -71,7 +71,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
                         new ParallelCommandGroup(
-                                SmartCommandGroups.smartTransferAndIntake(),
+                                RobotCommands.smartTransferAndIntake(),
                                 BarnRobot.getInstance().gate.closeCommand()
                         )
                 )
@@ -147,7 +147,7 @@ public class TestTeleopnNEW extends CommandOpMode {
                 ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(SmartCommandGroups.smartShootCommand());
+                .whenPressed(RobotCommands.smartShootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
@@ -69,6 +70,24 @@ public class RobotCommands {
                 BarnRobot.getInstance().intake.deactivateIntakeCommand(),
                 BarnRobot.getInstance().transfer.deactivateTransfer(),
                 BarnRobot.getInstance().gate.openCommand()
+        );
+    }
+
+    public static Command smartTransferAndIntake(){
+        return new ParallelCommandGroup(BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransferCommand());
+    }
+
+    public static Command smartShootCommand(){
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        CommandGroup.intakeAndTransferActivateCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().colorSensor.isRobotFull()),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                )
         );
     }
 

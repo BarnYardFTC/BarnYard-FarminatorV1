@@ -46,6 +46,15 @@ public class GovnoTesting extends CommandOpMode {
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 RobotCommands.shootAllCommand()
         );
+
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                RobotCommands.smartTransferAndIntake()
+        );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                RobotCommands.smartShootCommand()
+        );
     }
     @Override
     public void run() {

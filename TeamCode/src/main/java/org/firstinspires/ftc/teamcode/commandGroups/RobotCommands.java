@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import java.util.function.BooleanSupplier;
 
 /**
- * A class that contains complex command groups with commands from different classes.
+ * Contains complex command groups with commands from different classes.
  * It's here to make the code more object oriented and something :)
  */
 @Config
@@ -26,30 +26,18 @@ public class RobotCommands {
 
     private static String lastCommand;
 
-    /**
-     * Shoots one artifact when shooter is ready,
-     * not meant for using outside of the class
-     */
-    private static Command shootOneCommand() {
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> lastCommand = "shootOneCommand()"),
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                BarnRobot.getInstance().intake.activateIntakeCommand(),
-                BarnRobot.getInstance().transfer.activateTransfer(),
-                new WaitCommand(TRANSFER_ONE_DURATION),
-                BarnRobot.getInstance().intake.deactivateIntakeCommand(),
-                BarnRobot.getInstance().transfer.deactivateTransfer()
-        );
-    }
-
     /** Opens the gate shoots three artifacts */
     public static Command shootAllCommand() {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "shootAllCommand()"),
                 BarnRobot.getInstance().gate.openCommand(),
-                shootOneCommand(),
-                shootOneCommand(),
-                shootOneCommand()
+                new InstantCommand(() -> lastCommand = "shootOneCommand()"),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
+                BarnRobot.getInstance().transfer.activateTransfer(),
+                new WaitCommand(TRANSFER_ALL_DURATION),
+                BarnRobot.getInstance().intake.deactivateIntakeCommand(),
+                BarnRobot.getInstance().transfer.deactivateTransfer()
         );
     }
 
@@ -73,14 +61,20 @@ public class RobotCommands {
         );
     }
 
+    /** Keeps transfer and intake activated if robot isn't full */
     public static Command smartTransferAndIntake(){
-        return new ParallelCommandGroup(BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransferCommand());
+        return new ParallelCommandGroup(
+                new InstantCommand(() -> lastCommand = "smartTransferAndIntake()"),
+                BarnRobot.getInstance().intake.smartIntakeCommand(),
+                BarnRobot.getInstance().transfer.smartTransferCommand());
     }
 
+    /** Shoots until there is no artifacts left */
     public static Command smartShootCommand(){
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
+                        new InstantCommand(() -> lastCommand = "smartShootCommand()"),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.openCommand(),
                         CommandGroup.intakeAndTransferActivateCommand(),

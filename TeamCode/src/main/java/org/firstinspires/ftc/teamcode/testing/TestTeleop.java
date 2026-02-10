@@ -28,7 +28,7 @@ import java.util.function.BooleanSupplier;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "Test Teleop", group = "test")
+@TeleOp(name = "!!Test Teleop", group = "test")
 @Config
 public class TestTeleop extends CommandOpMode {
 

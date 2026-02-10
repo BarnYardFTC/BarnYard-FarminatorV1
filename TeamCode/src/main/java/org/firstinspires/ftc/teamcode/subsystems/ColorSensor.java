@@ -204,7 +204,7 @@ public class ColorSensor {
     }
 
     public boolean isShootAndMidIn(){
-        return isShootPosBusy() && isMidPosBusy();
+        return isShootPosBusy() || isMidPosBusy();
     }
 
     /**

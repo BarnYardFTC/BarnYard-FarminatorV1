@@ -127,13 +127,16 @@ public class LimeLight extends SubsystemBase {
     }
 
     public double getGoalYaw(){
-        LLResultTypes.FiducialResult largest = frs.get(0);
-        for (LLResultTypes.FiducialResult fr : frs) {
-            if (fr.getTargetArea() > largest.getTargetArea()) {
-                largest = fr;
+        if (frs != null){
+            LLResultTypes.FiducialResult largest = frs.get(0);
+            for (LLResultTypes.FiducialResult fr : frs) {
+                if (fr.getTargetArea() > largest.getTargetArea()) {
+                    largest = fr;
+                }
             }
+            return largest.getTargetPoseCameraSpace().getPosition().x;
         }
-        return largest.getTargetPoseCameraSpace().getPosition().x;
+        else return -1;
     }
 
     /**

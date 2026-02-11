@@ -48,6 +48,8 @@ public class BarnRobot extends Robot {
     public LimeLight limelight;
     public Webcam webcam;
 
+    public CircleLocalization circle;
+
     public PinpointLocalizer pinpointLocalizer;
 
 
@@ -140,6 +142,7 @@ public class BarnRobot extends Robot {
 
         initLimeLight();
         initWebcam(opMode.hardwareMap);
+        initCircle();
     }
 
 
@@ -177,6 +180,10 @@ public class BarnRobot extends Robot {
     public void initShooterHood(){
         shooterHood = new ShooterHood();
 //        shooterHood.setDefaultCommand(shooterHood.defaultHoodCommand());
+    }
+
+    public void initCircle(){
+        circle = new CircleLocalization();
     }
 
     public void initGate(){

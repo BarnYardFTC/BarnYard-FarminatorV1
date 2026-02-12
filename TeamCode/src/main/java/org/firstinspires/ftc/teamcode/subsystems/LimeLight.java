@@ -215,10 +215,7 @@ public class LimeLight extends SubsystemBase {
         frs = llResult.getFiducialResults();
         limelight.updateRobotOrientation(Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()));
 
-        if (isGoalTagDetected()
-                && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC &&
-                BarnRobot.getInstance().drive.isRobotStatic()
-        ) {
+        if (isGoalTagDetected()) {
             updatePose();
             poseUpdateTimer.reset();
         }
@@ -243,10 +240,11 @@ public class LimeLight extends SubsystemBase {
         robot.telemetry.addData("Limelight Data Valid", isDataValid());
         robot.telemetry.addData("Limelight llResult != null", limelight.getLatestResult() != null);
         robot.telemetry.addData("Limelight goal detected", isGoalTagDetected());
+        robot.telemetry.addData("Limelight distance", getGoalDistance());
 // && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC
         if (isGoalTagDetected()) {
             robot.telemetry.addData("Limelight llAngle", llResult.getBotpose().getOrientation());
-            robot.telemetry.addData("Limelight distance", getGoalDistance());
+
             robot.telemetry.addData("Limelight yaw", getGoalYaw());
          }
 

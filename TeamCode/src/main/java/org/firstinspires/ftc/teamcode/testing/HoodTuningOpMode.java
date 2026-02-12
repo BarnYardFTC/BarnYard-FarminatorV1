@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -31,18 +32,32 @@ public class HoodTuningOpMode extends CommandOpMode {
         );
 
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.setCustomDashboardPos());
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
+        farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
-                        farminator.shooter.turnOff(),
-                        farminator.shooter.runShooterBasedOnDistance()
-                );
+                        new ParallelCommandGroup(
+                                farminator.shooter.runShooterBasedOnDistance(),
+                                farminator.intake.activateIntakeCommand(),
+                                farminator.gate.openCommand(),
+                                farminator.transfer.activateTransfer()
+                        ),
+                        new ParallelCommandGroup(
+                                farminator.shooter.turnOff(),
+                                farminator.intake.deactivateIntakeCommand(),
+                                farminator.gate.closeCommand(),
+                                farminator.transfer.deactivateTransfer()
+                                )
+                        );
     }
 
     @Override
     public void run() {
         super.run();
+        farminator.limelight.displayTelemetry();
+        telemetry.addData("distance pinpoint", farminator.drive.getDistanceFromGoal());
+        farminator.shooter.displayTelemetry();
+        farminator.periodic();
     }
 }

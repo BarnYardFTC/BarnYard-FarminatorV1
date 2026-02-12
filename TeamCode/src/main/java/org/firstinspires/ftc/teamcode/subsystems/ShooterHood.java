@@ -19,7 +19,7 @@ public class ShooterHood extends SubsystemBase {
 
     private double servoPos = 0.95;
 
-    InterpLUT range1Lut;
+    InterpLUT rangeLut;
 
     public static double SERVO_POSITION = 1;
 
@@ -32,25 +32,27 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private void initInterpLUT(){
-        range1Lut = new InterpLUT();
+        rangeLut = new InterpLUT();
 
         //Adding each val with a key
-        range1Lut.add(0.45, 0.35);
-        range1Lut.add(0.75, 0.4);
-        range1Lut.add(0.86, 0.45);
-        range1Lut.add(1.16, 0.5);
-        range1Lut.add(1.28, 0.6);
-        range1Lut.add(1.86, 1);
-        range1Lut.add(1.95, 1);
-        range1Lut.add(2.04, 1);
+        rangeLut.add(0.05, 0.45);
+        rangeLut.add(0.22, 0.55);
+        rangeLut.add(0.51,0.65);
+        rangeLut.add(0.83,0.7);
+        rangeLut.add(1.05,0.95);
+        rangeLut.add(1.25,1);
+        rangeLut.add(1.65,0.85);
+        rangeLut.add(1.9,0.95);
+        rangeLut.add(2,1);
+        rangeLut.add(2.12,1);
         //generating final equation
 
-        range1Lut.createLUT();
+        rangeLut.createLUT();
     }
 
     public void distanceDependentAngleRange(double distance) {
         distance = capDistanceRange1(distance);
-        double position = range1Lut.get(distance);
+        double position = rangeLut.get(distance);
 
         BarnRobot.getInstance().telemetry.addData("range dependent position close", position);
 //        setPosition(position);
@@ -190,8 +192,8 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private double capDistanceRange1(double distance){
-        if (distance <= 0.45) distance = 0.46;
-        else if (distance >= 2.04) distance = 2.03;
+        if (distance <= 0.05) distance = 0.06;
+        else if (distance >= 2.12) distance = 2.11;
         return distance;
     }
 

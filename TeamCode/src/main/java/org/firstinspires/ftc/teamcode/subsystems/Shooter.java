@@ -75,6 +75,7 @@ public class Shooter  extends SubsystemBase {
             targetVelocity = SHOOTER_VELOCITY_RANGE_2;
         }
         else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
+            BarnRobot.getInstance().telemetry.addLine("SHOOTING RANGE 3");
             targetVelocity = SHOOTER_VELOCITY_RANGE_3;
         }
         else if (distance > SHOOTING_RANGE_3) {

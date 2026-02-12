@@ -52,7 +52,7 @@ public class TestTeleopnNEW extends CommandOpMode {
                 this,
                 opModeData
         );
-        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.setCustomDashboardPos() );
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 
@@ -119,15 +119,15 @@ public class TestTeleopnNEW extends CommandOpMode {
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
 //                .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+//                .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+//                .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
 
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
 //                .whenPressed(new ParallelCommandGroup(

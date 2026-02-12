@@ -55,8 +55,8 @@ public class ShooterHood extends SubsystemBase {
         range2Lut.add(1.86, 1);
         range2Lut.add(1.95, 1);
         range2Lut.add(2.04, 1);
-
         //generating final equation
+
         range1Lut.createLUT();
         range2Lut.createLUT();
     }

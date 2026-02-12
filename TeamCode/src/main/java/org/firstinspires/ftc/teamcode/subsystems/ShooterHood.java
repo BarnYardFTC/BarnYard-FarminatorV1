@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_1;
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_2;
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_3;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
@@ -14,7 +10,6 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.util.InterpLUT;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 
 @Config
 public class ShooterHood extends SubsystemBase {
@@ -25,7 +20,6 @@ public class ShooterHood extends SubsystemBase {
     private double servoPos = 0.95;
 
     InterpLUT range1Lut;
-    InterpLUT range2Lut;
 
     public static double SERVO_POSITION = 1;
 
@@ -39,7 +33,6 @@ public class ShooterHood extends SubsystemBase {
 
     private void initInterpLUT(){
         range1Lut = new InterpLUT();
-        range2Lut = new InterpLUT();
 
         //Adding each val with a key
         range1Lut.add(0.45, 0.35);
@@ -47,21 +40,15 @@ public class ShooterHood extends SubsystemBase {
         range1Lut.add(0.86, 0.45);
         range1Lut.add(1.16, 0.5);
         range1Lut.add(1.28, 0.6);
-
-        range2Lut.add(1.35,0.5);
-        range2Lut.add(1.47,0.6);
-        range2Lut.add(1.6,0.7);
-        range2Lut.add(1.75, 0.8);
-        range2Lut.add(1.86, 1);
-        range2Lut.add(1.95, 1);
-        range2Lut.add(2.04, 1);
+        range1Lut.add(1.86, 1);
+        range1Lut.add(1.95, 1);
+        range1Lut.add(2.04, 1);
         //generating final equation
 
         range1Lut.createLUT();
-        range2Lut.createLUT();
     }
 
-    public void distanceDependentAngleRange1(double distance) {
+    public void distanceDependentAngleRange(double distance) {
         distance = capDistanceRange1(distance);
         double position = range1Lut.get(distance);
 
@@ -71,68 +58,25 @@ public class ShooterHood extends SubsystemBase {
 
     }
 
-    public void distanceDependentAngleRange2(double distance) {
-        distance = capDistanceRange2(distance);
-        double position = range2Lut.get(distance);
-
-//        setPosition(position);
-        servoPos = position;
-    }
-
-    public void distanceDependentAngleRangeTmp(){
-        setPosition(MIN);
-    }
-
-    public void distanceDependentAngleRange3() {
-        setPosition(MAX);
-//        servoPos = MAX;
-    }
-
-    public void distanceDependentAngleRange4() {
-        setPosition(MAX);
-//        servoPos = MIN;
-    }
 
     public void autoHoodAlignmentConstantDistance(){
 
         double distance = BarnRobot.getInstance().limelight.getGoalDistance();
 
-        if (distance < SHOOTING_RANGE_1) {
-            distanceDependentAngleRange1(distance);
-        }
-        else if (distance > SHOOTING_RANGE_1 && distance < SHOOTING_RANGE_2){
-            distanceDependentAngleRange2(distance);
-        }
-        else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
-            distanceDependentAngleRange3();
-        }
-        else if (distance > SHOOTING_RANGE_3) {
-            distanceDependentAngleRange4();
-        }
-        else if (distance == -1) {
+        if (distance == -1) {
             setPosition(MIN);
+        }
+        else {
+            distanceDependentAngleRange(distance);
         }
     }
 
     public void shooterHoodBasedOnDistance(double distance){
-        if (distance < SHOOTING_RANGE_1) {
-//            setPosition(MIN);
-            distanceDependentAngleRange1(distance);
-        }
-        else if (distance > SHOOTING_RANGE_1 && distance < SHOOTING_RANGE_2){
-            distanceDependentAngleRange2(distance);
-//            setPosition(MIN+0.20);
-        }
-        else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
-            distanceDependentAngleRange3();
-//            setPosition(MAX-0.20);
-        }
-        else if (distance > SHOOTING_RANGE_3) {
-//            setPosition(MAX);
-            distanceDependentAngleRange4();
-        }
-        else if (distance == -1) {
+        if (distance == -1) {
             setPosition(MIN);
+        }
+        else {
+            distanceDependentAngleRange(distance);
         }
     }
 
@@ -247,12 +191,6 @@ public class ShooterHood extends SubsystemBase {
 
     private double capDistanceRange1(double distance){
         if (distance <= 0.45) distance = 0.46;
-        else if (distance >= 1.28) distance = 1.279;
-        return distance;
-    }
-
-    private double capDistanceRange2(double distance){
-        if (distance <= 1.35) distance = 1.36;
         else if (distance >= 2.04) distance = 2.03;
         return distance;
     }

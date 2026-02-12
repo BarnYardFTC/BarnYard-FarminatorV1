@@ -31,7 +31,7 @@ public class Shooter  extends SubsystemBase {
 
 
     public static double SHOOTING_RANGE_1 = 1.3;
-    public static double SHOOTING_RANGE_2 = 2.05;
+    public static double SHOOTING_RANGE_2 = 1.9;
     public static double SHOOTING_RANGE_3 = 2.8;
 
     private double targetVelocity;

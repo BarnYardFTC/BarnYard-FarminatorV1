@@ -109,26 +109,8 @@ public class ColorSensor {
      *
      * @return {@code true} if an artifact is detected
      */
-    public boolean isShootPosBusy() {
+    public boolean isPoseBusy() {
         return getArtifactDistanceTimed() < SHOOTER_DISTANCE_CM;
-    }
-
-    /**
-     * Determines whether an artifact is present at the middle position.
-     *
-     * @return {@code true} if an artifact is detected
-     */
-    public boolean isMidPosBusy() {
-        return getArtifactDistanceTimed() < MIDDLE_DISTANCE_CM;
-    }
-
-    /**
-     * Determines whether an artifact is present at the intake position.
-     *
-     * @return {@code true} if an artifact is detected
-     */
-    public boolean isIntakePosBusy() {
-        return getArtifactDistanceTimed() < INTAKE_DISTANCE_CM;
     }
 
     /**

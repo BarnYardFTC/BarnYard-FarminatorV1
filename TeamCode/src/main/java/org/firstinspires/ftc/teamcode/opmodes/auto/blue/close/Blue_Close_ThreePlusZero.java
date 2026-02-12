@@ -81,7 +81,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new DriveActionCommand(path1),
                                 new ParallelRaceGroup(
-                                        farminator.drive.alignToTagCommandAuto(),
+                                        farminator.drive.alignToTagLamLamCommand(),
                                         new WaitCommand(500)
                                 ),
                                 farminator.drive.stop(),

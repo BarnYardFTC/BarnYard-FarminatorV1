@@ -51,7 +51,6 @@ public class Shooter  extends SubsystemBase {
 
         pidfController = new ShooterPIDFController(p, 0, 0, f);
 
-        customDistance = 1.2;
     }
 
     private void setPower(double power) {
@@ -117,14 +116,10 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooter(velocity), this);
     }
 
-    public double customDistance = 0;
     private void shooterSpeedOnDistance(){
-        if (customDistance == 0){
-            operateShooterDistanceBased(
-                    BarnRobot.getInstance().drive.getDistanceFromGoal()
-            );
-        }
-        else operateShooterDistanceBased(customDistance);
+        operateShooterDistanceBased(
+                BarnRobot.getInstance().limelight.getGoalDistance()
+        );
     }
 
     public RunCommand runShooterBasedOnDistance(){

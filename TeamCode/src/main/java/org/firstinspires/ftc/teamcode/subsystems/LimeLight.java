@@ -122,10 +122,11 @@ public class LimeLight extends SubsystemBase {
             }
             return largest.getTargetPoseCameraSpace().getPosition().z;
         }
-        return -1;
+        return BarnRobot.getInstance().drive.getDistanceFromGoal();
 
     }
 
+    public double cashedYaw = -1;
     public double getGoalYaw(){
         if (frs != null){
             LLResultTypes.FiducialResult largest = frs.get(0);
@@ -134,9 +135,9 @@ public class LimeLight extends SubsystemBase {
                     largest = fr;
                 }
             }
-            return largest.getTargetPoseCameraSpace().getPosition().x;
+            cashedYaw = largest.getTargetPoseCameraSpace().getPosition().x;
         }
-        else return -1;
+        return cashedYaw;
     }
 
     /**

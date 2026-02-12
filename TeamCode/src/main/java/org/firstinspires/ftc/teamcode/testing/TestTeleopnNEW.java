@@ -128,29 +128,29 @@ public class TestTeleopnNEW extends CommandOpMode {
                         BarnRobot.getInstance().gate.closeCommand()
                 ));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommandPreset(1),
-                        rumbleCommand()
-                ).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommandPreset(2),
-                        rumbleCommand()
-                ).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommandPreset(3),
-                        rumbleCommand()
-                ).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+//                .whenPressed(new ParallelCommandGroup(
+//                        CommandGroup.shootCommandPreset(1),
+//                        rumbleCommand()
+//                ).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+//                .whenPressed(new ParallelCommandGroup(
+//                        CommandGroup.shootCommandPreset(2),
+//                        rumbleCommand()
+//                ).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+//                .whenPressed(new ParallelCommandGroup(
+//                        CommandGroup.shootCommandPreset(3),
+//                        rumbleCommand()
+//                ).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(CommandGroup.shootCommand());
@@ -171,7 +171,6 @@ public class TestTeleopnNEW extends CommandOpMode {
         farminator.shooter.displayTelemetry();
         telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
-        telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
         telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
 

@@ -87,14 +87,10 @@ public class ShooterHood extends SubsystemBase {
 //        servoPos = MIN;
     }
 
-    public void autoHoodAlignmentFunc(){
+    public void autoHoodAlignmentConstantDistance(){
+
         double distance = BarnRobot.getInstance().limelight.getGoalDistance();
 
-        autoHoodAlignmentConstantDistance(distance);
-
-    }
-
-    public void autoHoodAlignmentConstantDistance(double distance){
         if (distance < SHOOTING_RANGE_1) {
             distanceDependentAngleRange1(distance);
         }
@@ -121,7 +117,7 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public Command autoHoodAlignment(){
-        return new RunCommand(() -> autoHoodAlignmentFunc(), this);
+        return new RunCommand(() -> autoHoodAlignmentConstantDistance(), this);
     }
 
 //    public Command lower() {
@@ -143,7 +139,7 @@ public class ShooterHood extends SubsystemBase {
     private void setPosition(double position){
         if (position < MIN) position = MIN;
         if (position > MAX) position = MAX;
-        servo.setPosition(position);
+        servoPos = position;
     }
 
     public void lower() {

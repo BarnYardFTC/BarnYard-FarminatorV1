@@ -60,26 +60,4 @@ public class CommandGroup extends SequentialCommandGroup {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
     }
 
-
-
-
-
-
-    public static void shootPreset(int n){
-        if (n == 1){
-//            BarnRobot.getInstance().shooterHood.setCustomPosition(0.4);
-            BarnRobot.getInstance().shooter.customDistance = 1.2;
-        }
-        else if (n == 2){
-//            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
-            BarnRobot.getInstance().shooter.customDistance = 2.2;
-        } else if (n == 3){
-//            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
-            BarnRobot.getInstance().shooter.customDistance = 3;
-        }
-    }
-
-    public static Command shootCommandPreset(int n){
-        return new InstantCommand(() -> shootPreset(n));
-    }
 }

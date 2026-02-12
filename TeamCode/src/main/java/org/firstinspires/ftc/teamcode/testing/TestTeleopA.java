@@ -119,30 +119,30 @@ public class TestTeleopA extends CommandOpMode{
                 .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()).alongWith(
                         BarnRobot.getInstance().gate.closeCommand()
                 ));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommandPreset(1),
-                        rumbleCommand()
-                ).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommandPreset(2),
-                        rumbleCommand()
-                ).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommandPreset(3),
-                        rumbleCommand()
-                ).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+//                .whenPressed(new ParallelCommandGroup(
+//                        CommandGroup.shootCommandPreset(1),
+//                        rumbleCommand()
+//                ).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+//                .whenPressed(new ParallelCommandGroup(
+//                        CommandGroup.shootCommandPreset(2),
+//                        rumbleCommand()
+//                ).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+//                .whenPressed(new ParallelCommandGroup(
+//                        CommandGroup.shootCommandPreset(3),
+//                        rumbleCommand()
+//                ).alongWith(
+//                        BarnRobot.getInstance().gate.closeCommand()
+//                ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(CommandGroup.shootCommand());
@@ -163,7 +163,6 @@ public class TestTeleopA extends CommandOpMode{
         farminator.shooter.displayTelemetry();
         telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
-        telemetry.addData("custom distance", farminator.shooter.customDistance);
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
         telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
 

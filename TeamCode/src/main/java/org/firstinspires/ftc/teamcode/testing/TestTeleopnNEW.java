@@ -71,7 +71,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
                         new ParallelCommandGroup(
-                                RobotCommands.smartTransferAndIntake(),
+                                RobotCommands.smartCollectCommand(),
                                 BarnRobot.getInstance().gate.closeCommand()
                         )
                 )

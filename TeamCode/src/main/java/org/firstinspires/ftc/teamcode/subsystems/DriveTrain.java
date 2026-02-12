@@ -27,6 +27,7 @@ public class DriveTrain extends SubsystemBase {
     // Yaw PID (deg -> output turn)
     public static double pYaw = 0.5, dYaw = 0.005;
 
+
     // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
     public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.3;
@@ -230,20 +231,19 @@ public class DriveTrain extends SubsystemBase {
         double turnSpeed;
 
         if (valid) {
-            searchingForTag = false;  // We see tag → tracking mode
+            searchingForTag = false;
             double yawDiff = BarnRobot.getInstance().limelight.getGoalYaw();
             turnSpeed = diffToSpeed(yawDiff);
             BarnRobot.getInstance().telemetry.addData("pid speed", turnSpeed);
         } else {
             if (!searchingForTag) {
-                // We JUST lost the tag → re-enter search mode
                 searchingForTag = true;
                 tagJustVanished = true;
             } else {
                 tagJustVanished = false;
             }
 
-            turnSpeed = determineFinalTurnSpeed(); // pure search behavior
+            turnSpeed = determineFinalTurnSpeed();
         }
 
         drive(x, y, turnSpeed);

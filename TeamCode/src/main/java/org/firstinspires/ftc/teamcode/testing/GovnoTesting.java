@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.testing;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -43,13 +42,13 @@ public class GovnoTesting extends CommandOpMode {
                 RobotCommands.collectStopCommand()
         );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                RobotCommands.shootAllCommand()
-        );
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+//                RobotCommands.shootAllCommand()
+//        );
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                RobotCommands.smartTransferAndIntake()
+                RobotCommands.smartCollectCommand()
         );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(

@@ -52,7 +52,7 @@ public class TestTeleopnNEW extends CommandOpMode {
                 this,
                 opModeData
         );
-        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.defaultHoodCommand());
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.setCustomDashboardPos() );
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 

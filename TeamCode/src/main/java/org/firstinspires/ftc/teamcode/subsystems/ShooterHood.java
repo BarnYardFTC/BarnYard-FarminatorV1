@@ -9,10 +9,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.util.InterpLUT;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 
 @Config
 public class ShooterHood extends SubsystemBase {
@@ -64,18 +66,22 @@ public class ShooterHood extends SubsystemBase {
         double position = range1Lut.get(distance);
 
         BarnRobot.getInstance().telemetry.addData("range dependent position close", position);
-        setPosition(position);
-//        servoPos = position;
+//        setPosition(position);
+        servoPos = position;
+
     }
 
     public void distanceDependentAngleRange2(double distance) {
         distance = capDistanceRange2(distance);
         double position = range2Lut.get(distance);
 
-        setPosition(position);
-//        servoPos = position;
+//        setPosition(position);
+        servoPos = position;
     }
 
+    public void distanceDependentAngleRangeTmp(){
+        setPosition(MIN);
+    }
 
     public void distanceDependentAngleRange3() {
         setPosition(MAX);
@@ -108,6 +114,35 @@ public class ShooterHood extends SubsystemBase {
         }
     }
 
+    public void shooterHoodBasedOnDistance(double distance){
+        if (distance < SHOOTING_RANGE_1) {
+//            setPosition(MIN);
+            distanceDependentAngleRange1(distance);
+        }
+        else if (distance > SHOOTING_RANGE_1 && distance < SHOOTING_RANGE_2){
+            distanceDependentAngleRange2(distance);
+//            setPosition(MIN+0.20);
+        }
+        else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
+            distanceDependentAngleRange3();
+//            setPosition(MAX-0.20);
+        }
+        else if (distance > SHOOTING_RANGE_3) {
+//            setPosition(MAX);
+            distanceDependentAngleRange4();
+        }
+        else if (distance == -1) {
+            setPosition(MIN);
+        }
+    }
+
+    public void shooterHoodOnDistance(){
+        shooterHoodBasedOnDistance(
+                BarnRobot.getInstance().limelight.getGoalDistance()
+        );
+        setPosition(servoPos);
+    }
+
     public Command setHoodCloseToGoalPos(){
         return new RunCommand(() -> setPosition(MIN), this);
     }
@@ -116,8 +151,8 @@ public class ShooterHood extends SubsystemBase {
         return new InstantCommand(() -> servo.setPosition(position), this);
     }
 
-    public Command autoHoodAlignment(){
-        return new RunCommand(() -> autoHoodAlignmentConstantDistance(), this);
+    public RunCommand autoHoodAlignment(){
+        return new RunCommand(() -> shooterHoodOnDistance(), this);
     }
 
 //    public Command lower() {
@@ -139,7 +174,7 @@ public class ShooterHood extends SubsystemBase {
     private void setPosition(double position){
         if (position < MIN) position = MIN;
         if (position > MAX) position = MAX;
-        servoPos = position;
+        servo.setPosition(position);
     }
 
     public void lower() {
@@ -173,6 +208,13 @@ public class ShooterHood extends SubsystemBase {
         return new InstantCommand(() -> {
             servo.setPosition(MIN);
         },this
+        );
+    }
+
+    public Command defaultAndAutoHoodCommand(){
+        return new SequentialCommandGroup(
+                defaultHoodCommand(),
+                autoHoodAlignment()
         );
     }
 
@@ -215,6 +257,15 @@ public class ShooterHood extends SubsystemBase {
         return distance;
     }
 
+
+    public static double DASHBOARD_POS = 0.5;
+    public void setPositionDashboard(){
+        servo.setPosition(DASHBOARD_POS);
+    }
+
+    public RunCommand setCustomDashboardPos(){
+        return new RunCommand(() -> setPositionDashboard(), this);
+    }
 
 
     public void setCustomPosition(double position){

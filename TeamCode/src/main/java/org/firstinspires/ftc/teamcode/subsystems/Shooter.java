@@ -134,7 +134,7 @@ public class Shooter  extends SubsystemBase {
 
 
 
-    public void displayTelemetry(){
+    public void     displayTelemetry(){
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
         telemetry.addData("shooter velocity", shooterRight.getVelocity());
         telemetry.addData("left shooter power", shooterLeft.getPower());

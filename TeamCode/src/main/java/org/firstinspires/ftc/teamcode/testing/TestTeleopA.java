@@ -87,7 +87,7 @@ public class TestTeleopA extends CommandOpMode{
 //                .toggleWhenActive(
 //                        farminator.drive.maintainPosCommand(gamepad1.left_stick_x, farminator.pinpointLocalizer.getPose())
 //                );
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
                 .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
 
@@ -98,6 +98,9 @@ public class TestTeleopA extends CommandOpMode{
                         new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.maintainPosCommand())),
                         new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand()))
                 );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .toggleWhenPressed(farminator.drive.alignToTagLamLamCommand());
 
 
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)

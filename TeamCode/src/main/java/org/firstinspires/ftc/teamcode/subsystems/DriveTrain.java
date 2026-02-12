@@ -25,7 +25,7 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     // Yaw PID (deg -> output turn)
-    public static double pYaw = 0.03, dYaw = 0.0008;
+    public static double pYaw = 0.5, dYaw = 0.005;
 
     // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
@@ -39,6 +39,8 @@ public class DriveTrain extends SubsystemBase {
 
     // Lookahead time (sec) for predicting future position during "shoot while driving"
     public static double VELOCITY_LOOKAHEAD = 1.5;
+
+    private static final double PID_THRESHOLD = 0.03;
 
     /** Field coordinates for the target goal. (meters) */
     public static final double GOAL_X_1 = -1.72;
@@ -125,12 +127,11 @@ public class DriveTrain extends SubsystemBase {
      * Keep consistent with Limelight.getDyaw() and desiredHeading math.
      */
     private double diffToSpeed(double yawDiff) {
-
         // PID tries to drive yawDiff → 0
         double output = pidControllerYaw.calculate(0, yawDiff);
 
         // Deadband so we don't twitch near zero
-        if (Math.abs(yawDiff) < 1.0) {
+        if (Math.abs(yawDiff) < PID_THRESHOLD) {
             return 0;
         }
 
@@ -232,6 +233,7 @@ public class DriveTrain extends SubsystemBase {
             searchingForTag = false;  // We see tag → tracking mode
             double yawDiff = BarnRobot.getInstance().limelight.getGoalYaw();
             turnSpeed = diffToSpeed(yawDiff);
+            BarnRobot.getInstance().telemetry.addData("pid speed", turnSpeed);
         } else {
             if (!searchingForTag) {
                 // We JUST lost the tag → re-enter search mode

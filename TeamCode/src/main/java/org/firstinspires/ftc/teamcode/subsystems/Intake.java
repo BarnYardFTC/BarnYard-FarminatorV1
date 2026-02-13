@@ -74,7 +74,7 @@ public class Intake extends SubsystemBase {
         return new ConditionalCommand(
                 new InstantCommand(() -> setPower(0), this), // on true
                 new InstantCommand(() -> setPower(DEFAULT_POWER), this),             // on false
-                () -> shooterSensor.isPoseBusy() && midSensor.isPoseBusy() && intakeSensor.isPoseBusy()
+                () -> shooterSensor.isShootPoseBusy() && midSensor.isMidPoseBusy() && intakeSensor.isIntakePoseBusy()
         );
     }
 

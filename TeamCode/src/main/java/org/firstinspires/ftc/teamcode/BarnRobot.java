@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Robot;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -44,7 +45,7 @@ public class BarnRobot extends Robot {
     public Intake intake;
     public Transfer transfer;
     public Gate gate;
-
+    public BlinkinLED blinkinLED;
     public LimeLight limelight;
     public Webcam webcam;
     public KickStand kickStand;
@@ -145,6 +146,7 @@ public class BarnRobot extends Robot {
         initLimeLight();
         initWebcam(opMode.hardwareMap);
         initKickStand();
+        initBlinkin();
 
     }
 
@@ -195,6 +197,10 @@ public class BarnRobot extends Robot {
 //        shooterHood.setDefaultCommand(shooterHood.defaultHoodCommand());
     }
 
+    public void initBlinkin(){
+        blinkinLED = new BlinkinLED();
+    }
+
 
     public void initGate(){
         gate = new Gate();
@@ -220,6 +226,12 @@ public class BarnRobot extends Robot {
      */
     public void periodic() {
         pinpointLocalizer.update();
+        limelight.periodic();
+        shooter.periodic();
+        intake.periodic();
+        drive.periodic();
+        shooterHood.periodic();
+        blinkinLED.periodic();
         telemetry.update();
     }
 }

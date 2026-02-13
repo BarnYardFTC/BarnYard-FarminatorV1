@@ -43,9 +43,22 @@ public class BlinkinLED extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (BarnRobot.getInstance().shooterSensor.isPoseBusy()) setRed();
-        else if (BarnRobot.getInstance().midSensor.isPoseBusy()) setPurple();
-        else if (BarnRobot.getInstance().intakeSensor.isPoseBusy()) setGreen();
+        if (BarnRobot.getInstance().shooterSensor.isShootPoseBusy() && !BarnRobot.getInstance().midSensor.isMidPoseBusy() &&
+        !BarnRobot.getInstance().intakeSensor.isIntakePoseBusy()){
+            setRed();
+            BarnRobot.getInstance().telemetry.addData("blinkin", "red");
+        }
+        else if (BarnRobot.getInstance().midSensor.isMidPoseBusy() && BarnRobot.getInstance().shooterSensor.isShootPoseBusy() &&
+                !BarnRobot.getInstance().intakeSensor.isIntakePoseBusy()){
+            setPurple();
+            BarnRobot.getInstance().telemetry.addData("blinkin", "purple");
+        }
+        else if (BarnRobot.getInstance().intakeSensor.isIntakePoseBusy() && BarnRobot.getInstance().midSensor.isMidPoseBusy() &&
+                BarnRobot.getInstance().shooterSensor.isShootPoseBusy()
+        ){
+            setGreen();
+            BarnRobot.getInstance().telemetry.addData("blinkin", "green");
+        }
         else setBlack();
     }
 
@@ -125,4 +138,7 @@ public class BlinkinLED extends SubsystemBase {
     public long getLastUpdateTime() {
         return lastUpdateTime;
     }
+
+
+
 }

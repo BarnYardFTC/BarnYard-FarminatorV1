@@ -19,6 +19,27 @@ public class CommandGroup extends SequentialCommandGroup {
 
     public static int SHOOTING_TIME_MS = 3000;
 
+
+    public static Command smartShootCommand(){
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        new WaitUntilCommand(() -> isReadyToShoot()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        intakeAndTransferActivateCommand(),
+                        new WaitCommand(1500),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                )
+        );
+    }
+
+    private static boolean isReadyToShoot(){
+        BarnRobot.getInstance().telemetry.addData("lamlam aligned", BarnRobot.getInstance().limelight.isAlignedToGoal());
+        return BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal();
+    }
+
     public static Command shootCommand(){
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
@@ -43,8 +64,8 @@ public class CommandGroup extends SequentialCommandGroup {
     }
 
     public static boolean robotContainsArtifacts(){
-        return BarnRobot.getInstance().midSensor.isPoseBusy() ||
-                BarnRobot.getInstance().shooterSensor.isPoseBusy();
+        return BarnRobot.getInstance().midSensor.isMidPoseBusy() ||
+                BarnRobot.getInstance().shooterSensor.isShootPoseBusy();
     }
 
     public static Command deactivateIntakeAndTransferCommand(){
@@ -55,25 +76,4 @@ public class CommandGroup extends SequentialCommandGroup {
         return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransfer());
     }
 
-
-
-
-
-    public static void shootPreset(int n){
-        if (n == 1){
-//            BarnRobot.getInstance().shooterHood.setCustomPosition(0.4);
-            BarnRobot.getInstance().shooter.customDistance = 1.2;
-        }
-        else if (n == 2){
-//            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
-            BarnRobot.getInstance().shooter.customDistance = 2.2;
-        } else if (n == 3){
-//            BarnRobot.getInstance().shooterHood.setCustomPosition(1);
-            BarnRobot.getInstance().shooter.customDistance = 3;
-        }
-    }
-
-    public static Command shootCommandPreset(int n){
-        return new InstantCommand(() -> shootPreset(n));
-    }
 }

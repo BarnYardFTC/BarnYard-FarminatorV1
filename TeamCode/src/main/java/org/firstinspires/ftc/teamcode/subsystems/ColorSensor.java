@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -7,6 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.BarnRobot;
+
+
 
 /**
  * ColorSensor subsystem wrapper.
@@ -28,6 +32,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * this subsystem fails gracefully by reporting no artifact present.
  * </p>
  */
+@Config
 public class ColorSensor {
 
     /**
@@ -38,9 +43,9 @@ public class ColorSensor {
     /**
      * Distance thresholds (cm) for each robot position.
      */
-    private static final double SHOOTER_DISTANCE_CM = 8.8;
-    private static final double MIDDLE_DISTANCE_CM  = 3.0;
-    private static final double INTAKE_DISTANCE_CM  = 6.2;
+    public static double SHOOTER_DISTANCE_CM = 7;
+    public static double MIDDLE_DISTANCE_CM  = 3.0;
+    public static double INTAKE_DISTANCE_CM  = 7.1;
 
     /**
      * Hardware color sensor instance.
@@ -109,8 +114,12 @@ public class ColorSensor {
      *
      * @return {@code true} if an artifact is detected
      */
-    public boolean isPoseBusy() {
+    public boolean isShootPoseBusy() {
         return getArtifactDistanceTimed() < SHOOTER_DISTANCE_CM;
+    }public boolean isMidPoseBusy() {
+        return getArtifactDistanceTimed() < MIDDLE_DISTANCE_CM;
+    }public boolean isIntakePoseBusy() {
+        return getArtifactDistanceTimed() < INTAKE_DISTANCE_CM;
     }
 
     /**
@@ -132,7 +141,16 @@ public class ColorSensor {
         return cachedDistanceCm;
     }
 
-    public void displayTelemetry(Telemetry telemetry, String name, double distance){
-        telemetry.addData("is " + name + " busy: ", isPosBusy(distance));
+    public void displayTelemetry(String name){
+        if(name.equals("shoot")){
+            BarnRobot.getInstance().telemetry.addData("shoot", isShootPoseBusy());
+
+        } else if (name.equals("mid")) {
+            BarnRobot.getInstance().telemetry.addData("mid", isMidPoseBusy());
+
+        } else if (name.equals("intake")) {
+            BarnRobot.getInstance().telemetry.addData("intake", isIntakePoseBusy());
+
+        }
     }
 }

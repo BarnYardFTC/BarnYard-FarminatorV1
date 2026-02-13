@@ -70,6 +70,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
+//    private AutonomousController autoControl;
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
@@ -86,6 +87,8 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
+
+//        autoControl = new AutonomousController();
 
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
@@ -144,6 +147,8 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
 
 
+//        autoControl.setTeamPars(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
+
         //         ===== Commands =====
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
@@ -153,6 +158,8 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 AutoController.shootCommandPath(firstShoot),
 
                 AutoController.intakeCommandPath(collectLeftArts),
+
+//                AutoController.intakeCommandPath(autoControl.path(AutoPars.positions.LEFT_COLLECT)),
 
                 AutoController.shootCommandPath(leftToShoot),
 

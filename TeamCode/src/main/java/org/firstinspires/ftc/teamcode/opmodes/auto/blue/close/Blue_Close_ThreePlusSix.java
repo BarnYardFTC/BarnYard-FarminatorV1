@@ -6,20 +6,14 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
-import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousController;
-import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
@@ -72,12 +66,14 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-    private AutonomousController autoControl;
+    private final AutonomousPathController autoControl = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
+
+
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING)
+            autoControl.positions.get(AutoPars.positions.START_CLOSE)
     );
 
     public static int SCORE_TIME = 2200;
@@ -90,7 +86,6 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         farminator.init(this, opModeData);
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
 
-        autoControl = new AutonomousController();
 
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
@@ -149,7 +144,6 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
 
 
-        autoControl.setTeamPars(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
 
         //         ===== Commands =====
         new SequentialCommandGroup(

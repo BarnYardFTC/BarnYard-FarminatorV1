@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
-import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 import java.util.Map;
-import java.util.function.BooleanSupplier;
 
-public class AutonomousController {
+public class AutonomousPathController {
     /**
      * Variables(3 types of enum variable, map for positions, and last pose)
      */
@@ -26,7 +23,7 @@ public class AutonomousController {
      * @param side
      * @param pos
      */
-    public void setTeamPars(AutoPars.side side, AutoPars.posDistance pos) {
+    public AutonomousPathController(AutoPars.side side, AutoPars.posDistance pos) {
         color = side;
         distance = pos;
         setupVariables(color);

@@ -17,6 +17,8 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousController;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -70,7 +72,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-//    private AutonomousController autoControl;
+    private AutonomousController autoControl;
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
@@ -88,7 +90,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
         farminator.init(this, opModeData);
         farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
 
-//        autoControl = new AutonomousController();
+        autoControl = new AutonomousController();
 
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING));
@@ -147,7 +149,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
 
 
-//        autoControl.setTeamPars(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
+        autoControl.setTeamPars(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
 
         //         ===== Commands =====
         new SequentialCommandGroup(
@@ -159,11 +161,11 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
                 AutoController.intakeCommandPath(collectLeftArts),
 
-//                AutoController.intakeCommandPath(autoControl.path(AutoPars.positions.LEFT_COLLECT)),
+                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive)),
 
                 AutoController.shootCommandPath(leftToShoot),
 
-                AutoController.intakeCommandPath(collectMidArts),
+                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.MID_COLLECT, drive)),
 
                 AutoController.shootCommandPathIntake(midToShoot)
 

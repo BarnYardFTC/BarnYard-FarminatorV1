@@ -14,11 +14,14 @@ public enum AutoPars {
     }
 
     public enum positions {
-        START,
-        SHOOT,
+        START_CLOSE,
+        START_FAR,
+        SHOOT_CLOSE,
+        SHOOT_FAR,
         LEFT_COLLECT,
         MID_COLLECT,
         FAR_COLLECT,
+        LOAD_COLLECT,
         LEFT_LOAD_COLLECT,
         MID_LOAD_COLLECT,
         FAR_LOAD_COLLECT,

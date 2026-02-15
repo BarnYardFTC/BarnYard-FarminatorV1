@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
@@ -37,13 +39,16 @@ public class AutonomousPathController {
         switch (colors) {
             case BLUE:
                 positions = Map.ofEntries(
-                        Map.entry(AutoPars.positions.START_CLOSE, new Pose2d(60, -15, Math.toRadians(225))),
+                        Map.entry(AutoPars.positions.START_CLOSE, new Pose2d(-53.333, -45.5, Math.toRadians(225))),
                         Map.entry(AutoPars.positions.START_FAR, new Pose2d( 60, -15, Math.toRadians(225))),
-                        Map.entry(AutoPars.positions.SHOOT_CLOSE, new Pose2d(45, 0, Math.toRadians(227))),
+                        Map.entry(AutoPars.positions.SHOOT_CLOSE, new Pose2d(-23, -22, Math.toRadians(227))),
                         Map.entry(AutoPars.positions.SHOOT_FAR, new Pose2d(45, 0, Math.toRadians(227))),
                         Map.entry(AutoPars.positions.LEFT_COLLECT, new Pose2d(-11.5, -25, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.LEFT_READY_COLLECT, new Pose2d(-11.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.MID_COLLECT, new Pose2d(12, -25, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.MID_READY_COLLECT, new Pose2d(12, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.FAR_COLLECT, new Pose2d(34.5, -25, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.FAR_READY_COLLECT, new Pose2d(34.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.LEFT_LOAD_COLLECT, new Pose2d(50, -65, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.MID_LOAD_COLLECT, new Pose2d(54, -65, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.FAR_LOAD_COLLECT, new Pose2d(52, -65, Math.toRadians(270))),
@@ -94,15 +99,23 @@ public class AutonomousPathController {
                     switch (position) {
                         case SHOOT_CLOSE:
                             path = drive.actionBuilder(lastPose)
-                                    .splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
-                            lastPose = positions.get(position);
-                            return path;
-
-                        case LEFT_COLLECT: case MID_COLLECT: case FAR_COLLECT:
-                            path = drive.actionBuilder(lastPose)
                                     .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
                             lastPose = positions.get(position);
                             return path;
+                        case LEFT_COLLECT:
+                            path = drive.actionBuilder(lastPose)
+                                    .strafeToLinearHeading(positions.get(AutoPars.positions.LEFT_READY_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_READY_COLLECT).component2())
+                                    // keep Rotation2d hardcoded (as requested)
+                                    .strafeToConstantHeading(positions.get(position).component1(), new TranslationalVelConstraint(40));
+                            lastPose = positions.get(position);
+                            return path;
+                        case MID_COLLECT:
+                            path = drive.actionBuilder(lastPose)
+                                    .splineToLinearHeading(positions.get(position), new Rotation2d(0, -3));
+                            lastPose = positions.get(position);
+                            return path;
+//                        case FAR_COLLECT:
+
                     }
                 } else {
                     lastPose = positions.get(AutoPars.positions.START_FAR);
@@ -135,16 +148,14 @@ public class AutonomousPathController {
                     lastPose = positions.get(AutoPars.positions.START_CLOSE);
                     switch (position) {
                         case SHOOT_CLOSE:
-                            path = drive.actionBuilder(lastPose)
-                                    .splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
-                            lastPose = positions.get(position);
-                            return path;
-
-                        case LEFT_COLLECT: case MID_COLLECT: case FAR_COLLECT:
+                        case LEFT_COLLECT:
+                        case MID_COLLECT:
+                        case FAR_COLLECT:
                             path = drive.actionBuilder(lastPose)
                                     .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
                             lastPose = positions.get(position);
                             return path;
+
                     }
                 } else {
                     lastPose = positions.get(AutoPars.positions.START_FAR);

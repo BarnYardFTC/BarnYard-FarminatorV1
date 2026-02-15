@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.close.threePlusThree;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.Blue_Close_PPG.SOUTH_HEADING;
+//import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.Blue_Close_PPG.SOUTH_HEADING;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;

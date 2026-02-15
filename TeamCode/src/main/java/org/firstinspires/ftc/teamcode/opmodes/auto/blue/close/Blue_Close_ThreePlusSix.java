@@ -155,11 +155,14 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
 
                 AutoController.intakeCommandPath(collectLeftArts),
 
-                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive)),
+//                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive)),
 
                 AutoController.shootCommandPath(leftToShoot),
 
-                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.MID_COLLECT, drive)),
+                AutoController.intakeCommandPath(collectMidArts),
+
+
+//                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.MID_COLLECT, drive)),
 
                 AutoController.shootCommandPathIntake(midToShoot)
 

@@ -80,7 +80,8 @@ public class AutoController extends SequentialCommandGroup {
 
     public static Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
-                CommandGroup.smartIntakeAndTransferCommand(),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
+                BarnRobot.getInstance().transfer.activateTransfer(),
                 new DriveActionCommand(path),
                 CommandGroup.deactivateIntakeAndTransferCommand()
         );

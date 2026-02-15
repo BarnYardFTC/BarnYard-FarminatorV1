@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import android.app.VoiceInteractor;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.seattlesolvers.solverslib.command.Command;
@@ -11,11 +9,9 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDController;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.PinpointLocalizer;
 
 @Config
 public class DriveTrain extends SubsystemBase {
@@ -25,12 +21,18 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     // Yaw PID (deg -> output turn)
-    public static double pYaw = 0.5, dYaw = 0.005;
+    public static double closeP = 0.8, closeD = 0.05;
+    public static double farP = 0.8, farD = 0.05;
+    public final static double FAR_PID_DISTANCE = 2;
+
+    public static double TURN_START_POWER = 0.085; // tune 0.07–0.11
+    public static double TURN_START_ERROR = 2.0;   // deg — only help when farther than this
 
 
     // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.8;
     public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.3;
+
 
     private boolean searchingForTag = true;
 
@@ -77,7 +79,8 @@ public class DriveTrain extends SubsystemBase {
     private boolean tagJustVanished;
 
     // PID controller for yaw correction
-    private final PIDController pidControllerYaw;
+    private final PIDController pidControllerClose;
+    private final PIDController pidControllerFar;
 
     // NOTE: currently unused, kept because you may want to reference initial alignment
     private final double initialBotHeading;
@@ -99,7 +102,8 @@ public class DriveTrain extends SubsystemBase {
         mecanumDriveComponent = new MecanumDriveComponent();
 
         initialBotHeading = 270;
-        pidControllerYaw = new PIDController(pYaw, 0, dYaw);
+        pidControllerClose = new PIDController(closeP, 0, closeD);
+        pidControllerFar = new PIDController(farP, 0, farD);
     }
 
     // ============================================================
@@ -128,8 +132,11 @@ public class DriveTrain extends SubsystemBase {
      * Keep consistent with Limelight.getDyaw() and desiredHeading math.
      */
     private double diffToSpeed(double yawDiff) {
+        double output;
         // PID tries to drive yawDiff → 0
-        double output = pidControllerYaw.calculate(0, yawDiff);
+        if(BarnRobot.getInstance().limelight.getGoalDistance() > FAR_PID_DISTANCE)output = pidControllerFar.calculate(0, yawDiff);
+        else output = pidControllerFar.calculate(0, yawDiff);
+
 
         // Deadband so we don't twitch near zero
         if (Math.abs(yawDiff) < PID_THRESHOLD) {
@@ -137,8 +144,8 @@ public class DriveTrain extends SubsystemBase {
         }
 
         // Ensure minimum turning power to overcome friction
-        if (Math.abs(output) < MIN_TURNING_SPEED) {
-            output = Math.copySign(MIN_TURNING_SPEED, output);
+        if (Math.abs(yawDiff) > TURN_START_ERROR && Math.abs(output) < TURN_START_POWER) {
+            output = Math.copySign(TURN_START_POWER, output);
         }
 
         return output;
@@ -530,6 +537,6 @@ public class DriveTrain extends SubsystemBase {
     @Override
     public void periodic() {
         // Keep PID values hot-reloadable from Dashboard
-        pidControllerYaw.setPID(pYaw, 0, dYaw);
+        pidControllerClose.setPID(closeP, 0, closeD);
     }
 }

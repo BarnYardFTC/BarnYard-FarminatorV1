@@ -90,10 +90,10 @@ public class LimeLight extends SubsystemBase {
 
     public boolean isAlignedToGoal() {
 
-        boolean aligned = isGoalTagDetected() && Math.abs(getDyaw()) < 0.5;
+        boolean aligned = isGoalTagDetected() && Math.abs(getGoalYaw()) < 0.1;
 
         BarnRobot.getInstance().telemetry.addData("aligned", aligned);
-        BarnRobot.getInstance().telemetry.addData("yaw", getDyaw());
+        BarnRobot.getInstance().telemetry.addData("yaw", getGoalYaw());
         BarnRobot.getInstance().telemetry.addData("timer", validShootTimer.seconds());
 
         if (aligned) {

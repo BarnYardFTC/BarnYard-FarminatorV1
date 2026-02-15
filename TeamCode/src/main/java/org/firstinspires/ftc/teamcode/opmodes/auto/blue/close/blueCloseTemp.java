@@ -34,7 +34,11 @@ public class blueCloseTemp {
     public static final Pose2d midLoadZoneReady = new Pose2d(54, -57, 270);
 
 // paths nigga ----------------------------------------------------------------- no ai stamp only rawdogging
-    public static TrajectoryActionBuilder goShoot;
+    public static TrajectoryActionBuilder goShootLeft;
+    public static TrajectoryActionBuilder goShootMid;
+    public static TrajectoryActionBuilder goShootRight;
+
+    public static TrajectoryActionBuilder goShootPre;
     public static TrajectoryActionBuilder goPark;
     public static TrajectoryActionBuilder goCollectLeft;
     public static TrajectoryActionBuilder goCollectMid;
@@ -49,59 +53,79 @@ public class blueCloseTemp {
 
 
 
-
-    public static void ShootnPark(RoadRunnerMecanumDrive drive) {
-        goShoot = drive.actionBuilder(startPose)
+    public static void createPath(RoadRunnerMecanumDrive drive){
+        goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-
-        goPark = goShoot.endTrajectory()
-                .strafeToLinearHeading(parkPose.component1(),parkPose.component2());
-
-    }
-
-    public static void CollectRightnShoot(RoadRunnerMecanumDrive drive) {
-        goCollectRight = drive.actionBuilder(shootPose)
+        goCollectRight = goShootPre.endTrajectory()
                 .strafeToLinearHeading(rightCollectPose.component1(),rightCollectPose.component2());
-        goShoot = goCollectRight.endTrajectory()
-                .splineToConstantHeading(shootPose.component1(), shootPose.component2());
-    }
-
-    public static void CollectMidnShoot(RoadRunnerMecanumDrive drive) {
-        goCollectMid = drive.actionBuilder(shootPose)
+        goShootRight = goCollectRight.endTrajectory()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goCollectMid = goShootRight.endTrajectory()
                 .strafeToLinearHeading(midCollectPose.component1(),midCollectPose.component2());
-
-        goShoot = goCollectMid.endTrajectory()
-                .splineToConstantHeading(shootPose.component1(), shootPose.component2());
-
-    }
-
-    public static void CollectLeftnShoot(RoadRunnerMecanumDrive drive) {
-        goCollectLeft = drive.actionBuilder(shootPose)
+        goShootMid = goCollectMid.endTrajectory()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goCollectLeft = goShootMid.endTrajectory()
                 .strafeToLinearHeading(leftCollectPose.component1(),leftCollectPose.component2());
-        goShoot = goCollectLeft.endTrajectory()
-                .splineToConstantHeading(shootPose.component1(), shootPose.component2());
+        goShootLeft = goCollectLeft.endTrajectory()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goPark = goShootLeft.endTrajectory();
+
+
     }
 
-    public static void CollectLoadZonenShoot(RoadRunnerMecanumDrive drive){
-        takeFromLoadZone = drive.actionBuilder(shootPose)
-                .splineToLinearHeading(leftLoadZoneCollect,270)
-                .splineToConstantHeading(midLoadZoneCollect.component1(),midLoadZoneCollect.component2())
-                .splineToConstantHeading(rightLoadZoneCollect.component1(),rightLoadZoneCollect.component2());
-        goShoot = takeFromLoadZone.endTrajectory()
-                .splineToConstantHeading(shootVec, 270);//vec,h
-         new WaitCommand(SHOOT_TIME_MS);  //change to smart shooting later niggers
-    }
 
-    public static void GateCollectnShoot(RoadRunnerMecanumDrive drive){
-        openGate = drive.actionBuilder(shootPose)
-                .splineToConstantHeading(gateOpenPose.component1(),gateOpenPose.component2());
-
-        gateCollection = openGate.endTrajectory()
-                .splineToConstantHeading(gateCollectPose.component1(),gateCollectPose.component2());
-
-        goShoot = gateCollection.endTrajectory()
-                .splineToConstantHeading(shootVec, 270);
-    }
+//    public static void ShootnPark(RoadRunnerMecanumDrive drive) {
+//        goShoot = drive.actionBuilder(startPose)
+//                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+//
+//        goPark = goShoot.endTrajectory()
+//                .strafeToLinearHeading(parkPose.component1(),parkPose.component2());
+//
+//    }
+//
+//    public static void CollectRightnShoot(RoadRunnerMecanumDrive drive) {
+//        goCollectRight = drive.actionBuilder(shootPose)
+//                .strafeToLinearHeading(rightCollectPose.component1(),rightCollectPose.component2());
+//        goShoot = goCollectRight.endTrajectory()
+//                .splineToConstantHeading(shootPose.component1(), shootPose.component2());
+//    }
+//
+//    public static void CollectMidnShoot(RoadRunnerMecanumDrive drive) {
+//        goCollectMid = drive.actionBuilder(shootPose)
+//                .strafeToLinearHeading(midCollectPose.component1(),midCollectPose.component2());
+//
+//        goShoot = goCollectMid.endTrajectory()
+//                .splineToConstantHeading(shootPose.component1(), shootPose.component2());
+//
+//    }
+//
+//    public static void CollectLeftnShoot(RoadRunnerMecanumDrive drive) {
+//        goCollectLeft = drive.actionBuilder(shootPose)
+//                .strafeToLinearHeading(leftCollectPose.component1(),leftCollectPose.component2());
+//        goShoot = goCollectLeft.endTrajectory()
+//                .splineToConstantHeading(shootPose.component1(), shootPose.component2());
+//    }
+//
+//    public static void CollectLoadZonenShoot(RoadRunnerMecanumDrive drive){
+//        takeFromLoadZone = drive.actionBuilder(shootPose)
+//                .splineToLinearHeading(leftLoadZoneCollect,270)
+//                .splineToConstantHeading(midLoadZoneCollect.component1(),midLoadZoneCollect.component2())
+//                .splineToConstantHeading(rightLoadZoneCollect.component1(),rightLoadZoneCollect.component2());
+//        goShoot = takeFromLoadZone.endTrajectory()
+//                .splineToConstantHeading(shootVec, 270);//vec,h
+//         new WaitCommand(SHOOT_TIME_MS);  //change to smart shooting later niggers
+//    }
+//
+//    public static void GateCollectnShoot(RoadRunnerMecanumDrive drive){
+//        openGate = drive.actionBuilder(shootPose)
+//                .splineToConstantHeading(gateOpenPose.component1(),gateOpenPose.component2());
+//
+//        gateCollection = openGate.endTrajectory()
+//                .splineToConstantHeading(gateCollectPose.component1(),gateCollectPose.component2());
+//
+//        goShoot = gateCollection.endTrajectory()
+//                .splineToConstantHeading(shootVec, 270);
+//    }
 
 
 

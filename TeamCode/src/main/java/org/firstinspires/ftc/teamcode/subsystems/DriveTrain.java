@@ -29,7 +29,7 @@ public class DriveTrain extends SubsystemBase {
 
 
     // Search / fallback turning speeds (when tag not visible)
-    public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
+    public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.8;
     public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.3;
 
     private boolean searchingForTag = true;

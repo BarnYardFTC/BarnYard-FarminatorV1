@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import java.util.function.BooleanSupplier;
 
 
-@TeleOp(name = "!MAIN TELEOP", group = "!")
-public class FirstMainTeleop extends CommandOpMode{
+@TeleOp(name = "!DEMO TELEOP", group = "!")
+public class DemoTeleop extends CommandOpMode{
 
     // ------------------------
     // Robot Instance
@@ -92,8 +92,8 @@ public class FirstMainTeleop extends CommandOpMode{
                         new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand()))
                 );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                .toggleWhenPressed(farminator.drive.alignToTagLamLamCommand());
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+//                .toggleWhenPressed(farminator.drive.alignToTagLamLamCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .toggleWhenPressed(BarnRobot.getInstance().kickStand.raiseCommand())
@@ -106,7 +106,7 @@ public class FirstMainTeleop extends CommandOpMode{
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(CommandGroup.smartShootCommand());
+                .whenPressed(CommandGroup.shootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
@@ -122,14 +122,13 @@ public class FirstMainTeleop extends CommandOpMode{
         farminator.shooterHood.displayTelemetry();
         farminator.drive.displayPinpointDataTelemetry();
         farminator.shooter.displayTelemetry();
-//        telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
+        telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
-//        telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
-//        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
+        telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
+        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
         telemetry.addData("shoot busy", farminator.shooterSensor.isShootPoseBusy());
         telemetry.addData("mid busy", farminator.midSensor.isMidPoseBusy());
         telemetry.addData("intake busy", farminator.intakeSensor.isIntakePoseBusy());
-        farminator.limelight.displayTelemetry();
         farminator.periodic();
     }
 

@@ -4,7 +4,10 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 import java.util.Map;
@@ -29,6 +32,12 @@ public class AutonomousPathController {
         color = side;
         distance = pos;
         setupVariables(color);
+        if (distance == AutoPars.posDistance.CLOSE) {
+            lastPose = positions.get(AutoPars.positions.START_CLOSE);
+        }
+        else {
+            lastPose = positions.get(AutoPars.positions.START_FAR);
+        }
     }
 
     /**
@@ -43,11 +52,11 @@ public class AutonomousPathController {
                         Map.entry(AutoPars.positions.START_FAR, new Pose2d( 60, -15, Math.toRadians(225))),
                         Map.entry(AutoPars.positions.SHOOT_CLOSE, new Pose2d(-23, -22, Math.toRadians(227))),
                         Map.entry(AutoPars.positions.SHOOT_FAR, new Pose2d(45, 0, Math.toRadians(227))),
-                        Map.entry(AutoPars.positions.LEFT_COLLECT, new Pose2d(-11.5, -25, Math.toRadians(270))),
-                        Map.entry(AutoPars.positions.LEFT_READY_COLLECT, new Pose2d(-11.5, -63, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.LEFT_COLLECT, new Pose2d(-11.5, -63, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.LEFT_READY_COLLECT, new Pose2d(-11.5, -25, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.MID_COLLECT, new Pose2d(12, -25, Math.toRadians(270))),
-                        Map.entry(AutoPars.positions.MID_READY_COLLECT, new Pose2d(12, -63, Math.toRadians(270))),
-                        Map.entry(AutoPars.positions.FAR_COLLECT, new Pose2d(34.5, -25, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.MID_READY_COLLECT, new Pose2d(12, -25, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.FAR_COLLECT, new Pose2d(34.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.FAR_READY_COLLECT, new Pose2d(34.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.LEFT_LOAD_COLLECT, new Pose2d(50, -65, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.MID_LOAD_COLLECT, new Pose2d(54, -65, Math.toRadians(270))),
@@ -89,8 +98,9 @@ public class AutonomousPathController {
      * @param drive
      * @return TrajectoryActionBuilder
      */
-    public TrajectoryActionBuilder trajectories(AutoPars.positions position, RoadRunnerMecanumDrive drive) {
-        TrajectoryActionBuilder path;
+    public TrajectoryActionBuilder trajectories(AutoPars.positions position, RoadRunnerMecanumDrive drive, Telemetry telemetry) {
+        TrajectoryActionBuilder path = drive.actionBuilder(lastPose);
+        Pose2d tmpPose = positions.get(position);
 
         switch (color) {
             case BLUE:
@@ -98,22 +108,15 @@ public class AutonomousPathController {
                     lastPose = positions.get(AutoPars.positions.START_CLOSE);
                     switch (position) {
                         case SHOOT_CLOSE:
-                            path = drive.actionBuilder(lastPose)
-                                    .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
-                            lastPose = positions.get(position);
-                            return path;
+                            path.strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
+                            break;
                         case LEFT_COLLECT:
-                            path = drive.actionBuilder(lastPose)
-                                    .strafeToLinearHeading(positions.get(AutoPars.positions.LEFT_READY_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_READY_COLLECT).component2())
+                            path.strafeToLinearHeading(positions.get(AutoPars.positions.LEFT_READY_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_READY_COLLECT).component2())
                                     // keep Rotation2d hardcoded (as requested)
-                                    .strafeToConstantHeading(positions.get(position).component1(), new TranslationalVelConstraint(40));
-                            lastPose = positions.get(position);
-                            return path;
+                                    .strafeToConstantHeading(positions.get(AutoPars.positions.LEFT_COLLECT).component1(), new TranslationalVelConstraint(40));
+                            break;
                         case MID_COLLECT:
-                            path = drive.actionBuilder(lastPose)
-                                    .splineToLinearHeading(positions.get(position), new Rotation2d(0, -3));
-                            lastPose = positions.get(position);
-                            return path;
+                            path.splineToLinearHeading(positions.get(AutoPars.positions.MID_COLLECT), new Rotation2d(0, -3));
 //                        case FAR_COLLECT:
 
                     }
@@ -121,24 +124,16 @@ public class AutonomousPathController {
                     lastPose = positions.get(AutoPars.positions.START_FAR);
                     switch (position) {
                         case SHOOT_FAR:
-                            path = drive.actionBuilder(lastPose)
-                                    .splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
-                            lastPose = positions.get(position);
-                            return path;
-
+                            path.splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
+                            break;
                         case LOAD_COLLECT:
-                            path = drive.actionBuilder(lastPose)
-                                    .splineToLinearHeading(positions.get(AutoPars.positions.LEFT_LOAD_COLLECT), Math.toRadians(270))
+                            path.splineToLinearHeading(positions.get(AutoPars.positions.LEFT_LOAD_COLLECT), Math.toRadians(270))
                                     .splineToConstantHeading(positions.get(AutoPars.positions.MID_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.MID_LOAD_COLLECT).component2())
                                     .splineToConstantHeading(positions.get(AutoPars.positions.FAR_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.FAR_LOAD_COLLECT).component2());
-                            lastPose = positions.get(AutoPars.positions.FAR_LOAD_COLLECT);
-                            return path;
-
+                            break;
                         case FAR_COLLECT:
-                            path = drive.actionBuilder(lastPose)
-                                    .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
-                            lastPose = positions.get(position);
-                            return path;
+                            path.strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
+                            break;
                     }
                 }
                 break;
@@ -151,32 +146,36 @@ public class AutonomousPathController {
                         case LEFT_COLLECT:
                         case MID_COLLECT:
                         case FAR_COLLECT:
-                            path = drive.actionBuilder(lastPose)
-                                    .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
-                            lastPose = positions.get(position);
-                            return path;
-
+                            path.strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
+                            break;
                     }
                 } else {
                     lastPose = positions.get(AutoPars.positions.START_FAR);
                     switch (position) {
                         case SHOOT_FAR:
-                            path = drive.actionBuilder(lastPose)
-                                    .splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
-                            lastPose = positions.get(position);
-                            return path;
-
+                            path.splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
+                            break;
                         case LOAD_COLLECT:
-                            path = drive.actionBuilder(lastPose)
-                                    .splineToLinearHeading(positions.get(AutoPars.positions.FAR_LOAD_COLLECT), Math.toRadians(90))
+                            path.splineToLinearHeading(positions.get(AutoPars.positions.FAR_LOAD_COLLECT), Math.toRadians(90))
                                     .splineToConstantHeading(positions.get(AutoPars.positions.MID_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.MID_LOAD_COLLECT).component2())
                                     .splineToConstantHeading(positions.get(AutoPars.positions.LEFT_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_LOAD_COLLECT).component2());
-                            lastPose = positions.get(AutoPars.positions.LEFT_LOAD_COLLECT);
-                            return path;
+                            break;
                     }
                 }
                 break;
         }
-        return null;
+        lastPose = tmpPose;
+        telemetry.addData("Last Pose", lastPose);
+
+        return path;
     }
+
+    public void setLastPose(AutoPars.positions pos) {
+        lastPose = positions.get(pos);
+    }
+
+    public Command setLastPoseCmd(AutoPars.positions pos){
+        return new InstantCommand(() -> setLastPose(pos));
+    }
+
 }

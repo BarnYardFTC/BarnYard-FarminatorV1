@@ -51,15 +51,15 @@ public class BlueCloseControllerTest extends CommandOpMode {
 
                 BarnRobot.getInstance().shooterHood.setHoodPosition(0.85),
 
-                AutoController.shootCommandPath(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive)),
+                AutoController.shootCommandPath(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive, telemetry)),
 
-                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.LEFT_COLLECT, drive)),
+                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.LEFT_COLLECT, drive, telemetry)),
 
-                AutoController.shootCommandPath(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive)),
+                AutoController.shootCommandPath(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive, telemetry)),
 
-                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.MID_COLLECT, drive)),
+                AutoController.intakeCommandPath(autoControl.trajectories(AutoPars.positions.MID_COLLECT, drive, telemetry)),
 
-                AutoController.shootCommandPathIntake(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive))
+                AutoController.shootCommandPathIntake(autoControl.trajectories(AutoPars.positions.SHOOT_CLOSE, drive, telemetry))
 
         ).schedule();
     }

@@ -22,7 +22,7 @@ public class DriveTrain extends SubsystemBase {
 
     // Yaw PID (deg -> output turn)
     public static double closeP = 0.5, closeD = 0.05;
-    public static double farP = 0.8, farD = 0.05;
+    public static double farP = 0.3, farD = 0.05;
     public final static double FAR_PID_DISTANCE = 2;
 
 
@@ -81,6 +81,7 @@ public class DriveTrain extends SubsystemBase {
 
     // PID controller for yaw correction
     private final PIDController pidControllerClose;
+    private final PIDController pidControllerFar;
 
     // NOTE: currently unused, kept because you may want to reference initial alignment
     private final double initialBotHeading;
@@ -103,6 +104,7 @@ public class DriveTrain extends SubsystemBase {
 
         initialBotHeading = 270;
         pidControllerClose = new PIDController(closeP, 0, closeD);
+        pidControllerFar = new PIDController(farP, 0, farD);
     }
 
     // ============================================================
@@ -136,8 +138,8 @@ public class DriveTrain extends SubsystemBase {
         double output;
         // PID tries to drive yawDiff → 0
         if(BarnRobot.getInstance().limelight.getGoalDistance() > FAR_PID_DISTANCE){
-            pidControllerClose.setPID(farP, 0, farD);
-            output = pidControllerClose.calculate(0, yawDiff);
+            pidControllerFar.setPID(farP, 0, farD);
+            output = pidControllerFar.calculate(0, yawDiff);
         }
         else {
             pidControllerClose.setPID(closeP, 0, closeD);

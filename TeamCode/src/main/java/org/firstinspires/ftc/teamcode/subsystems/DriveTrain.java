@@ -21,7 +21,7 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     // Yaw PID (deg -> output turn)
-    public static double closeP = 0.5, closeD = 0.05;
+    public static double closeP = 0.6, closeD = 0.05;
     public static double farP = 0.3, farD = 0.05;
     public final static double FAR_PID_DISTANCE = 2;
 

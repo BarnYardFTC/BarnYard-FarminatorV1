@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
@@ -18,8 +20,7 @@ public class AutoController extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
-                                CommandGroup.intakeAndTransferGateCommand(),
-                                new DriveActionCommand(path),
+                                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
                                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 BarnRobot.getInstance().gate.openCommand(),
                                 BarnRobot.getInstance().intake.activateIntakeCommand(),
@@ -36,18 +37,15 @@ public class AutoController extends SequentialCommandGroup {
     public static int SHOOTING_TIME_MS = 1500;
     public static Command shootCommand() {
         return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        new SequentialCommandGroup(
-                                new WaitCommand(1500),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                BarnRobot.getInstance().transfer.activateTransfer(),
-                                BarnRobot.getInstance().intake.activateIntakeCommand(),
-                                new WaitCommand(SHOOTING_TIME_MS),
-                                //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                CommandGroup.deactivateIntakeAndTransferCommand()
-                        )
-                )
+                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                BarnRobot.getInstance().gate.openCommand(),
+                BarnRobot.getInstance().transfer.activateTransfer(),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
+                new WaitCommand(SHOOTING_TIME_MS),
+                //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
+                BarnRobot.getInstance().gate.closeCommand(),
+                CommandGroup.deactivateIntakeAndTransferCommand()
         );
     }
 
@@ -58,7 +56,7 @@ public class AutoController extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
-                                new DriveActionCommand(shootingPath),
+                                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
                                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 BarnRobot.getInstance().gate.openCommand(),
                                 BarnRobot.getInstance().intake.activateIntakeCommand(),
@@ -72,6 +70,10 @@ public class AutoController extends SequentialCommandGroup {
         );
     }
 
+    public static Command driveCommandPath(TrajectoryActionBuilder drivePath){
+        return new DriveActionCommand(drivePath);
+    }
+
     public static Command intakeCommandPath(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().intake.activateIntakeCommand(),
@@ -80,5 +82,6 @@ public class AutoController extends SequentialCommandGroup {
                 CommandGroup.deactivateIntakeAndTransferCommand()
         );
     }
+
 
 }

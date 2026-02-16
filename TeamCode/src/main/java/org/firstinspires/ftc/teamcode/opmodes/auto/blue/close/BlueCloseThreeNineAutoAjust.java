@@ -129,112 +129,34 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
 
-
-
-
-        // ===== Common objects (cleaner, no magic numbers) =====
-        Pose2d startPose = new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING);
-
-        Vector2d startNudge = new Vector2d(START_POSE_X, START_POSE_Y + START_Y_NUDGE);
-
-        Vector2d leftReady = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
-        Vector2d leftCollect = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y);
-        Vector2d gateAtCollectY = new Vector2d(GATE_POSE_X, SOUTH_COLLECT_POSE_Y);
-
-        Vector2d shootVec = new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y);
-        Pose2d shootPose = new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING);
-        Vector2d midShoot = new Vector2d(MID_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
-        Vector2d farShoot = new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
-        Vector2d leftShoot = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
-
-
-        Pose2d leftCollectPose = new Pose2d(
-                LEFT_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y,
-                SOUTH_HEADING
-        );
-
-        Pose2d leftShootPose = new Pose2d(
-                LEFT_COLLECT_POSE_X,
-                SOUTH_READY_POSE_Y,
-                LEFT_SHOOT_HEADING
-        );
-
-        Pose2d midCollectPose = new Pose2d(
-                MID_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y + MID_Y_OFFSET,
-                SOUTH_HEADING
-        );
-
-        Pose2d midShootPose = new Pose2d(
-                MID_COLLECT_POSE_X,
-                SOUTH_READY_POSE_Y,
-                MID_SHOOT_HEADING
-        );
-
-        Pose2d farShootHeading = new Pose2d(
-                RIGHT_COLLECT_POSE_X,
-                SOUTH_READY_POSE_Y,
-                FAR_SHOOT_HEADING
-        );
-
-        Pose2d rightCollectPose = new Pose2d(
-                RIGHT_COLLECT_POSE_X+2,
-                SOUTH_COLLECT_POSE_Y ,
-                SOUTH_HEADING
-        );
-
-        Pose2d endPose = new Pose2d(
-                ENDING_POSE_X,
-                ENDING_POSE_Y,
-                SHOOT_HEADING + END_HEADING_OFFSET_RAD
-        );
-
-        TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(VEL_TO_SHOOT);
-
-        TrajectoryActionBuilder path1 = drive.actionBuilder(startPose)
-                .strafeToLinearHeading(startNudge, SOUTH_HEADING)
-                .splineToConstantHeading(leftReady, SOUTH_HEADING)
-                // keep Rotation2d hardcoded (as requested)
-                .splineToConstantHeading(leftCollect, new Rotation2d(0, 0));
-
-        TrajectoryActionBuilder path2 = drive.actionBuilder(leftCollectPose)
-                .strafeToLinearHeading(leftShoot, LEFT_SHOOT_HEADING, fastToShoot);
-
-        TrajectoryActionBuilder path3 = drive.actionBuilder(leftShootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
-
-
-        TrajectoryActionBuilder path4 = drive.actionBuilder(midCollectPose)
-                .strafeToLinearHeading(midShoot, MID_SHOOT_HEADING);
-
-        TrajectoryActionBuilder path5 = drive.actionBuilder(midShootPose)
-                .splineToLinearHeading(rightCollectPose, new Rotation2d(0, -4));
-
-        TrajectoryActionBuilder path7 = drive.actionBuilder(rightCollectPose)
-                .strafeToLinearHeading(farShoot, FAR_SHOOT_HEADING);
-
+//      ==================COMMANDS===================
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.shootCommand(),
-                new WaitCommand(500),
+                AutoController.driveCommandPath(autoHub.trajectories(AutoPars.positions.SHOOT_CLOSE, drive, telemetry)),
 
-                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_COLLECT, drive, telemetry)),
+                AutoController.shootCommand()
 
-                AutoController.shootCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_SHOOT, drive, telemetry)),
-
-                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_COLLECT, drive, telemetry)),
-
-                farminator.drive.alignToTagLamLamCommand(), //Aligning exactly to the goal
-
-                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.MID_SHOOT, drive, telemetry)),
-
-                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_COLLECT, drive, telemetry)),
-
-                farminator.drive.alignToTagLamLamCommand(), //Aligning exactly to the goal
-
-                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.FAR_SHOOT, drive, telemetry))
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_COLLECT, drive, telemetry)),
+//
+//                AutoController.driveCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_SHOOT, drive, telemetry)),
+//                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
+//                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
+//                AutoController.shootCommand(),
+//
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_COLLECT, drive, telemetry)),
+//
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_SHOOT, drive, telemetry)),
+//                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
+//                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
+//                AutoController.shootCommand(),
+//
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_COLLECT, drive, telemetry)),
+//
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_SHOOT, drive, telemetry)),
+//                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
+//                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
+//                AutoController.shootCommand()
 
         ).schedule();
     }
@@ -243,6 +165,8 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
     public void run() {
         super.run();
         farminator.periodic();
+        telemetry.addData("aligned: ", farminator.limelight.isAlignedToGoal());
+        telemetry.addData("yaw: ", farminator.limelight.getGoalYaw());
     }
 
     /**

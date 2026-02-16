@@ -107,6 +107,11 @@ public class AutonomousPathController {
             case BLUE:
                 if (distance == AutoPars.posDistance.CLOSE) {
                     switch (position) {
+                        case SHOOT_CLOSE:
+                            path = drive.actionBuilder(lastPose)
+                                    .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
+                            break;
+
                         case LEFT_SHOOT:
                             path = drive.actionBuilder(lastPose)
                                     .strafeToLinearHeading(positions.get(AutoPars.positions.LEFT_SHOOT).component1(), positions.get(AutoPars.positions.LEFT_SHOOT).component2(), fastToShoot);

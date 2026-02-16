@@ -55,7 +55,7 @@ public class AutonomousPathController {
                         Map.entry(AutoPars.positions.LEFT_COLLECT, new Pose2d(-11.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.LEFT_READY_COLLECT, new Pose2d(-11.5, -25, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.MID_COLLECT, new Pose2d(12, -25, Math.toRadians(270))),
-                        Map.entry(AutoPars.positions.MID_READY_COLLECT, new Pose2d(12, -25, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.MID_READY_COLLECT, new Pose2d(12, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.FAR_COLLECT, new Pose2d(34.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.FAR_READY_COLLECT, new Pose2d(34.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.LEFT_LOAD_COLLECT, new Pose2d(50, -65, Math.toRadians(270))),

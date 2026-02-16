@@ -46,18 +46,15 @@ public class BlinkinLED extends SubsystemBase {
         if (BarnRobot.getInstance().shooterSensor.isShootPoseBusy() && !BarnRobot.getInstance().midSensor.isMidPoseBusy() &&
         !BarnRobot.getInstance().intakeSensor.isIntakePoseBusy()){
             setRed();
-            BarnRobot.getInstance().telemetry.addData("blinkin", "red");
         }
         else if (BarnRobot.getInstance().midSensor.isMidPoseBusy() && BarnRobot.getInstance().shooterSensor.isShootPoseBusy() &&
                 !BarnRobot.getInstance().intakeSensor.isIntakePoseBusy()){
             setPurple();
-            BarnRobot.getInstance().telemetry.addData("blinkin", "purple");
         }
         else if (BarnRobot.getInstance().intakeSensor.isIntakePoseBusy() && BarnRobot.getInstance().midSensor.isMidPoseBusy() &&
                 BarnRobot.getInstance().shooterSensor.isShootPoseBusy()
         ){
             setGreen();
-            BarnRobot.getInstance().telemetry.addData("blinkin", "green");
         }
         else setBlack();
     }

@@ -52,9 +52,9 @@ public class TestTeleopnNEW extends CommandOpMode {
                 this,
                 opModeData
         );
-        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.setCustomDashboardPos());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterCustomVelocityDashboard());
 
 
         // ==========================================================
@@ -138,15 +138,10 @@ public class TestTeleopnNEW extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        farminator.shooterHood.displayTelemetry();
+        telemetry.addLine("===PINPOINT DATA===");
         farminator.drive.displayPinpointDataTelemetry();
-        farminator.shooter.displayTelemetry();
-        telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
-        telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
-
-        telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
-        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-
+        telemetry.addLine("===WEBCAM DATA===");
+        farminator.webcam.displayTelemetry();
 
         farminator.periodic();
     }

@@ -91,11 +91,6 @@ public class LimeLight extends SubsystemBase {
     public boolean isAlignedToGoal() {
 
         boolean aligned = isGoalTagDetected() && Math.abs(getGoalYaw()) < 0.1;
-
-        BarnRobot.getInstance().telemetry.addData("aligned", aligned);
-        if(frs != null) BarnRobot.getInstance().telemetry.addData("yaw", getGoalYaw());
-        BarnRobot.getInstance().telemetry.addData("timer", validShootTimer.seconds());
-
         if (aligned) {
             if (!wasAligned) {
                 // Just became aligned → start timer
@@ -246,12 +241,7 @@ public class LimeLight extends SubsystemBase {
         llResult = limelight.getLatestResult();
         frs = llResult.getFiducialResults();
         isAlignmentReady = isAlignedToGoal();
-        limelight.updateRobotOrientation(Math.toDegrees(BarnRobot.getInstance().pinpointLocalizer.getPose().heading.toDouble()));
 
-        if (isGoalTagDetected()) {
-            updatePose();
-            poseUpdateTimer.reset();
-        }
     }
 
     public void updatePose(){
@@ -273,7 +263,8 @@ public class LimeLight extends SubsystemBase {
         robot.telemetry.addData("Limelight Data Valid", isDataValid());
         robot.telemetry.addData("Limelight llResult != null", limelight.getLatestResult() != null);
         robot.telemetry.addData("Limelight goal detected", isGoalTagDetected());
-// && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC
+// && poseUpdateTimer.seconds() >= PO
+// SE_UPDATE_INTERVAL_SEC
         if (isGoalTagDetected()) {
             robot.telemetry.addData("Limelight llAngle", llResult.getBotpose().getOrientation());
             robot.telemetry.addData("Limelight distance", getGoalDistance());

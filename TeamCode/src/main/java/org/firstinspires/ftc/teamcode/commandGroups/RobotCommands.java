@@ -85,6 +85,12 @@ public class RobotCommands {
         );
     }
 
+    public static Command autoParkCommand(){
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> lastCommand = "autoParkCommand()")
+        );
+    }
+
     public static String getLastCommand() {
         return lastCommand;
     }

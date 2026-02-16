@@ -101,7 +101,7 @@ public class BlueCloseThreeNineAdjust {
 
         Pose2d midCollectPose = new Pose2d(
                 MID_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y + MID_Y_OFFSET,
+                SOUTH_COLLECT_POSE_Y,
                 SOUTH_HEADING
         );
 
@@ -141,7 +141,7 @@ public class BlueCloseThreeNineAdjust {
                 .strafeToLinearHeading(leftShoot, LEFT_SHOOT_HEADING, fastToShoot);
 
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(leftShootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
+                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -5));
 
         TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(midCollectPose)
                 .strafeToLinearHeading(midShoot, MID_SHOOT_HEADING);

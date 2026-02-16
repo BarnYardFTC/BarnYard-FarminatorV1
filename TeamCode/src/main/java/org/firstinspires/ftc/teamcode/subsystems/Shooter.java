@@ -34,7 +34,7 @@ public class Shooter  extends SubsystemBase {
     public static double SHOOTING_RANGE_2 = 1.9;
     public static double SHOOTING_RANGE_3 = 2.8;
 
-    private double targetVelocity;
+    public static double targetVelocity;
 
 
     public Shooter() {
@@ -83,7 +83,10 @@ public class Shooter  extends SubsystemBase {
         else {
             targetVelocity = getVelocity();
         }
-        power = pidfController.calculate(targetVelocity, getVelocity());
+        setCustomVelocity();
+    }
+    private void setCustomVelocity(){
+        double power = pidfController.calculate(targetVelocity, getVelocity());
         setPower(power);
     }
 
@@ -98,6 +101,10 @@ public class Shooter  extends SubsystemBase {
 
     public RunCommand runShooterClose(){
         return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_RANGE_1), this);
+    }
+
+    public RunCommand runShooterCustomVelocityDashboard(){
+        return new RunCommand(() -> setCustomVelocity(), this);
     }
 
     public RunCommand runShooterReversed(){

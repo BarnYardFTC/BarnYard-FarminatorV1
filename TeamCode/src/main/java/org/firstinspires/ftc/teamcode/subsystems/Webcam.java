@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import android.util.Size;
@@ -46,14 +45,14 @@ public class Webcam extends SubsystemBase {
 
     /* ---------------- VISION CONSTANTS ---------------- */
 
-    private static final double POSE_UPDATE_INTERVAL_SEC = 1.0;
+    private static final double POSE_UPDATE_INTERVAL_SEC = 3;
     public static double MAX_UPDATE_DISTANCE = 1.5;
 
     private static final Size CAMERA_RESOLUTION = new Size(640, 480);
 
-    public static double WEBCAM_X = -5.1;
+    public static double WEBCAM_X = 0;
     public static double WEBCAM_Y = 7.3;
-    public static double WEBCAM_Z = 31.1;
+    public static double WEBCAM_Z = 36;
 
     private static final YawPitchRollAngles CAMERA_ORIENTATION =
             new YawPitchRollAngles(AngleUnit.DEGREES, 0, -64, 0, 0);
@@ -217,10 +216,6 @@ public class Webcam extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (isLocalizationTagDetected()) {
-            updateGoalYaw();
-        }
-
         if (isLocalizationTagDetected()
                 && BarnRobot.getInstance().drive.isRobotStatic()
                 && poseUpdateTimer.seconds() >= POSE_UPDATE_INTERVAL_SEC) {
@@ -249,6 +244,9 @@ public class Webcam extends SubsystemBase {
     public void displayTelemetry() {
         BarnRobot robot = BarnRobot.getInstance();
         AprilTagDetection d = getBestDetection();
+        robot.telemetry.addData("isRobotStatic", BarnRobot.getInstance().drive.isRobotStatic());
+        robot.telemetry.addData("poseUpdateTimer.secpnds()", poseUpdateTimer.seconds());
+        robot.telemetry.addData("isLocalizationTagDetected", isLocalizationTagDetected());
         robot.telemetry.addData("Webcam Robot X", d != null ? d.robotPose.getPosition().x : "N/A");
         robot.telemetry.addData("Webcam Robot Y", d != null ? d.robotPose.getPosition().y : "N/A");
         robot.telemetry.addData("Webcam Goal dYaw", dYaw);

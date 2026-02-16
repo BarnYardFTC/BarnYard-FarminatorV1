@@ -100,36 +100,41 @@ public class AutonomousPathController {
      */
     public TrajectoryActionBuilder trajectories(AutoPars.positions position, RoadRunnerMecanumDrive drive, Telemetry telemetry) {
         TrajectoryActionBuilder path = drive.actionBuilder(lastPose);
-
         switch (color) {
             case BLUE:
                 if (distance == AutoPars.posDistance.CLOSE) {
                     switch (position) {
                         case SHOOT_CLOSE:
-                            path.strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
+                            path = drive.actionBuilder(lastPose)
+                                    .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
                             break;
                         case LEFT_COLLECT:
-                            path.strafeToLinearHeading(positions.get(AutoPars.positions.LEFT_READY_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_READY_COLLECT).component2())
+                            path = drive.actionBuilder(lastPose)
+                                    .strafeToLinearHeading(positions.get(AutoPars.positions.LEFT_READY_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_READY_COLLECT).component2())
                                     // keep Rotation2d hardcoded (as requested)
                                     .strafeToConstantHeading(positions.get(AutoPars.positions.LEFT_COLLECT).component1(), new TranslationalVelConstraint(40));
                             break;
                         case MID_COLLECT:
-                            path.splineToLinearHeading(positions.get(AutoPars.positions.MID_COLLECT), new Rotation2d(0, -3));
+                            path = drive.actionBuilder(lastPose)
+                                    .splineToLinearHeading(positions.get(AutoPars.positions.MID_COLLECT), new Rotation2d(0, -3));
 //                        case FAR_COLLECT:
 
                     }
                 } else {
                     switch (position) {
                         case SHOOT_FAR:
-                            path.splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
+                            path = drive.actionBuilder(lastPose)
+                                    .splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
                             break;
                         case LOAD_COLLECT:
-                            path.splineToLinearHeading(positions.get(AutoPars.positions.LEFT_LOAD_COLLECT), Math.toRadians(270))
+                            path = drive.actionBuilder(lastPose)
+                                    .splineToLinearHeading(positions.get(AutoPars.positions.LEFT_LOAD_COLLECT), Math.toRadians(270))
                                     .splineToConstantHeading(positions.get(AutoPars.positions.MID_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.MID_LOAD_COLLECT).component2())
                                     .splineToConstantHeading(positions.get(AutoPars.positions.FAR_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.FAR_LOAD_COLLECT).component2());
                             break;
                         case FAR_COLLECT:
-                            path.strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
+                            path = drive.actionBuilder(lastPose)
+                                    .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
                             break;
                     }
                 }
@@ -142,16 +147,19 @@ public class AutonomousPathController {
                         case LEFT_COLLECT:
                         case MID_COLLECT:
                         case FAR_COLLECT:
-                            path.strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
+                            path = drive.actionBuilder(lastPose)
+                                    .strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
                             break;
                     }
                 } else {
                     switch (position) {
                         case SHOOT_FAR:
-                            path.splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
+                            path = drive.actionBuilder(lastPose)
+                                    .splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
                             break;
                         case LOAD_COLLECT:
-                            path.splineToLinearHeading(positions.get(AutoPars.positions.FAR_LOAD_COLLECT), Math.toRadians(90))
+                            path = drive.actionBuilder(lastPose)
+                                    .splineToLinearHeading(positions.get(AutoPars.positions.FAR_LOAD_COLLECT), Math.toRadians(90))
                                     .splineToConstantHeading(positions.get(AutoPars.positions.MID_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.MID_LOAD_COLLECT).component2())
                                     .splineToConstantHeading(positions.get(AutoPars.positions.LEFT_LOAD_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_LOAD_COLLECT).component2());
                             break;
@@ -160,7 +168,8 @@ public class AutonomousPathController {
                 break;
         }
         lastPose = positions.get(position);
-        telemetry.addData("Last Pose", lastPose);
+        telemetry.addData("Position: ", position);
+        telemetry.addData("Last Pose: ", lastPose.position);
 
         return path;
     }

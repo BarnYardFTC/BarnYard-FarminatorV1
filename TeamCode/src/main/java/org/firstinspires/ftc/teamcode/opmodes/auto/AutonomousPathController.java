@@ -18,7 +18,7 @@ public class AutonomousPathController {
      */
     public AutoPars.side color;
     public AutoPars.posDistance distance;
-    public AutoPars.positions position;
+    public AutoPars.positions posaition;
     public Map<AutoPars.positions, Pose2d> positions;
     public Pose2d lastPose;
 
@@ -100,12 +100,10 @@ public class AutonomousPathController {
      */
     public TrajectoryActionBuilder trajectories(AutoPars.positions position, RoadRunnerMecanumDrive drive, Telemetry telemetry) {
         TrajectoryActionBuilder path = drive.actionBuilder(lastPose);
-        Pose2d tmpPose = positions.get(position);
 
         switch (color) {
             case BLUE:
                 if (distance == AutoPars.posDistance.CLOSE) {
-                    lastPose = positions.get(AutoPars.positions.START_CLOSE);
                     switch (position) {
                         case SHOOT_CLOSE:
                             path.strafeToLinearHeading(positions.get(position).component1(), positions.get(position).component2());
@@ -121,7 +119,6 @@ public class AutonomousPathController {
 
                     }
                 } else {
-                    lastPose = positions.get(AutoPars.positions.START_FAR);
                     switch (position) {
                         case SHOOT_FAR:
                             path.splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
@@ -140,7 +137,6 @@ public class AutonomousPathController {
 
             case RED:
                 if (distance == AutoPars.posDistance.CLOSE) {
-                    lastPose = positions.get(AutoPars.positions.START_CLOSE);
                     switch (position) {
                         case SHOOT_CLOSE:
                         case LEFT_COLLECT:
@@ -150,7 +146,6 @@ public class AutonomousPathController {
                             break;
                     }
                 } else {
-                    lastPose = positions.get(AutoPars.positions.START_FAR);
                     switch (position) {
                         case SHOOT_FAR:
                             path.splineToConstantHeading(positions.get(position).component1(), positions.get(position).component2());
@@ -164,18 +159,9 @@ public class AutonomousPathController {
                 }
                 break;
         }
-        lastPose = tmpPose;
+        lastPose = positions.get(position);
         telemetry.addData("Last Pose", lastPose);
 
         return path;
     }
-
-    public void setLastPose(AutoPars.positions pos) {
-        lastPose = positions.get(pos);
-    }
-
-    public Command setLastPoseCmd(AutoPars.positions pos){
-        return new InstantCommand(() -> setLastPose(pos));
-    }
-
 }

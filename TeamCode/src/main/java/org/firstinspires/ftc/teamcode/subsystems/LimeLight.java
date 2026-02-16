@@ -93,7 +93,7 @@ public class LimeLight extends SubsystemBase {
         boolean aligned = isGoalTagDetected() && Math.abs(getGoalYaw()) < 0.1;
 
         BarnRobot.getInstance().telemetry.addData("aligned", aligned);
-        BarnRobot.getInstance().telemetry.addData("yaw", getGoalYaw());
+        if(frs != null) BarnRobot.getInstance().telemetry.addData("yaw", getGoalYaw());
         BarnRobot.getInstance().telemetry.addData("timer", validShootTimer.seconds());
 
         if (aligned) {
@@ -160,7 +160,7 @@ public class LimeLight extends SubsystemBase {
 
     public double cashedYaw = -1;
     public double getGoalYaw(){
-        if (frs != null){
+        if (!(frs == null || frs.isEmpty())){
             LLResultTypes.FiducialResult largest = frs.get(0);
             for (LLResultTypes.FiducialResult fr : frs) {
                 if (fr.getTargetArea() > largest.getTargetArea()) {

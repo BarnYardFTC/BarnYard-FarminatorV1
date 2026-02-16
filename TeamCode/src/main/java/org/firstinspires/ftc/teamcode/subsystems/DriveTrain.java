@@ -21,9 +21,10 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     // Yaw PID (deg -> output turn)
-    public static double closeP = 0.8, closeD = 0.05;
+    public static double closeP = 0.5, closeD = 0.05;
     public static double farP = 0.8, farD = 0.05;
     public final static double FAR_PID_DISTANCE = 2;
+
 
     public static double TURN_START_POWER = 0.085; // tune 0.07–0.11
     public static double TURN_START_ERROR = 2.0;   // deg — only help when farther than this
@@ -38,7 +39,7 @@ public class DriveTrain extends SubsystemBase {
 
 
     // Minimum turning speed clamp (helps overcome friction / deadband)
-    public static double MIN_TURNING_SPEED = 0.06;
+    public static double MIN_TURNING_SPEED = 0.1;
 
     // Lookahead time (sec) for predicting future position during "shoot while driving"
     public static double VELOCITY_LOOKAHEAD = 1.5;
@@ -80,7 +81,6 @@ public class DriveTrain extends SubsystemBase {
 
     // PID controller for yaw correction
     private final PIDController pidControllerClose;
-    private final PIDController pidControllerFar;
 
     // NOTE: currently unused, kept because you may want to reference initial alignment
     private final double initialBotHeading;
@@ -103,7 +103,6 @@ public class DriveTrain extends SubsystemBase {
 
         initialBotHeading = 270;
         pidControllerClose = new PIDController(closeP, 0, closeD);
-        pidControllerFar = new PIDController(farP, 0, farD);
     }
 
     // ============================================================
@@ -131,25 +130,32 @@ public class DriveTrain extends SubsystemBase {
      * - diffToSpeed uses PIDController directly, and you compare yawDiff > 1
      * Keep consistent with Limelight.getDyaw() and desiredHeading math.
      */
+
     private double diffToSpeed(double yawDiff) {
+        // PID tries to drive yawDiff → 0
         double output;
         // PID tries to drive yawDiff → 0
-        if(BarnRobot.getInstance().limelight.getGoalDistance() > FAR_PID_DISTANCE)output = pidControllerFar.calculate(0, yawDiff);
-        else output = pidControllerFar.calculate(0, yawDiff);
-
-
+        if(BarnRobot.getInstance().limelight.getGoalDistance() > FAR_PID_DISTANCE){
+            pidControllerClose.setPID(farP, 0, farD);
+            output = pidControllerClose.calculate(0, yawDiff);
+        }
+        else {
+            pidControllerClose.setPID(closeP, 0, closeD);
+            output = pidControllerClose.calculate(0, yawDiff);
+        }
         // Deadband so we don't twitch near zero
         if (Math.abs(yawDiff) < PID_THRESHOLD) {
             return 0;
         }
 
         // Ensure minimum turning power to overcome friction
-        if (Math.abs(yawDiff) > TURN_START_ERROR && Math.abs(output) < TURN_START_POWER) {
-            output = Math.copySign(TURN_START_POWER, output);
+        if (Math.abs(output) < MIN_TURNING_SPEED) {
+            output = Math.copySign(MIN_TURNING_SPEED, output);
         }
 
         return output;
     }
+
 
 
     /**

@@ -18,7 +18,7 @@ public class AutonomousPathController {
      */
     public AutoPars.side color;
     public AutoPars.posDistance distance;
-    public AutoPars.positions posaition;
+//    public AutoPars.positions position;
     public Map<AutoPars.positions, Pose2d> positions;
     public Pose2d lastPose;
 

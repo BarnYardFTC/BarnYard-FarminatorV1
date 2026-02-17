@@ -49,10 +49,6 @@ public class blueCloseTemp {
 
     public static TrajectoryActionBuilder takeFromLoadZone;
 
-    public static Vector2d shootVec = new Vector2d(-22,-23);
-
-
-
     public static void createPath(RoadRunnerMecanumDrive drive){
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());

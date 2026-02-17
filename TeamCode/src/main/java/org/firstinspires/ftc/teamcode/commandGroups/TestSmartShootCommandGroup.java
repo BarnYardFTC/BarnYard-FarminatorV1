@@ -13,7 +13,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
 @Config
-public class TestSmartShootCommandGroup extends SequentialCommandGroup {
+public class TestSmartShootCommandGroup {
 
     public static int SHOOTING_TIME_MS = 2500;
 

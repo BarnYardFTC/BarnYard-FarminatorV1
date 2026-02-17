@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 
 @Config
-public class AutoController extends SequentialCommandGroup {
+public class AutoController {
     public static Command shootCommandPathIntake(TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(

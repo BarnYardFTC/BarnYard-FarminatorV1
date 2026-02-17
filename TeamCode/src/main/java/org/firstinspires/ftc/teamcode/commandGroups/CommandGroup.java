@@ -14,7 +14,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
 @Config
-public class CommandGroup extends SequentialCommandGroup {
+public class CommandGroup {
 
     public static int SHOOTING_TIME_MS = 3000;
 

@@ -34,6 +34,7 @@ public class TestTeleopnNEW extends CommandOpMode {
     // Robot Instance
     // ------------------------
     private BarnRobot farminator;
+    public boolean sensorChanger = false;
 
     @Override
     public void initialize() {
@@ -66,14 +67,21 @@ public class TestTeleopnNEW extends CommandOpMode {
         // Transfer System
         // ------------------------
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
+                .toggleWhenPressed(
+                        new InstantCommand(() -> sensorChanger = !sensorChanger)
+                );
+
+
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
                         new ParallelCommandGroup(
-                                SmartCommandGroups.smartTransferAndIntake(),
+                                SmartCommandGroups.smartTransferAndIntake(sensorChanger),
                                 BarnRobot.getInstance().gate.closeCommand()
                         )
+
                 )
                 .whenInactive(
                         CommandGroup.deactivateIntakeAndTransferCommand().alongWith(
@@ -101,7 +109,7 @@ public class TestTeleopnNEW extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                         .whileActiveOnce(
-                                SmartCommandGroups.smartShootCommand()
+                                CommandGroup.shootCommand()
                         );
 
 
@@ -159,7 +167,7 @@ public class TestTeleopnNEW extends CommandOpMode {
                 ));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(SmartCommandGroups.smartShootCommand());
+                .whenPressed(CommandGroup.shootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

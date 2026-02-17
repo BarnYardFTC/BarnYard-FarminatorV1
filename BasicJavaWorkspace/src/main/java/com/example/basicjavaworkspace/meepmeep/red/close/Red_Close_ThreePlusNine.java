@@ -10,7 +10,6 @@ import java.lang.Math;
 public class Red_Close_ThreePlusNine {
 
     // ================== FIELD / POSES ==================
-
     // SleepAction is in seconds (double). Keep as seconds.
     public static double SHOOT_TIME_SEC = 2.0;
 
@@ -116,13 +115,13 @@ public class Red_Close_ThreePlusNine {
 
         // Shoot -> Mid collect -> Shoot
         TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, 3))
-                .splineToLinearHeading(shootPose, new Rotation2d(-2, 1), fastToShoot);
+                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3))
+                .splineToLinearHeading(shootPose, new Rotation2d(2, -1), fastToShoot);
 
         // Shoot -> Right collect -> End
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(shootPose)
                 .splineToLinearHeading(rightCollectPose, new Rotation2d(1, 2))
-                .splineToLinearHeading(endPose, new Rotation2d(-1.8, 1), fastToShoot);
+                .splineToLinearHeading(endPose, new Rotation2d(1.8, -1), fastToShoot);
 
         // ================== RUN ==================
         myBot.runAction(new SequentialAction(

@@ -57,13 +57,13 @@ public class CommandGroup extends SequentialCommandGroup {
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        intakeAndTransferActivateCommand(),
-                        new WaitCommand(1500),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                    new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                    BarnRobot.getInstance().gate.openCommand(),
+                    intakeAndTransferActivateCommand(),
+                    new WaitCommand(1500),
+                    BarnRobot.getInstance().gate.closeCommand(),
+                    deactivateIntakeAndTransferCommand(),
+                    new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
                 )
         );
     }

@@ -129,35 +129,29 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
+//          AVIV IT COMMENT FOR YOU THAT WE DONT NEED TO STOP SHOOTER EVERY SHOOTERCOMMAND WE CAN JUST TORN IT ON HOW WE ARE DOING IN TELEOP
+        // I DID THIS BUT JUST FOR YOUR KNOWLEDGE
 
-//      ==================COMMANDS===================
+        //HERE I WROTE I THINK RIGHT COMMANDS (PLEASE TEST THEM)
+
+        //ALSO YESTERDAY WHEN I TESTED WITHOUT AUTO ALIGN WHE SHOT FROM FAR POSITION ROBOT JUST UNDERSHOOT
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.driveCommandPath(autoHub.trajectories(AutoPars.positions.SHOOT_CLOSE, drive, telemetry)),
+                AutoController.shootCommandPath(autoHub.trajectories(AutoPars.positions.SHOOT_CLOSE, drive, telemetry)),
 
-                AutoController.shootCommand()
+                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_COLLECT, drive, telemetry)),
 
-//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_COLLECT, drive, telemetry)),
-//
-//                AutoController.driveCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_SHOOT, drive, telemetry)),
-//                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-//                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-//                AutoController.shootCommand(),
-//
-//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_COLLECT, drive, telemetry)),
-//
-//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_SHOOT, drive, telemetry)),
-//                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-//                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-//                AutoController.shootCommand(),
-//
-//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_COLLECT, drive, telemetry)),
-//
-//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_SHOOT, drive, telemetry)),
-//                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-//                new WaitUntilCommand(() -> farminator.limelight.isGoalTagDetected()),
-//                AutoController.shootCommand()
+                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.LEFT_SHOOT, drive, telemetry)),
+
+                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_COLLECT, drive, telemetry)),
+
+                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.MID_SHOOT, drive, telemetry)),
+
+                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_COLLECT, drive, telemetry)),
+
+                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.FAR_SHOOT, drive, telemetry))
+
 
         ).schedule();
     }
@@ -179,4 +173,5 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
         // store the finish heading of the auto
         OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
+
 }

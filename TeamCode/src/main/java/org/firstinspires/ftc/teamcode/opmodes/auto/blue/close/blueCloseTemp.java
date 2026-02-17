@@ -56,20 +56,19 @@ public class blueCloseTemp {
     public static void createPath(RoadRunnerMecanumDrive drive){
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectLeft = goShootPre.endTrajectory().fresh()
-                .strafeToLinearHeading(leftCollectPose.component1(),leftCollectPose.component2());
-        goShootLeft = goCollectLeft.endTrajectory().fresh()
-                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectMid = goShootLeft.endTrajectory().fresh()
-                .strafeToLinearHeading(midCollectPose.component1(),midCollectPose.component2());
-        goShootMid = goCollectMid.endTrajectory().fresh()
-                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectRight = goShootMid.endTrajectory().fresh()
+        goCollectRight = goShootPre.endTrajectory()
                 .strafeToLinearHeading(rightCollectPose.component1(),rightCollectPose.component2());
-        goShootRight = goCollectRight.endTrajectory().fresh()
+        goShootRight = goCollectRight.endTrajectory()
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goPark = goShootMid.endTrajectory().fresh()
-                .strafeToLinearHeading(parkPose.component1(),parkPose.component2());
+        goCollectMid = goShootRight.endTrajectory()
+                .strafeToLinearHeading(midCollectPose.component1(),midCollectPose.component2());
+        goShootMid = goCollectMid.endTrajectory()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goCollectLeft = goShootMid.endTrajectory()
+                .strafeToLinearHeading(leftCollectPose.component1(),leftCollectPose.component2());
+        goShootLeft = goCollectLeft.endTrajectory()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goPark = goShootLeft.endTrajectory();
 
 
     }

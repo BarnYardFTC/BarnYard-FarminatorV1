@@ -1,38 +1,18 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goCollectLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goCollectMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goCollectRight;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goPark;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goShootLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goShootMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goShootPre;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goShootRight;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.parkPose;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.startPose;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.*;
 
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-import org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.*;
 
 @Disabled
 @Autonomous(name = "!BLUE THREE PLUS NINE", group = "!main")
@@ -49,8 +29,6 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
             OpModeData.OpModeType.AUTONOMOUS,
             startPose
     );
-
-    public static int SCORE_TIME = 2200;
 
     @Override
     public void initialize() {
@@ -70,10 +48,6 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 AutoController.shootCommandPath(goShootPre),
                 AutoController.intakeCommandPath(goCollectLeft),
                 AutoController.shootCommandPath(goShootLeft),
-                AutoController.intakeCommandPath(goCollectMid),
-                AutoController.shootCommandPathIntake(goShootMid),
-                AutoController.intakeCommandPath(goCollectRight),
-                AutoController.shootCommandPathIntake(goShootRight),
                 new DriveActionCommand(goPark)
                 ).schedule();
     }

@@ -1,61 +1,34 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.*;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.subsystems.LimeLight;
-import org.firstinspires.ftc.teamcode.subsystems.Webcam;
+import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-/**
- * Autonomous routine "3+0 Close":
- * - Starts at a defined pose
- * - Prepares shooter and shoots three preloaded elements
- * - Does not collect additional elements after shooting
- */
-@Config
 @Disabled
-@Autonomous(name = "GV3+0 BLUE CLOSE", group = "main")
+@Autonomous(name = "!BLUE THREE PLUS ZERO", group = "!main")
 public class Blue_Close_ThreePlusZero extends CommandOpMode {
+
+
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
 
-    /** Initial pose */
-//    public static double POSE1_X = -45;
-//    public static double POSE1_Y = -45;
-    public static final double POSE1_X = -37;
-    public static final double POSE1_Y = -48;
-    public static final double POSE1_HEADING = Math.toRadians(90);
-    public static final double SHOOTING_HEADING = Math.toRadians(250);
-
-    /** Shooter shooting pose */
-    public static double SHOOTING_POSE_X = -57;
-    public static double SHOOTING_POSE_Y = -22;
-    public static double PERPENDICULAR_TO_DEPOT_HEADING = Math.toRadians(135);
-    public static boolean IsFinished = false;
-
-    public static int SCORE_TIME = 4000;
-
-
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+            startPose
+    );
 
     @Override
     public void initialize() {
@@ -64,37 +37,17 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING));
+        farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
 
-        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        drive = new RoadRunnerMecanumDrive(hardwareMap, startPose);
 
-        /** Define trajectory to shooting pose */
-        TrajectoryActionBuilder path1 = drive.actionBuilder(new Pose2d(POSE1_X, POSE1_Y, POSE1_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING, new TranslationalVelConstraint(25) );
-
-        TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOTING_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOTING_HEADING, new TranslationalVelConstraint(25) );
-
+        blueCloseTemp.createPath(drive);
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                new ParallelRaceGroup(
-                        farminator.shooter.runShooterBasedOnDistance(),
-                        new SequentialCommandGroup(
-                                new DriveActionCommand(path1),
-                                new ParallelRaceGroup(
-                                        farminator.drive.alignToTagCommandAuto(),
-                                        new WaitCommand(500)
-                                ),
-                                farminator.drive.stop(),
-                                farminator.intake.activateIntakeCommand(),
-                                new WaitCommand(SCORE_TIME)
-                        )
-                ),
-                farminator.intake.deactivateIntakeCommand(),
-                farminator.shooter.turnOffInstant()
+                AutoController.shootCommandPath(goShootPre),
+                new DriveActionCommand(goPark)
         ).schedule();
-
     }
 
     @Override
@@ -107,8 +60,10 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
      * runs when the autonomous is finished
      */
     @Override
-    public void end() {
+    public void end(){
         // store the finish heading of the auto
         OpModeData.setAutoFinishPose(drive.localizer.getPose());
     }
+
+
 }

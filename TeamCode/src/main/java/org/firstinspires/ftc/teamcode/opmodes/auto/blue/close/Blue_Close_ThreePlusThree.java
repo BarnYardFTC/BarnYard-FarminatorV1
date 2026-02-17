@@ -47,12 +47,7 @@ public class Blue_Close_ThreePlusThree extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 AutoController.shootCommandPath(goShootPre),
                 AutoController.intakeCommandPath(goCollectLeft),
-                AutoController.shootCommandPath(goShootLeft),
-                AutoController.intakeCommandPath(goCollectMid),
-                AutoController.shootCommandPathIntake(goShootMid),
-                AutoController.intakeCommandPath(goCollectRight),
-                AutoController.shootCommandPathIntake(goShootRight),
-                new DriveActionCommand(goPark)
+                AutoController.shootCommandPath(goLastShoot)
         ).schedule();
     }
 

@@ -46,7 +46,7 @@ public class Blue_Close_ThreePlusZero extends CommandOpMode {
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 AutoController.shootCommandPath(goShootPre),
-                new DriveActionCommand(goPark)
+                new DriveActionCommand(goLastShoot)
         ).schedule();
     }
 

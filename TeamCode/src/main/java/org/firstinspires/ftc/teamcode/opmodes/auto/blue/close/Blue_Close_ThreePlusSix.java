@@ -49,8 +49,7 @@ public class Blue_Close_ThreePlusSix extends CommandOpMode {
                 AutoController.intakeCommandPath(goCollectLeft),
                 AutoController.shootCommandPath(goShootLeft),
                 AutoController.intakeCommandPath(goCollectMid),
-                AutoController.shootCommandPathIntake(goShootMid),
-                new DriveActionCommand(goPark)
+                AutoController.shootCommandPath(goLastShoot)
         ).schedule();
     }
 

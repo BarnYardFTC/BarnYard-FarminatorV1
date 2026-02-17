@@ -21,23 +21,36 @@ public class CommandGroup extends SequentialCommandGroup {
 
 
     public static Command smartShootCommand(){
-        return new ParallelRaceGroup(
+        return new SequentialCommandGroup(
+            new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new WaitCommand(4000),
                 new SequentialCommandGroup(
-                        new WaitUntilCommand(() -> isReadyToShoot()),
-                        BarnRobot.getInstance().gate.openCommand(),
                         intakeAndTransferActivateCommand(),
-                        new WaitCommand(1500),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        deactivateIntakeAndTransferCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
+                        new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
+
                 )
+            ),
+                BarnRobot.getInstance().gate.closeCommand(),
+                deactivateIntakeAndTransferCommand(),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
         );
     }
 
     private static boolean isReadyToShoot(){
-        BarnRobot.getInstance().telemetry.addData("lamlam aligned", BarnRobot.getInstance().limelight.isAlignedToGoal());
-        return BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal();
+        return BarnRobot.getInstance().shooter.isReady()
+                && BarnRobot.getInstance().limelight.isAlignedToGoal()
+                ;
     }
 
     public static Command shootCommand(){

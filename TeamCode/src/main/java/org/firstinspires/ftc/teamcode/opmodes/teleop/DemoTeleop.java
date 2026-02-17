@@ -106,7 +106,7 @@ public class DemoTeleop extends CommandOpMode{
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(CommandGroup.shootCommand());
+                .whenPressed(CommandGroup.smartShootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

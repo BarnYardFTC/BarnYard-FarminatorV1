@@ -129,7 +129,7 @@ public class LimeLightTestTeleop extends CommandOpMode {
     private void bindShooterControls() {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(CommandGroup.shootCommand());
+                .whenPressed(CommandGroup.smartShootCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(

@@ -54,7 +54,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         );
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.setCustomDashboardPos());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterCustomVelocityDashboard());
+        farminator.shooter.setDefaultCommand(farminator.shooter.turnOff());
 
 
         // ==========================================================
@@ -125,7 +125,7 @@ public class TestTeleopnNEW extends CommandOpMode {
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(CommandGroup.shootCommand());
+                .whenPressed(CommandGroup.smartShootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

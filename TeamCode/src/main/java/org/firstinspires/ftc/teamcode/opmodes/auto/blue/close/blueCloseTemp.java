@@ -21,28 +21,22 @@ public class blueCloseTemp {
     public static final Pose2d midCollectPose = new Pose2d(12, -63, Math.toRadians(270));
     public static final Pose2d rightCollectPose = new Pose2d(34.5, -63, Math.toRadians(270));
 
-    public static final Pose2d leftLoadZoneReady = new Pose2d(-11.5, -20, Math.toRadians(270));
-    public static final Pose2d rightLoadZoneReady = new Pose2d(12, -20, Math.toRadians(270));
-    public static final Pose2d midLoadZoneReady = new Pose2d(34.5, -20, Math.toRadians(270));
+    public static final Pose2d leftCollectReady = new Pose2d(-11.5, -20, Math.toRadians(270));
+    public static final Pose2d midCollectReady = new Pose2d(34.5, -20, Math.toRadians(270));
+    public static final Pose2d rightCollectReady = new Pose2d(12, -20, Math.toRadians(270));
 
     public static final Pose2d parkPose = new Pose2d(-40, -22, Math.toRadians(227));
     public static final Pose2d gateOpenPose = new Pose2d(0, -50, Math.toRadians(90));
     public static final Pose2d gateCollectPose = new Pose2d(10,-57, Math.toRadians(227));
 
 // paths nigga ----------------------------------------------------------------- no ai stamp only rawdogging
-    public static TrajectoryActionBuilder goShootLeft;
-    public static TrajectoryActionBuilder goShootMid;
-    public static TrajectoryActionBuilder goShootRight;
+    public static TrajectoryActionBuilder goShootLeft, goShootMid, goShootRight, goShootPre, goLastShoot;
+    public static TrajectoryActionBuilder goCollectLeft, goCollectMid, goCollectRight;
+    public static TrajectoryActionBuilder goCollectReadyLeft, goCollectReadyMid, goCollectReadyRight;
 
-    public static TrajectoryActionBuilder goShootPre;
     public static TrajectoryActionBuilder goPark;
-    public static TrajectoryActionBuilder goCollectLeft;
-    public static TrajectoryActionBuilder goCollectMid;
-    public static TrajectoryActionBuilder goCollectRight;
-
     public static TrajectoryActionBuilder openGate;
     public static TrajectoryActionBuilder gateCollection;
-    public static TrajectoryActionBuilder goLastShoot;
 
     public static void createPath(RoadRunnerMecanumDrive drive){
         goShootPre = drive.actionBuilder(startPose)

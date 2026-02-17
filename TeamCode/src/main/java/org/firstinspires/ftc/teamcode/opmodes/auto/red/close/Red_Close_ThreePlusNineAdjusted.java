@@ -216,25 +216,25 @@ public class Red_Close_ThreePlusNineAdjusted extends CommandOpMode {
 
 
         new SequentialCommandGroup(
-                new WaitUntilCommand(this::opModeIsActive),
-                AutoController.shootCommand(),
-                new WaitCommand(500),
-
-                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_COLLECT, drive, telemetry)),
-
-                AutoController.shootCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_SHOOT, drive, telemetry)),
-
-                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_COLLECT, drive, telemetry)),
-
-                farminator.drive.alignToTagLamLamCommand(), //Aligning exactly to the goal
-
-                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.MID_SHOOT, drive, telemetry)),
-
-                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_COLLECT, drive, telemetry)),
-
-                farminator.drive.alignToTagLamLamCommand(), //Aligning exactly to the goal
-
-                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.FAR_SHOOT, drive, telemetry))
+//                new WaitUntilCommand(this::opModeIsActive),
+//                AutoController.shootCommand(),
+//                new WaitCommand(500),
+//
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_COLLECT, drive, telemetry)),
+//
+//                AutoController.shootCommandPath(autoHub.trajectories(AutoPars.positions.LEFT_SHOOT, drive, telemetry)),
+//
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.MID_COLLECT, drive, telemetry)),
+//
+//                farminator.drive.alignToTagLamLamCommand(), //Aligning exactly to the goal
+//
+//                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.MID_SHOOT, drive, telemetry)),
+//
+//                AutoController.intakeCommandPath(autoHub.trajectories(AutoPars.positions.FAR_COLLECT, drive, telemetry)),
+//
+//                farminator.drive.alignToTagLamLamCommand(), //Aligning exactly to the goal
+//
+//                AutoController.shootCommandPathIntake(autoHub.trajectories(AutoPars.positions.FAR_SHOOT, drive, telemetry))
 
         ).schedule();
     }

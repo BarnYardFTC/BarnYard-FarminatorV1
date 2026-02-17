@@ -51,7 +51,7 @@ public class AutonomousPathController {
                         Map.entry(AutoPars.positions.START_CLOSE, new Pose2d(-53.333, -45.5, Math.toRadians(225))),
                         Map.entry(AutoPars.positions.SHOOT_CLOSE, new Pose2d(-23, -22, Math.toRadians(227))),
                         Map.entry(AutoPars.positions.SHOOT_FAR, new Pose2d(45, 0, Math.toRadians(227))),
-                        Map.entry(AutoPars.positions.LEFT_COLLECT, new Pose2d(-11.5, -53, Math.toRadians(270))),
+                        Map.entry(AutoPars.positions.LEFT_COLLECT, new Pose2d(-11.5, -63, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.LEFT_READY_COLLECT, new Pose2d(-11.5, -26, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.MID_COLLECT, new Pose2d(12, -53, Math.toRadians(270))),
                         Map.entry(AutoPars.positions.MID_READY_COLLECT, new Pose2d(12, -63, Math.toRadians(270))),
@@ -126,8 +126,7 @@ public class AutonomousPathController {
                             break;
                         case LEFT_COLLECT:
                             path = drive.actionBuilder(lastPose)
-                                    .strafeToLinearHeading(positions.get(AutoPars.positions.SHOOT_NUDGE).component1(), positions.get(AutoPars.positions.SHOOT_NUDGE).component2())
-                                    .splineToConstantHeading(positions.get(AutoPars.positions.LEFT_READY_COLLECT).component1(), positions.get(AutoPars.positions.LEFT_READY_COLLECT).component2())
+                                    .splineToConstantHeading(positions.get(AutoPars.positions.LEFT_READY_COLLECT).component1(), new Rotation2d(0, 0))
                                     // keep Rotation2d hardcoded (as requested)
                                     .splineToConstantHeading(positions.get(AutoPars.positions.LEFT_COLLECT).component1(), new Rotation2d(0, 0));
                             break;

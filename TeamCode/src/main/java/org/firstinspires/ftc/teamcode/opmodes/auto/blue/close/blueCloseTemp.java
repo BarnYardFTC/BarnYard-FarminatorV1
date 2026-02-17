@@ -56,19 +56,20 @@ public class blueCloseTemp {
     public static void createPath(RoadRunnerMecanumDrive drive){
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectRight = goShootPre.endTrajectory()
-                .strafeToLinearHeading(rightCollectPose.component1(),rightCollectPose.component2());
-        goShootRight = goCollectRight.endTrajectory()
-                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectMid = goShootRight.endTrajectory()
-                .strafeToLinearHeading(midCollectPose.component1(),midCollectPose.component2());
-        goShootMid = goCollectMid.endTrajectory()
-                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectLeft = goShootMid.endTrajectory()
+        goCollectLeft = goShootPre.endTrajectory().fresh()
                 .strafeToLinearHeading(leftCollectPose.component1(),leftCollectPose.component2());
-        goShootLeft = goCollectLeft.endTrajectory()
+        goShootLeft = goCollectLeft.endTrajectory().fresh()
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goPark = goShootLeft.endTrajectory();
+        goCollectMid = goShootLeft.endTrajectory().fresh()
+                .strafeToLinearHeading(midCollectPose.component1(),midCollectPose.component2());
+        goShootMid = goCollectMid.endTrajectory().fresh()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goCollectRight = goShootMid.endTrajectory().fresh()
+                .strafeToLinearHeading(rightCollectPose.component1(),rightCollectPose.component2());
+        goShootRight = goCollectRight.endTrajectory().fresh()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goPark = goShootMid.endTrajectory().fresh()
+                .strafeToLinearHeading(parkPose.component1(),parkPose.component2());
 
 
     }

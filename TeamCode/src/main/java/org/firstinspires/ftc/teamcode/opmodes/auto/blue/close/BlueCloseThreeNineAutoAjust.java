@@ -124,10 +124,11 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
+        drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
+
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
 
 //      ==================COMMANDS===================
 
@@ -164,9 +165,10 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        farminator.periodic();
         telemetry.addData("aligned: ", farminator.limelight.isAlignedToGoal());
         telemetry.addData("yaw: ", farminator.limelight.getGoalYaw());
+
+        farminator.periodic();
     }
 
     /**

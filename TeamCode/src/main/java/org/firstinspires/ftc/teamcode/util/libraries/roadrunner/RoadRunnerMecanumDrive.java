@@ -41,6 +41,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.messages.MecanumLocalizerInputsMessage;
@@ -241,6 +242,8 @@ public final class RoadRunnerMecanumDrive {
         localizer = new PinpointLocalizer(hardwareMap, PARAMS.inPerTick, pose);
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
+
+        BarnRobot.getInstance().roadRunnerMecanumDrive = this;
     }
 
     public void setDrivePowers(PoseVelocity2d powers) {

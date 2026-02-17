@@ -127,6 +127,7 @@ public class Shooter  extends SubsystemBase {
         operateShooterDistanceBased(
                 BarnRobot.getInstance().limelight.getGoalDistance()
         );
+        BarnRobot.getInstance().telemetry.addLine("asd");
     }
 
     public RunCommand runShooterBasedOnDistance(){

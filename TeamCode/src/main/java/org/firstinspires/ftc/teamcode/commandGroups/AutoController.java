@@ -37,37 +37,16 @@ public class AutoController extends SequentialCommandGroup {
     public static int SHOOTING_TIME_MS = 1500;
     public static Command shootCommand() {
         return new SequentialCommandGroup(
-                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                BarnRobot.getInstance().gate.openCommand(),
-                BarnRobot.getInstance().transfer.activateTransfer(),
-                BarnRobot.getInstance().intake.activateIntakeCommand(),
-                new WaitCommand(SHOOTING_TIME_MS),
-                //                        new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                BarnRobot.getInstance().gate.closeCommand(),
-                CommandGroup.deactivateIntakeAndTransferCommand()
+                new ParallelRaceGroup(
+                        BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
+                        new WaitCommand(1000)
+                        ),
+                CommandGroup.shootCommand()
         );
     }
 
     public static Command deactivateIntakeAndTransferCommand(){
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
-    }
-    public static Command shootCommandPath(TrajectoryActionBuilder shootingPath){
-        return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        new SequentialCommandGroup(
-                                BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                BarnRobot.getInstance().intake.activateIntakeCommand(),
-                                BarnRobot.getInstance().transfer.activateTransfer(),
-                                new WaitCommand(SHOOTING_TIME_MS),
-//                            new WaitUntilCommand(() -> !CommandGroup.robotContainsArtifacts()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                CommandGroup.deactivateIntakeAndTransferCommand()
-                        )
-                )
-        );
     }
 
     public static Command driveCommandPath(TrajectoryActionBuilder drivePath){

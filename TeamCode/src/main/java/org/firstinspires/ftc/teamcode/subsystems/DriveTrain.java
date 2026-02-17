@@ -459,8 +459,15 @@ public class DriveTrain extends SubsystemBase {
 
     /** Distance from current robot pose to goal (meters). Uses alliance to choose goalY. */
     public double getDistanceFromGoal() {
-        double currentPoseX = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x * 0.0254; // inch -> meter
-        double currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // inch -> meter
+        double currentPoseX, currentPoseY;
+        if (BarnRobot.getInstance().opmodeData.opModeType == OpModeData.OpModeType.AUTONOMOUS){
+            currentPoseX = BarnRobot.getInstance().roadRunnerMecanumDrive.localizer.getPose().position.x * 0.0254; // inch -> meter
+            currentPoseY = BarnRobot.getInstance().roadRunnerMecanumDrive.localizer.getPose().position.y * 0.0254; // inch -> meter
+        }
+        else {
+            currentPoseY = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y * 0.0254; // inch -> meter
+            currentPoseX = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x * 0.0254; // inch -> meter
+        }
 
         if (BarnRobot.getInstance().opmodeData.allianceColor == OpModeData.AllianceColor.BLUE)
             return calcDistance(currentPoseX, currentPoseY, GOAL_X_1, BLUE_GOAL_Y);

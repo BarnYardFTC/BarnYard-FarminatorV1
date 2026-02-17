@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goCollectLeft;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goCollectMid;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goCollectRight;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goPark;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goShootLeft;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goShootMid;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.goShootPre;
@@ -73,25 +74,7 @@ public class Blue_Close_ThreePlusNine extends CommandOpMode {
                 AutoController.shootCommandPathIntake(goShootMid),
                 AutoController.intakeCommandPath(goCollectRight),
                 AutoController.shootCommandPathIntake(goShootRight),
-                new DriveActionCommand(new TrajectoryActionBuilder(parkPose))
-
-
-
-
-//                AutoController.shootCommand(),
-//                new WaitCommand(500),
-//                AutoController.intakeCommandPath(path1),
-//
-//                AutoController.shootCommandPath(path2),
-//
-//                AutoController.intakeCommandPath(path3),
-//
-//                AutoController.shootCommandPathIntake(path4),
-//
-//                AutoController.intakeCommandPath(path5),
-//
-//                AutoController.shootCommandPathIntake(path7)
-
+                new DriveActionCommand(goPark)
                 ).schedule();
     }
 

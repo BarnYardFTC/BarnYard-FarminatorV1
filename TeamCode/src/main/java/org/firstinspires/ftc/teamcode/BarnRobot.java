@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -54,7 +55,6 @@ public class BarnRobot extends Robot {
     public ColorSensor intakeSensor;
 
     public PinpointLocalizer pinpointLocalizer;
-
 
 
 
@@ -166,7 +166,7 @@ public class BarnRobot extends Robot {
 
     public void initShooter() {
         shooter = new Shooter();
-        shooter.setDefaultCommand(shooter.turnOff());
+        shooter.setDefaultCommand(shooter.runShooterBasedOnDistance());
     }
 
     private void initColorSensors(){
@@ -194,7 +194,6 @@ public class BarnRobot extends Robot {
 
     public void initShooterHood(){
         shooterHood = new ShooterHood();
-//        shooterHood.setDefaultCommand(shooterHood.defaultHoodCommand());
     }
 
     public void initBlinkin(){
@@ -214,7 +213,6 @@ public class BarnRobot extends Robot {
     public void initLimeLight() {
         limelight = new LimeLight();
     }
-
 
     // ------------------------------------------------------------
     // Periodic Loop

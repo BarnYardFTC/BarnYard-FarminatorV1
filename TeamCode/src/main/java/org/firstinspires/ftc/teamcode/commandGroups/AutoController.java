@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.commandGroups;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -33,14 +35,12 @@ public class AutoController extends SequentialCommandGroup {
     // Path for shooting pose -> autoAlign -> shooting
     public static Command shootCommandPath(TrajectoryActionBuilder shootingPath){
         return new SequentialCommandGroup(
-            new ParallelRaceGroup(
                 new DriveActionCommand(shootingPath),
                 new ParallelRaceGroup(
                         BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
                         new WaitCommand(1000)
                 ),
                 shootCommand()
-            )
         );
     }
 
@@ -48,15 +48,25 @@ public class AutoController extends SequentialCommandGroup {
     public static int SHOOTING_TIME_MS = 1500;
     public static Command shootCommand() {
         return new SequentialCommandGroup(
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                 BarnRobot.getInstance().gate.openCommand(),
-                BarnRobot.getInstance().transfer.activateTransfer(),
-                BarnRobot.getInstance().intake.activateIntakeCommand(),
-                new WaitCommand(SHOOTING_TIME_MS),
+                new ParallelRaceGroup(
+                        new WaitCommand(SHOOTING_TIME_MS),
+                        new RunCommand(() -> checkShooterReadiness())
+                ),
                 BarnRobot.getInstance().gate.closeCommand(),
-                deactivateIntakeAndTransferCommand(),
+                CommandGroup.deactivateIntakeAndTransferCommand(),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
         );
+    }
+
+    private static void checkShooterReadiness(){
+        if (BarnRobot.getInstance().shooter.isReady()) {
+            BarnRobot.getInstance().intake.setPower(1);
+            BarnRobot.getInstance().transfer.setTransferMotorPower(1);
+        } else {
+            BarnRobot.getInstance().intake.setPower(0);
+            BarnRobot.getInstance().transfer.setTransferMotorPower(0);
+        }
     }
 
     public static Command deactivateIntakeAndTransferCommand(){

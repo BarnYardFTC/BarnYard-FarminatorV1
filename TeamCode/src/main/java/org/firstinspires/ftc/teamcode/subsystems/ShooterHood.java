@@ -87,6 +87,7 @@ public class ShooterHood extends SubsystemBase {
                 BarnRobot.getInstance().limelight.getGoalDistance()
         );
         setPosition(servoPos);
+        BarnRobot.getInstance().telemetry.addLine("hood");
     }
 
     public Command setHoodCloseToGoalPos(){

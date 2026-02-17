@@ -136,6 +136,7 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
 
         //ALSO YESTERDAY WHEN I TESTED WITHOUT AUTO ALIGN WHE SHOT FROM FAR POSITION ROBOT JUST UNDERSHOOT
 
+
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 AutoController.shootCommandPath(autoHub.trajectories(AutoPars.positions.SHOOT_CLOSE, drive, telemetry)),

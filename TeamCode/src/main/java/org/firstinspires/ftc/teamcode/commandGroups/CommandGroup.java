@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
@@ -20,72 +21,82 @@ public class CommandGroup extends SequentialCommandGroup {
     public static int SHOOTING_TIME_MS = 3000;
 
 
-    public static Command smartShootCommand(){
+    public static Command smartShootCommand() {
         return new SequentialCommandGroup(
-            new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new WaitCommand(4000),
-                new SequentialCommandGroup(
-                        intakeAndTransferActivateCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
+                new ParallelRaceGroup(
+                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                        new WaitCommand(4000),
+                        new SequentialCommandGroup(
+                                intakeAndTransferActivateCommand(),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.closeCommand(),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.closeCommand(),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
 
-                )
-            ),
+                        )
+                ),
                 BarnRobot.getInstance().gate.closeCommand(),
                 deactivateIntakeAndTransferCommand(),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
         );
     }
 
-    private static boolean isReadyToShoot(){
+    private static boolean isReadyToShoot() {
         return BarnRobot.getInstance().shooter.isReady()
                 && BarnRobot.getInstance().limelight.isAlignedToGoal()
                 ;
     }
 
-    public static Command shootCommand(){
+    public static Command shootCommand() {
         return new ParallelRaceGroup(
                 BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
-                    new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                    BarnRobot.getInstance().gate.openCommand(),
-                    intakeAndTransferActivateCommand(),
-                    new WaitCommand(1500),
-                    BarnRobot.getInstance().gate.closeCommand(),
-                    deactivateIntakeAndTransferCommand(),
-                    new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                        BarnRobot.getInstance().gate.openCommand(),
+                        new ParallelRaceGroup(
+                                new WaitCommand(SHOOTING_TIME_MS),
+                                new RunCommand(() -> checkShooterReadiness())
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
                 )
         );
     }
+    private static void checkShooterReadiness(){
+        if (BarnRobot.getInstance().shooter.isReady()) {
+            BarnRobot.getInstance().intake.setPower(1);
+            BarnRobot.getInstance().transfer.setTransferMotorPower(1);
+        } else {
+            BarnRobot.getInstance().intake.setPower(0);
+            BarnRobot.getInstance().transfer.setTransferMotorPower(0);
+        }
+    }
 
-    public static Command intakeAndTransferGateCommand(){
+    public static Command intakeAndTransferGateCommand() {
         return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
     }
 
-    public static Command intakeAndTransferActivateCommand(){
+    public static Command intakeAndTransferActivateCommand() {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
     }
 
-    public static boolean robotContainsArtifacts(){
+    public static boolean robotContainsArtifacts() {
         return BarnRobot.getInstance().midSensor.isMidPoseBusy() ||
                 BarnRobot.getInstance().shooterSensor.isShootPoseBusy();
     }
 
-    public static Command deactivateIntakeAndTransferCommand(){
+    public static Command deactivateIntakeAndTransferCommand() {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
     }
 
-    public static Command smartIntakeAndTransferCommand(){
+    public static Command smartIntakeAndTransferCommand() {
         return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransfer());
     }
 

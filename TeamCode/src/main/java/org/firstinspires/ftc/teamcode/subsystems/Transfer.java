@@ -47,4 +47,8 @@ public class Transfer extends SubsystemBase {
         return new InstantCommand(() -> transferMotor.setPower(power));
     }
 
+    public void setTransferMotorPower(double power){
+        transferMotor.setPower(power);
+    }
+
 }

@@ -125,7 +125,7 @@ public class TestTeleopnNEW extends CommandOpMode {
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(CommandGroup.smartShootCommand());
+                .whenPressed(CommandGroup.shootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

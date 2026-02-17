@@ -46,7 +46,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="first auto with adjustment", group="test")
+@Autonomous(name="first auto with adjustment red", group="test")
 public class Red_Close_ThreePlusNineAdjusted extends CommandOpMode {
     // SleepAction is in seconds (double). Keep as seconds.
     // ===== Common objects (cleaner, no magic numbers) =====

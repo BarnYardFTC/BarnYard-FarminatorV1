@@ -18,4 +18,8 @@ public class SmartCommandGroups {
             return new ParallelCommandGroup(BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
         }
     }
+
+    public static Command smartIntakesTransfers(){
+        return new ParallelCommandGroup(BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransferCommand());
+    }
 }

@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.commandGroups.SmartCommandGroups;
+import org.firstinspires.ftc.teamcode.subsystems.ColorSensor;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
@@ -35,6 +36,7 @@ public class TestTeleopnNEW extends CommandOpMode {
     // ------------------------
     private BarnRobot farminator;
     public boolean sensorChanger = false;
+    public ColorSensor colorSensor;
 
     @Override
     public void initialize() {
@@ -54,6 +56,7 @@ public class TestTeleopnNEW extends CommandOpMode {
                 this,
                 opModeData
         );
+        colorSensor = new ColorSensor();
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.defaultHoodCommand());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
@@ -72,13 +75,18 @@ public class TestTeleopnNEW extends CommandOpMode {
                         new InstantCommand(() -> sensorChanger = !sensorChanger)
                 );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
+                .whileActiveOnce(
+                        farminator.colorSensor.setCheckFalse()
+                );
+
 
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
                         new ParallelCommandGroup(
-                                SmartCommandGroups.smartTransferAndIntake(sensorChanger),
+                                SmartCommandGroups.smartIntakesTransfers(),
                                 BarnRobot.getInstance().gate.closeCommand()
                         )
 
@@ -180,14 +188,7 @@ public class TestTeleopnNEW extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        farminator.shooterHood.displayTelemetry();
-        farminator.drive.displayPinpointDataTelemetry();
-        farminator.shooter.displayTelemetry();
-        telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
-        telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
-        telemetry.addData("custom distance", farminator.shooter.customDistance);
-        telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
-        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
+        telemetry.addData("Toggle intake pos: ", sensorChanger);
         farminator.colorSensor.displayTelemetry(telemetry);
 
         farminator.periodic();

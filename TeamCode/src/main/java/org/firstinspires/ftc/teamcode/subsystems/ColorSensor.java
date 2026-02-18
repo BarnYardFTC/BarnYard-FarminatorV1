@@ -36,7 +36,7 @@ public class ColorSensor {
     /**
      * Minimum time (in seconds) between physical sensor reads.
      */
-    public static double COLOR_SENSOR_WAIT_SECONDS = 0.5;
+    public static double COLOR_SENSOR_WAIT_SECONDS = 0.3;
     public static double COLOR_SENSOR_CHECK_MID_SECONDS = 1;
 
     /**
@@ -49,7 +49,6 @@ public class ColorSensor {
     /**
      * Hardware color sensor instance.
      */
-    private final NormalizedColorSensor shooterSensor;
     private final NormalizedColorSensor midSensor;
     private final NormalizedColorSensor intakeSensor;
 
@@ -61,8 +60,9 @@ public class ColorSensor {
     private final ElapsedTime intakeTimer = new ElapsedTime();
     private final ElapsedTime midCheckTimer = new ElapsedTime();
 
-    private int midDoubleCheck = 0;
+    private boolean midDoubleCheck = false;
     private boolean tripleCheck = false;
+    private boolean fourthCheck = false;
 
     /**
      * Cached distance reading (cm).
@@ -77,12 +77,10 @@ public class ColorSensor {
      * @param colorSensor the REV color sensor from the hardware map
      */
     public ColorSensor() {
-        this.shooterSensor = BarnRobot.getInstance().robotHardware.shooterColorSensor;
         this.midSensor = BarnRobot.getInstance().robotHardware.midColorSensor;
         this.intakeSensor = BarnRobot.getInstance().robotHardware.intakeColorSensor;
 
-        if (this.shooterSensor != null && this.midSensor != null && this.intakeSensor != null) {
-            this.shooterSensor.setGain(4);
+        if (this.midSensor != null && this.intakeSensor != null) {
             this.midSensor.setGain(4);
             this.intakeSensor.setGain(4);
         }
@@ -110,13 +108,6 @@ public class ColorSensor {
      */
     private double getArtifactDistanceTimed(int variant){
         switch (variant){
-            case 1:
-                if (shooterTimer.seconds() >= COLOR_SENSOR_WAIT_SECONDS) {
-                    shooterTimer.reset();
-                    cachedShooterDistanceCm = readDistanceSensor(this.shooterSensor);
-                }
-                return cachedShooterDistanceCm;
-                
             case 2:
                 if (midTimer.seconds() >= COLOR_SENSOR_WAIT_SECONDS) {
                     midTimer.reset();
@@ -174,12 +165,15 @@ public class ColorSensor {
      */
     public boolean isShootPosBusy() {
         if (getArtifactDistanceTimed(2) < MIDDLE_DISTANCE_CM) {
-            midDoubleCheck++;
+            midDoubleCheck = true;
             tripleCheck = true;
         }
-        else midDoubleCheck = 0;
+        if (tripleCheck && !midDoubleCheck){
+            fourthCheck = true;
+        }
+        else midDoubleCheck = false;
 
-        return midDoubleCheck < 1 && tripleCheck;
+        return tripleCheck && fourthCheck;
     }
 
     /**
@@ -190,12 +184,7 @@ public class ColorSensor {
      * @return {@code true} if an artifact is detected
      */
     public boolean isMidPosBusy() {
-        if (getArtifactDistanceTimed(2) < MIDDLE_DISTANCE_CM) {
-            midDoubleCheck++;
-        }
-        else midDoubleCheck = 0;
-
-        return midDoubleCheck > 1;
+        return getArtifactDistanceTimed(2) < MIDDLE_DISTANCE_CM;
     }
 
     /**
@@ -217,6 +206,14 @@ public class ColorSensor {
      */
     public boolean isPosBusy(double distanceCm , int pos) {
         return getArtifactDistanceTimed(pos) < distanceCm;
+    }
+    public void setAllBooleansFalse(){
+        tripleCheck = false;
+        fourthCheck = false;
+    }
+
+    public Command setCheckFalse(){
+        return new InstantCommand(() -> setAllBooleansFalse());
     }
 
     public boolean isRobotFull(){
@@ -250,12 +247,12 @@ public class ColorSensor {
     }
 
     public void displayTelemetry(Telemetry telemetry){
-        telemetry.addData("is shooter pos busy: ", isPosBusy(SHOOTER_DISTANCE_CM, 1));
-        telemetry.addData("is mid pos busy: ", isPosBusy(MIDDLE_DISTANCE_CM, 2));
-        telemetry.addData("is intake pos busy: ", isPosBusy(INTAKE_DISTANCE_CM, 3));
-        telemetry.addData("shooter sensor: ", getArtifactDistanceTimed(1));
-        telemetry.addData("mid sensor: ", getArtifactDistanceTimed(2));
-        telemetry.addData("intake sensor: ", getArtifactDistanceTimed(3));
+        telemetry.addData("is shooter pos busy: ", isShootPosBusy());
+        telemetry.addData("is mid pos busy: ", isMidPosBusy());
+        telemetry.addData("is intake pos busy: ", isIntakePosBusy());
+        telemetry.addData("doubleCheck", midDoubleCheck);
+        telemetry.addData("Triple check", tripleCheck);
+        telemetry.addData("Fourth check", fourthCheck);
 
     }
 }

@@ -71,13 +71,11 @@ public class FirstMainTeleop extends CommandOpMode{
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
                 .whenActive(new ParallelCommandGroup(
-                        farminator.intake.customIntakeCommand(-1),
-                        BarnRobot.getInstance().gate.closeCommand()
-                ))
-                .whenInactive(new ParallelCommandGroup(
-                        farminator.intake.deactivateIntakeCommand(),
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
+                        farminator.drive.alignToTagLamLamCommand(),
+                        CommandGroup.smartShootCommand()
+//                        farminator.intake.customIntakeCommand(-1),
+//                        BarnRobot.getInstance().gate.closeCommand()
+                )).whenInactive(farminator.drive.driveOneDriverCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
@@ -92,8 +90,7 @@ public class FirstMainTeleop extends CommandOpMode{
 //                        new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand()))
 //                );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                .toggleWhenPressed(farminator.drive.alignToTagLamLamCommand());
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .toggleWhenPressed(BarnRobot.getInstance().kickStand.raiseCommand())
@@ -106,13 +103,22 @@ public class FirstMainTeleop extends CommandOpMode{
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(CommandGroup.smartShootCommand());
+                .whenActive(
+                        new ParallelCommandGroup(
+                                farminator.intake.customIntakeCommand(-1),
+                                BarnRobot.getInstance().gate.closeCommand())
+                );
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
                         farminator.shooter.turnOff(),
                         farminator.shooter.runShooterBasedOnDistance()
+                );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .toggleWhenPressed(
+                        farminator.drive.alignToTagLamLamCommand()
                 );
     }
 
@@ -129,6 +135,7 @@ public class FirstMainTeleop extends CommandOpMode{
         telemetry.addData("shoot busy", farminator.shooterSensor.isShootPoseBusy());
         telemetry.addData("mid busy", farminator.midSensor.isMidPoseBusy());
         telemetry.addData("intake busy", farminator.intakeSensor.isIntakePoseBusy());
+        telemetry.addData("is in zone", farminator.drive.isInsideLaunchZone());
         farminator.limelight.displayTelemetry();
         farminator.periodic();
     }

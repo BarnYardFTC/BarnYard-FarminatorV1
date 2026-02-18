@@ -40,13 +40,13 @@ public class Shooter  extends SubsystemBase {
     public Shooter() {
         shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterRight.setDirection(DcMotorSimple.Direction.FORWARD);
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         shooterLeft = BarnRobot.getInstance().robotHardware.shooterLeft;
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         pidfController = new ShooterPIDFController(p, 0, 0, f);

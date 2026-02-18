@@ -25,10 +25,9 @@ public class CommandGroup extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
                         BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                        new WaitCommand(4000),
                         new SequentialCommandGroup(
+                                new WaitUntilCommand(CommandGroup::isReadyToShoot),
                                 intakeAndTransferActivateCommand(),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 BarnRobot.getInstance().gate.openCommand(),
                                 new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
                                 BarnRobot.getInstance().gate.closeCommand(),
@@ -39,7 +38,6 @@ public class CommandGroup extends SequentialCommandGroup {
                                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                                 BarnRobot.getInstance().gate.openCommand(),
                                 new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
-
                         )
                 ),
                 BarnRobot.getInstance().gate.closeCommand(),
@@ -49,9 +47,10 @@ public class CommandGroup extends SequentialCommandGroup {
     }
 
     private static boolean isReadyToShoot() {
-        return BarnRobot.getInstance().shooter.isReady()
-                && BarnRobot.getInstance().limelight.isAlignedToGoal()
-                ;
+        if(BarnRobot.getInstance().webcam.isLocalizationTagDetected()){
+            return BarnRobot.getInstance().drive.isInsideLaunchZone() && (BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal());
+        }
+        return false;
     }
 
     public static Command shootCommand() {

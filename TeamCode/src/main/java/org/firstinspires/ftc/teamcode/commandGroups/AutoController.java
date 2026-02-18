@@ -4,6 +4,7 @@ import android.content.ContentQueryMap;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -35,6 +36,22 @@ public class AutoController extends SequentialCommandGroup {
                         new InstantCommand(),
                         () -> shoot
                 ),
+                deactivateIntakeAndTransferCommand()
+        );
+    }
+
+    public static Command shootCommand(TrajectoryActionBuilder path){
+        return new SequentialCommandGroup(
+                intakeAndTransferGateCommand(),
+                new DriveActionCommand(path)
+//                deactivateIntakeAndTransferCommand()
+        );
+    }
+
+    public static Command intakeCommand(TrajectoryActionBuilder path){
+        return new SequentialCommandGroup(
+                shootCommand(),
+                new DriveActionCommand(path),
                 deactivateIntakeAndTransferCommand()
         );
     }

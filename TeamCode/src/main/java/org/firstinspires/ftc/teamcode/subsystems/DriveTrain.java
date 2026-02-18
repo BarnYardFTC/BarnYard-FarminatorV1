@@ -22,8 +22,22 @@ public class DriveTrain extends SubsystemBase {
 
     // Yaw PID (deg -> output turn)
     public static double closeP = 0.9, closeD = 0.05;
-    public static double farP = 0.6, farD = 0.15;
+    public static double farP = 0.6, farD = 0.2;
     public final static double FAR_PID_DISTANCE = 2;
+    public static double farLimelightGoal = -0.1;
+
+    public double getFarLimelightGoal(){
+        return farLimelightGoal;
+    }
+
+    //Big zone:
+    public static double ax = -72, ay = 72;
+    public static double bx = 10, by = 0;
+    public static double cx = -72, cy = -72;
+    //small zone
+    public static double dx = 72, dy = 48;
+    public static double ex = 24, ey = 0;
+    public static double fx = 56, fy = -48;
 
 
     public static double TURN_START_POWER = 0.085; // tune 0.07–0.11
@@ -238,6 +252,36 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
     //                          ALIGNMENT LOGIC
     // ============================================================
+
+    public  boolean isInsideLaunchZone() {
+        double px = BarnRobot.getInstance().pinpointLocalizer.getPose().position.x;
+        double py = BarnRobot.getInstance().pinpointLocalizer.getPose().position.y;
+        //coordinates of triangle vertexes
+
+        //big zone
+        double d1 = cross(px, py, ax, ay, bx, by);
+        double d2 = cross(px, py, bx, by, cx, cy);
+        double d3 = cross(px, py, cx, cy, ax, ay);
+        //small zone
+        double d4 = cross(px, py, dx, dy, ex, ey);
+        double d5 = cross(px, py, ex, ey, fx, fy);
+        double d6 = cross(px, py, fx, fy, dx, dy);
+
+
+        boolean hasNegBig = (d1 < 0) || (d2 < 0) || (d3 < 0);
+        boolean hasPosBig = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+        boolean hasNegSmall = (d4 < 0) || (d5 < 0) || (d6 < 0);
+        boolean hasPosSmall = (d4 > 0) || (d5 > 0) || (d6 > 0);
+
+        return (!(hasNegBig && hasPosBig) || !(hasNegSmall && hasPosSmall)); // inside if all same sign
+    }
+
+    private static double cross(double px, double py,
+                                double ax, double ay,
+                                double bx, double by) {
+        return (px - bx) * (ay - by) - (ax - bx) * (py - by);
+    }
 
     /** Main entry: aligns robot to the AprilTag or approximate direction */
     private void alignToGoal(double x, double y) {
@@ -542,6 +586,7 @@ public class DriveTrain extends SubsystemBase {
         BarnRobot.getInstance().telemetry.addData("pinpoint x", BarnRobot.getInstance().pinpointLocalizer.getPose().position.x);
         BarnRobot.getInstance().telemetry.addData("pinpoint y", BarnRobot.getInstance().pinpointLocalizer.getPose().position.y);
         BarnRobot.getInstance().telemetry.addData("pinpoint heading", getBotAbsoluteHeading());
+        BarnRobot.getInstance().telemetry.addData("is in zone", isInsideLaunchZone());
         BarnRobot.getInstance().telemetry.addData("distance from goal", getDistanceFromGoal());
     }
 

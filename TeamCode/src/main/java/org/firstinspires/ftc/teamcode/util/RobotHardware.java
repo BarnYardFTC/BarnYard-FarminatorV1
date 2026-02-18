@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -202,6 +203,7 @@ public class RobotHardware {
 
         shooterRight = hw.get(DcMotorEx.class, SHOOTER_RIGHT_CONFIG_NAME);
         shooterLeft = hw.get(DcMotorEx.class, SHOOTER_LEFT_CONFIG_NAME);
+
 
         intake = hw.get(DcMotorEx.class, INTAKE_CONFIG_NAME);
 

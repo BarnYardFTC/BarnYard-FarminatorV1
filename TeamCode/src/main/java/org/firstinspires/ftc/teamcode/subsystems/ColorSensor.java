@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.RunCommand;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -38,6 +37,7 @@ public class ColorSensor {
      * Minimum time (in seconds) between physical sensor reads.
      */
     public static double COLOR_SENSOR_WAIT_SECONDS = 0.5;
+    public static double COLOR_SENSOR_CHECK_MID_SECONDS = 1;
 
     /**
      * Distance thresholds (cm) for each robot position.
@@ -59,6 +59,10 @@ public class ColorSensor {
     private final ElapsedTime shooterTimer = new ElapsedTime();
     private final ElapsedTime midTimer = new ElapsedTime();
     private final ElapsedTime intakeTimer = new ElapsedTime();
+    private final ElapsedTime midCheckTimer = new ElapsedTime();
+
+    private int midDoubleCheck = 0;
+    private boolean tripleCheck = false;
 
     /**
      * Cached distance reading (cm).
@@ -86,6 +90,7 @@ public class ColorSensor {
         shooterTimer.reset();
         midTimer.reset();
         intakeTimer.reset();
+        midCheckTimer.reset();
     }
 
 
@@ -117,6 +122,7 @@ public class ColorSensor {
                     midTimer.reset();
                     cachedMidDistanceCm = readDistanceSensor(this.midSensor);
                 }
+
                 return cachedMidDistanceCm;
                 
             case 3:
@@ -167,7 +173,13 @@ public class ColorSensor {
      * @return {@code true} if an artifact is detected
      */
     public boolean isShootPosBusy() {
-        return getArtifactDistanceTimed(1) < SHOOTER_DISTANCE_CM;
+        if (getArtifactDistanceTimed(2) < MIDDLE_DISTANCE_CM) {
+            midDoubleCheck++;
+            tripleCheck = true;
+        }
+        else midDoubleCheck = 0;
+
+        return midDoubleCheck < 1 && tripleCheck;
     }
 
     /**
@@ -178,7 +190,12 @@ public class ColorSensor {
      * @return {@code true} if an artifact is detected
      */
     public boolean isMidPosBusy() {
-        return getArtifactDistanceTimed(2) < MIDDLE_DISTANCE_CM;
+        if (getArtifactDistanceTimed(2) < MIDDLE_DISTANCE_CM) {
+            midDoubleCheck++;
+        }
+        else midDoubleCheck = 0;
+
+        return midDoubleCheck > 1;
     }
 
     /**

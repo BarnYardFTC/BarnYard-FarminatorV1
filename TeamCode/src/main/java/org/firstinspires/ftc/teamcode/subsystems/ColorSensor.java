@@ -58,11 +58,12 @@ public class ColorSensor {
     private final ElapsedTime shooterTimer = new ElapsedTime();
     private final ElapsedTime midTimer = new ElapsedTime();
     private final ElapsedTime intakeTimer = new ElapsedTime();
-    private final ElapsedTime midCheckTimer = new ElapsedTime();
+    private final ElapsedTime artCheckTimer = new ElapsedTime();
 
     private boolean midDoubleCheck = false;
     private boolean tripleCheck = false;
     private boolean fourthCheck = false;
+    private boolean robotFullness = false;
 
     /**
      * Cached distance reading (cm).
@@ -88,7 +89,7 @@ public class ColorSensor {
         shooterTimer.reset();
         midTimer.reset();
         intakeTimer.reset();
-        midCheckTimer.reset();
+        artCheckTimer.reset();
     }
 
 
@@ -217,11 +218,21 @@ public class ColorSensor {
     }
 
     public boolean isRobotFull(){
-        return isMidPosBusy() && isShootPosBusy() && isIntakePosBusy();
+        if(artCheckTimer.seconds() > COLOR_SENSOR_CHECK_MID_SECONDS){
+            artCheckTimer.reset();
+            robotFullness = isMidPosBusy() && isShootPosBusy() && isIntakePosBusy();
+        }
+
+        return robotFullness;
     }
 
     public boolean isShootAndMidIn(){
-        return isShootPosBusy() && isMidPosBusy();
+        if(artCheckTimer.seconds() > COLOR_SENSOR_CHECK_MID_SECONDS){
+            artCheckTimer.reset();
+            robotFullness = isMidPosBusy() && isShootPosBusy();
+        }
+
+        return robotFullness;
     }
 
     public Command artifactsChecking(){
@@ -247,6 +258,7 @@ public class ColorSensor {
     }
 
     public void displayTelemetry(Telemetry telemetry){
+        telemetry.addData("Is Robot FULL: ", isRobotFull());
         telemetry.addData("is shooter pos busy: ", isShootPosBusy());
         telemetry.addData("is mid pos busy: ", isMidPosBusy());
         telemetry.addData("is intake pos busy: ", isIntakePosBusy());

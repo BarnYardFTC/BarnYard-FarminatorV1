@@ -86,7 +86,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
                         new ParallelCommandGroup(
-                                SmartCommandGroups.smartIntakesTransfers(),
+                                SmartCommandGroups.smartTransferAndIntake(sensorChanger),
                                 BarnRobot.getInstance().gate.closeCommand()
                         )
 
@@ -188,7 +188,9 @@ public class TestTeleopnNEW extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("Toggle intake pos: ", sensorChanger);
+        farminator.intake.displayTelemetry(telemetry);
+        farminator.transfer.displayTelemetry(telemetry);
+//        telemetry.addData("Toggle intake pos: ", sensorChanger);
         farminator.colorSensor.displayTelemetry(telemetry);
 
         farminator.periodic();

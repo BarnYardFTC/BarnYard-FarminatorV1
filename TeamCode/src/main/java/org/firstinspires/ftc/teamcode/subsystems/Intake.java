@@ -8,8 +8,11 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
 /**
@@ -21,9 +24,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 public class Intake extends SubsystemBase {
 
     /** Intake motor hardware object. */
-    private final DcMotorEx intake;
-    private final ColorSensor colorSensor;
-    /** Default power to run the intake. */
+    private final DcMotorEx intake;/** Default power to run the intake. */
     public static double DEFAULT_POWER = 1;
 
     /**
@@ -31,7 +32,6 @@ public class Intake extends SubsystemBase {
      */
     public Intake() {
         this.intake = BarnRobot.getInstance().robotHardware.intake;
-        this.colorSensor = new ColorSensor();
 
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -68,10 +68,10 @@ public class Intake extends SubsystemBase {
 
     public Command smartIntakeCommand(){
         return new ConditionalCommand(
-                new InstantCommand(() -> setPower(0), this),
-                new InstantCommand(() -> setPower(DEFAULT_POWER), this),
-                this.colorSensor::isRobotFull
-                );
+                deactivateIntakeCommand(),
+                activateIntakeCommand(),
+                () -> BarnRobot.getInstance().colorSensor.isRobotFull()
+        );
     }
 
 
@@ -82,5 +82,9 @@ public class Intake extends SubsystemBase {
      */
     public Command deactivateIntakeCommand() {
         return new InstantCommand(() -> setPower(0), this);
+    }
+
+    public void displayTelemetry(Telemetry telemetry){
+        telemetry.addData("Is Robot FULL TRANSFER: ", BarnRobot.getInstance().colorSensor.isRobotFull());
     }
 }

@@ -64,6 +64,7 @@ public class ColorSensor {
     private boolean tripleCheck = false;
     private boolean fourthCheck = false;
     private boolean robotFullness = false;
+    public boolean intakeMode = false;
 
     /**
      * Cached distance reading (cm).
@@ -238,6 +239,14 @@ public class ColorSensor {
     public Command artifactsChecking(){
         return new InstantCommand(this::isShootAndMidIn) {
         };
+    }
+
+    public Command changeMode(){
+        return new InstantCommand(() -> intakeMode = !intakeMode);
+    }
+
+    public boolean getIntakeMode(){
+        return intakeMode;
     }
 
     /**

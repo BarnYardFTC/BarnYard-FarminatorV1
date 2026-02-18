@@ -4,8 +4,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -35,7 +37,6 @@ public class TestTeleopnNEW extends CommandOpMode {
     // Robot Instance
     // ------------------------
     private BarnRobot farminator;
-    public boolean sensorChanger = false;
     public ColorSensor colorSensor;
 
     @Override
@@ -72,9 +73,11 @@ public class TestTeleopnNEW extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .toggleWhenPressed(
-                        new InstantCommand(() -> sensorChanger = !sensorChanger)
+                        farminator.colorSensor.changeMode()
                 );
 
+
+        //This shit need to be in shoot button
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
                 .whileActiveOnce(
                         farminator.colorSensor.setCheckFalse()
@@ -86,7 +89,11 @@ public class TestTeleopnNEW extends CommandOpMode {
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
                         new ParallelCommandGroup(
-                                SmartCommandGroups.smartTransferAndIntake(sensorChanger),
+                                new ConditionalCommand(
+                                        SmartCommandGroups.smartIntakesTransfers(),
+                                        CommandGroup.intakeAndTransferActivateCommand(),
+                                        () -> farminator.colorSensor.getIntakeMode()
+                                ),
                                 BarnRobot.getInstance().gate.closeCommand()
                         )
 
@@ -190,7 +197,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         super.run();
         farminator.intake.displayTelemetry(telemetry);
         farminator.transfer.displayTelemetry(telemetry);
-//        telemetry.addData("Toggle intake pos: ", sensorChanger);
+        telemetry.addData("Toggle intake pos: ", farminator.colorSensor.getIntakeMode());
         farminator.colorSensor.displayTelemetry(telemetry);
 
         farminator.periodic();

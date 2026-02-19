@@ -105,7 +105,7 @@ public class RobotCommands {
                 new InstantCommand(() -> lastCommand = "autoRRPCommand()"),
                 new DriveActionCommand(
                         robot.roadRunnerMecanumDrive.actionBuilder(currentPose)
-                                .strafeToLinearHeading(new Vector2d(0, 0), Math.toRadians(270))
+                                .strafeToLinearHeading(new Vector2d(0, 0), Math.toRadians(180))
                 )
         );
     }

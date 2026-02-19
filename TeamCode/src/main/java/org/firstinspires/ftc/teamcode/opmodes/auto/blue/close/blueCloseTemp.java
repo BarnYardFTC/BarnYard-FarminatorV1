@@ -54,6 +54,5 @@ public class blueCloseTemp {
         goLastShoot = goCollectLeft.endTrajectory().fresh()
                 .strafeToLinearHeading(lastShootPose.component1(),lastShootPose.component2());
         goPark = goLastShoot.endTrajectory();
-
     }
 }

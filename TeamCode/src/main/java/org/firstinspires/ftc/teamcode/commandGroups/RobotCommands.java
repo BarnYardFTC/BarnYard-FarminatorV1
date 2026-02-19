@@ -89,7 +89,7 @@ public class RobotCommands {
     public static Command autoParkCommand(){
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "autoParkCommand()"),
-                new RunCommand(() -> BarnRobot.getInstance().drive.drive(0, 0, 270))
+                new RunCommand(() -> BarnRobot.getInstance().drive.driveToPose(0, 0, 270))
         );
     }
 

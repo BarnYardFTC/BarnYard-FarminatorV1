@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class CommandGroup extends SequentialCommandGroup {
 
-    public static int SHOOTING_TIME_MS = 3000;
+    public static int SHOOTING_TIME_MS = 1500;
 
     public static Command shootCommand(){
         return new ParallelRaceGroup(
@@ -28,6 +28,7 @@ public class CommandGroup extends SequentialCommandGroup {
                         new WaitCommand(1500),
                         BarnRobot.getInstance().gate.closeCommand(),
                         deactivateIntakeAndTransferCommand(),
+                        BarnRobot.getInstance().colorSensor.setCheckFalse(),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
             )
         );

@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
  * - Gamepad mappings
  * - Periodic updates
  */
-@TeleOp(name = "Test Teleop new", group = "test")
+@TeleOp(name = "FOR YOU LEON(Test teleop)", group = "test")
 @Config
 public class TestTeleopnNEW extends CommandOpMode {
 
@@ -71,7 +71,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         // Transfer System
         // ------------------------
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .toggleWhenPressed(
                         farminator.colorSensor.changeMode()
                 );
@@ -122,10 +122,10 @@ public class TestTeleopnNEW extends CommandOpMode {
                 .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
                 .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                        .whileActiveOnce(
-                                CommandGroup.shootCommand()
-                        );
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+//                        .whileActiveOnce(
+//                                CommandGroup.shootCommand()
+//                        );
 
 
 
@@ -175,7 +175,7 @@ public class TestTeleopnNEW extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommandPreset(3),
+                        CommandGroup.shootCommand(),
                         rumbleCommand()
                 ).alongWith(
                         BarnRobot.getInstance().gate.closeCommand()

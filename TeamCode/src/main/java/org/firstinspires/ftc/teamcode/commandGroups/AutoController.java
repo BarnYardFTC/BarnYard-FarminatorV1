@@ -57,41 +57,45 @@ public class AutoController extends SequentialCommandGroup {
 //    }
 
     // Command for shoot
-    public static int SHOOTING_TIME_MS = 1000;
+    public static int SHOOTING_TIME_MS = 4000;
     public static Command shootCommand() {
-//        return new SequentialCommandGroup(
-//                BarnRobot.getInstance().gate.openCommand(),
-//                new WaitCommand(SHOOTING_TIME_MS),
-//                intakeAndTransferGateCommand(),
-////                        new RunCommand(() -> checkShooterReadiness())
-//                BarnRobot.getInstance().gate.closeCommand(),
-//                deactivateIntakeAndTransferCommand(),
-//                new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
-//        );
-
-        return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-                        new WaitCommand(250)
-                ),
-                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                BarnRobot.getInstance().gate.openCommand(),
-                CommandGroup.intakeAndTransferActivateCommand(),
-                new WaitCommand(SHOOTING_TIME_MS),
-                BarnRobot.getInstance().gate.closeCommand(),
-                CommandGroup.deactivateIntakeAndTransferCommand()
+        return new ParallelRaceGroup(
+                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                new SequentialCommandGroup(
+                        BarnRobot.getInstance().gate.openCommand(),
+                        new ParallelRaceGroup(
+                                new WaitCommand(SHOOTING_TIME_MS),
+                                new RunCommand(() -> checkShooterReadiness())
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        CommandGroup.deactivateIntakeAndTransferCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                )
         );
+//
+//        return new SequentialCommandGroup(
+//                new ParallelRaceGroup(
+//                        BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
+//                        new WaitCommand(250)
+//                ),
+//                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+//                BarnRobot.getInstance().gate.openCommand(),
+//                CommandGroup.intakeAndTransferActivateCommand(),
+//                new WaitCommand(SHOOTING_TIME_MS),
+//                BarnRobot.getInstance().gate.closeCommand(),
+//                CommandGroup.deactivateIntakeAndTransferCommand()
+//        );
     }
 
-//    private static void checkShooterReadiness(){
-//        if (BarnRobot.getInstance().shooter.isReady()) {
-//            BarnRobot.getInstance().intake.setPower(1);
-//            BarnRobot.getInstance().transfer.setTransferMotorPower(1);
-//        } else {
-//            BarnRobot.getInstance().intake.setPower(0);
-//            BarnRobot.getInstance().transfer.setTransferMotorPower(0);
-//        }
-//    }
+    private static void checkShooterReadiness(){
+        if (BarnRobot.getInstance().shooter.isReady()) {
+            BarnRobot.getInstance().intake.setPower(1);
+            BarnRobot.getInstance().transfer.setTransferMotorPower(1);
+        } else {
+            BarnRobot.getInstance().intake.setPower(0);
+            BarnRobot.getInstance().transfer.setTransferMotorPower(0);
+        }
+    }
 
     public static Command deactivateIntakeAndTransferCommand(){
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());

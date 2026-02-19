@@ -31,29 +31,33 @@ public class GovnoTesting extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenActive(
-                        farminator.shooter.runShooter(1000)
+                        RobotCommands.autoParkCommand()
                 );
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                RobotCommands.collectCommand()
-        );
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                RobotCommands.collectStopCommand()
-        );
-
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-//                RobotCommands.shootAllCommand()
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+//                .toggleWhenActive(
+//                        farminator.shooter.runShooter(1000)
+//                );
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+//                RobotCommands.collectCommand()
 //        );
-
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                RobotCommands.smartCollectCommand()
-        );
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                RobotCommands.smartShootCommand()
-        );
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+//                RobotCommands.collectStopCommand()
+//        );
+//
+////        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+////                RobotCommands.shootAllCommand()
+////        );
+//
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+//                RobotCommands.smartCollectCommand()
+//        );
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+//                RobotCommands.smartShootCommand()
+//        );
     }
     @Override
     public void run() {

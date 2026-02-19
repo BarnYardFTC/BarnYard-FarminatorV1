@@ -5,6 +5,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
@@ -87,7 +88,8 @@ public class RobotCommands {
 
     public static Command autoParkCommand(){
         return new SequentialCommandGroup(
-                new InstantCommand(() -> lastCommand = "autoParkCommand()")
+                new InstantCommand(() -> lastCommand = "autoParkCommand()"),
+                new RunCommand(() -> BarnRobot.getInstance().drive.drive(0, 0, 270))
         );
     }
 

@@ -81,7 +81,7 @@ public class Shooter  extends SubsystemBase {
             targetVelocity = SHOOTER_VELOCITY_RANGE_4;
         }
         else {
-            targetVelocity = getVelocity();
+            targetVelocity = 0;
         }
         setCustomVelocity();
     }

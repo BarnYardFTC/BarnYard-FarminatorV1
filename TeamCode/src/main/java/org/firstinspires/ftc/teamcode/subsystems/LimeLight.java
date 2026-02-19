@@ -139,6 +139,8 @@ public class LimeLight extends SubsystemBase {
         return largest;
     }
 
+    double cashedGoalDistance = 1;
+
     public double getGoalDistance(){
         if(isGoalTagDetected()){
             LLResultTypes.FiducialResult largest = frs.get(0);
@@ -147,9 +149,10 @@ public class LimeLight extends SubsystemBase {
                     largest = fr;
                 }
             }
-            return largest.getTargetPoseCameraSpace().getPosition().z;
+            cashedGoalDistance = largest.getTargetPoseCameraSpace().getPosition().z;
         }
-        return BarnRobot.getInstance().drive.getDistanceFromGoal();
+        return cashedGoalDistance;
+
 
     }
 

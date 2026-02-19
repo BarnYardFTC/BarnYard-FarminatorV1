@@ -71,7 +71,7 @@ public class FirstMainTeleop extends CommandOpMode{
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05)
-                .whenActive(
+                .whileActiveContinuous(
                         new RunCommand(this::intakeSwitcher)
                 )
                 .whenInactive(

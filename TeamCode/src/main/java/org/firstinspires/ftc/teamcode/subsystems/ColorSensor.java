@@ -221,14 +221,14 @@ public class ColorSensor {
     public boolean isRobotFull(){
         if(artCheckTimer.seconds() > COLOR_SENSOR_CHECK_MID_SECONDS){
             artCheckTimer.reset();
-            robotFullness = isMidPosBusy() && isShootPosBusy() && isIntakePosBusy();
+            robotFullness = isMidPosBusy() && isIntakePosBusy();
         }
 
         return robotFullness;
     }
 
     public boolean isShootAndMidIn(){
-        return isMidPosBusy() && isShootPosBusy();
+        return isMidPosBusy();
     }
 
     public Command artifactsChecking(){

@@ -43,14 +43,18 @@ public class BlinkinLED extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!BarnRobot.getInstance().midSensor.isMidPoseBusy() &&
-        !BarnRobot.getInstance().intakeSensor.isIntakePoseBusy()){
+        if (BarnRobot.getInstance().colorSensor.isShootPosBusy() && !BarnRobot.getInstance().colorSensor.isMidPosBusy() && !BarnRobot.getInstance().colorSensor.isIntakePosBusy()){
             setRed();
         }
-        else if (BarnRobot.getInstance().intakeSensor.isIntakePoseBusy() && BarnRobot.getInstance().midSensor.isMidPoseBusy()
+        else if (BarnRobot.getInstance().colorSensor.isShootAndMidIn()
         ){
             setGreen();
         }
+
+        else if (BarnRobot.getInstance().colorSensor.isRobotFull()){
+            setPurple();
+        }
+
         else setBlack();
     }
 

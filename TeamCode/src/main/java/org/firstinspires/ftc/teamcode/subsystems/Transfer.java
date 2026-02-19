@@ -35,11 +35,11 @@ public class Transfer extends SubsystemBase {
         return new InstantCommand(() -> transferMotor.setPower(0));
     }
 
-    public Command smartTransfer(){  //Disable transfer when there is enough artifacts in the robot
+    public Command smartTransferCommand(){
         return new ConditionalCommand(
-                new InstantCommand(() -> transferMotor.setPower(0), this), // on true
-                new InstantCommand(() -> transferMotor.setPower(1), this),             // on false
-                () -> BarnRobot.getInstance().midSensor.isMidPoseBusy()
+                deactivateTransfer(),
+                activateTransfer(),
+                () -> BarnRobot.getInstance().colorSensor.isShootAndMidIn()
         );
     }
 

@@ -8,6 +8,7 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -58,10 +59,20 @@ public class FirstMainTeleop extends CommandOpMode{
         // ------------------------
 
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
+                .whileActiveOnce(
+                        new SequentialCommandGroup(
+                                farminator.colorSensor.changeMode(),
+                                farminator.colorSensor.setCheckFalse()
+                        )
+
+                );
+
+
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
-                        CommandGroup.smartIntakeAndTransferCommand()
+                        new InstantCommand(() -> intakeSwitcher())
                 )
                 .whenInactive(
                         CommandGroup.deactivateIntakeAndTransferCommand().alongWith(
@@ -122,6 +133,16 @@ public class FirstMainTeleop extends CommandOpMode{
                 );
     }
 
+    private void intakeSwitcher(){
+        if (farminator.colorSensor.getIntakeMode()){
+            farminator.intake.smartIntakeCommand();
+            farminator.transfer.smartTransferCommand();
+        }else{
+            farminator.intake.activateIntakeCommand();
+            farminator.transfer.activateTransfer();
+        }
+    }
+
     @Override
     public void run() {
         super.run();
@@ -132,8 +153,8 @@ public class FirstMainTeleop extends CommandOpMode{
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
 //        telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
 //        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-        telemetry.addData("mid busy", farminator.midSensor.isMidPoseBusy());
-        telemetry.addData("intake busy", farminator.intakeSensor.isIntakePoseBusy());
+        telemetry.addData("Is smart functions ON? ", farminator.colorSensor.getIntakeMode());
+        farminator.colorSensor.displayTelemetry(telemetry);
         telemetry.addData("is in zone", farminator.drive.isInsideLaunchZone());
         farminator.limelight.displayTelemetry();
         farminator.periodic();

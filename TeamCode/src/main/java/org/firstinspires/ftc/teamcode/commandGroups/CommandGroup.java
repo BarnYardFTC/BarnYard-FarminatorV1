@@ -42,12 +42,13 @@ public class CommandGroup extends SequentialCommandGroup {
                 ),
                 BarnRobot.getInstance().gate.closeCommand(),
                 deactivateIntakeAndTransferCommand(),
+                BarnRobot.getInstance().colorSensor.setCheckFalse(),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
         );
     }
 
     private static boolean isReadyToShoot() {
-        if(BarnRobot.getInstance().webcam.isLocalizationTagDetected()){
+        if (BarnRobot.getInstance().webcam.isLocalizationTagDetected()) {
             return BarnRobot.getInstance().drive.isInsideLaunchZone() && (BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal());
         }
         return false;
@@ -64,11 +65,13 @@ public class CommandGroup extends SequentialCommandGroup {
                         ),
                         BarnRobot.getInstance().gate.closeCommand(),
                         CommandGroup.deactivateIntakeAndTransferCommand(),
+                        BarnRobot.getInstance().colorSensor.setCheckFalse(),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
                 )
         );
     }
-    private static void checkShooterReadiness(){
+
+    private static void checkShooterReadiness() {
         if (BarnRobot.getInstance().shooter.isReady()) {
             BarnRobot.getInstance().intake.setPower(1);
             BarnRobot.getInstance().transfer.setTransferMotorPower(1);
@@ -87,12 +90,11 @@ public class CommandGroup extends SequentialCommandGroup {
     }
 
 
+    public static Command smartIntakeAndTransfer() {
+        return new ParallelCommandGroup(BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransferCommand());
+    }
+
     public static Command deactivateIntakeAndTransferCommand() {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());
     }
-
-    public static Command smartIntakeAndTransferCommand() {
-        return new ParallelCommandGroup(BarnRobot.getInstance().gate.closeCommand(), BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransfer());
-    }
-
 }

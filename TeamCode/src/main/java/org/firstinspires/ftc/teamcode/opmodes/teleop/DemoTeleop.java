@@ -61,7 +61,7 @@ public class DemoTeleop extends CommandOpMode{
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
-                        CommandGroup.smartIntakeAndTransferCommand()
+                        CommandGroup.smartIntakeAndTransfer()
                 )
                 .whenInactive(
                         CommandGroup.deactivateIntakeAndTransferCommand().alongWith(
@@ -126,8 +126,7 @@ public class DemoTeleop extends CommandOpMode{
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
         telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-        telemetry.addData("mid busy", farminator.midSensor.isMidPoseBusy());
-        telemetry.addData("intake busy", farminator.intakeSensor.isIntakePoseBusy());
+        farminator.colorSensor.displayTelemetry(telemetry);
         farminator.periodic();
     }
 

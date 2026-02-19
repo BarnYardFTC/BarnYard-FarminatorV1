@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
+package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;

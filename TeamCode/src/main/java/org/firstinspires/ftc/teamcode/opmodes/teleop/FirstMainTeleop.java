@@ -70,9 +70,9 @@ public class FirstMainTeleop extends CommandOpMode{
 
 
         // Left Trigger → Intake active (transfer + intake)
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-                .whenActive(
-                        new InstantCommand(() -> intakeSwitcher())
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05)
+                .whileActiveContinuous(
+                        new RunCommand(this::intakeSwitcher)
                 )
                 .whenInactive(
                         CommandGroup.deactivateIntakeAndTransferCommand().alongWith(
@@ -80,7 +80,7 @@ public class FirstMainTeleop extends CommandOpMode{
                         )
                 );
 
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05)
                 .whenActive(new ParallelCommandGroup(
                         farminator.drive.alignToTagLamLamCommand(),
                         CommandGroup.smartShootCommand()
@@ -133,15 +133,7 @@ public class FirstMainTeleop extends CommandOpMode{
                 );
     }
 
-    private void intakeSwitcher(){
-        if (farminator.colorSensor.getIntakeMode()){
-            farminator.intake.smartIntakeCommand().schedule();
-            farminator.transfer.smartTransferCommand().schedule();
-        }else{
-            farminator.intake.activateIntakeCommand().schedule();
-            farminator.transfer.activateTransfer().schedule();
-        }
-    }
+
 
     @Override
     public void run() {
@@ -158,6 +150,18 @@ public class FirstMainTeleop extends CommandOpMode{
         telemetry.addData("is in zone", farminator.drive.isInsideLaunchZone());
         farminator.limelight.displayTelemetry();
         farminator.periodic();
+    }
+
+    private void intakeSwitcher(){
+        if (farminator.colorSensor.getIntakeMode()){
+            farminator.intake.smartIntakeCommand().schedule();
+            farminator.transfer.smartTransferCommand().schedule();
+            telemetry.addLine("\n\n\n====SMART====\n\n\n");
+        }else{
+            farminator.intake.activateIntakeCommand().schedule();
+            farminator.transfer.activateTransfer().schedule();
+            telemetry.addLine("\n\n\n====DUMB====\n\n\n");
+        }
     }
 
     private InstantCommand rumbleCommand() {

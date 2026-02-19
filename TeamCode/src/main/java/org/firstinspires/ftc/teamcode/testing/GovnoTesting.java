@@ -18,7 +18,7 @@ public class GovnoTesting extends CommandOpMode {
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.BLUE,
                 OpModeData.OpModeType.TELEOP,
-                new Pose2d(0, 0, Math.toRadians(180)),
+                new Pose2d(23, 0, Math.toRadians(180)),
                 180
         );
         farminator = BarnRobot.getInstance();
@@ -27,6 +27,10 @@ public class GovnoTesting extends CommandOpMode {
                 opModeData
         );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .toggleWhenActive(
+                        farminator.shooter.turnOffInstant()
+                );
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)

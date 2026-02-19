@@ -109,6 +109,11 @@ public class DriveTrain extends SubsystemBase {
     private double lastHeading = Double.NaN;
     private long lastTimeNs = 0;
 
+    // For func that moves robot to coordinates
+    private static final double p = 0.05, d = 0.005; // Tune these
+    private static final PIDController pid = new PIDController(p, 0, d);
+
+
     // ============================================================
     //                       CONSTRUCTOR
     // ============================================================
@@ -437,6 +442,20 @@ public class DriveTrain extends SubsystemBase {
                 ),
                 this
         );
+    }
+
+    public void driveToPose(double targetX, double targetY, double targetHeading) {
+        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+
+        //calculates translation speeds
+        double xSpeed = pid.calculate(currentPose.position.x, targetX);
+        double ySpeed = pid.calculate(currentPose.position.y, targetY);
+
+        //calculates rotation speed using existing yaw logic
+        double headingError = angleWrap(Math.toRadians(targetHeading) - currentPose.heading.toDouble());
+        double turnSpeed = diffToSpeed(Math.toDegrees(headingError));
+
+        drive(xSpeed, ySpeed, turnSpeed);
     }
 
     /** Auto version: alignment with zero translation (turn only) */

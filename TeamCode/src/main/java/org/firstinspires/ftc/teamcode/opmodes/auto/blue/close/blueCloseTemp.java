@@ -17,15 +17,16 @@ public class blueCloseTemp {
 
 
     public static final Pose2d leftCollectPose = new Pose2d(-11.5, -53, Math.toRadians(270));
-    public static final Pose2d midCollectPose = new Pose2d(12, -53, Math.toRadians(270));
-    public static final Pose2d rightCollectPose = new Pose2d(34.5, -53, Math.toRadians(270));
+    public static final Pose2d midCollectPose = new Pose2d(12, -60, Math.toRadians(270));
+    public static final Pose2d rightCollectPose = new Pose2d(35.5, -60, Math.toRadians(270));
+
 
     public static final Pose2d leftLoadZoneReady = new Pose2d(-11.5, -20, Math.toRadians(270));
     public static final Pose2d rightLoadZoneReady = new Pose2d(12, -20, Math.toRadians(270));
     public static final Pose2d midLoadZoneReady = new Pose2d(34.5, -20, Math.toRadians(270));
 
     public static final Pose2d parkPose = new Pose2d(-40, -22, Math.toRadians(227));
-    public static final Pose2d gateOpenPose = new Pose2d(0, -70, Math.toRadians(180));
+    public static final Pose2d gateOpenPose = new Pose2d(0, -53, Math.toRadians(180));
     public static final Pose2d gateCollectPose = new Pose2d(10,-57, Math.toRadians(227));
 
     TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(150);
@@ -48,21 +49,24 @@ public class blueCloseTemp {
     public static void createPath(RoadRunnerMecanumDrive drive){
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectLeft = drive.actionBuilder(shootPose)
-                .splineToLinearHeading(leftCollectPose, new Rotation2d(0, -4))
-                .splineToSplineHeading(gateOpenPose, new Rotation2d(3, -5));
-        goShootLeft = drive.actionBuilder(gateOpenPose)
+        goCollectLeft = goShootPre.endTrajectory().fresh()
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2))
+                .setTangent(Math.toRadians(20))
+                .splineToLinearHeading(gateOpenPose, Math.toRadians(-20));
+        goShootLeft = goCollectLeft.endTrajectory().fresh()
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
-        goCollectMid = drive.actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
-        goShootMid = drive.actionBuilder(midCollectPose)
-                .splineToLinearHeading(shootPose, new Rotation2d(-2, -1));
-        openGate = drive.actionBuilder(shootPose)
-                .splineToLinearHeading(gateOpenPose, new Rotation2d(0, -2));
-        gateCollection = drive.actionBuilder(gateOpenPose)
-                .splineToLinearHeading(gateCollectPose, new Rotation2d(0,-1));
-        goShootLast = drive.actionBuilder(gateCollectPose)
-                .splineToLinearHeading(lastShootPose, new Rotation2d(0,-2));
+        goCollectMid = goShootLeft.endTrajectory().fresh()
+                .setTangent(new Rotation2d(2.1,0.4))
+                .splineToLinearHeading(midCollectPose, Math.toRadians(-90));
+        goShootMid = goCollectMid.endTrajectory().fresh()
+                .setTangent(new Rotation2d(0,1))
+                .splineToLinearHeading(shootPose, Math.toRadians(150));
+        goCollectRight = goShootMid.endTrajectory().fresh()
+                .setTangent(new Rotation2d(2.1,0.4))
+                .splineToLinearHeading(rightCollectPose, new Rotation2d(0, -1.5));
+        goShootLast = goCollectRight.endTrajectory().fresh()
+                .setTangent(Math.toRadians(150))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(150));
 
 //        goCollectRight = drive.actionBuilder(shootPose)
 //                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));

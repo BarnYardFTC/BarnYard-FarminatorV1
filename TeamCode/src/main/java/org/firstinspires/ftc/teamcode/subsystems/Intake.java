@@ -78,6 +78,6 @@ public class Intake extends SubsystemBase {
      * @return command to stop the intake
      */
     public Command deactivateIntakeCommand() {
-        return new InstantCommand(() -> setPower(0), this);
+        return new InstantCommand(() -> setPower(0.3), this);
     }
 }

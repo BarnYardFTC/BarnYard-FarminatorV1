@@ -60,7 +60,6 @@ public class AutoController extends SequentialCommandGroup {
     public static int SHOOTING_TIME_MS = 4000;
     public static Command shootCommand() {
         return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
                         BarnRobot.getInstance().gate.openCommand(),
                         new ParallelRaceGroup(

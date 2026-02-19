@@ -50,7 +50,6 @@ public class BarnRobot extends Robot {
     public LimeLight limelight;
     public Webcam webcam;
     public KickStand kickStand;
-    public ColorSensor shooterSensor;
     public ColorSensor midSensor;
     public ColorSensor intakeSensor;
 
@@ -170,7 +169,6 @@ public class BarnRobot extends Robot {
     }
 
     private void initColorSensors(){
-        shooterSensor = new ColorSensor(robotHardware.shooterColorSensor);
         midSensor = new ColorSensor(robotHardware.midColorSensor);
         intakeSensor = new ColorSensor(robotHardware.intakeColorSensor);
     }

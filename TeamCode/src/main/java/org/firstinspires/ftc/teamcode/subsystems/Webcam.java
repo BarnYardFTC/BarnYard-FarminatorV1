@@ -249,6 +249,7 @@ public class Webcam extends SubsystemBase {
         robot.telemetry.addData("isLocalizationTagDetected", isLocalizationTagDetected());
         robot.telemetry.addData("Webcam Robot X", d != null ? d.robotPose.getPosition().x : "N/A");
         robot.telemetry.addData("Webcam Robot Y", d != null ? d.robotPose.getPosition().y : "N/A");
+        robot.telemetry.addData("Webcam Robot Heading", !aprilTag.getDetections().isEmpty() ? aprilTag.getDetections().get(0).robotPose.getOrientation().getYaw(AngleUnit.DEGREES) : "N/A");
         robot.telemetry.addData("Webcam Goal dYaw", dYaw);
         robot.telemetry.addData("Webcam Goal Distance", getDistanceToGoal());
     }

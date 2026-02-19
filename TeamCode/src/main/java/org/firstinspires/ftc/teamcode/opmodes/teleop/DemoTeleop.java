@@ -126,7 +126,6 @@ public class DemoTeleop extends CommandOpMode{
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
         telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-        telemetry.addData("shoot busy", farminator.shooterSensor.isShootPoseBusy());
         telemetry.addData("mid busy", farminator.midSensor.isMidPoseBusy());
         telemetry.addData("intake busy", farminator.intakeSensor.isIntakePoseBusy());
         farminator.periodic();

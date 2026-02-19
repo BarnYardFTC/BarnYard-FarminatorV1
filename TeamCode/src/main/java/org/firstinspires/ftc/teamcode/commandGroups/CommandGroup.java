@@ -86,10 +86,6 @@ public class CommandGroup extends SequentialCommandGroup {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
     }
 
-    public static boolean robotContainsArtifacts() {
-        return BarnRobot.getInstance().midSensor.isMidPoseBusy() ||
-                BarnRobot.getInstance().shooterSensor.isShootPoseBusy();
-    }
 
     public static Command deactivateIntakeAndTransferCommand() {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.deactivateIntakeCommand(), BarnRobot.getInstance().transfer.deactivateTransfer());

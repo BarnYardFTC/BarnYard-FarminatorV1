@@ -39,7 +39,7 @@ public class Transfer extends SubsystemBase {
         return new ConditionalCommand(
                 new InstantCommand(() -> transferMotor.setPower(0), this), // on true
                 new InstantCommand(() -> transferMotor.setPower(1), this),             // on false
-                () -> BarnRobot.getInstance().shooterSensor.isShootPoseBusy() && BarnRobot.getInstance().midSensor.isMidPoseBusy()
+                () -> BarnRobot.getInstance().midSensor.isMidPoseBusy()
         );
     }
 

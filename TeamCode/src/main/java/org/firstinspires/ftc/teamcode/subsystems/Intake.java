@@ -21,7 +21,6 @@ public class Intake extends SubsystemBase {
 
     /** Intake motor hardware object. */
     private final DcMotorEx intake;
-    private final ColorSensor shooterSensor;
     private final ColorSensor midSensor;
     private final ColorSensor intakeSensor;
 
@@ -33,7 +32,6 @@ public class Intake extends SubsystemBase {
      */
     public Intake() {
         this.intake = BarnRobot.getInstance().robotHardware.intake;
-        shooterSensor = BarnRobot.getInstance().shooterSensor;
         midSensor = BarnRobot.getInstance().midSensor;
         intakeSensor = BarnRobot.getInstance().intakeSensor;
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -74,7 +72,7 @@ public class Intake extends SubsystemBase {
         return new ConditionalCommand(
                 new InstantCommand(() -> setPower(0), this), // on true
                 new InstantCommand(() -> setPower(DEFAULT_POWER), this),             // on false
-                () -> shooterSensor.isShootPoseBusy() && midSensor.isMidPoseBusy() && intakeSensor.isIntakePoseBusy()
+                () -> midSensor.isMidPoseBusy() && intakeSensor.isIntakePoseBusy()
         );
     }
 

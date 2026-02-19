@@ -82,7 +82,6 @@ public class RobotHardware {
 
 //    public IMU imu;
     public Limelight3A limelight;
-    public NormalizedColorSensor shooterColorSensor;
     public NormalizedColorSensor intakeColorSensor;
     public NormalizedColorSensor midColorSensor;
 
@@ -242,7 +241,6 @@ public class RobotHardware {
 //        imu.initialize(IMU_PARAMETERS);
 //        imu.resetYaw();
         limelight = hw.get(Limelight3A.class, "limelight");
-        shooterColorSensor = hw.get(NormalizedColorSensor.class, "colorSensorShooter");
         intakeColorSensor = hw.get(NormalizedColorSensor.class, "colorSensorIntake");
         midColorSensor = hw.get(NormalizedColorSensor.class, "colorSensorMid");
 

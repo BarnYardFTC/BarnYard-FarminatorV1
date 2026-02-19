@@ -13,6 +13,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
+import org.firstinspires.ftc.teamcode.util.OpModeData;
 
 /**
  * Contains complex command groups with commands from different classes.
@@ -27,6 +28,15 @@ public class RobotCommands {
 
     private static String lastCommand;
 
+
+    private static final double PARKING_X = 0;
+    private static final double GATE_X = 0;
+    private static final double PARKING_BLUE_Y = 0;
+    private static final double GATE_BLUE_Y = 0;
+    private static final double PARKING_RED_Y = 0;
+    private static final double GATE_RED_Y = 0;
+
+    private static BarnRobot farminator;
 
 
     /** Opens the gate shoots three artifacts */
@@ -47,9 +57,9 @@ public class RobotCommands {
     public static Command collectCommand() {
         return new ParallelCommandGroup(
                 new InstantCommand(() -> lastCommand = "collectCommand()"),
-                BarnRobot.getInstance().gate.closeCommand(),
-                BarnRobot.getInstance().intake.activateIntakeCommand(),
-                BarnRobot.getInstance().transfer.activateTransfer()
+                farminator.gate.closeCommand(),
+                farminator.intake.activateIntakeCommand(),
+                farminator.transfer.activateTransfer()
         );
     }
 
@@ -57,9 +67,9 @@ public class RobotCommands {
     public static Command collectStopCommand() {
         return new ParallelCommandGroup(
                 new InstantCommand(() -> lastCommand = "collectStopCommand()"),
-                BarnRobot.getInstance().intake.deactivateIntakeCommand(),
-                BarnRobot.getInstance().transfer.deactivateTransfer(),
-                BarnRobot.getInstance().gate.openCommand()
+                farminator.intake.deactivateIntakeCommand(),
+                farminator.transfer.deactivateTransfer(),
+                farminator.gate.openCommand()
         );
     }
 
@@ -89,23 +99,37 @@ public class RobotCommands {
 //        );
 //    }
 
-    public static Command autoParkCommand(){
+    private static double snapHeading(double heading) {
+        double degrees = Math.toDegrees(heading);
+        return Math.toRadians(Math.round(degrees / 180.0) * 180.0);
+    }
+
+    public static Command autoParkCommand(OpModeData opModeData){
+        Pose2d currentPose = farminator.roadRunnerMecanumDrive.localizer.getPose();
+        double y;
+        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
+            y = PARKING_BLUE_Y;
+        } else y = PARKING_RED_Y;
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "autoParkCommand()"),
-                new RunCommand(() -> BarnRobot.getInstance().drive.driveToPose(0, 0, 270))
+                new DriveActionCommand(
+                        farminator.roadRunnerMecanumDrive.actionBuilder(currentPose)
+                                .strafeToLinearHeading(new Vector2d(GATE_X, y), snapHeading(currentPose.heading.toDouble()))
+                )
         );
     }
 
-    public static Command autoRRPCommand() {
-        BarnRobot robot = BarnRobot.getInstance();
-        // Get current position from Road Runner's localizer
-        Pose2d currentPose = robot.roadRunnerMecanumDrive.localizer.getPose();
-
+    public static Command autoGateCommand(OpModeData opModeData) {
+        Pose2d currentPose = farminator.roadRunnerMecanumDrive.localizer.getPose();
+        double y;
+        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
+            y = GATE_BLUE_Y;
+        } else y = GATE_RED_Y;
         return new SequentialCommandGroup(
-                new InstantCommand(() -> lastCommand = "autoRRPCommand()"),
+                new InstantCommand(() -> lastCommand = "autoGateCommand()"),
                 new DriveActionCommand(
-                        robot.roadRunnerMecanumDrive.actionBuilder(currentPose)
-                                .strafeToLinearHeading(new Vector2d(0, 0), Math.toRadians(180))
+                        farminator.roadRunnerMecanumDrive.actionBuilder(currentPose)
+                                .strafeToLinearHeading(new Vector2d(GATE_X, y), snapHeading(currentPose.heading.toDouble()))
                 )
         );
     }
@@ -115,6 +139,6 @@ public class RobotCommands {
     }
 
     public static void displayTelemetry() {
-        BarnRobot.getInstance().telemetry.addData("last command: ", getLastCommand());
+        farminator.telemetry.addData("last command: ", getLastCommand());
     }
 }

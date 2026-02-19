@@ -138,10 +138,10 @@ public class TestTeleopnNEW extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addLine("===PINPOINT DATA===");
+
         farminator.drive.displayPinpointDataTelemetry();
-        telemetry.addLine("===WEBCAM DATA===");
-        farminator.webcam.displayTelemetry();
+
+        telemetry.addData("NIR's (a) DICK HEAD", farminator.drive.getBotAbsoluteHeading());
 
         farminator.periodic();
     }

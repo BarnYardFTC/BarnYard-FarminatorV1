@@ -135,11 +135,11 @@ public class FirstMainTeleop extends CommandOpMode{
 
     private void intakeSwitcher(){
         if (farminator.colorSensor.getIntakeMode()){
-            farminator.intake.smartIntakeCommand();
-            farminator.transfer.smartTransferCommand();
+            farminator.intake.smartIntakeCommand().schedule();
+            farminator.transfer.smartTransferCommand().schedule();
         }else{
-            farminator.intake.activateIntakeCommand();
-            farminator.transfer.activateTransfer();
+            farminator.intake.activateIntakeCommand().schedule();
+            farminator.transfer.activateTransfer().schedule();
         }
     }
 

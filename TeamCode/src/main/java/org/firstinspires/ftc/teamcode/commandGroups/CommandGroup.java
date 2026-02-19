@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class CommandGroup extends SequentialCommandGroup {
 
-    public static int SHOOTING_TIME_MS = 1500;
+    public static int SHOOTING_TIME_MS = 4000;
 
 
     public static Command smartShootCommand() {

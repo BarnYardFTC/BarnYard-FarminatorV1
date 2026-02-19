@@ -179,6 +179,14 @@ public class Webcam extends SubsystemBase {
 
     /* ---------------- GAME PATTERN ---------------- */
 
+    public double getBotHeading(){
+        double heading = 0;
+        if (!aprilTag.getDetections().isEmpty()){
+            heading = aprilTag.getDetections().get(0).robotPose.getOrientation().getYaw(AngleUnit.DEGREES);
+            heading += 90;
+        }
+        return heading;
+    }
     public void updateGamePattern() {
         for (AprilTagDetection d : aprilTag.getDetections()) {
             if (d.metadata == null || !d.metadata.name.contains("Obelisk")) continue;
@@ -223,8 +231,29 @@ public class Webcam extends SubsystemBase {
             updatePose();
             poseUpdateTimer.reset();
         }
+
+        if (getBotHeading() != 0){
+            updateHeading(getBotHeading());
+        }
     }
 
+    private static double wrapTo180(double angle) {
+        angle = angle % 360;          // keep within 0–360 range
+        if (angle > 180) {
+            angle -= 360;
+        }
+        return angle;
+    }
+
+    private void updateHeading(double heading){
+        Pose2d newPose = new Pose2d(
+                BarnRobot.getInstance().pinpointLocalizer.getPose().position.x,
+                BarnRobot.getInstance().pinpointLocalizer.getPose().position.y,
+                Math.toRadians(wrapTo180(heading))
+        );
+
+        BarnRobot.getInstance().pinpointLocalizer.setPose(newPose);
+    }
     /* ---------------- CAMERA CONTROL ---------------- */
 
     public void stopStreaming() {
@@ -249,7 +278,10 @@ public class Webcam extends SubsystemBase {
         robot.telemetry.addData("isLocalizationTagDetected", isLocalizationTagDetected());
         robot.telemetry.addData("Webcam Robot X", d != null ? d.robotPose.getPosition().x : "N/A");
         robot.telemetry.addData("Webcam Robot Y", d != null ? d.robotPose.getPosition().y : "N/A");
-        robot.telemetry.addData("Webcam Robot Heading", !aprilTag.getDetections().isEmpty() ? aprilTag.getDetections().get(0).robotPose.getOrientation().getYaw(AngleUnit.DEGREES) : "N/A");
+        robot.telemetry.addData("webcam heading", getBotHeading());
+        if (!aprilTag.getDetections().isEmpty()){
+            robot.telemetry.addData("webcam real heading", aprilTag.getDetections().get(0).robotPose.getOrientation().getYaw(AngleUnit.DEGREES));
+        }
         robot.telemetry.addData("Webcam Goal dYaw", dYaw);
         robot.telemetry.addData("Webcam Goal Distance", getDistanceToGoal());
     }

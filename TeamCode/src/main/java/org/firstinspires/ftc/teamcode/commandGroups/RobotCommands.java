@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -10,6 +12,7 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
+import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 
 /**
  * Contains complex command groups with commands from different classes.
@@ -90,6 +93,20 @@ public class RobotCommands {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "autoParkCommand()"),
                 new RunCommand(() -> BarnRobot.getInstance().drive.driveToPose(0, 0, 270))
+        );
+    }
+
+    public static Command autoRRPCommand() {
+        BarnRobot robot = BarnRobot.getInstance();
+        // Get current position from Road Runner's localizer
+        Pose2d currentPose = robot.roadRunnerMecanumDrive.localizer.getPose();
+
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> lastCommand = "autoRRPCommand()"),
+                new DriveActionCommand(
+                        robot.roadRunnerMecanumDrive.actionBuilder(currentPose)
+                                .strafeToLinearHeading(new Vector2d(0, 0), Math.toRadians(270))
+                )
         );
     }
 

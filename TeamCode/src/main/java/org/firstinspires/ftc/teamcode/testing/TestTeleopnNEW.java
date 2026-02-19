@@ -71,18 +71,15 @@ public class TestTeleopnNEW extends CommandOpMode {
         // Transfer System
         // ------------------------
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .toggleWhenPressed(
-                        farminator.colorSensor.changeMode()
-                );
-
-
         //This shit need to be in shoot button
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
                 .whileActiveOnce(
-                        farminator.colorSensor.setCheckFalse()
-                );
+                        new SequentialCommandGroup(
+                                farminator.colorSensor.changeMode(),
+                                farminator.colorSensor.setCheckFalse()
+                        )
 
+                );
 
 
         // Left Trigger → Intake active (transfer + intake)
@@ -175,7 +172,7 @@ public class TestTeleopnNEW extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(new ParallelCommandGroup(
-                        CommandGroup.shootCommand(),
+                        CommandGroup.shootCommandPreset(1),
                         rumbleCommand()
                 ).alongWith(
                         BarnRobot.getInstance().gate.closeCommand()

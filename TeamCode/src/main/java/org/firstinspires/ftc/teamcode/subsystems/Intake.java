@@ -85,6 +85,6 @@ public class Intake extends SubsystemBase {
     }
 
     public void displayTelemetry(Telemetry telemetry){
-        telemetry.addData("Is Robot FULL TRANSFER: ", BarnRobot.getInstance().colorSensor.isRobotFull());
+        telemetry.addData("Is Robot FULL INTAKE: ", BarnRobot.getInstance().colorSensor.isRobotFull());
     }
 }

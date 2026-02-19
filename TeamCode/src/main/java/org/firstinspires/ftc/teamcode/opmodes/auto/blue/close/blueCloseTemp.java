@@ -68,8 +68,8 @@ public class blueCloseTemp {
                 .setTangent(Math.toRadians(150))
                 .splineToLinearHeading(lastShootPose, Math.toRadians(150));
 
-//        goCollectRight = drive.actionBuilder(shootPose)
-//                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));
+        goCollectRight = drive.actionBuilder(shootPose)
+                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));
 //        goShootRight = drive.actionBuilder(rightCollectPose)
 //                .splineToLinearHeading(lastShootPose, new Rotation2d(-1.8, -1));
     }

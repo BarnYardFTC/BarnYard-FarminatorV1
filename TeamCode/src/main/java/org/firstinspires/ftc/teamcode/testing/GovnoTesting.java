@@ -27,6 +27,10 @@ public class GovnoTesting extends CommandOpMode {
                 opModeData
         );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .toggleWhenActive(
+                        farminator.shooter.turnOffInstant()
+                );
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)

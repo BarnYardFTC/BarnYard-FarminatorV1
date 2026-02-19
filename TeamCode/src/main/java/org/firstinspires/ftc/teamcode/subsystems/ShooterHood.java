@@ -39,8 +39,8 @@ public class ShooterHood extends SubsystemBase {
         rangeLut.add(0.22, 0.55);
         rangeLut.add(0.51,0.65);
         rangeLut.add(0.83,0.7);
-        rangeLut.add(1.05,0.95);
-        rangeLut.add(1.25,1);
+        rangeLut.add(1.05,0.85);
+        rangeLut.add(1.25,0.95);
         rangeLut.add(1.65,0.85);
         rangeLut.add(1.91,0.95);
         rangeLut.add(2,1);

@@ -64,8 +64,8 @@ public class blueCloseTemp {
         goShootLast = drive.actionBuilder(gateCollectPose)
                 .splineToLinearHeading(lastShootPose, new Rotation2d(0,-2));
 
-//        goCollectRight = drive.actionBuilder(shootPose)
-//                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));
+        goCollectRight = drive.actionBuilder(shootPose)
+                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));
 //        goShootRight = drive.actionBuilder(rightCollectPose)
 //                .splineToLinearHeading(lastShootPose, new Rotation2d(-1.8, -1));
     }

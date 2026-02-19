@@ -78,6 +78,7 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
     public void run() {
         super.run();
         telemetry.addData("aligned: ", farminator.limelight.isAlignedToGoal());
+        farminator.limelight.displayTelemetry();
 
         farminator.periodic();
     }

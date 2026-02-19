@@ -43,8 +43,6 @@ public class DriveTrain extends SubsystemBase {
     public static double TURN_START_POWER = 0.085; // tune 0.07–0.11
     public static double TURN_START_ERROR = 2.0;   // deg — only help when farther than this
 
-    private final PIDController pidControllerYaw;
-    private final double initialBotHeading;
 
     // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.8;

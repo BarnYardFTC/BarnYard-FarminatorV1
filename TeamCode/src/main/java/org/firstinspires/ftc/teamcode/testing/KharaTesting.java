@@ -34,23 +34,23 @@ public class KharaTesting extends CommandOpMode {
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 
 
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
-                .whenActive(
-                        RobotCommands.smartCollectCommand()
-                )
-                .whenInactive(
-                        RobotCommands.collectStopCommand()
-                );
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
-                .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(RobotCommands.smartShootCommand());
+//        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
+//                .whenActive(
+//                        RobotCommands.smartCollectCommand()
+//                )
+//                .whenInactive(
+//                        RobotCommands.collectStopCommand()
+//                );
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+//                .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
+//                .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+//                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
+//
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+//                .whenPressed(RobotCommands.smartShootCommand());
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

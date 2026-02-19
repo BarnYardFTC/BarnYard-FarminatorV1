@@ -61,30 +61,30 @@ public class RobotCommands {
     }
 
     /** Keeps transfer and intake activated if robot isn't full */
-    public static Command smartCollectCommand(){
-        return new ParallelCommandGroup(
-                new InstantCommand(() -> lastCommand = "smartTransferAndIntake()"),
-                BarnRobot.getInstance().gate.closeCommand(),
-                BarnRobot.getInstance().intake.smartIntakeCommand(),
-                BarnRobot.getInstance().transfer.smartTransferCommand());
-    }
-
-    /** Shoots until there is no artifacts left */
-    public static Command smartShootCommand(){
-        return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                new SequentialCommandGroup(
-                        new InstantCommand(() -> lastCommand = "smartShootCommand()"),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        BarnRobot.getInstance().intake.activateIntakeCommand(),
-                        BarnRobot.getInstance().transfer.activateTransfer(),
-                        new WaitUntilCommand(() -> !BarnRobot.getInstance().colorSensor.isShootAndMidIn()),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
-                )
-        );
-    }
+//    public static Command smartCollectCommand(){
+//        return new ParallelCommandGroup(
+//                new InstantCommand(() -> lastCommand = "smartTransferAndIntake()"),
+//                BarnRobot.getInstance().gate.closeCommand(),
+//                BarnRobot.getInstance().intake.smartIntakeCommand(),
+//                BarnRobot.getInstance().transfer.smartTransferCommand());
+//    }
+//
+//    /** Shoots until there is no artifacts left */
+//    public static Command smartShootCommand(){
+//        return new ParallelRaceGroup(
+//                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+//                new SequentialCommandGroup(
+//                        new InstantCommand(() -> lastCommand = "smartShootCommand()"),
+//                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+//                        BarnRobot.getInstance().gate.openCommand(),
+//                        BarnRobot.getInstance().intake.activateIntakeCommand(),
+//                        BarnRobot.getInstance().transfer.activateTransfer(),
+//                        new WaitUntilCommand(() -> !BarnRobot.getInstance().colorSensor.isShootAndMidIn()),
+//                        BarnRobot.getInstance().gate.closeCommand(),
+//                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+//                )
+//        );
+//    }
 
     public static Command autoParkCommand(){
         return new SequentialCommandGroup(

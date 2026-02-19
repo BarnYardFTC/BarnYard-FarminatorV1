@@ -14,7 +14,7 @@ public class blueCloseTemp {
 
     public static final Pose2d startPose = new Pose2d( -53.333, -45.5, Math.toRadians(225));
     public static final Pose2d shootPose = new Pose2d(-23, -22, Math.toRadians(224));
-    public static final Pose2d lastShootPose = new Pose2d(-40, -22, Math.toRadians(242));
+    public static final Pose2d lastShootPose = new Pose2d(-36, -15, Math.toRadians(242));
 
 
     public static final Pose2d leftCollectPose = new Pose2d(-11.5, -53, Math.toRadians(270));
@@ -52,8 +52,8 @@ public class blueCloseTemp {
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
         goCollectLeft = goShootPre.endTrajectory().fresh()
                 .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2))
-                .setTangent(Math.toRadians(50))
-                .splineToLinearHeading(gateOpenPose, Math.toRadians(-20));
+                .setTangent(new Rotation2d(1,1))
+                .splineToLinearHeading(gateOpenPose, Math.toRadians(-90), fastToShoot);
         goShootLeft = goCollectLeft.endTrajectory().fresh()
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2(), fastToShoot);
         goCollectMid = goShootLeft.endTrajectory().fresh()
@@ -66,7 +66,7 @@ public class blueCloseTemp {
                 .setTangent(new Rotation2d(2.1,0.4))
                 .splineToLinearHeading(rightCollectPose, new Rotation2d(0, -1.5));
         goShootLast = goCollectRight.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
-                .setTangent(Math.toRadians(150))
-                .splineToLinearHeading(lastShootPose, Math.toRadians(150), fastToShoot);
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(198), fastToShoot);
     }
 }

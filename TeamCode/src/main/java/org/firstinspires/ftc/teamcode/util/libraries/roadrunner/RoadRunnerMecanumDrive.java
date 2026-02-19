@@ -82,12 +82,12 @@ public final class RoadRunnerMecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 10;
-        public double lateralGain = 13;
+        public double axialGain = 5;
+        public double lateralGain = 10;
         public double headingGain = 15; // shared with turn
 
-        public double axialVelGain = 0.0;
-        public double lateralVelGain = 0.0;
+        public double axialVelGain = 1;
+        public double lateralVelGain = 0.8;
         public double headingVelGain = 0.0; // shared with turn
     }
 

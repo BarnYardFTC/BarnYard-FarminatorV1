@@ -35,7 +35,7 @@ public class GovnoTesting extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenActive(
-                        RobotCommands.autoParkCommand()
+                        RobotCommands.autoRRPCommand()
                 );
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
 //                .toggleWhenActive(

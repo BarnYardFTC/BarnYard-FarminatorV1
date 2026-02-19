@@ -40,24 +40,24 @@ public class AutoController extends SequentialCommandGroup {
         );
     }
 
-    public static Command shootCommand(TrajectoryActionBuilder path){
-        return new SequentialCommandGroup(
-                intakeAndTransferGateCommand(),
-                new DriveActionCommand(path)
+//    public static Command shootCommand(TrajectoryActionBuilder path){
+//        return new SequentialCommandGroup(
+//                intakeAndTransferGateCommand(),
+//                new DriveActionCommand(path)
+////                deactivateIntakeAndTransferCommand()
+//        );
+//    }
+//
+//    public static Command intakeCommand(TrajectoryActionBuilder path){
+//        return new SequentialCommandGroup(
+//                shootCommand(),
+//                new DriveActionCommand(path),
 //                deactivateIntakeAndTransferCommand()
-        );
-    }
-
-    public static Command intakeCommand(TrajectoryActionBuilder path){
-        return new SequentialCommandGroup(
-                shootCommand(),
-                new DriveActionCommand(path),
-                deactivateIntakeAndTransferCommand()
-        );
-    }
+//        );
+//    }
 
     // Command for shoot
-    public static int SHOOTING_TIME_MS = 1500;
+    public static int SHOOTING_TIME_MS = 1000;
     public static Command shootCommand() {
 //        return new SequentialCommandGroup(
 //                BarnRobot.getInstance().gate.openCommand(),
@@ -72,7 +72,7 @@ public class AutoController extends SequentialCommandGroup {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
                         BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-                        new WaitCommand(500)
+                        new WaitCommand(250)
                 ),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                 BarnRobot.getInstance().gate.openCommand(),

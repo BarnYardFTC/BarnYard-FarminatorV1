@@ -2,49 +2,22 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.blueCloseTemp.*;
 
-import android.widget.AutoCompleteTextView;
-
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
-import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
-import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
-
-import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
-import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
@@ -77,7 +50,6 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
-
 /**
  * robotPathCommands(boolean intake, boolean shoot, TrajectoryActionBuilder path)
  */
@@ -89,9 +61,9 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectLeft),
 
-                AutoController.robotPathCommands(true, true, goShootLeft),
+                AutoController.robotPathCommands(true, true,goShootLeft),
 
-                AutoController.robotPathCommands(true, false,goCollectMid),
+                AutoController.robotPathCommands(true, false, goCollectMid),
 
                 AutoController.robotPathCommands(true, true, goShootMid),
 
@@ -102,12 +74,10 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
 
         ).schedule();
     }
-
     @Override
     public void run() {
         super.run();
         telemetry.addData("aligned: ", farminator.limelight.isAlignedToGoal());
-        telemetry.addData("yaw: ", farminator.limelight.getGoalYaw());
 
         farminator.periodic();
     }

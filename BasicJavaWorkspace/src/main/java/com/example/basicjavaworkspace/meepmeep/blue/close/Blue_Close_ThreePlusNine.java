@@ -75,7 +75,7 @@ public class Blue_Close_ThreePlusNine {
 
         Vector2d leftReady = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
         Vector2d leftCollect = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y);
-        Vector2d gateAtCollectY = new Vector2d(GATE_POSE_X, SOUTH_COLLECT_POSE_Y);
+        Pose2d gateAtCollectY = new Pose2d(0, -50, Math.toRadians(180));
 
         Vector2d shootVec = new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y);
         Pose2d shootPose = new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING);
@@ -111,10 +111,10 @@ public class Blue_Close_ThreePlusNine {
 
         TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(shootPose)
                 .splineToLinearHeading(leftCollectPose, new Rotation2d(0, -4))
-                .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, -8));
+                .splineToSplineHeading(gateAtCollectY, new Rotation2d(3, -5));
 
 
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
+        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(gateAtCollectY )
                 .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
 
         TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(shootPose)

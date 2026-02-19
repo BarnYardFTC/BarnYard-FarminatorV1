@@ -7,11 +7,11 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-public class blueCloseTemp {
+public class blueFarTemp {
 
     public static final int SHOOT_TIME_MS = 1500;
 
-    public static final Pose2d startPose = new Pose2d( -53.333, -45.5, Math.toRadians(225));
+    public static final Pose2d startPose = new Pose2d( 60, -15, Math.toRadians(225));
     public static final Pose2d shootPose = new Pose2d(-23, -22, Math.toRadians(227));
     public static final Pose2d lastShootPose = new Pose2d(-40, -22, Math.toRadians(242));
 

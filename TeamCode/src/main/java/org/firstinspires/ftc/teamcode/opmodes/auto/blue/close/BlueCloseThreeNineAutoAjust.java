@@ -67,9 +67,9 @@ public class BlueCloseThreeNineAutoAjust extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, true, goShootMid),
 
-                AutoController.robotPathCommands(true, false, goCollectRight)
+                AutoController.robotPathCommands(true, false, goCollectRight),
 
-//                AutoController.robotPathCommands(true, true, goShootRight)
+                AutoController.robotPathCommands(true, true, goShootLast)
 
 
         ).schedule();

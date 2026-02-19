@@ -23,7 +23,7 @@ public class BlueCloseThreeNineAutoAjust {
     public static final Pose2d midLoadZoneReady = new Pose2d(34.5, -20, Math.toRadians(270));
 
     public static final Pose2d parkPose = new Pose2d(-40, -22, Math.toRadians(227));
-    public static final Pose2d gateOpenPose = new Pose2d(0, -59, Math.toRadians(180));
+    public static final Pose2d gateOpenPose = new Pose2d(0, -70, Math.toRadians(180));
     public static final Pose2d gateCollectPose = new Pose2d(10,-57, Math.toRadians(227));
 
     TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(150);
@@ -42,7 +42,7 @@ public class BlueCloseThreeNineAutoAjust {
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2())
 
                 .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2))
-                .setTangent(new Rotation2d(1,3))
+                .setTangent(new Rotation2d(1,1))
                 .splineToLinearHeading(gateOpenPose, Math.toRadians(-90))
 
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2())
@@ -53,11 +53,11 @@ public class BlueCloseThreeNineAutoAjust {
                 .setTangent(new Rotation2d(0,1))
                 .splineToLinearHeading(shootPose, Math.toRadians(150))
 
-                .setTangent(new Rotation2d(2.1,0.4))
+                .setTangent(new Rotation2d(2.1,0.2))
                 .splineToLinearHeading(rightCollectPose, new Rotation2d(0, -1.5))
 
                 .setTangent(Math.toRadians(120))
-                .splineToLinearHeading(lastShootPose, Math.toRadians(205))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(198))
 
                 .build());
 

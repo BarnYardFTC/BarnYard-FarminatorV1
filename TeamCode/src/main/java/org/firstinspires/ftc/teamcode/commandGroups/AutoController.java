@@ -59,7 +59,7 @@ public class AutoController extends SequentialCommandGroup {
 //    }
 
     // Command for shoot
-    public static int SHOOTING_TIME_MS = 1300;
+    public static int SHOOTING_TIME_MS = 1200;
     public static Command shootCommand() {
         return new ParallelRaceGroup(
                 new SequentialCommandGroup(

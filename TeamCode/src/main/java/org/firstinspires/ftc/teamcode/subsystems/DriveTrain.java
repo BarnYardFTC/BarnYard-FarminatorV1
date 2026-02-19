@@ -444,6 +444,16 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
+    public Command alignToTagAutoCommand() {
+        return new RunCommand(
+                () -> alignToGoal(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY()
+                ),
+                this
+        );
+    }
+
     public void driveToPose(double targetX, double targetY, double targetHeading) {
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
 

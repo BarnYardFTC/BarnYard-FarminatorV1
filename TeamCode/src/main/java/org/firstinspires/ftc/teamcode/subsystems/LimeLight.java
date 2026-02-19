@@ -66,6 +66,9 @@ public class LimeLight extends SubsystemBase {
     /** Distance to goal in meters. */
     private double goalRange;
 
+    private final int closePipeline = 7;
+    private final int farPipeline = 6;
+
     /**
      * Constructs the LimeLight subsystem and initializes default settings.
      */
@@ -73,7 +76,7 @@ public class LimeLight extends SubsystemBase {
         limelight = BarnRobot.getInstance().robotHardware.limelight;
         poseUpdateTimer.reset();
         validShootTimer.reset();
-        limelight.pipelineSwitch(7);
+        limelight.pipelineSwitch(closePipeline);
         limelight.setPollRateHz(POLL_RATE_HZ);
         resetData();
         start();
@@ -219,6 +222,14 @@ public class LimeLight extends SubsystemBase {
         }
     }
 
+    public int choosePipeline(){
+        if(getGoalDistance() > 2.8){
+            return farPipeline;
+        }else{
+            return closePipeline;
+        }
+    }
+
     /**
      * Checks if the Limelight currently sees a goal tag.
      *
@@ -244,6 +255,7 @@ public class LimeLight extends SubsystemBase {
         llResult = limelight.getLatestResult();
         frs = llResult.getFiducialResults();
         isAlignmentReady = isAlignedToGoal();
+        choosePipeline();
 
     }
 

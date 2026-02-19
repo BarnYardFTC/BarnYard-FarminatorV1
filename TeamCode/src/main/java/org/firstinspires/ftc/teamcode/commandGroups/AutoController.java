@@ -20,6 +20,8 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHood;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 
+import java.sql.BatchUpdateException;
+
 @Config
 public class AutoController extends SequentialCommandGroup {
 
@@ -57,10 +59,14 @@ public class AutoController extends SequentialCommandGroup {
 //    }
 
     // Command for shoot
-    public static int SHOOTING_TIME_MS = 2500;
+    public static int SHOOTING_TIME_MS = 1300;
     public static Command shootCommand() {
         return new ParallelRaceGroup(
                 new SequentialCommandGroup(
+                        new ParallelRaceGroup(
+                                new WaitCommand(1500),
+                                BarnRobot.getInstance().drive.alignToTagAutoCommand().interruptOn(() -> BarnRobot.getInstance().limelight.isAlignedToGoal())
+                        ),
                         BarnRobot.getInstance().gate.openCommand(),
                         new ParallelRaceGroup(
                                 new WaitCommand(SHOOTING_TIME_MS),

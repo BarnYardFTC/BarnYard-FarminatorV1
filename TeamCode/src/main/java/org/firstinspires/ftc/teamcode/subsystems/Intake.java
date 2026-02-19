@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -22,7 +21,10 @@ public class Intake extends SubsystemBase {
 
     /** Intake motor hardware object. */
     private final DcMotorEx intake;
-    private final ColorSensor colorSensor;
+    private final ColorSensor shooterSensor;
+    private final ColorSensor midSensor;
+    private final ColorSensor intakeSensor;
+
     /** Default power to run the intake. */
     public static double DEFAULT_POWER = 1;
 
@@ -31,10 +33,12 @@ public class Intake extends SubsystemBase {
      */
     public Intake() {
         this.intake = BarnRobot.getInstance().robotHardware.intake;
-        this.colorSensor = new ColorSensor();
-
+        shooterSensor = BarnRobot.getInstance().shooterSensor;
+        midSensor = BarnRobot.getInstance().midSensor;
+        intakeSensor = BarnRobot.getInstance().intakeSensor;
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
     }
 
     /**
@@ -66,14 +70,13 @@ public class Intake extends SubsystemBase {
         return new InstantCommand(() -> setPower(DEFAULT_POWER), this);
     }
 
-    public Command smartIntakeCommand(){
+    public Command smartIntakeCommand(){    //Disable intake when there is enough artifacts in the robot
         return new ConditionalCommand(
-                new InstantCommand(() -> setPower(0), this),
-                new InstantCommand(() -> setPower(DEFAULT_POWER), this),
-                this.colorSensor::isRobotFull
-                );
+                new InstantCommand(() -> setPower(0), this), // on true
+                new InstantCommand(() -> setPower(DEFAULT_POWER), this),             // on false
+                () -> shooterSensor.isShootPoseBusy() && midSensor.isMidPoseBusy() && intakeSensor.isIntakePoseBusy()
+        );
     }
-
 
     /**
      * Returns a command that deactivates the intake.

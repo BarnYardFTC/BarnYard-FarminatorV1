@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.Robot;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.*;
-import org.firstinspires.ftc.teamcode.util.OpModeData;
+        import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -45,11 +46,15 @@ public class BarnRobot extends Robot {
     public Intake intake;
     public Transfer transfer;
     public Gate gate;
+    public BlinkinLED blinkinLED;
+    public LimeLight limelight;
+    public Webcam webcam;
     public KickStand kickStand;
-    public ColorSensor colorSensor;
+    public ColorSensor shooterSensor;
+    public ColorSensor midSensor;
+    public ColorSensor intakeSensor;
 
     public PinpointLocalizer pinpointLocalizer;
-
 
 
 
@@ -138,7 +143,11 @@ public class BarnRobot extends Robot {
         initGate();
         initTransfer();
         initColorSensors();
+        initLimeLight();
+        initWebcam(opMode.hardwareMap);
         initKickStand();
+        initBlinkin();
+
     }
 
 
@@ -147,9 +156,23 @@ public class BarnRobot extends Robot {
     // ------------------------------------------------------------
 
     /** Sets up the shooter system. */
+    public void initWebcam(HardwareMap hw){
+        webcam = new Webcam(hw);
+    }
+
+    public void initKickStand(){
+        kickStand = new KickStand();
+    }
+
     public void initShooter() {
         shooter = new Shooter();
-        shooter.setDefaultCommand(shooter.turnOff());
+        shooter.setDefaultCommand(shooter.runShooterBasedOnDistance());
+    }
+
+    private void initColorSensors(){
+        shooterSensor = new ColorSensor(robotHardware.shooterColorSensor);
+        midSensor = new ColorSensor(robotHardware.midColorSensor);
+        intakeSensor = new ColorSensor(robotHardware.intakeColorSensor);
     }
 
     /**
@@ -161,9 +184,6 @@ public class BarnRobot extends Robot {
         drive = new DriveTrain();
     }
 
-    public void initKickStand(){
-        kickStand = new KickStand();
-    }
     public void initTransfer(){
         transfer = new Transfer();
     }
@@ -172,14 +192,14 @@ public class BarnRobot extends Robot {
         pinpointLocalizer = new PinpointLocalizer(hw, RoadRunnerMecanumDrive.PARAMS.inPerTick, opmodeData.initialPose2d);
     }
 
-    private void initColorSensors(){
-        colorSensor = new ColorSensor();
-    }
-
     public void initShooterHood(){
         shooterHood = new ShooterHood();
-        shooterHood.setDefaultCommand(shooterHood.autoHoodAlignment());
     }
+
+    public void initBlinkin(){
+        blinkinLED = new BlinkinLED();
+    }
+
 
     public void initGate(){
         gate = new Gate();
@@ -190,6 +210,9 @@ public class BarnRobot extends Robot {
         intake = new Intake();
     }
 
+    public void initLimeLight() {
+        limelight = new LimeLight();
+    }
 
     // ------------------------------------------------------------
     // Periodic Loop

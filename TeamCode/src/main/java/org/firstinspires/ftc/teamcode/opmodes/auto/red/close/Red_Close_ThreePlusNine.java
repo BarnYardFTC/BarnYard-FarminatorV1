@@ -121,7 +121,7 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
                 .strafeToLinearHeading(startNudge, SOUTH_HEADING)
                 .splineToConstantHeading(leftReady, SOUTH_HEADING)
                 .splineToConstantHeading(leftCollect, new Rotation2d(0, 0))
-                .splineToConstantHeading(gateAtCollectY, new Rotation2d(3, 8));
+                .splineToConstantHeading(gateAtCollectY, new Rotation2d(-3, -8));
 
         // Gate -> Shoot (strafe fast)
         TrajectoryActionBuilder path2 = drive.actionBuilder(new Pose2d(gateAtCollectY.x, gateAtCollectY.y, SOUTH_HEADING))
@@ -137,7 +137,7 @@ public class Red_Close_ThreePlusNine extends CommandOpMode {
 
         // Shoot -> Right collect (approach)
         TrajectoryActionBuilder path5 = drive.actionBuilder(shootPose)
-                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, 2));
+                .splineToLinearHeading(rightCollectPose, new Rotation2d(-1, -2));
 
         // Right collect -> End (return/park)
         TrajectoryActionBuilder path6 = drive.actionBuilder(rightCollectPose)

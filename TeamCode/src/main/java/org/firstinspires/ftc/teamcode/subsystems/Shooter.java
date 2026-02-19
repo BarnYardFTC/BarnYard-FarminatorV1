@@ -31,27 +31,26 @@ public class Shooter  extends SubsystemBase {
 
 
     public static double SHOOTING_RANGE_1 = 1.3;
-    public static double SHOOTING_RANGE_2 = 2.05;
+    public static double SHOOTING_RANGE_2 = 1.9;
     public static double SHOOTING_RANGE_3 = 2.8;
 
-    private double targetVelocity;
+    public static double targetVelocity;
 
 
     public Shooter() {
         shooterRight = BarnRobot.getInstance().robotHardware.shooterRight;
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterRight.setDirection(DcMotorSimple.Direction.FORWARD);
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         shooterLeft = BarnRobot.getInstance().robotHardware.shooterLeft;
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         pidfController = new ShooterPIDFController(p, 0, 0, f);
 
-        customDistance = 1.2;
     }
 
     private void setPower(double power) {
@@ -82,9 +81,12 @@ public class Shooter  extends SubsystemBase {
             targetVelocity = SHOOTER_VELOCITY_RANGE_4;
         }
         else {
-            targetVelocity = getVelocity();
+            targetVelocity = 0;
         }
-        power = pidfController.calculate(targetVelocity, getVelocity());
+        setCustomVelocity();
+    }
+    private void setCustomVelocity(){
+        double power = pidfController.calculate(targetVelocity, getVelocity());
         setPower(power);
     }
 
@@ -99,6 +101,10 @@ public class Shooter  extends SubsystemBase {
 
     public RunCommand runShooterClose(){
         return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_RANGE_1), this);
+    }
+
+    public RunCommand runShooterCustomVelocityDashboard(){
+        return new RunCommand(() -> setCustomVelocity(), this);
     }
 
     public RunCommand runShooterReversed(){
@@ -117,14 +123,10 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooter(velocity), this);
     }
 
-    public double customDistance = 1.2;
     private void shooterSpeedOnDistance(){
-        if (customDistance == 0){
-            operateShooterDistanceBased(
-                    BarnRobot.getInstance().drive.getDistanceFromGoal()
-            );
-        }
-        else operateShooterDistanceBased(customDistance);
+        operateShooterDistanceBased(
+                BarnRobot.getInstance().limelight.getGoalDistance()
+        );
     }
 
     public RunCommand runShooterBasedOnDistance(){
@@ -174,9 +176,9 @@ public class Shooter  extends SubsystemBase {
     }
 
 
-     public void setCustomVelocity(double velocity){
-            operateShooter(velocity);
-     }
+    public void setCustomVelocity(double velocity){
+        operateShooter(velocity);
+    }
 
 }
 //

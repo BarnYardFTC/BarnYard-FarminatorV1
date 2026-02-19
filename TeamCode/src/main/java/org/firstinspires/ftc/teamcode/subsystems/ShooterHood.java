@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_1;
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_2;
-import static org.firstinspires.ftc.teamcode.subsystems.Shooter.SHOOTING_RANGE_3;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.util.InterpLUT;
 
@@ -22,8 +19,7 @@ public class ShooterHood extends SubsystemBase {
 
     private double servoPos = 0.95;
 
-    InterpLUT range1Lut;
-    InterpLUT range2Lut;
+    InterpLUT rangeLut;
 
     public static double SERVO_POSITION = 1;
 
@@ -36,84 +32,74 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private void initInterpLUT(){
-        range1Lut = new InterpLUT();
-        range2Lut = new InterpLUT();
+        rangeLut = new InterpLUT();
 
         //Adding each val with a key
-        range1Lut.add(0.45, 0.35);
-        range1Lut.add(0.75, 0.4);
-        range1Lut.add(0.86, 0.45);
-        range1Lut.add(1.16, 0.5);
-        range1Lut.add(1.28, 0.6);
-
-        range2Lut.add(1.35,0.5);
-        range2Lut.add(1.47,0.6);
-        range2Lut.add(1.6,0.7);
-        range2Lut.add(1.75, 0.8);
-        range2Lut.add(1.86, 1);
-        range2Lut.add(1.95, 1);
-        range2Lut.add(2.04, 1);
-
+        rangeLut.add(0.05, 0.45);
+        rangeLut.add(0.22, 0.55);
+        rangeLut.add(0.51,0.65);
+        rangeLut.add(0.83,0.7);
+        rangeLut.add(1.05,0.95);
+        rangeLut.add(1.25,1);
+        rangeLut.add(1.65,0.85);
+        rangeLut.add(1.91,0.95);
+        rangeLut.add(2,1);
+        rangeLut.add(2.12,1);
         //generating final equation
-        range1Lut.createLUT();
-        range2Lut.createLUT();
+
+        rangeLut.createLUT();
     }
 
-    public void distanceDependentAngleRange1(double distance) {
+    public void distanceDependentAngleRange(double distance) {
         distance = capDistanceRange1(distance);
-        double position = range1Lut.get(distance);
+        double position = rangeLut.get(distance);
 
         BarnRobot.getInstance().telemetry.addData("range dependent position close", position);
-        servo.setPosition(position);
-    }
-
-    public void distanceDependentAngleRange2(double distance) {
-        distance = capDistanceRange2(distance);
-        double position = range2Lut.get(distance);
-
-        servo.setPosition(position);
-    }
-
-    public void distanceDependentAngleRange3() {
-        servo.setPosition(1);
-    }
-
-    public void distanceDependentAngleRange4() {
-        servo.setPosition(1);
-    }
-
-    public void autoHoodAlignmentFunc(){
-        double distance = BarnRobot.getInstance().drive.getDistanceFromGoal();
-
-        autoHoodAlignmentConstantDistance(distance);
+//        setPosition(position);
+        servoPos = position;
 
     }
 
-    public void autoHoodAlignmentConstantDistance(double distance){
-        if (distance < SHOOTING_RANGE_1) {
-            distanceDependentAngleRange1(distance);
+
+    public void autoHoodAlignmentConstantDistance(){
+
+        double distance = BarnRobot.getInstance().limelight.getGoalDistance();
+
+        if (distance == -1) {
+            setPosition(MIN);
         }
-        else if (distance > SHOOTING_RANGE_1 && distance < SHOOTING_RANGE_2){
-            distanceDependentAngleRange2(distance);
+        else {
+            distanceDependentAngleRange(distance);
         }
-        else if (distance > SHOOTING_RANGE_2 && distance < SHOOTING_RANGE_3){
-            distanceDependentAngleRange3();
+    }
+
+    public void shooterHoodBasedOnDistance(double distance){
+        if (distance == -1) {
+            setPosition(MIN);
         }
-        else if (distance > SHOOTING_RANGE_3) {
-            distanceDependentAngleRange4();
+        else {
+            distanceDependentAngleRange(distance);
         }
+    }
+
+    public void shooterHoodOnDistance(){
+        shooterHoodBasedOnDistance(
+                BarnRobot.getInstance().limelight.getGoalDistance()
+        );
+        setPosition(servoPos);
+        BarnRobot.getInstance().telemetry.addLine("hood");
     }
 
     public Command setHoodCloseToGoalPos(){
-        return new RunCommand(() -> servo.setPosition(0.1), this);
+        return new RunCommand(() -> setPosition(MIN), this);
     }
 
     public Command setHoodPosNoLimit(double position){
         return new InstantCommand(() -> servo.setPosition(position), this);
     }
 
-    public Command autoHoodAlignment(){
-        return new RunCommand(() -> autoHoodAlignmentFunc(), this);
+    public RunCommand autoHoodAlignment(){
+        return new RunCommand(() -> shooterHoodOnDistance(), this);
     }
 
 //    public Command lower() {
@@ -172,6 +158,13 @@ public class ShooterHood extends SubsystemBase {
         );
     }
 
+    public Command defaultAndAutoHoodCommand(){
+        return new SequentialCommandGroup(
+                defaultHoodCommand(),
+                autoHoodAlignment()
+        );
+    }
+
     public Command goToPositionCommand(){
         return new RunCommand(() ->
                 goToPosition(), this);
@@ -200,15 +193,19 @@ public class ShooterHood extends SubsystemBase {
     }
 
     private double capDistanceRange1(double distance){
-        if (distance <= 0.45) distance = 0.46;
-        else if (distance >= 1.28) distance = 1.279;
+        if (distance <= 0.05) distance = 0.06;
+        else if (distance >= 2.12) distance = 2.11;
         return distance;
     }
 
-    private double capDistanceRange2(double distance){
-        if (distance <= 1.35) distance = 1.36;
-        else if (distance >= 2.04) distance = 2.03;
-        return distance;
+
+    public static double DASHBOARD_POS = 0.5;
+    public void setPositionDashboard(){
+        servo.setPosition(DASHBOARD_POS);
+    }
+
+    public RunCommand setCustomDashboardPos(){
+        return new RunCommand(() -> setPositionDashboard(), this);
     }
 
 

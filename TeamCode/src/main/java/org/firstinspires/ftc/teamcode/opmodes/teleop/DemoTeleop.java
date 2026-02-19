@@ -1,10 +1,13 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -12,9 +15,11 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
+import java.util.function.BooleanSupplier;
 
-@TeleOp(name = "!TEST TELEOP ORIGINAL", group = "!")
-public class TestTeleop extends CommandOpMode{
+
+@TeleOp(name = "!DEMO TELEOP", group = "!")
+public class DemoTeleop extends CommandOpMode{
 
     // ------------------------
     // Robot Instance
@@ -39,8 +44,8 @@ public class TestTeleop extends CommandOpMode{
                 this,
                 opModeData
         );
-        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.defaultHoodCommand());
-        farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand());
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 
 
@@ -56,11 +61,7 @@ public class TestTeleop extends CommandOpMode{
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
                 .whenActive(
-                        new ParallelCommandGroup(
-                                farminator.intake.activateIntakeCommand(),
-                                farminator.transfer.activateTransfer(),
-                                BarnRobot.getInstance().gate.closeCommand()
-                        )
+                        CommandGroup.smartIntakeAndTransferCommand()
                 )
                 .whenInactive(
                         CommandGroup.deactivateIntakeAndTransferCommand().alongWith(
@@ -78,11 +79,8 @@ public class TestTeleop extends CommandOpMode{
                         BarnRobot.getInstance().gate.closeCommand()
                 ));
 
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-//                .toggleWhenActive(
-//                        farminator.drive.maintainPosCommand(gamepad1.left_stick_x, farminator.pinpointLocalizer.getPose())
-//                );
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
                 .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
 
@@ -94,27 +92,17 @@ public class TestTeleop extends CommandOpMode{
                         new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand()))
                 );
 
-
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-//                .toggleWhenActive(
-//                        farminator.drive.alignToTagCommand());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
-
-//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-//                .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
+//                .toggleWhenPressed(farminator.drive.alignToTagLamLamCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
+                .toggleWhenPressed(BarnRobot.getInstance().kickStand.raiseCommand())
+                .whenInactive(BarnRobot.getInstance().kickStand.lowerCommand());
 
+
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(180)))));
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
@@ -136,12 +124,11 @@ public class TestTeleop extends CommandOpMode{
         farminator.shooter.displayTelemetry();
         telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
         telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
-
         telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
         telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-
-
-
+        telemetry.addData("shoot busy", farminator.shooterSensor.isShootPoseBusy());
+        telemetry.addData("mid busy", farminator.midSensor.isMidPoseBusy());
+        telemetry.addData("intake busy", farminator.intakeSensor.isIntakePoseBusy());
         farminator.periodic();
     }
 

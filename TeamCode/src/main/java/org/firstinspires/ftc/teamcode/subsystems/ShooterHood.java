@@ -38,13 +38,15 @@ public class ShooterHood extends SubsystemBase {
         rangeLut.add(0.05, 0.45);
         rangeLut.add(0.22, 0.55);
         rangeLut.add(0.51,0.65);
-        rangeLut.add(0.83,0.7);
-        rangeLut.add(1.05,0.85);
-        rangeLut.add(1.25,0.95);
-        rangeLut.add(1.65,0.85);
-        rangeLut.add(1.91,0.95);
-        rangeLut.add(2,1);
-        rangeLut.add(2.12,1);
+        rangeLut.add(0.72,0.42);
+        rangeLut.add(0.92,0.5);
+        rangeLut.add(0.95,0.6);
+        rangeLut.add(1.18,0.7);
+        rangeLut.add(1.28,0.8);
+        rangeLut.add(1.32,0.8);
+        rangeLut.add(1.4,0.8);
+        rangeLut.add(1.6,0.9);
+        rangeLut.add(1.85,1);
         //generating final equation
 
         rangeLut.createLUT();
@@ -194,7 +196,7 @@ public class ShooterHood extends SubsystemBase {
 
     private double capDistanceRange1(double distance){
         if (distance <= 0.05) distance = 0.06;
-        else if (distance >= 2.12) distance = 2.11;
+        else if (distance >= 1.85) distance = 1.84;
         return distance;
     }
 

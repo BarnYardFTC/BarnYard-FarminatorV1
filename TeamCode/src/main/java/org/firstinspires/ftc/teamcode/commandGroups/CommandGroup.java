@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 @Config
 public class CommandGroup extends SequentialCommandGroup {
 
-    public static int SHOOTING_TIME_MS = 2500;
+    public static int SHOOTING_TIME_MS = 4000;
 
 
     public static Command smartShootCommand() {
@@ -89,7 +89,9 @@ public class CommandGroup extends SequentialCommandGroup {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.activateIntakeCommand(), BarnRobot.getInstance().transfer.activateTransfer());
     }
 
-
+    public static Command forceCloseGateCommand() {
+        return new InstantCommand(() -> BarnRobot.getInstance().gate.closeCommand());
+    }
     public static Command smartIntakeAndTransfer() {
         return new ParallelCommandGroup(BarnRobot.getInstance().intake.smartIntakeCommand(), BarnRobot.getInstance().transfer.smartTransferCommand());
     }

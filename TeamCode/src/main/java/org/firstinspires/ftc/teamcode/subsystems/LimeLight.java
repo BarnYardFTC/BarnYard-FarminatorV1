@@ -275,6 +275,7 @@ public class LimeLight extends SubsystemBase {
     /** Outputs all relevant telemetry for the Limelight subsystem. */
     public void displayTelemetry() {
         BarnRobot robot = BarnRobot.getInstance();
+        robot.telemetry.addData("pipeline", choosePipeline());
 // && poseUpdateTimer.seconds() >= PO
 // SE_UPDATE_INTERVAL_SEC
         if (isGoalTagDetected()) {

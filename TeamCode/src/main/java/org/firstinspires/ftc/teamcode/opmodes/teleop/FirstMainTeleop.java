@@ -86,7 +86,10 @@ public class FirstMainTeleop extends CommandOpMode{
                         CommandGroup.smartShootCommand()
 //                        farminator.intake.customIntakeCommand(-1),
 //                        BarnRobot.getInstance().gate.closeCommand()
-                )).whenInactive(farminator.drive.driveOneDriverCommand());
+                )).whenInactive(new ParallelCommandGroup(
+                        farminator.drive.driveOneDriverCommand(),
+                        CommandGroup.forceCloseGateCommand())
+                );
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)

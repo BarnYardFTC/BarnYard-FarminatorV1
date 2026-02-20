@@ -67,7 +67,7 @@ public class TestTeleopnNEW extends CommandOpMode {
 
 
         // Left Trigger → Intake active (transfer + intake)
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05)
                 .whenActive(
                         new ParallelCommandGroup(
                                 farminator.intake.activateIntakeCommand(),
@@ -81,7 +81,7 @@ public class TestTeleopnNEW extends CommandOpMode {
                         )
                 );
 
-        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0)
+        new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05)
                 .whenActive(new ParallelCommandGroup(
                         farminator.intake.customIntakeCommand(-1),
                         BarnRobot.getInstance().gate.closeCommand()
@@ -140,6 +140,7 @@ public class TestTeleopnNEW extends CommandOpMode {
         super.run();
 
         farminator.drive.displayPinpointDataTelemetry();
+        farminator.limelight.displayTelemetry();
 
         telemetry.addData("NIR's (a) DICK HEAD", farminator.drive.getBotAbsoluteHeading());
 

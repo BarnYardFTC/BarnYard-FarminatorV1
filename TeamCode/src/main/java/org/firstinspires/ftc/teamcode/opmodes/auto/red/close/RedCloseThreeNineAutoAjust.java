@@ -27,12 +27,12 @@ public class RedCloseThreeNineAutoAjust extends CommandOpMode {
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
+    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.RED, AutoPars.posDistance.CLOSE);
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
+            OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
-            autoHub.positions.get(AutoPars.positions.START_CLOSE)
+            startPose
     );
 
     public static int SCORE_TIME = 2200;
@@ -44,7 +44,7 @@ public class RedCloseThreeNineAutoAjust extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
+        drive = new RoadRunnerMecanumDrive(hardwareMap, startPose);
         redCloseTemp.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());

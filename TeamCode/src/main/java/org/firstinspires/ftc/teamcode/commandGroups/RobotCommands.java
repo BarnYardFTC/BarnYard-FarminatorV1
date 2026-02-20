@@ -27,15 +27,16 @@ public class RobotCommands {
     private static final int TRANSFER_ONE_DURATION = 1500;
     private static final int TRANSFER_ALL_DURATION = TRANSFER_ONE_DURATION * 3;
 
+    /** Telemetry thingy */
     private static String lastCommand;
 
-
-    private static final double PARKING_X = 0;
+    /** Coordinates */
+    private static final double PARKING_X = 37;
     private static final double GATE_X = 0;
-    private static final double PARKING_BLUE_Y = 0;
-    private static final double GATE_BLUE_Y = 0;
-    private static final double PARKING_RED_Y = 0;
-    private static final double GATE_RED_Y = 0;
+    private static final double PARKING_BLUE_Y = 32;
+    private static final double GATE_BLUE_Y = - 53;
+    private static final double PARKING_RED_Y = - PARKING_BLUE_Y;
+    private static final double GATE_RED_Y = - GATE_BLUE_Y;
 
 
     /** Opens the gate shoots three artifacts */
@@ -98,12 +99,14 @@ public class RobotCommands {
 //        );
 //    }
 
+    /** Snaps heading to x axis WIP */
     private static double snapHeading(double heading) {
         //double degrees = Math.toDegrees(heading);
         //return Math.toRadians(Math.round(degrees / 180.0) * 180.0);
         return Math.toRadians(heading);
     }
 
+    /** Auto driving commands */
     public static Command autoParkCommand(OpModeData opModeData){
         double y;
         if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
@@ -112,6 +115,17 @@ public class RobotCommands {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "autoParkCommand()"),
                 new InstantCommand(() -> BarnRobot.getInstance().drive.driveToPose(PARKING_X, y, snapHeading(BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES))))
+        );
+    }
+
+    public static Command autoGateCommand(OpModeData opModeData){
+        double y;
+        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
+            y = GATE_BLUE_Y;
+        } else y = GATE_RED_Y;
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> lastCommand = "autoParkCommand()"),
+                new InstantCommand(() -> BarnRobot.getInstance().drive.driveToPose(GATE_X, y, snapHeading(BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES))))
         );
     }
 
@@ -145,6 +159,7 @@ public class RobotCommands {
 //        );
 //    }
 
+    /** Telemetry */
     public static String getLastCommand() {
         return lastCommand;
     }

@@ -110,7 +110,7 @@ public class DriveTrain extends SubsystemBase {
     private long lastTimeNs = 0;
 
     // For func that moves robot to coordinates
-    private static final double p = 0.05, d = 0.005; // Tune these
+    private static final double p = 0.03, d = 0.007; // Tune these
     private static final PIDController pid = new PIDController(p, 0, d);
 
 

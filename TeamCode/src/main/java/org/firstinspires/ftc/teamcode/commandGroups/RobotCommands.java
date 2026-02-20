@@ -36,8 +36,6 @@ public class RobotCommands {
     private static final double PARKING_RED_Y = 0;
     private static final double GATE_RED_Y = 0;
 
-    private static BarnRobot farminator;
-
 
     /** Opens the gate shoots three artifacts */
 //    public static Command shootAllCommand() {
@@ -57,9 +55,9 @@ public class RobotCommands {
     public static Command collectCommand() {
         return new ParallelCommandGroup(
                 new InstantCommand(() -> lastCommand = "collectCommand()"),
-                farminator.gate.closeCommand(),
-                farminator.intake.activateIntakeCommand(),
-                farminator.transfer.activateTransfer()
+                BarnRobot.getInstance().gate.closeCommand(),
+                BarnRobot.getInstance().intake.activateIntakeCommand(),
+                BarnRobot.getInstance().transfer.activateTransfer()
         );
     }
 
@@ -67,9 +65,9 @@ public class RobotCommands {
     public static Command collectStopCommand() {
         return new ParallelCommandGroup(
                 new InstantCommand(() -> lastCommand = "collectStopCommand()"),
-                farminator.intake.deactivateIntakeCommand(),
-                farminator.transfer.deactivateTransfer(),
-                farminator.gate.openCommand()
+                BarnRobot.getInstance().intake.deactivateIntakeCommand(),
+                BarnRobot.getInstance().transfer.deactivateTransfer(),
+                BarnRobot.getInstance().gate.openCommand()
         );
     }
 
@@ -100,12 +98,13 @@ public class RobotCommands {
 //    }
 
     private static double snapHeading(double heading) {
-        double degrees = Math.toDegrees(heading);
-        return Math.toRadians(Math.round(degrees / 180.0) * 180.0);
+        //double degrees = Math.toDegrees(heading);
+        //return Math.toRadians(Math.round(degrees / 180.0) * 180.0);
+        return Math.toRadians(heading);
     }
 
     public static Command autoParkCommand(OpModeData opModeData){
-        Pose2d currentPose = farminator.roadRunnerMecanumDrive.localizer.getPose();
+        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
         double y;
         if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
             y = PARKING_BLUE_Y;
@@ -113,14 +112,14 @@ public class RobotCommands {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "autoParkCommand()"),
                 new DriveActionCommand(
-                        farminator.roadRunnerMecanumDrive.actionBuilder(currentPose)
-                                .strafeToLinearHeading(new Vector2d(GATE_X, y), snapHeading(currentPose.heading.toDouble()))
+                        BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
+                                .strafeToLinearHeading(new Vector2d(PARKING_X, y), snapHeading(currentPose.heading.toDouble()))
                 )
         );
     }
 
     public static Command autoGateCommand(OpModeData opModeData) {
-        Pose2d currentPose = farminator.roadRunnerMecanumDrive.localizer.getPose();
+        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
         double y;
         if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
             y = GATE_BLUE_Y;
@@ -128,7 +127,7 @@ public class RobotCommands {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "autoGateCommand()"),
                 new DriveActionCommand(
-                        farminator.roadRunnerMecanumDrive.actionBuilder(currentPose)
+                        BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
                                 .strafeToLinearHeading(new Vector2d(GATE_X, y), snapHeading(currentPose.heading.toDouble()))
                 )
         );
@@ -139,6 +138,6 @@ public class RobotCommands {
     }
 
     public static void displayTelemetry() {
-        farminator.telemetry.addData("last command: ", getLastCommand());
+        BarnRobot.getInstance().telemetry.addData("last command: ", getLastCommand());
     }
 }

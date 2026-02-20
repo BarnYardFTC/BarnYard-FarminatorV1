@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
  * and waiting until the shooter is up to speed.
  */
 @Config
-public class ShootSequenceCommandGroup extends SequentialCommandGroup {
+public class ShootSequenceCommandGroup {
 
     /** Default preparation time for shooter in milliseconds. */
     public static int SHOOT_PREP_TIME = 4000;

@@ -50,8 +50,8 @@ public class MirrorPositionFile {
                 String data = reader.nextLine();
 
                 // Mirror Pose2d if present (example: mirror along Y)
-                if (data.contains("new Pose2d")) {
-                    data = mirrorPose(data, "y");  // or "X" depending on your choice
+                if (data.contains("new Pose2d") || data.contains("Math.toRadians") || data.contains("new Rotation2d")) {
+                    data = mirrorPose(data, "x");  // or "X" depending on your choice
                 }
 
                 // Flip color in content: blue ↔ red
@@ -88,12 +88,20 @@ public class MirrorPositionFile {
                 double mirroredAngle = 180 - angle;
                 line = angleMatcher.replaceFirst("Math.toRadians(" + mirroredAngle + ")");
             }
-        } else if (axis.equals("Y")) {
-            Pattern yPattern = Pattern.compile("(Pose2d\\s*\\(\\s*[-\\d.]+,\\s*)([-\\d.]+)");
-            Matcher yMatcher = yPattern.matcher(line);
-            if (yMatcher.find()) {
-                double y = Double.parseDouble(yMatcher.group(2));
-                line = yMatcher.replaceFirst("$1" + (-y));
+            Pattern Rotation2dPattern = Pattern.compile("(Rotation2d\\s*\\(\\s*[-\\d.]+,\\s*)([-\\d.]+)");
+            Matcher Rotation2dMatcher = Rotation2dPattern.matcher(line);
+            if (Rotation2dMatcher.find()) {
+                double Rotation = Double.parseDouble(Rotation2dMatcher.group(2));
+                line = Rotation2dMatcher.replaceFirst("$1" + (-Rotation));
+            }
+
+
+        } else if (axis.equals("X")) {
+            Pattern xPattern = Pattern.compile("(Pose2d\\s*\\(\\s*[-\\d.]+,\\s*)([-\\d.]+)");
+            Matcher xMatcher = xPattern.matcher(line);
+            if (xMatcher.find()) {
+                double x = Double.parseDouble(xMatcher.group(2));
+                line = xMatcher.replaceFirst("$1" + (-x));
             }
 
             Pattern anglePattern = Pattern.compile("Math\\.toRadians\\s*\\(\\s*([-\\d.]+)\\s*\\)");
@@ -102,6 +110,13 @@ public class MirrorPositionFile {
                 double angle = Double.parseDouble(angleMatcher.group(1));
                 double mirroredAngle = -angle;
                 line = angleMatcher.replaceFirst("Math.toRadians(" + mirroredAngle + ")");
+            }
+            Pattern Rotation2dPattern = Pattern.compile("Rotation2d\\s*\\(\\s*([-\\d.]+)");
+            Matcher Rotation2dMatcher = Rotation2dPattern.matcher(line);
+
+            if (Rotation2dMatcher.find()) {
+                double Rotation = Double.parseDouble(Rotation2dMatcher.group(1));
+                line = Rotation2dMatcher.replaceFirst("Rotation2d(" + (-Rotation));
             }
         }
 

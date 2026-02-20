@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
@@ -104,34 +105,45 @@ public class RobotCommands {
     }
 
     public static Command autoParkCommand(OpModeData opModeData){
-        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
         double y;
         if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
             y = PARKING_BLUE_Y;
         } else y = PARKING_RED_Y;
         return new SequentialCommandGroup(
                 new InstantCommand(() -> lastCommand = "autoParkCommand()"),
-                new DriveActionCommand(
-                        BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
-                                .strafeToLinearHeading(new Vector2d(PARKING_X, y), snapHeading(currentPose.heading.toDouble()))
-                )
+                new InstantCommand(() -> BarnRobot.getInstance().drive.driveToPose(PARKING_X, y, snapHeading(BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES))))
         );
     }
 
-    public static Command autoGateCommand(OpModeData opModeData) {
-        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
-        double y;
-        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
-            y = GATE_BLUE_Y;
-        } else y = GATE_RED_Y;
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> lastCommand = "autoGateCommand()"),
-                new DriveActionCommand(
-                        BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
-                                .strafeToLinearHeading(new Vector2d(GATE_X, y), snapHeading(currentPose.heading.toDouble()))
-                )
-        );
-    }
+//    public static Command autoParkCommand(OpModeData opModeData){
+//        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+//        double y;
+//        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
+//            y = PARKING_BLUE_Y;
+//        } else y = PARKING_RED_Y;
+//        return new SequentialCommandGroup(
+//                new InstantCommand(() -> lastCommand = "autoParkCommand()"),
+//                new DriveActionCommand(
+//                        BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
+//                                .strafeToLinearHeading(new Vector2d(PARKING_X, y), snapHeading(currentPose.heading.toDouble()))
+//                )
+//        );
+//    }
+//
+//    public static Command autoGateCommand(OpModeData opModeData) {
+//        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+//        double y;
+//        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
+//            y = GATE_BLUE_Y;
+//        } else y = GATE_RED_Y;
+//        return new SequentialCommandGroup(
+//                new InstantCommand(() -> lastCommand = "autoGateCommand()"),
+//                new DriveActionCommand(
+//                        BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
+//                                .strafeToLinearHeading(new Vector2d(GATE_X, y), snapHeading(currentPose.heading.toDouble()))
+//                )
+//        );
+//    }
 
     public static String getLastCommand() {
         return lastCommand;

@@ -93,7 +93,7 @@ public class LimeLight extends SubsystemBase {
 
     public boolean isAlignedToGoal() {
 
-        boolean aligned = isGoalTagDetected() && Math.abs(getGoalYaw()) < 0.1;
+        boolean aligned = isGoalTagDetected() && Math.abs(getGoalYaw()) < 3;
         if (aligned) {
             if (!wasAligned) {
                 // Just became aligned → start timer

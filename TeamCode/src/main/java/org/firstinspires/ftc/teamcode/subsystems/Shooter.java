@@ -67,7 +67,6 @@ public class Shooter  extends SubsystemBase {
 
     public void operateShooterDistanceBased(double distance) {
         pidfController.setPIDF(p, 0, 0, f);
-        double power;
         if (distance < SHOOTING_RANGE_1) {
             targetVelocity = SHOOTER_VELOCITY_RANGE_1;
         }
@@ -132,6 +131,7 @@ public class Shooter  extends SubsystemBase {
     public RunCommand runShooterBasedOnDistance(){
         return new RunCommand(() -> shooterSpeedOnDistance(), this);
     }
+
 
     public RunCommand runShooterBasedOnConstantDistance(double distance){
         return new RunCommand(() -> operateShooterDistanceBased(

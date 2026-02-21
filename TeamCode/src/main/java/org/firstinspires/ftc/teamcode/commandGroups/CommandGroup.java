@@ -21,24 +21,25 @@ public class CommandGroup extends SequentialCommandGroup {
     public static int SHOOTING_TIME_MS = 4000;
 
 
+
     public static Command smartShootCommand() {
         return new SequentialCommandGroup(
+                new WaitUntilCommand(CommandGroup::isReadyToShoot),
                 new ParallelRaceGroup(
-                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                         new SequentialCommandGroup(
-                                new WaitUntilCommand(CommandGroup::isReadyToShoot),
                                 intakeAndTransferActivateCommand(),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
-                        )
+                                BarnRobot.getInstance().gate.openCommand()
+//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.closeCommand(),
+//                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.openCommand(),
+//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.closeCommand(),
+//                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.openCommand(),
+//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
+                        ),
+                        new WaitCommand(1000)
                 ),
                 BarnRobot.getInstance().gate.closeCommand(),
                 deactivateIntakeAndTransferCommand(),
@@ -49,23 +50,20 @@ public class CommandGroup extends SequentialCommandGroup {
 
     private static boolean isReadyToShoot() {
         if (BarnRobot.getInstance().webcam.isLocalizationTagDetected()) {
-            return BarnRobot.getInstance().drive.isInsideLaunchZone() && (BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal());
+            return (BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal());
         }
         return false;
     }
 
     public static Command shootCommand() {
         return new ParallelRaceGroup(
-                BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
                 new SequentialCommandGroup(
                         BarnRobot.getInstance().gate.openCommand(),
-                        new ParallelRaceGroup(
-                                new WaitCommand(SHOOTING_TIME_MS),
-                                new RunCommand(() -> checkShooterReadiness())
-                        ),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        intakeAndTransferActivateCommand(),
+                        new WaitCommand(2000),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
-                        BarnRobot.getInstance().colorSensor.setCheckFalse(),
+                        deactivateIntakeAndTransferCommand(),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
                 )
         );

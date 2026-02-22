@@ -6,17 +6,11 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
-
-import kotlin.jvm.JvmField;
 
 /**
  * Contains complex command groups with commands from different classes.
@@ -161,18 +155,24 @@ public class RobotCommands {
 //    }
 
     private static DriveActionCommand rrDrive(double x, double y) {
+        BarnRobot.getInstance().telemetry.addData("DAC x:", x);
+        BarnRobot.getInstance().telemetry.addData("DAC y:", y);
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
         return new DriveActionCommand(BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
-                .strafeToLinearHeading(new Vector2d(X, Y), currentPose.heading));
+                .strafeToLinearHeading(new Vector2d(x, y), currentPose.heading));
     }
+
+    public static Command park() {
+        return rrDrive(PARKING_X, PARKING_BLUE_Y);
+    }
+//    public static Command parkRun() {
+//        return new RunCommand(() -> rrDrive(PARKING_X, PARKING_BLUE_Y));
+//    }
+
 
     /** Telemetry */
     public static String getLastCommand() {
         return lastCommand;
-    }
-
-    public static Command move() {
-        return rrDrive(X, Y);
     }
 
     public static void displayTelemetry() {

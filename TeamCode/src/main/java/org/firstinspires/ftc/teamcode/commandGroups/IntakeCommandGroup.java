@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 
 @Config
-public class IntakeCommandGroup extends SequentialCommandGroup {
+public class IntakeCommandGroup  {
 
     /** Default intake operation duration in milliseconds. */
     public static int INTAKE_TIME = 4000;

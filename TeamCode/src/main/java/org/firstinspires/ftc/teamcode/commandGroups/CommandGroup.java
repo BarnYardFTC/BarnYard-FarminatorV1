@@ -28,7 +28,7 @@ public class CommandGroup extends SequentialCommandGroup {
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
                                 intakeAndTransferActivateCommand(),
-                                BarnRobot.getInstance().gate.openCommand()
+                                BarnRobot.getInstance().gate.openCommand(),
 //                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
 //                                BarnRobot.getInstance().gate.closeCommand(),
 //                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
@@ -38,10 +38,11 @@ public class CommandGroup extends SequentialCommandGroup {
 //                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
 //                                BarnRobot.getInstance().gate.openCommand(),
 //                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
+                                 new WaitCommand(1000)
                         ),
                         new WaitCommand(1000)
                 ),
-                BarnRobot.getInstance().gate.closeCommand(),
+//                BarnRobot.getInstance().gate.closeCommand(),
                 deactivateIntakeAndTransferCommand(),
                 BarnRobot.getInstance().colorSensor.setCheckFalse(),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())

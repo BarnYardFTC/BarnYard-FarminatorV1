@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.robocol.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -26,13 +27,14 @@ public class TeleopTemplate{
     // ------------------------
     // Robot Instance
     // ------------------------
-    private BarnRobot farminator;
+    private BarnRobot farminator = BarnRobot.getInstance();
+
 
     public void initControls(){
 
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
+        farminator.shooter.setDefaultCommand(farminator.shooter.opearteShooter());
 
 
         // ==========================================================
@@ -45,29 +47,33 @@ public class TeleopTemplate{
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenActive(
                         new ParallelCommandGroup(
-                                farminator.shooter.runShooterBasedOnConstantDistance(1.2),
+                                farminator.shooter.setShooterManualDistance(1.2),
+                                farminator.shooter.setManualDistance(),
                                 farminator.shooterHood.setHoodPosition(0.71),
                                 CommandGroup.shootCommand()
                         ))
-                .whenInactive(CommandGroup.forceCloseGateCommand())
         ;
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenActive(new ParallelCommandGroup(
-                        farminator.shooter.runShooterBasedOnConstantDistance(3),
-                        farminator.shooterHood.setHoodPosition(1),
-                        CommandGroup.shootCommand()
-                ))        .whenInactive(CommandGroup.forceCloseGateCommand())
+                .whenActive(
+                        new ParallelCommandGroup(
+                            farminator.shooter.setShooterManualDistance(3),
+                            farminator.shooter.setManualDistance(),
+                            farminator.shooterHood.setHoodPosition(1),
+                            CommandGroup.shootCommand()
+                        ))
+
         ;
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenActive(new ParallelCommandGroup(
-                        farminator.shooter.runShooterBasedOnConstantDistance(1.4),
-                        farminator.shooterHood.setHoodPosition(0.85),
-                        CommandGroup.shootCommand()
-                ))        .whenInactive(CommandGroup.forceCloseGateCommand())
-        ;
+                .whenActive(
+                        new ParallelCommandGroup(
+                            farminator.shooter.setShooterManualDistance(1.4),
+                            farminator.shooter.setManualDistance(),
+                            farminator.shooterHood.setHoodPosition(0.85),
+                            CommandGroup.shootCommand()
+                        ));
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
@@ -82,24 +88,28 @@ public class TeleopTemplate{
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05)
+
                 .whileActiveContinuous(
-                        new RunCommand(this::intakeSwitcher)
+                        new ParallelCommandGroup(
+                            new RunCommand(this::intakeSwitcher),
+                            BarnRobot.getInstance().gate.closeCommand()
+                        )
                 )
                 .whenInactive(
-                        CommandGroup.deactivateIntakeAndTransferCommand().alongWith(
-                                BarnRobot.getInstance().gate.closeCommand()
+                        new ParallelCommandGroup(
+                                CommandGroup.deactivateIntakeAndTransferCommand()
                         )
                 );
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05)
                 .whenActive(new ParallelCommandGroup(
+                        farminator.shooter.setAutoDistance(),
                         farminator.drive.alignToTagLamLamCommand(),
                         CommandGroup.smartShootCommand()
 //                        farminator.intake.customIntakeCommand(-1),
 //                        BarnRobot.getInstance().gate.closeCommand()
-                )).whenInactive(new ParallelCommandGroup(
-                        farminator.drive.driveOneDriverCommand(),
-                        CommandGroup.forceCloseGateCommand())
+                )).whenInactive(
+                        farminator.drive.driveOneDriverCommand()
                 );
 
 
@@ -155,5 +165,9 @@ public class TeleopTemplate{
             farminator.transfer.activateTransfer().schedule();
         }
     }
+
+
+
+
 
 }

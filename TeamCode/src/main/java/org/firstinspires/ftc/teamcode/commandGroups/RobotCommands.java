@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
+import kotlin.jvm.JvmField;
+
 /**
  * Contains complex command groups with commands from different classes.
  * It's here to make the code more object oriented and something :)
@@ -37,6 +39,8 @@ public class RobotCommands {
     private static final double GATE_BLUE_Y = - 53;
     private static final double PARKING_RED_Y = - PARKING_BLUE_Y;
     private static final double GATE_RED_Y = - GATE_BLUE_Y;
+
+    public static double X = 0, Y = 0;
 
 
     /** Opens the gate shoots three artifacts */
@@ -107,43 +111,40 @@ public class RobotCommands {
     }
 
     /** Auto driving commands */
-    public static Command autoParkCommand(OpModeData opModeData){
-        double y = (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) ? PARKING_BLUE_Y : PARKING_RED_Y;
-        return new RunCommand(() -> {
-            BarnRobot.getInstance().drive.driveToPose(
-                    PARKING_X,
-                    y,
-                    BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES)
-            );
-        }, BarnRobot.getInstance().drive);
-    }
-
-    public static Command autoGateCommand(OpModeData opModeData){
-        double y = (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) ? GATE_BLUE_Y : GATE_RED_Y;
-        return new RunCommand(() -> {
-            BarnRobot.getInstance().drive.driveToPose(
-                    GATE_X,
-                    y,
-                    BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES)
-            );
-        }, BarnRobot.getInstance().drive);
-    }
-
 //    public static Command autoParkCommand(OpModeData opModeData){
-//        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
-//        double y;
-//        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
-//            y = PARKING_BLUE_Y;
-//        } else y = PARKING_RED_Y;
-//        return new SequentialCommandGroup(
-//                new InstantCommand(() -> lastCommand = "autoParkCommand()"),
-//                new DriveActionCommand(
-//                        BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
-//                                .strafeToLinearHeading(new Vector2d(PARKING_X, y), snapHeading(currentPose.heading.toDouble()))
-//                )
-//        );
+//        double y = (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) ? PARKING_BLUE_Y : PARKING_RED_Y;
+//        return new RunCommand(() -> {
+//            BarnRobot.getInstance().drive.driveToPose(
+//                    PARKING_X,
+//                    y,
+//                    BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES)
+//            );
+//        }, BarnRobot.getInstance().drive);
 //    }
 //
+//    public static Command autoGateCommand(OpModeData opModeData){
+//        double y = (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) ? GATE_BLUE_Y : GATE_RED_Y;
+//        return new RunCommand(() -> {
+//            BarnRobot.getInstance().drive.driveToPose(
+//                    GATE_X,
+//                    y,
+//                    BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES)
+//            );
+//        }, BarnRobot.getInstance().drive);
+//    }
+
+    public static Command autoParkCommand(OpModeData opModeData){
+        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+        double y;
+        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
+            y = PARKING_BLUE_Y;
+        } else y = PARKING_RED_Y;
+        return new DriveActionCommand(
+                BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
+                        .strafeToLinearHeading(new Vector2d(PARKING_X, y), snapHeading(currentPose.heading.toDouble()))
+        );
+    }
+
 //    public static Command autoGateCommand(OpModeData opModeData) {
 //        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
 //        double y;
@@ -159,9 +160,19 @@ public class RobotCommands {
 //        );
 //    }
 
+    private static DriveActionCommand rrDrive(double x, double y) {
+        Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
+        return new DriveActionCommand(BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
+                .strafeToLinearHeading(new Vector2d(X, Y), currentPose.heading));
+    }
+
     /** Telemetry */
     public static String getLastCommand() {
         return lastCommand;
+    }
+
+    public static Command move() {
+        return rrDrive(X, Y);
     }
 
     public static void displayTelemetry() {

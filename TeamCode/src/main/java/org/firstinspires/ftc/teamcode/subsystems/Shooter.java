@@ -22,7 +22,8 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-
+    private boolean isAutoOperated;
+    private double distance;
 
     public static double SHOOTER_VELOCITY_RANGE_4 = 1350; // only for far zone
     public static double SHOOTER_VELOCITY_RANGE_3 = 1150;
@@ -48,6 +49,8 @@ public class Shooter  extends SubsystemBase {
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        isAutoOperated = true;
 
         pidfController = new ShooterPIDFController(p, 0, 0, f);
 
@@ -128,12 +131,41 @@ public class Shooter  extends SubsystemBase {
         );
     }
 
-    public RunCommand runShooterBasedOnDistance(){
+    public boolean isAutoOperated(){
+        return isAutoOperated;
+    }
+
+    public Command opearteShooter(){
+        BarnRobot.getInstance().telemetry.addData("auto shoot", isAutoOperated);
+        if(isAutoOperated)
+            return runShooterBasedOnDistance();
+        else return runShooterBasedOnConstantDistance();
+    }
+
+    public Command setShooterManualDistance(double d){
+        return new InstantCommand(
+                () -> distance = d
+        );
+    }
+
+    public Command setManualDistance(){
+        return new InstantCommand(
+                () -> isAutoOperated = false
+        );
+    }
+
+    public Command setAutoDistance(){
+        return new InstantCommand(
+                () -> isAutoOperated = true
+        );
+    }
+
+    public Command runShooterBasedOnDistance(){
         return new RunCommand(() -> shooterSpeedOnDistance(), this);
     }
 
 
-    public RunCommand runShooterBasedOnConstantDistance(double distance){
+    public Command runShooterBasedOnConstantDistance(){
         return new RunCommand(() -> operateShooterDistanceBased(
                 distance
         ), this);

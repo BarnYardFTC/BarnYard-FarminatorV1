@@ -7,125 +7,94 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 import java.lang.Math;
 
+
 public class Red_Close_ThreePlusSix {
 
-    // ================== FIELD / POSES ==================
-    public static double START_POSE_X = -53.333;
-    public static double START_POSE_Y = 45.5;
-    public static double START_HEADING = Math.toRadians(135);
+    public static final int SHOOT_TIME_MS = 1500;
 
-    public static double SHOOT_POSE_X = -23;
-    public static double SHOOT_POSE_Y = 22;
-    public static double SHOOT_HEADING = Math.toRadians(137);
 
-    public static double SOUTH_READY_POSE_Y = 25;
-    public static double SOUTH_COLLECT_POSE_Y = 63;
+    public static final Pose2d startPose = new Pose2d( -49.333, 45.5, Math.toRadians(360 - 225));
+    public static final Pose2d shootPose = new Pose2d(-23, 22, Math.toRadians(360 - 224));
+    public static final Pose2d lastShootPose = new Pose2d(-36, 5, Math.toRadians(360 - 240));
 
-    public static double NORTH_HEADING = Math.toRadians(90);
 
-    public static double LEFT_COLLECT_POSE_X = -11.5;
-    public static double MID_COLLECT_POSE_X = 12;
-    public static double GATE_POSE_X = -2;
-    public static double GATE_POSE_Y = -44; // currently unused in your paths
+    public static final Pose2d leftCollectPose = new Pose2d(-11.5, 58, Math.toRadians(360 - 270));
+    public static final Pose2d midCollectPose = new Pose2d(12, 72, Math.toRadians(360 - 270));
+    public static final Pose2d rightCollectPose = new Pose2d(35.5, 72, Math.toRadians(360 - 270));
 
-    public static double ENDING_POSE_X = -40;
-    public static double ENDING_POSE_Y = 22;
 
-    // ================== BOT / SIM CONFIG ==================
-    private static final int WINDOW_SIZE = 800;
+    public static final Pose2d leftLoadZoneReady = new Pose2d(-11.5, 20, Math.toRadians(360 - 270));
+    public static final Pose2d rightLoadZoneReady = new Pose2d(12, 20, Math.toRadians(360 - 270));
+    public static final Pose2d midLoadZoneReady = new Pose2d(34.5, 20, Math.toRadians(360 - 270));
 
-    private static final double MAX_VEL = 60;
-    private static final double MAX_ACCEL = 60;
-    private static final double MAX_ANG_VEL = Math.toRadians(180);
-    private static final double MAX_ANG_ACCEL = Math.toRadians(180);
-    private static final double TRACK_WIDTH = 15;
+    public static final Pose2d parkPose = new Pose2d(-40, 22, Math.toRadians(360 - 227));
+    public static final Pose2d gateOpenPose = new Pose2d(0, 65, Math.toRadians(360 - 180));
+    public static final Pose2d gateCollectPose = new Pose2d(10,57, Math.toRadians(360 - 227));
 
-    private static final double BOT_WIDTH = 15.07;
-    private static final double BOT_HEIGHT = 16.961;
+//    private static final TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.5);
 
-    // ================== PATH TUNING (no Rotation2d here) ==================
-    private static final double START_Y_NUDGE = 5.0;
-    private static final double MID_Y_OFFSET = 8.0;
-    private static final double RIGHT_Y_OFFSET = 15.0;
+    // paths nigga ----------------------------------------------------------------- no ai stamp only rawdogging
+    public static TrajectoryActionBuilder goShootLast;
+    public static TrajectoryActionBuilder goShootMid;
+    public static TrajectoryActionBuilder goShootLeft;
 
-    private static final double VEL_TO_SHOOT = 120.0;
+    public static TrajectoryActionBuilder goShootPre;
+    public static TrajectoryActionBuilder goPark;
+    public static TrajectoryActionBuilder goCollectRight;
+    public static TrajectoryActionBuilder goCollectMid;
+    public static TrajectoryActionBuilder goCollectLeft;
 
-    private static final double END_HEADING_OFFSET_RAD = Math.toRadians(15);
+    public static TrajectoryActionBuilder openGate;
+    public static TrajectoryActionBuilder gateCollection;
+    public static TrajectoryActionBuilder goLastShoot;
+
+
+
 
 
     public static void main(String[] args) {
 
-        MeepMeep meepMeep = new MeepMeep(WINDOW_SIZE);
+        MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(MAX_VEL, MAX_ACCEL, MAX_ANG_VEL, MAX_ANG_ACCEL, TRACK_WIDTH)
-                .setDimensions(BOT_WIDTH, BOT_HEIGHT)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(15.07, 16.961)
                 .build();
 
         //---LEFT CYCLE
+        goShootPre = myBot.getDrive().actionBuilder(startPose)
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+        goCollectLeft = goShootPre.endTrajectory().fresh()
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, 2.0))
+                .setTangent(new Rotation2d(1,-4.0))
+                .splineToLinearHeading(gateOpenPose, Math.toRadians(100.0));//
+        goShootLeft = goCollectLeft.endTrajectory().fresh()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());//
+        goCollectMid = goShootLeft.endTrajectory().fresh()
+                .setTangent(new Rotation2d(2.7,-0.8))
+                .splineToLinearHeading(midCollectPose, Math.toRadians(90.0));//
+        goShootMid = goCollectMid.endTrajectory().fresh()
+                .setTangent(new Rotation2d(0,-1.0))
+                .splineToLinearHeading(shootPose, Math.toRadians(-150.0));
+        goCollectRight = goShootMid.endTrajectory().fresh()
+                .setTangent(new Rotation2d(2.1,-0.2))
+                .splineToSplineHeading(rightCollectPose, new Rotation2d(0, 1.5));
 
-        Pose2d startPose = new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING);
-
-        Vector2d startNudge = new Vector2d(START_POSE_X, START_POSE_Y + START_Y_NUDGE);
-
-        Vector2d leftReady = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
-        Vector2d leftCollect = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y);
-        Vector2d gateAtCollectY = new Vector2d(GATE_POSE_X, SOUTH_COLLECT_POSE_Y);
-
-        Vector2d shootVec = new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y);
-        Pose2d shootPose = new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING);
-
-        Pose2d midCollectPose = new Pose2d(
-                MID_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y - MID_Y_OFFSET,
-                NORTH_HEADING
-        );
-
-        Pose2d leftReadyPose = new Pose2d(
-                LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y, NORTH_HEADING
-        );
-
-
-        Pose2d endPose = new Pose2d(
-                ENDING_POSE_X,
-                ENDING_POSE_Y,
-                SHOOT_HEADING -   END_HEADING_OFFSET_RAD
-        );
-
-
-        //      ===== Trajectory constraints =====
-        TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(VEL_TO_SHOOT);
-
-
-        //         ===== Paths =====
-        TrajectoryActionBuilder firstShoot = myBot.getDrive().actionBuilder(startPose)
-                .strafeToLinearHeading(startNudge, NORTH_HEADING)
-                .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
-
-        TrajectoryActionBuilder collectLeftArts = myBot.getDrive().actionBuilder(shootPose)
-                .strafeToLinearHeading(leftReady, NORTH_HEADING)
-                // keep Rotation2d hardcoded (as requested)
-                .strafeToConstantHeading(leftCollect, new TranslationalVelConstraint(60));
-
-        TrajectoryActionBuilder leftToShoot = myBot.getDrive().actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, NORTH_HEADING))
-                .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
-
-        TrajectoryActionBuilder collectMidArts = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, 3));
-
-        TrajectoryActionBuilder midToShoot = myBot.getDrive().actionBuilder(midCollectPose)
-                .splineToLinearHeading(endPose, new Rotation2d(-1.8, 1), fastToShoot);
-
-
+//                        new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.25));
+        goShootLast = goCollectRight.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .splineToLinearHeading(lastShootPose, new Rotation2d(-1,1));
 
 
         // ================== RUN ==================
         myBot.runAction(new SequentialAction(
-                firstShoot.build(),
-                collectLeftArts.build(),
-                leftToShoot.build(),
-                collectMidArts.build(),
-                midToShoot.build()
+                goShootPre.build(),
+                goCollectLeft.build(),
+                goShootLeft.build(),
+                goCollectMid.build(),
+                goShootMid.build(),
+                goCollectRight.build(),
+                goShootLast.build()
+
         ));
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)

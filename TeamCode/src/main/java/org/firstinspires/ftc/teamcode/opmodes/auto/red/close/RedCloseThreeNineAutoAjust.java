@@ -69,7 +69,7 @@ public class RedCloseThreeNineAutoAjust extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, goShootLast)
+                AutoController.robotPathCommands(true, true, goShootLastFixed)
 
 
         ).schedule();

@@ -93,7 +93,7 @@ public class LimeLight extends SubsystemBase {
 
     public boolean isAlignedToGoal() {
 
-        boolean aligned = isGoalTagDetected() && Math.abs(getGoalYaw()) < 0.1;
+        boolean aligned = isGoalTagDetected() && Math.abs(getGoalYaw()) < 3;
         if (aligned) {
             if (!wasAligned) {
                 // Just became aligned → start timer
@@ -275,6 +275,7 @@ public class LimeLight extends SubsystemBase {
     /** Outputs all relevant telemetry for the Limelight subsystem. */
     public void displayTelemetry() {
         BarnRobot robot = BarnRobot.getInstance();
+        robot.telemetry.addData("pipeline", choosePipeline());
 // && poseUpdateTimer.seconds() >= PO
 // SE_UPDATE_INTERVAL_SEC
         if (isGoalTagDetected()) {

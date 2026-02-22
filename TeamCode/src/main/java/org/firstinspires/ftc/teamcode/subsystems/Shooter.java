@@ -26,8 +26,8 @@ public class Shooter  extends SubsystemBase {
 
     public static double SHOOTER_VELOCITY_RANGE_4 = 1350; // only for far zone
     public static double SHOOTER_VELOCITY_RANGE_3 = 1150;
-    public static double SHOOTER_VELOCITY_RANGE_2 = 1035;
-    public static double SHOOTER_VELOCITY_RANGE_1 = 1030;
+    public static double SHOOTER_VELOCITY_RANGE_2 = 1050;
+    public static double SHOOTER_VELOCITY_RANGE_1 = 900;
 
 
     public static double SHOOTING_RANGE_1 = 1.3;
@@ -67,7 +67,6 @@ public class Shooter  extends SubsystemBase {
 
     public void operateShooterDistanceBased(double distance) {
         pidfController.setPIDF(p, 0, 0, f);
-        double power;
         if (distance < SHOOTING_RANGE_1) {
             targetVelocity = SHOOTER_VELOCITY_RANGE_1;
         }
@@ -132,6 +131,7 @@ public class Shooter  extends SubsystemBase {
     public RunCommand runShooterBasedOnDistance(){
         return new RunCommand(() -> shooterSpeedOnDistance(), this);
     }
+
 
     public RunCommand runShooterBasedOnConstantDistance(double distance){
         return new RunCommand(() -> operateShooterDistanceBased(

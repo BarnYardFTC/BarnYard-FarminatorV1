@@ -46,6 +46,10 @@ public class Gate extends SubsystemBase {
         isOpen = false;
     }
 
+    public double getLeftPos(){
+        return leftServo.getPosition();
+    }
+
     public boolean isClosed(){
         return !isOpen;
     }

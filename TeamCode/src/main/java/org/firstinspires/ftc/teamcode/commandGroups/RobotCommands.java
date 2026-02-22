@@ -108,25 +108,25 @@ public class RobotCommands {
 
     /** Auto driving commands */
     public static Command autoParkCommand(OpModeData opModeData){
-        double y;
-        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
-            y = PARKING_BLUE_Y;
-        } else y = PARKING_RED_Y;
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> lastCommand = "autoParkCommand()"),
-                new InstantCommand(() -> BarnRobot.getInstance().drive.driveToPose(PARKING_X, y, snapHeading(BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES))))
-        );
+        double y = (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) ? PARKING_BLUE_Y : PARKING_RED_Y;
+        return new RunCommand(() -> {
+            BarnRobot.getInstance().drive.driveToPose(
+                    PARKING_X,
+                    y,
+                    BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES)
+            );
+        }, BarnRobot.getInstance().drive);
     }
 
     public static Command autoGateCommand(OpModeData opModeData){
-        double y;
-        if (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) {
-            y = GATE_BLUE_Y;
-        } else y = GATE_RED_Y;
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> lastCommand = "autoParkCommand()"),
-                new InstantCommand(() -> BarnRobot.getInstance().drive.driveToPose(GATE_X, y, snapHeading(BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES))))
-        );
+        double y = (opModeData.allianceColor == OpModeData.AllianceColor.BLUE) ? GATE_BLUE_Y : GATE_RED_Y;
+        return new RunCommand(() -> {
+            BarnRobot.getInstance().drive.driveToPose(
+                    GATE_X,
+                    y,
+                    BarnRobot.getInstance().pinpointLocalizer.driver.getHeading(AngleUnit.DEGREES)
+            );
+        }, BarnRobot.getInstance().drive);
     }
 
 //    public static Command autoParkCommand(OpModeData opModeData){

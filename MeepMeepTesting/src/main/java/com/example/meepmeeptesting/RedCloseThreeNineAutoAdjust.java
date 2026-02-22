@@ -43,19 +43,19 @@ public class RedCloseThreeNineAutoAdjust {
         myBot.runAction(myBot.getDrive().actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2())
 
-                .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, 2))
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(-0.5, 3))
                 .setTangent(new Rotation2d(2,-2))
                 .splineToLinearHeading(gateOpenPose, Math.toRadians(90))
 
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2())
 
-                .setTangent(new Rotation2d(2.1,-0.8))
+                .setTangent(new Rotation2d(2.1,-1.5))
                 .splineToLinearHeading(midCollectPose, Math.toRadians(90))
 
-                .setTangent(new Rotation2d(0,-1))
+                .setTangent(new Rotation2d(0,1))
                 .splineToLinearHeading(shootPose, Math.toRadians(-150))
 
-                .setTangent(new Rotation2d(2.1,-0.2))
+                .setTangent(new Rotation2d(2.1,-0.7))
                 .splineToLinearHeading(rightCollectPose, new Rotation2d(0, 1.5))
 
                 .setTangent(Math.toRadians(-120))

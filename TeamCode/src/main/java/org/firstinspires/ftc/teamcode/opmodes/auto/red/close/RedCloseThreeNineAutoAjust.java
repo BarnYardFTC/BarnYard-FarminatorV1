@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="Red close 3+9", group="test")
+@Autonomous(name="!!COMP: Red close 3+9", group="!comp")
 public class RedCloseThreeNineAutoAjust extends CommandOpMode {
 
     /** Robot and drive system instances */

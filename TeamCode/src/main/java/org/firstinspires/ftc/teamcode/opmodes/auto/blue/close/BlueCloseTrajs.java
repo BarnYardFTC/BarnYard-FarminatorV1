@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
-import com.acmerobotics.roadrunner.MecanumKinematics;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
@@ -8,7 +7,7 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-public class blueCloseTemp {
+public class BlueCloseTrajs {
 
     public static final int SHOOT_TIME_MS = 1500;
 
@@ -63,7 +62,7 @@ public class blueCloseTemp {
                 .setTangent(new Rotation2d(0,1))
                 .splineToLinearHeading(shootPose, Math.toRadians(150));
         goCollectRight = goShootMid.endTrajectory().fresh()
-                .setTangent(new Rotation2d(2.1,0.2))
+                .setTangent(new Rotation2d(2.1,1))
                 .splineToSplineHeading(rightCollectPose, new Rotation2d(0, -1.5),
                         new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.25));
         goShootLast = goCollectRight.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()

@@ -52,7 +52,7 @@ public class redCloseTemp {
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
         goCollectLeft = goShootPre.endTrajectory().fresh()
-                .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, 2.0))
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(-.5, 3.0))
                 .setTangent(new Rotation2d(2,-2.0))
                 .splineToLinearHeading(gateOpenPose, Math.toRadians(100.0), fastToShoot);//
         goShootLeft = goCollectLeft.endTrajectory().fresh()
@@ -61,10 +61,10 @@ public class redCloseTemp {
                 .setTangent(new Rotation2d(2.7,-0.8))
                 .splineToLinearHeading(midCollectPose, Math.toRadians(90.0), fastToShoot);//
         goShootMid = goCollectMid.endTrajectory().fresh()
-                .setTangent(new Rotation2d(0,-1.0))
+                .setTangent(new Rotation2d(0,-1.5))
                 .splineToLinearHeading(shootPose, Math.toRadians(-150.0));
         goCollectRight = goShootMid.endTrajectory().fresh()
-                .setTangent(new Rotation2d(2.1,-0.2))
+                .setTangent(new Rotation2d(2.1,-0.7))
                 .splineToSplineHeading(rightCollectPose, new Rotation2d(0, 1.5));
 
 //                        new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.25));

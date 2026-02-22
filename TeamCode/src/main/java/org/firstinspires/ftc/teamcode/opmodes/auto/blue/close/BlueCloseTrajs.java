@@ -36,36 +36,66 @@ public class BlueCloseTrajs {
     public static TrajectoryActionBuilder goShootMid;
     public static TrajectoryActionBuilder goShootLeft;
 
+    public static TrajectoryActionBuilder goShootLeftGate;
+
     public static TrajectoryActionBuilder goShootPre;
     public static TrajectoryActionBuilder goPark;
     public static TrajectoryActionBuilder goCollectRight;
     public static TrajectoryActionBuilder goCollectMid;
     public static TrajectoryActionBuilder goCollectLeft;
+    public static TrajectoryActionBuilder goCollectLeftGate;
 
     public static TrajectoryActionBuilder openGate;
     public static TrajectoryActionBuilder gateCollection;
     public static TrajectoryActionBuilder goLastShoot;
 
+    public static TrajectoryActionBuilder goShootPreLeave;
+    public static TrajectoryActionBuilder goShootMidLeave;
+    public static TrajectoryActionBuilder goShootLeftLeave;
+
     public static void createPath(RoadRunnerMecanumDrive drive){
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
+
         goCollectLeft = goShootPre.endTrajectory().fresh()
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2));
+
+        goCollectLeftGate = goShootPre.endTrajectory().fresh()
                 .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2))
                 .setTangent(new Rotation2d(1,1))
                 .splineToLinearHeading(gateOpenPose, Math.toRadians(-100), fastToShoot);
+
+        goShootLeftGate = goCollectLeftGate.endTrajectory().fresh()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2(), fastToShoot);
+
         goShootLeft = goCollectLeft.endTrajectory().fresh()
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2(), fastToShoot);
-        goCollectMid = goShootLeft.endTrajectory().fresh()
+
+        goCollectMid = goShootLeftGate.endTrajectory().fresh()
                 .setTangent(new Rotation2d(2.1,0.4))
                 .splineToLinearHeading(midCollectPose, Math.toRadians(-90), fastToShoot);
+
         goShootMid = goCollectMid.endTrajectory().fresh()
                 .setTangent(new Rotation2d(0,1))
                 .splineToLinearHeading(shootPose, Math.toRadians(150));
+
         goCollectRight = goShootMid.endTrajectory().fresh()
                 .setTangent(new Rotation2d(2.1,1))
                 .splineToSplineHeading(rightCollectPose, new Rotation2d(0, -1.5),
                         new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.25));
+
         goShootLast = goCollectRight.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(198), fastToShoot);
+
+        goShootPreLeave = drive.actionBuilder(startPose)
+                .strafeToLinearHeading(lastShootPose.component1(),lastShootPose.component2());
+
+        goShootLeftLeave = goCollectLeft.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .setTangent(Math.toRadians(120))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(198), fastToShoot);
+
+        goShootMidLeave = goCollectMid.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
                 .setTangent(Math.toRadians(120))
                 .splineToLinearHeading(lastShootPose, Math.toRadians(198), fastToShoot);
     }

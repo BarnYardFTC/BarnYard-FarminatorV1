@@ -43,7 +43,7 @@ public class BlueCloseThreeNineAutoAjust {
 
                 .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2))
                 .setTangent(new Rotation2d(1,1))
-                .splineToLinearHeading(gateOpenPose, Math.toRadians(-90))
+//                .splineToLinearHeading(gateOpenPose, Math.toRadians(-90))
 
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2())
 

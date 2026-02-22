@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="Red close 3+0", group="red close")
+@Autonomous(name="Blue close 3+0", group="red close")
 public class BlueCloseThreeZeroAutoAjust extends CommandOpMode {
 
     /** Robot and drive system instances */
@@ -50,7 +50,7 @@ public class BlueCloseThreeZeroAutoAjust extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.robotPathCommands(false, true, goShootPre)
+                AutoController.robotPathCommands(false, true, goShootPreLeave)
         ).schedule();
     }
     @Override

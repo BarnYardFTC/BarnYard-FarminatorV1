@@ -76,6 +76,7 @@ public class Red_Far_ThreePlusThree {
             goShootRight = goCollectRight.endTrajectory().fresh()
                     .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
 
+
             goCollectMid = goShootRight.endTrajectory().fresh()
                     .setTangent(90)
                     .splineToLinearHeading(midCollectPose, Math.toRadians(90.0));

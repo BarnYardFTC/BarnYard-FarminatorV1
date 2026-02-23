@@ -44,7 +44,8 @@ public final class PinpointLocalizer implements Localizer {
         double xOffset = mmPerTick * PARAMS.perpXTicks, yOffset = mmPerTick * PARAMS.parYTicks;
 
         driver.setEncoderResolution(1 / mmPerTick, DistanceUnit.MM);
-        driver.setOffsets(xOffset, yOffset, DistanceUnit.MM);
+//        driver.setOffsets(xOffset, yOffset, DistanceUnit.MM);
+        driver.setOffsets(-24, -135.0, DistanceUnit.MM);
 //        driver.setOffsets(mmPerTick * PARAMS.parYTicks, mmPerTick * PARAMS.perpXTicks, DistanceUnit.MM);
 
         initialParDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
@@ -102,5 +103,9 @@ public final class PinpointLocalizer implements Localizer {
 
     public Pose2d getPoseVelocity() {
         return poseVelocity;
+    }
+
+    public void setOffset(double x, double y) {
+        driver.setOffsets(x, y, DistanceUnit.MM);
     }
 }

@@ -34,7 +34,9 @@ public class AutoController extends SequentialCommandGroup {
                 ),
                 new DriveActionCommand(path),
                 new ConditionalCommand(
-                        shootCommand(),
+                        new SequentialCommandGroup(
+                            new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                            shootCommand()),
                         new InstantCommand(),
                         () -> shoot
                 ),
@@ -64,7 +66,6 @@ public class AutoController extends SequentialCommandGroup {
         return new ParallelRaceGroup(
                 new SequentialCommandGroup(
                         new ParallelRaceGroup(
-                                new WaitCommand(1500),
                                 BarnRobot.getInstance().drive.alignToTagAutoCommand().interruptOn(() -> BarnRobot.getInstance().limelight.isAlignedToGoal())
                         ),
                         BarnRobot.getInstance().gate.openCommand(),
@@ -73,7 +74,6 @@ public class AutoController extends SequentialCommandGroup {
                                 new RunCommand(() -> checkShooterReadiness())
                         ),
                         BarnRobot.getInstance().gate.closeCommand(),
-                        CommandGroup.deactivateIntakeAndTransferCommand(),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
                 )
         );

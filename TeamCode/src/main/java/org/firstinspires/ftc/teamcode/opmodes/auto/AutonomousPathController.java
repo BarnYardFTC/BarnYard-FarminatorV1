@@ -70,7 +70,7 @@ public class AutonomousPathController {
             case RED:
                 positions = Map.ofEntries(
                         Map.entry(AutoPars.positions.START_CLOSE, new Pose2d(-53.333, 45.5, Math.toRadians(135))),
-                        Map.entry(AutoPars.positions.START_FAR, new Pose2d( 60, 15, Math.toRadians(135))),
+                        Map.entry(AutoPars.positions.START_FAR, new Pose2d( 60, 15.0, Math.toRadians(180))),
                         Map.entry(AutoPars.positions.SHOOT_CLOSE, new Pose2d(23, -22, Math.toRadians(137))),
                         Map.entry(AutoPars.positions.SHOOT_FAR, new Pose2d(45, 0, Math.toRadians(137))),
                         Map.entry(AutoPars.positions.LEFT_COLLECT, new Pose2d(-11.5, 63, Math.toRadians(90))),

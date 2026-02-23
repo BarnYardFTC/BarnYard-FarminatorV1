@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTraj
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;

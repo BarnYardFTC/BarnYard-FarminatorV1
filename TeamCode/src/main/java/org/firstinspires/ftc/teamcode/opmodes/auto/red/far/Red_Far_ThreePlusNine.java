@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.far;
 
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.Command;
@@ -47,7 +48,7 @@ public class Red_Far_ThreePlusNine extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
-        RedFarTemp.createPath(drive);
+        RedFarTemp.createPath2(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
@@ -71,7 +72,9 @@ public class Red_Far_ThreePlusNine extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, goShootRight)
+                AutoController.robotPathCommands(true, true, goShootRight),
+
+                AutoController.robotPathCommands(false,false, goFromLine)
 
 
         ).schedule();

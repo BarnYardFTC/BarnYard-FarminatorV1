@@ -13,7 +13,7 @@ public class MirrorPositionFile {
     public static void main(String[] args) throws IOException {
 
         // ORIGINAL FILE PATH
-        String originalPath = "C:\\Users\\PMW\\StudioProjects\\BarnYard-FarminatorV1\\TeamCode\\src\\main\\java\\org\\firstinspires\\ftc\\teamcode\\opmodes\\auto\\blue\\far\\BlueFarTemp.java";
+        String originalPath = "C:\\Users\\Barnyard\\StudioProjects\\BarnYard-FarminatorV1\\TeamCode\\src\\main\\java\\org\\firstinspires\\ftc\\teamcode\\opmodes\\auto\\red\\far\\RedFarTemp.java";
         File inputFile = new File(originalPath);
         if (!inputFile.exists()) {
             try {

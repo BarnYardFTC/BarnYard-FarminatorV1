@@ -37,7 +37,7 @@ public class RedFarTemp {
 
     public static TrajectoryActionBuilder goReadyCollectLoadZone, goCollectLoadZone, goShootLoadZone, goFromLine;
 
-    public static void createPath2(RoadRunnerMecanumDrive drive) {
+    public static void createPath(RoadRunnerMecanumDrive drive) {
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2().toDouble());
 

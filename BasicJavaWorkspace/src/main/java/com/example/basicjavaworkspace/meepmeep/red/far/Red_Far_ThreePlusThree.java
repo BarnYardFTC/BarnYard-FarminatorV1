@@ -19,16 +19,21 @@ public class Red_Far_ThreePlusThree {
     public static final Pose2d lastShootPose = new Pose2d(40, 22.0, Math.toRadians(-242.0));
 
 
-    public static final Pose2d leftCollectPose = new Pose2d(-11.5, 53.0, Math.toRadians(-270.0));
+    public static final Pose2d leftCollectPose = new Pose2d(54, 53.0, Math.toRadians(-270.0));
     public static final Pose2d midCollectPose = new Pose2d(12, 53.0, Math.toRadians(-270.0));
     public static final Pose2d rightCollectPose = new Pose2d(34.5, 60.0 , Math.toRadians(-270.0));
 
     public static final Pose2d loadZoneReady = new Pose2d(34.5, 63.0, Math.toRadians(0)); // Maybe y needs some changes
 
 
-    public static final Pose2d leftLoadZoneReady = new Pose2d(-11.5, 20.0, Math.toRadians(-270.0));
-    public static final Pose2d rightLoadZoneReady = new Pose2d(12, 20.0, Math.toRadians(-270.0));
-    public static final Pose2d LoadZoneCollect = new Pose2d(63, 63.0, Math.toRadians(-270.0));
+    public static final Pose2d leftLoadZone = new Pose2d(54, 63, Math.toRadians(-270.0));
+    public static final Pose2d midLoadZoneReady = new Pose2d(58, 40, Math.toRadians(-270.0));
+    public static final Pose2d midLoadZone = new Pose2d(58, 63, Math.toRadians(-270.0));
+
+    public static final Pose2d rightLoadZoneReady = new Pose2d(58, 40, Math.toRadians(-270.0));
+    public static final Pose2d rightLoadZone = new Pose2d(63, 63, Math.toRadians(-270.0));
+
+    public static final Pose2d loadZoneCollect = new Pose2d(63, 63.0, Math.toRadians(-270.0));
 
     public static final Pose2d parkPose = new Pose2d(-40, 22.0, Math.toRadians(-227.0));
     public static final Pose2d gateOpenPose = new Pose2d(0, 70.0, Math.toRadians(-180.0));
@@ -60,6 +65,8 @@ public class Red_Far_ThreePlusThree {
     public static TrajectoryActionBuilder goCollectLoadZone;
     public static TrajectoryActionBuilder goShootLoadZone;
     public static TrajectoryActionBuilder goFromLine;
+    public static TrajectoryActionBuilder goTakeLoadZoneStart;
+    public static TrajectoryActionBuilder goLoadZoneShoot;
 
 
 
@@ -81,6 +88,18 @@ public class Red_Far_ThreePlusThree {
             goShootPre = myBot.getDrive().actionBuilder(startPose)
                     .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
 
+            goTakeLoadZoneStart = goShootPre.endTrajectory().fresh()
+                    .strafeToLinearHeading(leftLoadZone.component1(), leftLoadZone.component2())
+                    .strafeToLinearHeading(midLoadZoneReady.component1(), midLoadZoneReady.component2())
+                    .strafeToLinearHeading(midLoadZone.component1(), midLoadZone.component2())
+                    .strafeToLinearHeading(midLoadZoneReady.component1(), midLoadZoneReady.component2())
+//                    .strafeToLinearHeading(rightLoadZoneReady.component1(), rightLoadZoneReady.component2())
+                    .strafeToLinearHeading(rightLoadZone.component1(), rightLoadZone.component2());
+
+
+            goLoadZoneShoot = goTakeLoadZoneStart.endTrajectory().fresh()
+                    .strafeToLinearHeading(shootPose.component1(), shootPose.component2());
+
             goCollectRight = goShootPre.endTrajectory().fresh()
                     .setTangent(shootPose.component2())
                     .splineTo(rightCollectPose.component1(), new Rotation2d(0,1.1));
@@ -94,7 +113,7 @@ public class Red_Far_ThreePlusThree {
                     .splineToLinearHeading(loadZoneReady, new Rotation2d(0,1.1));
 
             goCollectLoadZone = goReadyCollectLoadZone.endTrajectory().fresh()
-                    .strafeToConstantHeading(LoadZoneCollect.component1());
+                    .strafeToConstantHeading(loadZoneCollect.component1());
 
             goShootLoadZone = goCollectLoadZone.endTrajectory().fresh()
                     .setTangent(Math.toRadians(-180))
@@ -109,6 +128,8 @@ public class Red_Far_ThreePlusThree {
             myBot.runAction(
                     new SequentialAction(
                             goShootPre.build(),
+                            goTakeLoadZoneStart.build(),
+                            goLoadZoneShoot.build(),
                             goCollectRight.build(),
                             goShootRight.build(),
                             goReadyCollectLoadZone.build(),

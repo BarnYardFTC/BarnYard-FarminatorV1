@@ -14,8 +14,8 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="!!COMP: Blue close 3+9", group="!comp")
-public class BlueCloseThreeNineAutoAdjust extends CommandOpMode {
+@Autonomous(name="Blue close 3+0", group="red close")
+public class BC0AA extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
@@ -50,21 +50,7 @@ public class BlueCloseThreeNineAutoAdjust extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.robotPathCommands(false, true, goShootPre),
-
-                AutoController.robotPathCommands(true, false, goCollectLeftGate),
-
-                AutoController.robotPathCommands(true, true, goShootLeftGate),
-
-                AutoController.robotPathCommands(true, false, goCollectMid),
-
-                AutoController.robotPathCommands(true, true, goShootMid),
-
-                AutoController.robotPathCommands(true, false, goCollectRight),
-
-                AutoController.robotPathCommands(true, true, goShootLast)
-
-
+                AutoController.robotPathCommands(false, true, goShootPreLeave)
         ).schedule();
     }
     @Override

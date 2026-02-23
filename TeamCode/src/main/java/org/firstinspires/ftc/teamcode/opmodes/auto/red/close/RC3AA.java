@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
+package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs.*;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs.goCollectLeft;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs.goShootLeftLeave;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs.goShootPre;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -11,19 +13,19 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
+import org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="Blue close 3+3", group="red close")
-public class BlueCloseThreeThreeAutoAdjust extends CommandOpMode {
+@Autonomous(name="Red close 3+3", group="red close")
 
-    /** Robot and drive system instances */
+public class RC3AA extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
+    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.RED, AutoPars.posDistance.CLOSE);
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
+            OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
             autoHub.positions.get(AutoPars.positions.START_CLOSE)
     );
@@ -80,3 +82,4 @@ public class BlueCloseThreeThreeAutoAdjust extends CommandOpMode {
     }
 
 }
+

@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -20,8 +19,9 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name = "!GV3+6 RED CLOSE", group = "!main")
-public class Red_Close_ThreePlusSix extends CommandOpMode {
+@Autonomous(name = "!GV3+3 RED CLOSE", group = "!main")
+
+public class RC3 extends CommandOpMode {
 
     public static double START_POSE_X = -53.333;
     public static double START_POSE_Y = 45.5;
@@ -134,13 +134,8 @@ public class Red_Close_ThreePlusSix extends CommandOpMode {
                 .strafeToConstantHeading(leftCollect, new TranslationalVelConstraint(60));
 
         TrajectoryActionBuilder leftToShoot = drive.actionBuilder(new Pose2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, NORTH_HEADING))
-                .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
-
-        TrajectoryActionBuilder collectMidArts = drive.actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, 3));
-
-        TrajectoryActionBuilder midToShoot = drive.actionBuilder(midCollectPose)
                 .splineToLinearHeading(endPose, new Rotation2d(-1.8, 1), fastToShoot);
+
 
 
         //         ===== Commands =====
@@ -153,11 +148,7 @@ public class Red_Close_ThreePlusSix extends CommandOpMode {
 
                 intakeCommandPath(collectLeftArts),
 
-                shootCommandPath(leftToShoot),
-
-                intakeCommandPath(collectMidArts),
-
-                shootCommandPathIntake(midToShoot)
+                shootCommandPath(leftToShoot)
 
         ).schedule();
     }
@@ -245,6 +236,5 @@ public class Red_Close_ThreePlusSix extends CommandOpMode {
                 CommandGroup.deactivateIntakeAndTransferCommand()
         );
     }
-
 
 }

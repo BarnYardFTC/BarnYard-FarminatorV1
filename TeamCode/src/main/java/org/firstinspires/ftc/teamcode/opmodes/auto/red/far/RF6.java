@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -18,9 +17,9 @@ import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-@Autonomous(name = "!GV3+3 RED FAR", group = "!main")
+@Autonomous(name = "!GV3+6 RED FAR", group = "!main")
 
-public class Red_Far_ThreePlusThree  extends CommandOpMode {
+public class RF6 extends CommandOpMode {
 
     public static double START_POSE_X = 60;
     public static double START_POSE_Y = 15;
@@ -83,6 +82,7 @@ public class Red_Far_ThreePlusThree  extends CommandOpMode {
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y),COLLECT_HEADING )
                 .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING );
 
+
         TrajectoryActionBuilder angleToShoot = drive.actionBuilder(
                         new Pose2d(COLLECT_POSE2_X, COLLECT_POSE_Y,COLLECT_HEADING))
                 .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING + Math.toRadians(4));
@@ -112,8 +112,11 @@ public class Red_Far_ThreePlusThree  extends CommandOpMode {
 
                 shootCommandPath(angleToShoot),
 
-                intakeCommandPath(finalPos)
+                intakeCommandPath(rightCollect),
 
+                shootCommandPath(rightToShoot),
+
+                intakeCommandPath(finalPos)
         ).schedule();
     }
 

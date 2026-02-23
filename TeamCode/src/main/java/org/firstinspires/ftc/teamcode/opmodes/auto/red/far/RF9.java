@@ -1,66 +1,22 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.far;
 
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goCollectLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goCollectMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goCollectRight;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootLast;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootPre;
-
-import android.widget.AutoCompleteTextView;
-
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.red.close.redCloseTemp;
-import org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp;
-import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
-import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
-
-import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
-import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 
 @Autonomous(name="first auto with adjustment red FAR", group="test")
-public class Red_Far_ThreePlusNine extends CommandOpMode {
+public class RF9 extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;

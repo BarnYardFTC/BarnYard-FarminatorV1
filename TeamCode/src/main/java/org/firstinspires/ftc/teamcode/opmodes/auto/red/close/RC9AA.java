@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 @Autonomous(name="!!COMP: Red close 3+9", group="!comp")
-public class RedCloseThreeNineAutoAdjust extends CommandOpMode {
+public class RC9AA extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;

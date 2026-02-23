@@ -42,7 +42,7 @@ public class CommandGroup extends SequentialCommandGroup {
                         ),
                         new WaitCommand(1000)
                 ),
-//                BarnRobot.getInstance().gate.closeCommand(),
+                BarnRobot.getInstance().gate.closeCommand(),
                 deactivateIntakeAndTransferCommand(),
                 BarnRobot.getInstance().colorSensor.setCheckFalse(),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
@@ -50,10 +50,7 @@ public class CommandGroup extends SequentialCommandGroup {
     }
 
     private static boolean isReadyToShoot() {
-        if (BarnRobot.getInstance().webcam.isLocalizationTagDetected()) {
-            return (BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal());
-        }
-        return false;
+        return (BarnRobot.getInstance().shooter.isReady() && BarnRobot.getInstance().limelight.isAlignedToGoal());
     }
 
     public static Command shootCommand() {

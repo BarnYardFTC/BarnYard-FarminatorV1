@@ -67,7 +67,8 @@ public class LimeLight extends SubsystemBase {
     private double goalRange;
 
     private final int closePipeline = 7;
-    private final int farPipeline = 6;
+    private final int farBluePipeline = 6;
+    private final int farRedPipeline = 5;
 
     /**
      * Constructs the LimeLight subsystem and initializes default settings.
@@ -224,7 +225,8 @@ public class LimeLight extends SubsystemBase {
 
     public int choosePipeline(){
         if(getGoalDistance() > 2.8){
-            return farPipeline;
+            if(BarnRobot.getInstance().opmodeData.allianceColor.equals(OpModeData.AllianceColor.BLUE))return farBluePipeline;
+            else return farRedPipeline;
         }else{
             return closePipeline;
         }
@@ -255,7 +257,7 @@ public class LimeLight extends SubsystemBase {
         llResult = limelight.getLatestResult();
         frs = llResult.getFiducialResults();
         isAlignmentReady = isAlignedToGoal();
-        choosePipeline();
+        limelight.pipelineSwitch(choosePipeline());
 
     }
 

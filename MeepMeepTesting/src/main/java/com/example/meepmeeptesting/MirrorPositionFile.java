@@ -13,7 +13,7 @@ public class MirrorPositionFile {
     public static void main(String[] args) throws IOException {
 
         // ORIGINAL FILE PATH
-        String originalPath = "C:\\Users\\Barnyard\\StudioProjects\\BarnYard-FarminatorV1\\TeamCode\\src\\main\\java\\org\\firstinspires\\ftc\\teamcode\\opmodes\\auto\\blue\\close\\blueCloseTemp.java";
+        String originalPath = "C:\\Users\\PMW\\StudioProjects\\BarnYard-FarminatorV1\\TeamCode\\src\\main\\java\\org\\firstinspires\\ftc\\teamcode\\opmodes\\auto\\blue\\far\\BlueFarTemp.java";
         File inputFile = new File(originalPath);
         if (!inputFile.exists()) {
             try {
@@ -72,7 +72,7 @@ public class MirrorPositionFile {
     public static String mirrorPose(String line, String axis) {
         axis = axis.toUpperCase();
 
-        if (axis.equals("X")) {
+        if (axis.equals("Y")) {
             Pattern xPattern = Pattern.compile("Pose2d\\s*\\(\\s*([-\\d.]+)");
             Matcher xMatcher = xPattern.matcher(line);
 

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.redCloseTemp.*;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -38,7 +38,7 @@ public class RC9AA extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, startPose);
-        redCloseTemp.createPath(drive);
+        RedCloseTrajs.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
@@ -62,7 +62,7 @@ public class RC9AA extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, goShootLastFixed)
+                AutoController.robotPathCommands(true, true, goShootLast)
 
 
         ).schedule();

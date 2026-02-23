@@ -41,7 +41,7 @@ public class RF3 extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
-        RedFarTemp.createPath2(drive);
+        RedFarTemp.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());

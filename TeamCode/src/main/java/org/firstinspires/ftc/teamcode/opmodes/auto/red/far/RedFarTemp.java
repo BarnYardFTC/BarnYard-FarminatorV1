@@ -15,10 +15,12 @@ public class RedFarTemp {
     public static final Pose2d shootPose = new Pose2d(54, 15, Math.toRadians(-203.0));
     public static final Pose2d lastPose = new Pose2d(37, 15, Math.toRadians(-199.0));
     public static final Pose2d rightCollectPose = new Pose2d(34.5, 60.0 , Math.toRadians(-270.0));
+    public static final Pose2d rightLoadZoneReady = new Pose2d(63, 40, Math.toRadians(-270.0));
 
-    public static final Pose2d leftLoadZone = new Pose2d(54, 63, Math.toRadians(-270.0));
-    public static final Pose2d midLoadZoneReady = new Pose2d(58, 40, Math.toRadians(-270.0));
-    public static final Pose2d midLoadZone = new Pose2d(58, 63, Math.toRadians(-270.0));
+
+    public static final Pose2d leftLoadZone = new Pose2d(52, 63, Math.toRadians(-270.0));
+    public static final Pose2d midLoadZoneReady = new Pose2d(55, 40, Math.toRadians(-270.0));
+    public static final Pose2d midLoadZone = new Pose2d(52, 63, Math.toRadians(-270.0));
     public static final Pose2d rightLoadZone = new Pose2d(63, 63, Math.toRadians(-270.0));
 
 
@@ -48,11 +50,11 @@ public class RedFarTemp {
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2().toDouble());
 
         goStartToLoadZoneCollect = goShootPre.endTrajectory().fresh()
-                .strafeToLinearHeading(leftLoadZone.component1(), leftLoadZone.component2())
                 .strafeToLinearHeading(midLoadZoneReady.component1(), midLoadZoneReady.component2())
                 .strafeToLinearHeading(midLoadZone.component1(), midLoadZone.component2())
                 .strafeToLinearHeading(midLoadZoneReady.component1(), midLoadZoneReady.component2())
-//                    .strafeToLinearHeading(rightLoadZoneReady.component1(), rightLoadZoneReady.component2())
+                .strafeToLinearHeading(midLoadZone.component1(), midLoadZone.component2())
+                .strafeToLinearHeading(rightLoadZoneReady.component1(), midLoadZoneReady.component2())
                 .strafeToLinearHeading(rightLoadZone.component1(), rightLoadZone.component2());
 
         goLoadZoneShoot = goStartToLoadZoneCollect.endTrajectory().fresh()

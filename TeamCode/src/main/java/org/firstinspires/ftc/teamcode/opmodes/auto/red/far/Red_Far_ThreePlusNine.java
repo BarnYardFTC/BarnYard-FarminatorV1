@@ -71,7 +71,7 @@ public class Red_Far_ThreePlusNine extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, goShootLast)
+                AutoController.robotPathCommands(true, true, goShootRight)
 
 
         ).schedule();

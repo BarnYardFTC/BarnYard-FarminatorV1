@@ -11,7 +11,7 @@ public class RedCloseTrajs {
 
     public static final int SHOOT_TIME_MS = 1500;
 
-    public static final Pose2d startPose = new Pose2d( -53.333, 45.5, Math.toRadians(-225.0));
+    public static final Pose2d startPose = new Pose2d( -53.333, 45.5, Math.toRadians(180));
     public static final Pose2d shootPose = new Pose2d(-23, 22.0, Math.toRadians(-224.0));
     public static final Pose2d lastShootPose = new Pose2d(-36, 15.0, Math.toRadians(-242.0));
 

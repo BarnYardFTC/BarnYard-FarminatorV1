@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+import com.noahbres.meepmeep.roadrunner.entity.MarkerIndicatorEntity;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class Red_Far_ThreePlusThree {
@@ -13,7 +14,7 @@ public class Red_Far_ThreePlusThree {
 
     public static final int SHOOT_TIME_MS = 1500;
 
-    public static final Pose2d startPose = new Pose2d( 60, 15.0, Math.toRadians(-225.0));
+    public static final Pose2d startPose = new Pose2d( 60, 15.0, Math.toRadians(180));
     public static final Pose2d shootPose = new Pose2d(45, 00.0, Math.toRadians(-227.0));
     public static final Pose2d lastShootPose = new Pose2d(40, 22.0, Math.toRadians(-242.0));
 
@@ -67,11 +68,13 @@ public class Red_Far_ThreePlusThree {
                     .setDimensions(13.157, 18.03044)
                     .build();
 
+
             goShootPre = myBot.getDrive().actionBuilder(startPose)
                     .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
 
             goCollectRight = goShootPre.endTrajectory().fresh()
-                    .splineToLinearHeading(rightCollectPose, new Rotation2d(1, 0.1));
+                    .setTangent(Math.toRadians(90))
+                    .splineToLinearHeading(rightCollectPose, Math.toRadians(90));
 
             goShootRight = goCollectRight.endTrajectory().fresh()
                     .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
@@ -86,7 +89,8 @@ public class Red_Far_ThreePlusThree {
                     .splineToLinearHeading(shootPose, Math.toRadians(-150.0));
 
             goCollectLeftGate = goShootMid.endTrajectory().fresh()
-                    .splineToLinearHeading(leftCollectPose, new Rotation2d(0.1, -2))
+                    .setTangent(Math.toRadians(135))
+                    .splineToLinearHeading(leftCollectPose, new Rotation2d(0.1, 1))
                     .setTangent(new Rotation2d(-1.0,1))
                     .splineToLinearHeading(gateOpenPose, Math.toRadians(100.0));
 
@@ -99,13 +103,6 @@ public class Red_Far_ThreePlusThree {
             goShootLeft = goCollectLeft.endTrajectory().fresh()
                     .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
 
-            goCollectRight = goShootMid.endTrajectory().fresh()
-                    .setTangent(new Rotation2d(-2.1,1))
-                    .splineToSplineHeading(rightCollectPose, new Rotation2d(-0.0, -1.5));
-
-            goShootRight = goCollectRight.endTrajectory().fresh()
-                    .setTangent(Math.toRadians(-120.0))
-                    .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
 
 
             // Run the trajectory

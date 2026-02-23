@@ -26,9 +26,9 @@ public class RC9AA extends CommandOpMode {
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
-            startPose
+            autoHub.positions.get(AutoPars.positions.START_CLOSE)
     );
-
+//      I DONT KNOW WHY BUT WE MUST USE FOR START POSES POSES FROM AUTOHUB
     public static int SCORE_TIME = 2200;
 
     @Override
@@ -38,7 +38,7 @@ public class RC9AA extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, startPose);
+        drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
         RedCloseTrajs.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
@@ -55,7 +55,7 @@ public class RC9AA extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectLeft),
 
-                AutoController.robotPathCommands(true, true,goShootLeft),
+                AutoController.robotPathCommands(true, true, goShootLeft),
 
                 AutoController.robotPathCommands(true, false, goCollectMid),
 

@@ -8,152 +8,108 @@ import java.lang.Math;
 
 public class Blue_Close_ThreePlusNine {
 
-    // ================== FIELD / POSES ==================
-    public static double SHOOTING_PROG_POSE_X = -35;
-    public static double SHOOTING_PROG_POSE_Y = -30;
+    public static final int SHOOT_TIME_MS = 1500;
 
-    // SleepAction is in seconds (double). Keep as seconds.
-    public static double SHOOT_TIME_SEC = 2.0;
+    public static final Pose2d startPose = new Pose2d( -53.333, 45.5, Math.toRadians(180));
+    public static final Pose2d shootPose = new Pose2d(-23, 22.0, Math.toRadians(-224.0));
+    public static final Pose2d lastShootPose = new Pose2d(-36, 15.0, Math.toRadians(-242.0));
 
-    public static double START_POSE_X = -53.333;
-    public static double START_POSE_Y = -45.5;
-    public static double START_HEADING = Math.toRadians(225);
 
-    public static double SHOOT_POSE_X = -23;
-    public static double SHOOT_POSE_Y = -22;
-    public static double SHOOT_HEADING = Math.toRadians(227);
+    public static final Pose2d leftCollectPose = new Pose2d(-11.5, 53.0, Math.toRadians(-270.0));
+    public static final Pose2d midCollectPose = new Pose2d(12, 62.0, Math.toRadians(-270.0));
+    public static final Pose2d rightCollectPose = new Pose2d(35.5, 65.0, Math.toRadians(-270.0));
 
-    public static double SOUTH_READY_POSE_Y = -30;
-    public static double SOUTH_COLLECT_POSE_Y = -53;
 
-    public static double SOUTH_HEADING = Math.toRadians(270);
+    public static final Pose2d leftLoadZoneReady = new Pose2d(-11.5, 20.0, Math.toRadians(-270.0));
+    public static final Pose2d rightLoadZoneReady = new Pose2d(12, 20.0, Math.toRadians(-270.0));
+    public static final Pose2d midLoadZoneReady = new Pose2d(34.5, 20.0, Math.toRadians(-270.0));
 
-    public static double LEFT_COLLECT_POSE_X = -11.5;
-    public static double MID_COLLECT_POSE_X = 12;
-    public static double RIGHT_COLLECT_POSE_X = 35;
+    public static final Pose2d parkPose = new Pose2d(-40, 22.0, Math.toRadians(-227.0));
+    public static final Pose2d gateOpenPose = new Pose2d(0, 65, Math.toRadians(360 - 180));
+    public static final Pose2d gateCollectPose = new Pose2d(10,57.0, Math.toRadians(-227.0));
 
-    public static double GATE_POSE_X = -5;
-    public static double GATE_POSE_Y = -44; // currently unused in your paths
+//    private static final TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.5);
 
-    public static double ENDING_POSE_X = -40;
-    public static double ENDING_POSE_Y = -22;
+    // paths nigga ----------------------------------------------------------------- no ai stamp only rawdogging
+    public static TrajectoryActionBuilder goShootLast;
+    public static TrajectoryActionBuilder goShootMid;
+    public static TrajectoryActionBuilder goShootLeft;
 
-    // ================== BOT / SIM CONFIG ==================
-    private static final int WINDOW_SIZE = 800;
+    public static TrajectoryActionBuilder goShootLeftGate;
 
-    private static final double MAX_VEL = 60;
-    private static final double MAX_ACCEL = 60;
-    private static final double MAX_ANG_VEL = Math.toRadians(180);
-    private static final double MAX_ANG_ACCEL = Math.toRadians(180);
-    private static final double TRACK_WIDTH = 15;
+    public static TrajectoryActionBuilder goShootPre;
+    public static TrajectoryActionBuilder goPark;
+    public static TrajectoryActionBuilder goCollectRight;
+    public static TrajectoryActionBuilder goCollectMid;
+    public static TrajectoryActionBuilder goCollectLeft;
 
-    private static final double BOT_WIDTH = 15.07;
-    private static final double BOT_HEIGHT = 16.961;
+    public static TrajectoryActionBuilder openGate;
+    public static TrajectoryActionBuilder gateCollection;
+    public static TrajectoryActionBuilder goLastShoot;
 
-    // ================== PATH TUNING (no Rotation2d here) ==================
-    private static final double START_Y_NUDGE = 5.0;
-    private static final double MID_Y_OFFSET = 8.0;
-    private static final double RIGHT_Y_OFFSET = 15.0;
-
-    private static final double VEL_TO_SHOOT = 150.0;
-
-    private static final double END_HEADING_OFFSET_RAD = Math.toRadians(15);
-
+    public static TrajectoryActionBuilder goShootPreLeave;
+    public static TrajectoryActionBuilder goShootMidLeave;
+    public static TrajectoryActionBuilder goShootLeftLeave;
     public static void main(String[] args) {
 
-        MeepMeep meepMeep = new MeepMeep(WINDOW_SIZE);
+        MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                .setConstraints(MAX_VEL, MAX_ACCEL, MAX_ANG_VEL, MAX_ANG_ACCEL, TRACK_WIDTH)
-                .setDimensions(BOT_WIDTH, BOT_HEIGHT)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(13.157, 18.03044)
                 .build();
 
-        // ===== Common objects (cleaner, no magic numbers) =====
-        Pose2d startPose = new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING);
 
-        Vector2d startShoot = new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y);
+        goShootPre = myBot.getDrive().actionBuilder(startPose)
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
 
-        Vector2d leftReady = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_READY_POSE_Y);
-        Vector2d leftCollect = new Vector2d(LEFT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y);
-        Pose2d gateAtCollectY = new Pose2d(0, -50, Math.toRadians(180));
-
-        Vector2d shootVec = new Vector2d(SHOOT_POSE_X, SHOOT_POSE_Y);
-        Pose2d shootPose = new Pose2d(SHOOT_POSE_X, SHOOT_POSE_Y, SHOOT_HEADING);
-
-        Pose2d leftCollectPose = new Pose2d(
-                LEFT_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y,
-                SOUTH_HEADING
-        );
-
-        Pose2d midCollectPose = new Pose2d(
-                MID_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y + MID_Y_OFFSET,
-                SOUTH_HEADING
-        );
-
-        Pose2d rightCollectPose = new Pose2d(
-                RIGHT_COLLECT_POSE_X,
-                SOUTH_COLLECT_POSE_Y + RIGHT_Y_OFFSET,
-                SOUTH_HEADING
-        );
-
-        Pose2d endPose = new Pose2d(
-                ENDING_POSE_X,
-                ENDING_POSE_Y,
-                SHOOT_HEADING + END_HEADING_OFFSET_RAD
-        );
-
-        TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(VEL_TO_SHOOT);
-
-        TrajectoryActionBuilder path0 = myBot.getDrive().actionBuilder(startPose)
-                .strafeToLinearHeading(startShoot, SHOOT_HEADING);
-
-        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(leftCollectPose, new Rotation2d(0, -4));
-//                .splineToSplineHeading(gateAtCollectY, new Rotation2d(3, -5))
+        goCollectLeft = goShootPre.endTrajectory().fresh()
+//                .setTangent(Math.toRadians(-224))
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(0, 3))
+                .setTangent(new Rotation2d(1,-4.0))
+                .splineToLinearHeading(gateOpenPose, Math.toRadians(100.0));
 
 
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(gateAtCollectY )
-                .strafeToLinearHeading(shootVec, SHOOT_HEADING, fastToShoot);
+        goShootLeft = goCollectLeft.endTrajectory().fresh()
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
 
-        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(midCollectPose, new Rotation2d(0, -3));
+        goCollectMid = goShootLeft.endTrajectory().fresh()  // REady
+                .setTangent(Math.toRadians(75))
+                .splineToSplineHeading(midCollectPose, new Rotation2d(0,3));
 
-        TrajectoryActionBuilder path4 = myBot.getDrive().actionBuilder(midCollectPose)
-                .splineToLinearHeading(shootPose, new Rotation2d(-2, -1), fastToShoot);
+        goShootMid = goCollectMid.endTrajectory().fresh()
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(shootPose, Math.toRadians(-150.0));
 
-        TrajectoryActionBuilder path5 = myBot.getDrive().actionBuilder(shootPose)
-                .splineToLinearHeading(rightCollectPose, new Rotation2d(1, -2));
+        goCollectRight = goShootMid.endTrajectory().fresh()
+                .setTangent(Math.toRadians(50))
+                .splineToSplineHeading(rightCollectPose, new Rotation2d(0, 3));
 
-        TrajectoryActionBuilder path7 = myBot.getDrive().actionBuilder(rightCollectPose)
-                .splineToLinearHeading(endPose, new Rotation2d(-1.8, -1), fastToShoot);
+        goShootLast = goCollectRight.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .setTangent(Math.toRadians(-120.0))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
 
-//        new SequentialCommandGroup(
-//                new WaitUntilCommand(this::opModeIsActive),
-//                new DriveActionCommand(drive.actionBuilder(new Pose2d(0,0,0))
-//                        .strafeToLinearHeading(new Vector2d(0, 30), Math.toRadians(90))),
-//                intakeCommandPath(testpath)
-//                ).schedule();
-//
+        goShootPreLeave = myBot.getDrive().actionBuilder(startPose)
+                .strafeToLinearHeading(lastShootPose.component1(),lastShootPose.component2());
 
+        goShootLeftLeave = goCollectLeft.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .setTangent(Math.toRadians(-120.0))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
 
+        goShootMidLeave = goCollectMid.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .setTangent(Math.toRadians(-120.0))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
 
         // ================== RUN ==================
         myBot.runAction(new SequentialAction(
-                path0.build(),
-                new SleepAction(SHOOT_TIME_SEC),
-                path1.build(),
-                path2.build(),
-                new SleepAction(SHOOT_TIME_SEC),
-                path3.build(),
-                path4.build(),
-                new SleepAction(SHOOT_TIME_SEC),
-                path5.build(),
-                path7.build(),
-
-                new SleepAction(SHOOT_TIME_SEC)
-        ));
+                goShootPre.build(),
+                goCollectLeft.build(),
+                goShootLeft.build(),
+                goCollectMid.build(),
+                goShootMid.build(),
+                goCollectRight.build(),
+                goShootLast.build()
+                ));
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)

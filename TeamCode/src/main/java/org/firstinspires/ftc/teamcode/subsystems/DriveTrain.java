@@ -390,9 +390,9 @@ public class DriveTrain extends SubsystemBase {
     public Command driveOneDriverCommand() {
         return new RunCommand(
                 () -> drive(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx1.getLeftY(),
-                        BarnRobot.getInstance().gamepadEx1.getRightX()
+                        BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY()+ BarnRobot.getInstance().gamepadEx2.getLeftY(),
+                        BarnRobot.getInstance().gamepadEx1.getRightX() + BarnRobot.getInstance().gamepadEx2.getRightX()
                 ),
                 this
         );
@@ -414,9 +414,9 @@ public class DriveTrain extends SubsystemBase {
     public Command driveNonFieldOrientedCommand() {
         return new RunCommand(
                 () -> mecanumDriveComponent.driveNonFieldCentric(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx1.getLeftY(),
-                        BarnRobot.getInstance().gamepadEx1.getRightX()
+                        BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY(),
+                        BarnRobot.getInstance().gamepadEx1.getRightX() + BarnRobot.getInstance().gamepadEx2.getRightX()
                 ),
                 this
         );
@@ -437,8 +437,8 @@ public class DriveTrain extends SubsystemBase {
     public Command alignToTagLamLamCommand() {
         return new RunCommand(
                 () -> alignToGoal(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx1.getLeftY()
+                        BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY()
                 ),
                 this
         );
@@ -447,8 +447,8 @@ public class DriveTrain extends SubsystemBase {
     public Command alignToTagAutoCommand() {
         return new RunCommand(
                 () -> alignToGoal(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx1.getLeftY()
+                        BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY()
                 ),
                 this
         );
@@ -488,7 +488,7 @@ public class DriveTrain extends SubsystemBase {
                         stopPose = BarnRobot.getInstance().pinpointLocalizer.getPose()
                 ),
                 new RunCommand(() -> mecanumDriveComponent.maintainPos(
-                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
                         stopPose
                 ), this)
         );

@@ -16,7 +16,7 @@ public class BlueCloseTemp {
     public static final Pose2d lastShootPose = new Pose2d(-36, -15, Math.toRadians(242));
 
 
-    public static final Pose2d leftCollectPose = new Pose2d(-11.5, -53, Math.toRadians(270));
+    public static final Pose2d leftCollectPose = new Pose2d(-11.5, -55, Math.toRadians(270));
     public static final Pose2d midCollectPose = new Pose2d(12, -62, Math.toRadians(270));
     public static final Pose2d rightCollectPose = new Pose2d(35.5, -65, Math.toRadians(270));
 

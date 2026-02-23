@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name = "!GV3+6 RED CLOSE", group = "!main")
+@Autonomous(name = "GV RC6", group = "red close")
 public class RC6 extends CommandOpMode {
 
     public static double START_POSE_X = -53.333;

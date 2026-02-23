@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="Red close 3+3", group="red close")
+@Autonomous(name="RC3 AA", group="red close")
 
 public class RC3AA extends CommandOpMode {
     private BarnRobot farminator;

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="!!COMP: Blue close 3+9", group="!comp")
+@Autonomous(name="!!COMP: BC9 AA", group="blue close")
 public class BC9AA extends CommandOpMode {
 
     /** Robot and drive system instances */

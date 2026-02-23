@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name = "!RED THREE PLUS NINE", group = "!main")
+@Autonomous(name = "RC9", group = "red close")
 @Disabled
 public class RC9 extends CommandOpMode {
 

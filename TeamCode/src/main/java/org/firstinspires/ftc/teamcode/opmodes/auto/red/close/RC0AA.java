@@ -1,29 +1,23 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
-
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTemp.*;
+package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
+import org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="Blue close 3+3", group="red close")
-public class BlueCloseThreeThreeAutoAjust extends CommandOpMode {
-
-    /** Robot and drive system instances */
+@Autonomous(name="Red close 3+0", group="red close")
+public class RC0AA extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
+    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.RED, AutoPars.posDistance.CLOSE);
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.BLUE,
+            OpModeData.AllianceColor.RED,
             OpModeData.OpModeType.AUTONOMOUS,
             autoHub.positions.get(AutoPars.positions.START_CLOSE)
     );
@@ -33,31 +27,19 @@ public class BlueCloseThreeThreeAutoAjust extends CommandOpMode {
     @Override
     public void initialize() {
 
+
         /** Initialize robot and drive system */
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
-        BlueCloseTemp.createPath(drive);
+        BlueCloseTrajs.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
-/**
- * robotPathCommands(boolean intake, boolean shoot, TrajectoryActionBuilder path)
- */
-
-
-        new SequentialCommandGroup(
-                new WaitUntilCommand(this::opModeIsActive),
-                AutoController.robotPathCommands(false, true, goShootPre),
-
-                AutoController.robotPathCommands(true, false, goCollectLeft),
-
-                AutoController.robotPathCommands(true, true,goShootLeftLeave)
-        ).schedule();
     }
-    @Override
+
     public void run() {
         super.run();
         telemetry.addData("aligned: ", farminator.limelight.isAlignedToGoal());
@@ -80,3 +62,4 @@ public class BlueCloseThreeThreeAutoAjust extends CommandOpMode {
     }
 
 }
+

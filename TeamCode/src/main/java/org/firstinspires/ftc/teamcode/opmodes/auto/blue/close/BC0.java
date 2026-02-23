@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
  */
 @Config
 @Autonomous(name = "GV3+0 BLUE CLOSE", group = "main")
-public class Blue_Close_ThreePlusZero extends CommandOpMode {
+public class BC0 extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;

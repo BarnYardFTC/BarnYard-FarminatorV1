@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
 
 @Autonomous(name = "!RED THREE PLUS NINE", group = "!main")
 @Disabled
-public class Red_Close_ThreePlusNine extends CommandOpMode {
+public class RC9 extends CommandOpMode {
 
     // ================== FIELD / POSES ==================
     public static double SHOOT_TIME_SEC = 2.0; // (not used directly; kept like your template)

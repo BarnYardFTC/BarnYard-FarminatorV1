@@ -1,22 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.far;
 
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goCollectLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goCollectMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goCollectRight;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootLast;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp.goShootPre;
-
-import android.widget.AutoCompleteTextView;
-
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.Command;
@@ -32,31 +15,11 @@ import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
-import org.firstinspires.ftc.teamcode.opmodes.auto.red.close.redCloseTemp;
-import org.firstinspires.ftc.teamcode.opmodes.auto.red.far.redFarTemp;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.RedFarTemp.*;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
-import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
-import org.firstinspires.ftc.teamcode.util.OpModeData;
-import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 
 @Autonomous(name="first auto with adjustment red FAR", group="test")
@@ -66,6 +29,7 @@ public class Red_Far_ThreePlusNine extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
     private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.RED, AutoPars.posDistance.FAR);
+
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.RED,
@@ -83,7 +47,7 @@ public class Red_Far_ThreePlusNine extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
-        redFarTemp.createPath(drive);
+        RedFarTemp.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
@@ -95,19 +59,19 @@ public class Red_Far_ThreePlusNine extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.robotPathCommands(false, true, redCloseTemp.goShootPre),
+                AutoController.robotPathCommands(false, true, goShootPre),
 
-                AutoController.robotPathCommands(true, false, redCloseTemp.goCollectLeft),
+                AutoController.robotPathCommands(true, false, goCollectLeftGate),
 
-                AutoController.robotPathCommands(true, true, redCloseTemp.goShootLeft),
+                AutoController.robotPathCommands(true, true, goShootLeftGate),
 
-                AutoController.robotPathCommands(true, false, redCloseTemp.goCollectMid),
+                AutoController.robotPathCommands(true, false, goCollectMid),
 
-                AutoController.robotPathCommands(true, true, redCloseTemp.goShootMid),
+                AutoController.robotPathCommands(true, true, goShootMid),
 
-                AutoController.robotPathCommands(true, false, redCloseTemp.goCollectRight),
+                AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, redCloseTemp.goShootLast)
+                AutoController.robotPathCommands(true, true, goShootLast)
 
 
         ).schedule();

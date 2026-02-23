@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs.*;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTemp.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -38,7 +38,7 @@ public class BlueCloseThreeZeroAutoAjust extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
-        BlueCloseTrajs.createPath(drive);
+        BlueCloseTemp.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());

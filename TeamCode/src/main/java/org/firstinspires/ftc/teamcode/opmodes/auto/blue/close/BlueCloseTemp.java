@@ -7,7 +7,7 @@ import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-public class BlueCloseTrajs {
+public class BlueCloseTemp {
 
     public static final int SHOOT_TIME_MS = 1500;
 

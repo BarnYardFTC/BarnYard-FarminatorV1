@@ -82,7 +82,5 @@ public class RedMainTeleop extends CommandOpMode{
         }
     }
 
-    private InstantCommand rumbleCommand() {
-        return new InstantCommand(() -> gamepad1.rumble(200));
-    }
+
 }

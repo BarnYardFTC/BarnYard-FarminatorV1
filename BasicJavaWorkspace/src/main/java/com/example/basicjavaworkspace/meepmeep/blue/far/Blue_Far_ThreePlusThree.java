@@ -1,28 +1,37 @@
 package com.example.basicjavaworkspace.meepmeep.blue.far;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class Blue_Far_ThreePlusThree {
-    public static long SHOOT_TIME = 2;
+    public static final Pose2d startPose = new Pose2d( 60, -15.0, Math.toRadians(-180.0));
+    public static final Pose2d shootPose = new Pose2d(54, -15.0, Math.toRadians(203.0));
+    public static final Pose2d lastPose = new Pose2d(37, -15.0, Math.toRadians(199.0));
+    public static final Pose2d rightCollectPose = new Pose2d(34.5, -60.0 , Math.toRadians(270.0));
 
-    public static double START_POSE_X = 60;
-    public static double START_POSE_Y = -15;
-    public static double START_HEADING = Math.toRadians(180);
+    public static final Pose2d loadZoneReady = new Pose2d(34.5, -63.0, Math.toRadians(-0.0)); // Maybe y needs some changes
 
-    public static double SHOOTING_POSE_X = 55;
-    public static double SHOOTING_POSE_Y = -10;
-    public static double SHOOT_HEADING = Math.toRadians(215);
+    public static final Pose2d LoadZoneCollect = new Pose2d(63, -63.0, Math.toRadians(270.0));
 
-    public static double COLLECT_POSE_X = 60;
-    public static double COLLECT_POSE_Y = -60;
-    public static double COLLECT_HEADING = Math.toRadians(270);
+    public static TrajectoryActionBuilder goShootRight;
+    public static TrajectoryActionBuilder goShootMid;
+
+    public static TrajectoryActionBuilder goShootLeftGate;
+
+    public static TrajectoryActionBuilder goShootPre;
+    public static TrajectoryActionBuilder goCollectRight;
+    public static TrajectoryActionBuilder goCollectMid;
+    public static TrajectoryActionBuilder goCollectLeft;
+    public static TrajectoryActionBuilder goCollectLeftGate;
+    public static TrajectoryActionBuilder goReadyCollectLoadZone, goCollectLoadZone, goShootLoadZone, goFromLine;
 
     // -----------------------------
     // Main Simulation
@@ -36,20 +45,42 @@ public class Blue_Far_ThreePlusThree {
                 .setDimensions(13.157, 18.03044)
                 .build();
 
-        TrajectoryActionBuilder path1 = myBot.getDrive().actionBuilder(new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
-        TrajectoryActionBuilder path2 = myBot.getDrive().actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING );
-        TrajectoryActionBuilder path3 = myBot.getDrive().actionBuilder(new Pose2d(COLLECT_POSE_X,COLLECT_POSE_Y,COLLECT_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+        goShootPre = myBot.getDrive().actionBuilder(startPose)
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2().toDouble());
+
+        goCollectRight = goShootPre.endTrajectory().fresh()
+                .setTangent(shootPose.component2())
+                .splineTo(rightCollectPose.component1(), new Rotation2d(-0.0,-1.1));
+
+        goShootRight = goCollectRight.endTrajectory().fresh()
+                .setTangent(Math.toRadians(90.0))
+                .splineTo(shootPose.component1(), shootPose.component2().toDouble()-Math.toRadians(-180.0));
+
+        goReadyCollectLoadZone = goShootRight.endTrajectory().fresh()
+                .setTangent(shootPose.component2())
+                .splineToLinearHeading(loadZoneReady, new Rotation2d(-0.0,-1.1));
+
+        goCollectLoadZone = goReadyCollectLoadZone.endTrajectory().fresh()
+                .strafeToConstantHeading(LoadZoneCollect.component1());
+
+        goShootLoadZone = goCollectLoadZone.endTrajectory().fresh()
+                .setTangent(Math.toRadians(180.0))
+                .splineToSplineHeading(shootPose, new Rotation2d(1.0,2));
+
+        goFromLine = goShootLoadZone.endTrajectory().fresh()
+                .strafeToConstantHeading(lastPose.component1());
 
 
         // Run the trajectory
         myBot.runAction(
                 new SequentialAction(
-                        path1.build(),
-                        path2.build(),
-                        path3.build()
+                        goShootPre.build(),
+                        goCollectRight.build(),
+                        goShootRight.build(),
+                        goReadyCollectLoadZone.build(),
+                        goCollectLoadZone.build(),
+                        goShootLoadZone.build(),
+                        goFromLine.build()
                 )
         );
 

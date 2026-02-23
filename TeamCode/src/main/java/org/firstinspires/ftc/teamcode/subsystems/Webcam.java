@@ -181,11 +181,19 @@ public class Webcam extends SubsystemBase {
 
     public double getBotHeading(){
         double heading = 0;
-        if (!aprilTag.getDetections().isEmpty()){
-            heading = aprilTag.getDetections().get(0).robotPose.getOrientation().getYaw(AngleUnit.DEGREES);
-            heading += 90;
+        try {
+            if (!aprilTag.getDetections().isEmpty()) {
+                heading = aprilTag.getDetections().get(0).robotPose.getOrientation().getYaw(AngleUnit.DEGREES);
+                heading += 90;
+            }
+            return heading;
         }
-        return heading;
+        catch (IndexOutOfBoundsException out){
+            return 0;
+        }
+        catch (NullPointerException e){
+            return 0;
+        }
     }
     public void updateGamePattern() {
         for (AprilTagDetection d : aprilTag.getDetections()) {

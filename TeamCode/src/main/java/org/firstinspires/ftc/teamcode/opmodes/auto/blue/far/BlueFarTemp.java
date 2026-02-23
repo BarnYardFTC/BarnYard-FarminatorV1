@@ -43,7 +43,7 @@ public class BlueFarTemp {
 
         goCollectRight = goShootPre.endTrajectory().fresh()
                 .setTangent(shootPose.component2())
-                .splineTo(rightCollectPose.component1(), new Rotation2d(-0.0,1.1), fastToShoot2);
+                .splineTo(rightCollectPose.component1(), new Rotation2d(-0.0,-1.1));
 
         goShootRight = goCollectRight.endTrajectory().fresh()
                 .setTangent(Math.toRadians(90.0))
@@ -51,14 +51,14 @@ public class BlueFarTemp {
 
         goReadyCollectLoadZone = goShootRight.endTrajectory().fresh()
                 .setTangent(shootPose.component2())
-                .splineToLinearHeading(loadZoneReady, new Rotation2d(-0.0,1.1), fastToShoot);
+                .splineToLinearHeading(loadZoneReady, new Rotation2d(-0.0,-1.1), fastToShoot);
 
         goCollectLoadZone = goReadyCollectLoadZone.endTrajectory().fresh()
                 .strafeToConstantHeading(LoadZoneCollect.component1(), fastToShoot);
 
         goShootLoadZone = goCollectLoadZone.endTrajectory().fresh()
                 .setTangent(Math.toRadians(180.0))
-                .splineToSplineHeading(shootPose, new Rotation2d(-1.0,-2));
+                .splineToSplineHeading(shootPose, new Rotation2d(1.0,2));
 
         goFromLine = goShootLoadZone.endTrajectory().fresh()
                 .strafeToConstantHeading(lastPose.component1());

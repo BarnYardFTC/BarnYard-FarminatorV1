@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
-@Autonomous(name = "!GV3+0 RED FAR", group = "!main")
+@Autonomous(name = "GV RF0", group = "red far")
 
 public class RF0 extends CommandOpMode {
 

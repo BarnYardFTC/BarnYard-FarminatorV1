@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTemp.*;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goCollectLeft;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goCollectMid;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootLeft;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootMidLeave;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootPre;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -11,11 +15,10 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
-import org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTemp;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="Red close 3+6", group="red close")
+@Autonomous(name="RC6 AA", group="red close")
 public class RC6AA extends CommandOpMode {
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
@@ -37,7 +40,7 @@ public class RC6AA extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
-        BlueCloseTemp.createPath(drive);
+        RedCloseTrajs.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());

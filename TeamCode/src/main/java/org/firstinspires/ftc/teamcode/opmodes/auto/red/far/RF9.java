@@ -10,12 +10,12 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
-import org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs;
+import org.firstinspires.ftc.teamcode.opmodes.auto.red.close.redCloseTemp;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 
-@Autonomous(name="RF9", group="test")
+@Autonomous(name="RF9 AA?", group="red far")
 public class RF9 extends CommandOpMode {
 
     /** Robot and drive system instances */
@@ -39,7 +39,7 @@ public class RF9 extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
-        RedCloseTrajs.createPath(drive);
+        redFarTemp.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
@@ -51,19 +51,19 @@ public class RF9 extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.robotPathCommands(false, true, RedCloseTrajs.goShootPre),
+                AutoController.robotPathCommands(false, true, redCloseTemp.goShootPre),
 
-                AutoController.robotPathCommands(true, false, RedCloseTrajs.goCollectLeft),
+                AutoController.robotPathCommands(true, false, redCloseTemp.goCollectLeft),
 
-                AutoController.robotPathCommands(true, true, RedCloseTrajs.goShootLeft),
+                AutoController.robotPathCommands(true, true, redCloseTemp.goShootLeft),
 
-                AutoController.robotPathCommands(true, false, RedCloseTrajs.goCollectMid),
+                AutoController.robotPathCommands(true, false, redCloseTemp.goCollectMid),
 
-                AutoController.robotPathCommands(true, true, RedCloseTrajs.goShootMid),
+                AutoController.robotPathCommands(true, true, redCloseTemp.goShootMid),
 
-                AutoController.robotPathCommands(true, false, RedCloseTrajs.goCollectRight),
+                AutoController.robotPathCommands(true, false, redCloseTemp.goCollectRight),
 
-                AutoController.robotPathCommands(true, true, RedCloseTrajs.goShootLast)
+                AutoController.robotPathCommands(true, true, redCloseTemp.goShootLast)
 
 
         ).schedule();

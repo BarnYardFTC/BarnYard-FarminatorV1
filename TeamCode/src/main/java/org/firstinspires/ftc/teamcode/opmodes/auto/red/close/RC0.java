@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanu
  * - Does not collect additional elements after shooting
  */
 @Config
-@Autonomous(name = "GV3+0 RED CLOSE", group = "main")
+@Autonomous(name = "GV RC0", group = "red close")
 @Disabled
 public class RC0 extends CommandOpMode {
 

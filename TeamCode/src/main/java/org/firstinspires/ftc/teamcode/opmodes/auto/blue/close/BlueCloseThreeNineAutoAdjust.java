@@ -1,17 +1,10 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
+package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.redCloseTemp.*;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTrajs.*;
 
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Rotation2d;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -21,18 +14,18 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="!!COMP: Red close 3+9", group="!comp")
-public class RedCloseThreeNineAutoAjust extends CommandOpMode {
+@Autonomous(name="!!COMP: Blue close 3+9", group="!comp")
+public class BlueCloseThreeNineAutoAdjust extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.RED, AutoPars.posDistance.CLOSE);
+    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.RED,
+            OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            startPose
+            autoHub.positions.get(AutoPars.positions.START_CLOSE)
     );
 
     public static int SCORE_TIME = 2200;
@@ -44,8 +37,8 @@ public class RedCloseThreeNineAutoAjust extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, startPose);
-        redCloseTemp.createPath(drive);
+        drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
+        BlueCloseTrajs.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
@@ -59,9 +52,9 @@ public class RedCloseThreeNineAutoAjust extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 AutoController.robotPathCommands(false, true, goShootPre),
 
-                AutoController.robotPathCommands(true, false, goCollectLeft),
+                AutoController.robotPathCommands(true, false, goCollectLeftGate),
 
-                AutoController.robotPathCommands(true, true,goShootLeft),
+                AutoController.robotPathCommands(true, true, goShootLeftGate),
 
                 AutoController.robotPathCommands(true, false, goCollectMid),
 
@@ -69,7 +62,7 @@ public class RedCloseThreeNineAutoAjust extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, goShootLastFixed)
+                AutoController.robotPathCommands(true, true, goShootLast)
 
 
         ).schedule();

@@ -165,8 +165,8 @@ public class TeleopTemplate{
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
-                        () -> farminator.shooter.turnOff(),
-                        () -> farminator.shooter.runShooterBasedOnDistance()
+                        new RunCommand(() -> farminator.shooter.turnOff().schedule()),
+                        new RunCommand(() -> farminator.shooter.runShooterBasedOnDistance().schedule())
                 );
 
         // Left Trigger → Intake active (transfer + intake)

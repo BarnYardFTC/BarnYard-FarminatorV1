@@ -57,6 +57,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     private void setPower(double power) {
+        BarnRobot.getInstance().telemetry.addLine("LEON 2222221222");
         shooterRight.setPower(power);
         shooterLeft.setPower(power);
     }

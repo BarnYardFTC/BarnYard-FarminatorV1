@@ -28,7 +28,7 @@ public class TeleopTemplate{
 
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
-        farminator.shooter.setDefaultCommand(farminator.shooter.opearteShooter());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
 
 
         // ==========================================================
@@ -77,7 +77,13 @@ public class TeleopTemplate{
                         farminator.drive.driveOneDriverCommand()
                 );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenActive(new ParallelCommandGroup(
+                        CommandGroup.shootCommand()
+                )).whenInactive(
+                        farminator.drive.driveOneDriverCommand()
+                );
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenActive(new ParallelCommandGroup(
                         CommandGroup.shootCommand()
                 )).whenInactive(
@@ -112,9 +118,15 @@ public class TeleopTemplate{
 //                        farminator.shooter.runShooterBasedOnDistance()
 //                );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .toggleWhenPressed(
-                        farminator.drive.alignToTagLamLamCommand()
+                        new RunCommand(() -> farminator.kickStand.activate()),
+                        new RunCommand(() -> farminator.kickStand.deactivate()));
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .toggleWhenPressed(
+                        () -> farminator.shooter.turnOff(),
+                        () -> farminator.shooter.runShooterBasedOnDistance()
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
@@ -135,13 +147,27 @@ public class TeleopTemplate{
                         )
                 ));
 
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .toggleWhenPressed(
+                        new RunCommand(() -> farminator.kickStand.activate()),
+                        new RunCommand(() -> farminator.kickStand.deactivate()));
 
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
+                .toggleWhenPressed(
+                        () -> farminator.shooter.turnOff(),
+                        () -> farminator.shooter.runShooterBasedOnDistance()
+                );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.kickStand.deactivateCommand()));
+                .toggleWhenPressed(
+                        new RunCommand(() -> farminator.kickStand.activateCommand()),
+                        new RunCommand(() -> farminator.kickStand.deactivateCommand()));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.kickStand.activateCommand()));
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+                .toggleWhenPressed(
+                        () -> farminator.shooter.turnOff(),
+                        () -> farminator.shooter.runShooterBasedOnDistance()
+                );
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
@@ -233,13 +259,6 @@ public class TeleopTemplate{
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(CommandGroup.shootCommand());
-
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(
-                        farminator.shooter.turnOff(),
-                        farminator.shooter.runShooterBasedOnDistance()
-                );
     }
 
     private void intakeSwitcher(){

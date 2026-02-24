@@ -22,7 +22,7 @@ public class KickStand extends SubsystemBase {
         rightKickStand.setDirection(Servo.Direction.REVERSE);
         leftKickStand.setDirection(Servo.Direction.FORWARD);
 
-        lower();
+        deactivate();
     }
 
     private void setPosition(double pos){
@@ -39,20 +39,21 @@ public class KickStand extends SubsystemBase {
         rightKickStand.setPosition(pos);
     }
 
-    private void lower(){
+    public void deactivate(){
         setPosition(MIN);
     }
 
     public Command deactivateCommand(){
-        return new InstantCommand(() -> lower());
+        return new InstantCommand(() -> deactivate());
     }
 
-    private void raise(){
+    public void activate(){
         setPosition(MAX);
     }
 
     public Command activateCommand(){
-        return new InstantCommand(() -> raise());
+        BarnRobot.getInstance().telemetry.addLine("LEON GAY");
+        return new InstantCommand(() -> activate());
     }
 
 

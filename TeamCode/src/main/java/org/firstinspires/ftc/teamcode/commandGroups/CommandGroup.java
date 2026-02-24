@@ -29,18 +29,17 @@ public class CommandGroup extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 intakeAndTransferActivateCommand(),
                                 BarnRobot.getInstance().gate.openCommand(),
-//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-//                                BarnRobot.getInstance().gate.closeCommand(),
-//                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-//                                BarnRobot.getInstance().gate.openCommand(),
-//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-//                                BarnRobot.getInstance().gate.closeCommand(),
-//                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-//                                BarnRobot.getInstance().gate.openCommand(),
-//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
-                                 new WaitCommand(1000)
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.closeCommand(),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.closeCommand(),
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                BarnRobot.getInstance().gate.openCommand(),
+                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
                         ),
-                        new WaitCommand(1000)
+                        new WaitCommand(1500)
                 ),
                 BarnRobot.getInstance().gate.closeCommand(),
                 deactivateIntakeAndTransferCommand(),

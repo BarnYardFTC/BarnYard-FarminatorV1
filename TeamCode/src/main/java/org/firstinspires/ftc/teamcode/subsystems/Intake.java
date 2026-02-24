@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -79,5 +80,8 @@ public class Intake extends SubsystemBase {
      */
     public Command deactivateIntakeCommand() {
         return new InstantCommand(() -> setPower(0.3), this);
+    }
+    public RunCommand deactivateIntakeRunCommandZeroPower() {
+        return new RunCommand(() -> setPower(0), this);
     }
 }

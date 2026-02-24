@@ -132,6 +132,9 @@ public class DriveTrain extends SubsystemBase {
 
     /** Field-centric drive wrapper */
     public void drive(double x, double y, double turn) {
+        BarnRobot.getInstance().telemetry.addData("Drive x:", x);
+        BarnRobot.getInstance().telemetry.addData("Drive y:", y);
+        BarnRobot.getInstance().telemetry.addData("Drive turn:", turn);
         lastLimelightValid = false;
         mecanumDriveComponent.driveFieldCentric(x, y, turn);
     }
@@ -298,7 +301,6 @@ public class DriveTrain extends SubsystemBase {
             searchingForTag = false;
             double yawDiff = BarnRobot.getInstance().limelight.getGoalYaw();
             turnSpeed = diffToSpeed(yawDiff);
-            BarnRobot.getInstance().telemetry.addData("pid speed", turnSpeed);
         } else {
             if (!searchingForTag) {
                 searchingForTag = true;
@@ -310,6 +312,7 @@ public class DriveTrain extends SubsystemBase {
             turnSpeed = determineFinalTurnSpeed();
         }
 
+        BarnRobot.getInstance().telemetry.addData("pid speed", turnSpeed);
         drive(x, y, turnSpeed);
         lastLimelightValid = valid;
     }

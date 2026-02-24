@@ -57,9 +57,6 @@ public class Shooter  extends SubsystemBase {
     }
 
     private void setPower(double power) {
-        if (power == 0){
-            BarnRobot.getInstance().telemetry.addLine("\n\n\n\n\n\n\n NIGGER EPSTEIN \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        }
         shooterRight.setPower(power);
         shooterLeft.setPower(power);
     }

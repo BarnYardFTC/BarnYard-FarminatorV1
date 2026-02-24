@@ -22,7 +22,7 @@ public class Shooter  extends SubsystemBase {
     private DcMotorEx shooterRight;
     private DcMotorEx shooterLeft;
 
-    private boolean isAutoOperated;
+    public boolean isAutoOperated;
     private double distance;
 
     public static double SHOOTER_VELOCITY_RANGE_4 = 1300; // only for far zone
@@ -69,6 +69,7 @@ public class Shooter  extends SubsystemBase {
     }
 
     public void operateShooterDistanceBased(double distance) {
+        if (!isAutoOperated) distance = this.distance;
         pidfController.setPIDF(p, 0, 0, f);
         if (distance < SHOOTING_RANGE_1) {
             targetVelocity = SHOOTER_VELOCITY_RANGE_1;

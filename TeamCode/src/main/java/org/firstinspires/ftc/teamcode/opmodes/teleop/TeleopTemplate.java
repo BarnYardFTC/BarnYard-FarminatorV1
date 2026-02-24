@@ -123,6 +123,12 @@ public class TeleopTemplate{
                         new RunCommand(() -> farminator.kickStand.activate()),
                         new RunCommand(() -> farminator.kickStand.deactivate()));
 
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .toggleWhenPressed(
+                        new RunCommand(() -> farminator.kickStand.activate()),
+                        new RunCommand(() -> farminator.kickStand.deactivate()));
+
+
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
                         () -> farminator.shooter.turnOff(),
@@ -147,27 +153,13 @@ public class TeleopTemplate{
                         )
                 ));
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .toggleWhenPressed(
-                        new RunCommand(() -> farminator.kickStand.activate()),
-                        new RunCommand(() -> farminator.kickStand.deactivate()));
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(
-                        () -> farminator.shooter.turnOff(),
-                        () -> farminator.shooter.runShooterBasedOnDistance()
-                );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .toggleWhenPressed(
                         new RunCommand(() -> farminator.kickStand.activateCommand()),
                         new RunCommand(() -> farminator.kickStand.deactivateCommand()));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(
-                        new RunCommand(() -> farminator.shooter.turnOff().schedule()),
-                        new RunCommand(() -> farminator.shooter.runShooterBasedOnDistance().schedule())
-                );
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)
@@ -189,8 +181,6 @@ public class TeleopTemplate{
                         CommandGroup.shootCommand()
                 );
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.TOUCHPAD)
-                        .toggleWhenPressed(farminator.kickStand.activateCommand(), farminator.kickStand.deactivateCommand());
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
                 .toggleWhenActive(
@@ -207,29 +197,25 @@ public class TeleopTemplate{
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
 //                .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()).alongWith(
-                        BarnRobot.getInstance().gate.closeCommand()
-                ));
-
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenActive(
-                        new ParallelCommandGroup(
-                                farminator.shooter.setShooterManualDistance(1.2),
-                                farminator.shooter.setManualDistance()
-                        ));
 
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenActive(
                         new ParallelCommandGroup(
+                                farminator.shooter.setShooterManualDistance(1.2),
+                                farminator.shooter.setManualDistance(),
+                                farminator.shooterHood.setHoodPosition(0.71)
+                        ))
+        ;
+
+
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenActive(
+                        new ParallelCommandGroup(
                                 farminator.shooter.setShooterManualDistance(3),
-                                farminator.shooter.setManualDistance()
+                                farminator.shooter.setManualDistance(),
+                                farminator.shooterHood.setHoodPosition(1)
                         ))
 
         ;
@@ -238,12 +224,30 @@ public class TeleopTemplate{
                 .whenActive(
                         new ParallelCommandGroup(
                                 farminator.shooter.setShooterManualDistance(1.4),
-                                farminator.shooter.setManualDistance()
+                                farminator.shooter.setManualDistance(),
+                                farminator.shooterHood.setHoodPosition(0.85)
                         ));
 
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
+                .whenActive(
+                        () -> farminator.drive.mecanumDriveComponent.activateSlowMode()
+                )
+                .whenInactive(() -> farminator.drive.mecanumDriveComponent.activateFastMode());
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+                .whenActive(
+                        () -> farminator.drive.mecanumDriveComponent.activateSlowMode()
+                )
+                .whenInactive(() -> farminator.drive.mecanumDriveComponent.activateFastMode());
 
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
+                .toggleWhenPressed(
+                        farminator.shooter.turnOff(),
+                        farminator.shooter.runShooterBasedOnDistance()
+                );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
                         farminator.shooter.turnOff(),
                         farminator.shooter.runShooterBasedOnDistance()

@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.util.InterpLUT;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+import java.security.cert.CertPathValidatorException;
 import java.util.function.DoubleSupplier;
 
 @Config
@@ -25,12 +26,15 @@ public class ShooterHood extends SubsystemBase {
 
     public static double SERVO_POSITION = 1;
 
+    private boolean isAuto;
+
 
     public ShooterHood(){
         servo = BarnRobot.getInstance().robotHardware.shooterHood;
         servo.setDirection(Servo.Direction.REVERSE);    // Change if needed
         servo.setPosition(1);
         initInterpLUT();
+        isAuto = true;
     }
 
     private void initInterpLUT(){
@@ -96,11 +100,13 @@ public class ShooterHood extends SubsystemBase {
     }
 
     public void shooterHoodOnDistance(){
-        shooterHoodBasedOnDistance(
-                BarnRobot.getInstance().limelight.getGoalDistance()
-        );
+        if (BarnRobot.getInstance().shooter.isAutoOperated){
+            shooterHoodBasedOnDistance(
+                    BarnRobot.getInstance().limelight.getGoalDistance()
+            );
+        }
+
         setPosition(servoPos);
-        BarnRobot.getInstance().telemetry.addLine("hood");
     }
 
     public Command setHoodCloseToGoalPos(){
@@ -109,6 +115,15 @@ public class ShooterHood extends SubsystemBase {
 
     public Command setHoodPosNoLimit(double position){
         return new InstantCommand(() -> servo.setPosition(position), this);
+    }
+
+    public void setManual(){
+        isAuto = false;
+    }
+
+    public Command operateHood(){
+        if(isAuto) return autoHoodAlignment();
+        else return new RunCommand(() -> setHoodPosition(servoPos));
     }
 
     public RunCommand autoHoodAlignment(){
@@ -154,7 +169,7 @@ public class ShooterHood extends SubsystemBase {
         if (position < MIN) position = MIN;
         double finalPosition = position;
         return new InstantCommand(() ->
-                servo.setPosition(finalPosition), this);
+                servoPos = finalPosition, this);
 
     }
 

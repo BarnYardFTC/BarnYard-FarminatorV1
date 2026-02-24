@@ -63,10 +63,10 @@ public class RF9 extends CommandOpMode {
                 AutoController.robotPathCommands(true, false, RedFarTemp.goCollectLoadZone),
 
                 AutoController.robotPathCommands(true, true, RedFarTemp.goShootLoadZone),
-//
-//                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectMid),
-//
-//                AutoController.robotPathCommands(true, true, RedFarTemp.goShootMid),
+
+                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectMid),
+
+                AutoController.robotPathCommands(true, true, RedFarTemp.goShootMid),
 
                 AutoController.robotPathCommands(false, false, RedFarTemp.goFromLine)
 

@@ -108,10 +108,10 @@ public class TestTeleopnNEW extends CommandOpMode {
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(farminator.kickStand.raiseCommand());
+                .whenPressed(farminator.kickStand.activateCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(farminator.kickStand.lowerCommand());
+                .whenPressed(farminator.kickStand.deactivateCommand());
 
 
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)

@@ -246,7 +246,10 @@ public class TeleopTemplate{
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(
-                        farminator.shooter.turnOff(),
+                        new ParallelCommandGroup(
+                                farminator.shooter.turnOff(),
+                                farminator.intake.deactivateIntakeRunCommandZeroPower()
+                        ),
                         farminator.shooter.runShooterBasedOnDistance()
                 );
 

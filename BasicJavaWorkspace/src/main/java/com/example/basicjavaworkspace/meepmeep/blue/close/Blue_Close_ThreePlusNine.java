@@ -12,7 +12,7 @@ public class Blue_Close_ThreePlusNine {
 
     public static final Pose2d startPose = new Pose2d( -53.333, 45.5, Math.toRadians(180));
     public static final Pose2d shootPose = new Pose2d(-23, 22.0, Math.toRadians(-224.0));
-    public static final Pose2d lastShootPose = new Pose2d(-36, 15.0, Math.toRadians(-242.0));
+    public static final Pose2d lastShootPose = new Pose2d(-36, 10.0, Math.toRadians(-242.0));
 
 
     public static final Pose2d leftCollectPose = new Pose2d(-11.5, 53.0, Math.toRadians(-270.0));
@@ -74,7 +74,7 @@ public class Blue_Close_ThreePlusNine {
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2());
 
         goCollectMid = goShootLeft.endTrajectory().fresh()  // REady
-                .setTangent(Math.toRadians(75))
+                .setTangent(Math.toRadians(125))
                 .splineToSplineHeading(midCollectPose, new Rotation2d(0,3));
 
         goShootMid = goCollectMid.endTrajectory().fresh()

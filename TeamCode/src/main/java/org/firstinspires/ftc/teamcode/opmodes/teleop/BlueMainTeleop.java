@@ -48,7 +48,7 @@ public class BlueMainTeleop extends CommandOpMode{
                 opModeData
         );
         template = new TeleopTemplate();
-        template.initControls();
+        template.initControls(270);
 
     }
 

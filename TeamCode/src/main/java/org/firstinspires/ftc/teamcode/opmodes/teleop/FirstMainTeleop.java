@@ -49,7 +49,7 @@ public class FirstMainTeleop extends CommandOpMode{
                 opModeData
         );
         template = new TeleopTemplate();
-        template.initControls();
+        template.initControls(90);
     }
 
 

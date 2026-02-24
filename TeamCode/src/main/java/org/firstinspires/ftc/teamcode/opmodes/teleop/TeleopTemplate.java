@@ -27,10 +27,14 @@ public class TeleopTemplate{
     // ------------------------
     // Robot Instance
     // ------------------------
+
+    private double fieldOrientedReferenceHeading;
     private BarnRobot farminator = BarnRobot.getInstance();
 
 
-    public void initControls(){
+    public void initControls(double fieldOrientedReferenceHeading){
+
+        this.fieldOrientedReferenceHeading = fieldOrientedReferenceHeading;
 
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
@@ -83,6 +87,13 @@ public class TeleopTemplate{
                         farminator.drive.driveOneDriverCommand()
                 );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+                .whenActive(new ParallelCommandGroup(
+                        CommandGroup.smartShootCommand()
+                )).whenInactive(
+                        farminator.drive.driveOneDriverCommand()
+                );
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                 .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
@@ -95,10 +106,6 @@ public class TeleopTemplate{
 //                        new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.maintainPosCommand())),
 //                        new InstantCommand(() -> farminator.drive.setDefaultCommand(farminator.drive.driveNonFieldOrientedCommand()))
 //                );
-
-
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(180)))));
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
@@ -119,6 +126,26 @@ public class TeleopTemplate{
                 .toggleWhenPressed(
                         farminator.drive.alignToTagLamLamCommand()
                 );
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+                        .whenPressed(() -> farminator.pinpointLocalizer.setPose(
+                                new Pose2d(
+                                        farminator.pinpointLocalizer.getPose().position.x,
+                                        farminator.pinpointLocalizer.getPose().position.y,
+                                        Math.toRadians(fieldOrientedReferenceHeading)
+                                )
+                        ));
+
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+                .whenPressed(() -> farminator.pinpointLocalizer.setPose(
+                        new Pose2d(
+                                farminator.pinpointLocalizer.getPose().position.x,
+                                farminator.pinpointLocalizer.getPose().position.y,
+                                Math.toRadians(fieldOrientedReferenceHeading)
+                        )
+                ));
+
+
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()));

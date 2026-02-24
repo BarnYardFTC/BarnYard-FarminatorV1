@@ -1,14 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goCollectLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goCollectMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goCollectRight;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootLast;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootMid;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootPre;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootPreLeave;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -20,6 +11,9 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
+
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.*;
+
 
 @Autonomous(name="RC0", group="red close")
 public class RC0AA extends CommandOpMode {

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -15,7 +16,10 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.red.far.RedFarTemp;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTemp.*;
 
+
+@Disabled
 @Autonomous(name="BF9", group="blue far")
 public class BF9 extends CommandOpMode {
 
@@ -53,19 +57,19 @@ public class BF9 extends CommandOpMode {
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 new WaitCommand(1500),
-                AutoController.robotPathCommands(true, true, RedFarTemp.goShootPre),
+                AutoController.robotPathCommands(true, true, goShootPre),
 
-                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectRight),
+                AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, RedFarTemp.goShootRight),
+                AutoController.robotPathCommands(true, true, goShootRight),
 
-                AutoController.robotPathCommands(false, false, RedFarTemp.goReadyCollectLoadZone),
+                AutoController.robotPathCommands(false, false, goReadyCollectLoadZone),
 
-                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectLoadZone),
+                AutoController.robotPathCommands(true, false, goCollectLoadZone),
 
-                AutoController.robotPathCommands(true, true, RedFarTemp.goShootLoadZone),
+                AutoController.robotPathCommands(true, true, goShootLoadZone),
 
-                AutoController.robotPathCommands(false, false, RedFarTemp.goFromLine)
+                AutoController.robotPathCommands(false, false, goFromLine)
 
 
 

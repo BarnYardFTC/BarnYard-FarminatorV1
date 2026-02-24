@@ -15,6 +15,9 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.RedFarTemp.*;
+
+
 @Disabled
 @Autonomous(name="RF9", group="red far")
 public class RF9 extends CommandOpMode {

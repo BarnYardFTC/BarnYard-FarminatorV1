@@ -16,6 +16,15 @@ public class BlueFarTemp {
     public static final Pose2d lastPose = new Pose2d(37, -15.0, Math.toRadians(199.0));
     public static final Pose2d rightCollectPose = new Pose2d(34.5, -60.0 , Math.toRadians(270.0));
 
+    public static final Pose2d leftLoadZone = new Pose2d(52, -63, Math.toRadians(270.0));
+    public static final Pose2d midLoadZoneReady = new Pose2d(55, -40, Math.toRadians(270.0));
+    public static final Pose2d midLoadZone = new Pose2d(52, -63, Math.toRadians(270.0));
+    public static final Pose2d rightLoadZone = new Pose2d(63, -63, Math.toRadians(270.0));
+
+    public static final Pose2d midCollectPose = new Pose2d(10, -70.0, Math.toRadians(270.0));
+    public static final Pose2d rightLoadZoneReady = new Pose2d(63, -40, Math.toRadians(270.0));
+
+
     public static final Pose2d loadZoneReady = new Pose2d(34.5, -63.0, Math.toRadians(-0.0)); // Maybe y needs some changes
 
     public static final Pose2d LoadZoneCollect = new Pose2d(63, -63.0, Math.toRadians(270.0));
@@ -35,11 +44,23 @@ public class BlueFarTemp {
     public static TrajectoryActionBuilder goCollectLeft;
     public static TrajectoryActionBuilder goCollectLeftGate;
 
-    public static TrajectoryActionBuilder goReadyCollectLoadZone, goCollectLoadZone, goShootLoadZone, goFromLine;
+    public static TrajectoryActionBuilder goReadyCollectLoadZone, goCollectLoadZone, goShootLoadZone, goFromLine, goStartToLoadZoneCollect, goLoadZoneShoot;
 
     public static void createPath(RoadRunnerMecanumDrive drive) {
         goShootPre = drive.actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2().toDouble());
+
+        goStartToLoadZoneCollect = goShootPre.endTrajectory().fresh()
+                .strafeToLinearHeading(midLoadZoneReady.component1(), midLoadZoneReady.component2())
+                .strafeToLinearHeading(midLoadZone.component1(), midLoadZone.component2())
+                .strafeToLinearHeading(midLoadZoneReady.component1(), midLoadZoneReady.component2())
+                .strafeToLinearHeading(midLoadZone.component1(), midLoadZone.component2())
+                .strafeToLinearHeading(rightLoadZoneReady.component1(), midLoadZoneReady.component2())
+                .strafeToLinearHeading(rightLoadZone.component1(), rightLoadZone.component2());
+
+        goLoadZoneShoot = goStartToLoadZoneCollect.endTrajectory().fresh()
+                .strafeToLinearHeading(shootPose.component1(), shootPose.component2());
+
 
         goCollectRight = goShootPre.endTrajectory().fresh()
                 .setTangent(shootPose.component2())

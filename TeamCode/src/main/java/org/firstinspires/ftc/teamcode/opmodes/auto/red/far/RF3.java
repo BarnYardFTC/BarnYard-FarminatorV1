@@ -14,6 +14,9 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.far.RedFarTemp.*;
+
+
 
 @Autonomous(name="RF3 ", group="red far")
 public class RF3 extends CommandOpMode {
@@ -52,13 +55,13 @@ public class RF3 extends CommandOpMode {
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 new WaitCommand(1500),
-                AutoController.robotPathCommands(true, true, RedFarTemp.goShootPre),
+                AutoController.robotPathCommands(true, true, goShootPre),
 
-                AutoController.robotPathCommands(true, false, RedFarTemp.goStartToLoadZoneCollect),
+                AutoController.robotPathCommands(true, false, goStartToLoadZoneCollect),
 
-                AutoController.robotPathCommands(true, true, RedFarTemp.goLoadZoneShoot),
+                AutoController.robotPathCommands(true, true, goLoadZoneShoot),
 
-                AutoController.robotPathCommands(false, false, RedFarTemp.goFromLine)
+                AutoController.robotPathCommands(false, false, goFromLine)
 
 
 

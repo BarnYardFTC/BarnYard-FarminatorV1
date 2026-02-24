@@ -25,13 +25,13 @@ public class Shooter  extends SubsystemBase {
     private boolean isAutoOperated;
     private double distance;
 
-    public static double SHOOTER_VELOCITY_RANGE_4 = 1350; // only for far zone
+    public static double SHOOTER_VELOCITY_RANGE_4 = 1300; // only for far zone
     public static double SHOOTER_VELOCITY_RANGE_3 = 1150;
     public static double SHOOTER_VELOCITY_RANGE_2 = 1050;
     public static double SHOOTER_VELOCITY_RANGE_1 = 900;
 
 
-    public static double SHOOTING_RANGE_1 = 1.3;
+    public static double SHOOTING_RANGE_1 = 1.26;
     public static double SHOOTING_RANGE_2 = 1.9;
     public static double SHOOTING_RANGE_3 = 2.8;
 
@@ -210,6 +210,10 @@ public class Shooter  extends SubsystemBase {
 
     public void setCustomVelocity(double velocity){
         operateShooter(velocity);
+    }
+
+    public double getTargetVelocity() {
+        return targetVelocity;
     }
 
 }

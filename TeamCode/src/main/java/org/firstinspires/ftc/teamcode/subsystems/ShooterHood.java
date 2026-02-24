@@ -11,13 +11,15 @@ import com.seattlesolvers.solverslib.util.InterpLUT;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 
+import java.util.function.DoubleSupplier;
+
 @Config
 public class ShooterHood extends SubsystemBase {
     private Servo servo;
     private final double MIN = 0.35;
     private final double MAX = 0.95;
 
-    private double servoPos = 0.95;
+    public static double servoPos = 0.95;
 
     InterpLUT rangeLut;
 
@@ -35,18 +37,27 @@ public class ShooterHood extends SubsystemBase {
         rangeLut = new InterpLUT();
 
         //Adding each val with a key
+//        rangeLut.add(0.05, 0.45);
+//        rangeLut.add(0.22, 0.55);
+//        rangeLut.add(0.51,0.65);
+//        rangeLut.add(0.72,0.42);
+//        rangeLut.add(0.92,0.5);
+//        rangeLut.add(0.95,0.6);
+//        rangeLut.add(1.18,0.7);
+//        rangeLut.add(1.28,0.8);
+//        rangeLut.add(1.32,0.8);
+//        rangeLut.add(1.4,0.8);
+//        rangeLut.add(1.6,0.9);
+//        rangeLut.add(1.85,1);
+
         rangeLut.add(0.05, 0.45);
-        rangeLut.add(0.22, 0.55);
-        rangeLut.add(0.51,0.65);
-        rangeLut.add(0.72,0.42);
-        rangeLut.add(0.92,0.5);
-        rangeLut.add(0.95,0.6);
-        rangeLut.add(1.18,0.7);
-        rangeLut.add(1.28,0.8);
-        rangeLut.add(1.32,0.8);
-        rangeLut.add(1.4,0.8);
-        rangeLut.add(1.6,0.9);
-        rangeLut.add(1.85,1);
+        rangeLut.add(0.87, 0.67);
+        rangeLut.add(1.15,0.73);
+        rangeLut.add(1.27,0.93);
+        rangeLut.add(1.5,0.93);
+        rangeLut.add(1.75,0.93);
+        rangeLut.add(2,0.95);
+
         //generating final equation
 
         rangeLut.createLUT();
@@ -150,6 +161,12 @@ public class ShooterHood extends SubsystemBase {
     public Command defaultHoodCommand(){
         return new RunCommand(() -> {
             setPosition(servoPos);
+        }, this);
+    }
+
+    public Command HoodRunCommand(DoubleSupplier pos){
+        return new InstantCommand(() -> {
+            setPosition(pos.getAsDouble());
         }, this);
     }
 

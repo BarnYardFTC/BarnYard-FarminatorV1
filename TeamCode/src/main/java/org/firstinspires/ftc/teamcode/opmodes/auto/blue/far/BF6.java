@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 
-@Autonomous(name="BF6", group="test")
+@Autonomous(name="BF6", group="blue far")
 public class BF6 extends CommandOpMode {
 
 

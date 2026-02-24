@@ -57,7 +57,7 @@ public class Blue_Far_ThreePlusSix   {
 
         goCollectRight = goShootPre.endTrajectory().fresh()
                 .setTangent(shootPose.component2())
-                .splineTo(rightCollectPose.component1(), new Rotation2d(-0.0,-1.1));
+                .splineTo(rightCollectPose.component1(), new Rotation2d(0,-2));
 
         goShootRight = goCollectRight.endTrajectory().fresh()
                 .setTangent(Math.toRadians(90.0))

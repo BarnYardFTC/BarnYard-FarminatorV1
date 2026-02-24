@@ -18,16 +18,16 @@ import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTemp.*
 
 
 
-@Autonomous(name="BF0 ", group="red far")
+@Autonomous(name="BF0 ", group="blue far")
 public class BF0 extends CommandOpMode {
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.RED, AutoPars.posDistance.FAR);
+    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.FAR);
 
     private final OpModeData opModeData = new OpModeData(
-            OpModeData.AllianceColor.RED,
+            OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
             autoHub.positions.get(AutoPars.positions.START_FAR)
     );

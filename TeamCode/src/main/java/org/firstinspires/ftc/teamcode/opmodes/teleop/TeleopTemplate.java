@@ -1,14 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.robocol.Command;
-import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.button.Trigger;
@@ -16,10 +10,6 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
-import org.firstinspires.ftc.teamcode.util.OpModeData;
-
-import java.util.function.BooleanSupplier;
-
 
 
 public class TeleopTemplate{
@@ -148,10 +138,10 @@ public class TeleopTemplate{
 
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.raise()));
+                .whenPressed(new InstantCommand(() -> farminator.kickStand.deactivateCommand()));
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new InstantCommand(() -> farminator.shooterHood.lower()));
+                .whenPressed(new InstantCommand(() -> farminator.kickStand.activateCommand()));
 
         // Left Trigger → Intake active (transfer + intake)
         new Trigger(() -> farminator.gamepadEx2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0)

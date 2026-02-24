@@ -3,10 +3,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
-import com.seattlesolvers.solverslib.command.RunCommand;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -47,7 +43,7 @@ public class KickStand extends SubsystemBase {
         setPosition(MIN);
     }
 
-    public Command lowerCommand(){
+    public Command deactivateCommand(){
         return new InstantCommand(() -> lower());
     }
 
@@ -55,7 +51,7 @@ public class KickStand extends SubsystemBase {
         setPosition(MAX);
     }
 
-    public Command raiseCommand(){
+    public Command activateCommand(){
         return new InstantCommand(() -> raise());
     }
 

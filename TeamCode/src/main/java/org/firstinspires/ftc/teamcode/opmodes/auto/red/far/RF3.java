@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 
-@Autonomous(name="RF3 AA?", group="red far")
+@Autonomous(name="RF3 ", group="red far")
 public class RF3 extends CommandOpMode {
 
     /** Robot and drive system instances */

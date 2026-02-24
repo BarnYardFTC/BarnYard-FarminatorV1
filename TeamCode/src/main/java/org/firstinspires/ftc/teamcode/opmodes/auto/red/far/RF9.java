@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 
-@Autonomous(name="RF9 AA?", group="red far")
+@Autonomous(name="RF9", group="red far")
 public class RF9 extends CommandOpMode {
 
     /** Robot and drive system instances */
@@ -63,9 +63,9 @@ public class RF9 extends CommandOpMode {
                 AutoController.robotPathCommands(true, false, RedFarTemp.goCollectLoadZone),
 
                 AutoController.robotPathCommands(true, true, RedFarTemp.goShootLoadZone),
-
+//
 //                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectMid),
-
+//
 //                AutoController.robotPathCommands(true, true, RedFarTemp.goShootMid),
 
                 AutoController.robotPathCommands(false, false, RedFarTemp.goFromLine)

@@ -87,9 +87,9 @@ public class TeleopTemplate{
                         farminator.drive.driveOneDriverCommand()
                 );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
                 .whenActive(new ParallelCommandGroup(
-                        CommandGroup.smartShootCommand()
+                        CommandGroup.shootCommand()
                 )).whenInactive(
                         farminator.drive.driveOneDriverCommand()
                 );
@@ -116,18 +116,18 @@ public class TeleopTemplate{
                 );
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(
-                        farminator.shooter.turnOff(),
-                        farminator.shooter.runShooterBasedOnDistance()
-                );
+//        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
+//                .toggleWhenPressed(
+//                        farminator.shooter.turnOff(),
+//                        farminator.shooter.runShooterBasedOnDistance()
+//                );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenPressed(
                         farminator.drive.alignToTagLamLamCommand()
                 );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                         .whenPressed(() -> farminator.pinpointLocalizer.setPose(
                                 new Pose2d(
                                         farminator.pinpointLocalizer.getPose().position.x,
@@ -136,7 +136,7 @@ public class TeleopTemplate{
                                 )
                         ));
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
+        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> farminator.pinpointLocalizer.setPose(
                         new Pose2d(
                                 farminator.pinpointLocalizer.getPose().position.x,
@@ -182,9 +182,6 @@ public class TeleopTemplate{
 //                .toggleWhenActive(
 //                        farminator.drive.maintainPosCommand(gamepad1.left_stick_x, farminator.pinpointLocalizer.getPose())
 //                );
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.B)
-                .whenHeld(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateSlowMode()))
-                .whenReleased(new InstantCommand(() -> farminator.drive.mecanumDriveComponent.activateFastMode()));
 
 
 
@@ -199,8 +196,6 @@ public class TeleopTemplate{
 //                .toggleWhenActive(
 //                        farminator.drive.alignToTagCommand());
 
-        farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new InstantCommand(() -> farminator.pinpointLocalizer.setPose(new Pose2d(0,0,Math.toRadians(270)))));
 
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
 //                .toggleWhenPressed(farminator.shooterHood.goToPositionCommand());

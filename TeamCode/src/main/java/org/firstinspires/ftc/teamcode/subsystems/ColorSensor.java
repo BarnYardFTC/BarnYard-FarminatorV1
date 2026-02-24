@@ -64,7 +64,7 @@ public class ColorSensor {
     private boolean tripleCheck = false;
     private boolean fourthCheck = false;
     private boolean robotFullness = false;
-    public boolean intakeMode = false;
+    public boolean intakeMode = true;
 
     /**
      * Cached distance reading (cm).

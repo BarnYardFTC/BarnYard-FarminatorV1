@@ -85,11 +85,11 @@ public class RedFarTemp {
         //experimental
         goCollectMid = goShootLoadZone.endTrajectory().fresh()
                 .setTangent(Math.toRadians(200))
-                .splineToSplineHeading(midCollectPose, midCollectPose.heading);
+                .splineToSplineHeading(midCollectPose, midCollectPose.heading, fastToShoot);
 
         goShootMid = goCollectMid.endTrajectory().fresh()
                 .setTangent(Math.toRadians(270))
-                .splineToLinearHeading(shootPose, Math.toRadians(150.0));
+                .splineToLinearHeading(shootPose, Math.toRadians(150.0), fastToShoot);
 
         goFromLine = drive.actionBuilder(shootPose)
                 .strafeToConstantHeading(lastPose.component1());

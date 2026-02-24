@@ -80,7 +80,9 @@ public class RedFarTemp {
                 .setTangent(Math.toRadians(-180))
                 .splineToSplineHeading(shootPose, new Rotation2d(1,-2));
 
-        goFromLine = goShootLoadZone.endTrajectory().fresh()
+        goFromLine = drive.actionBuilder(shootPose)
                 .strafeToConstantHeading(lastPose.component1());
+
+
     }
 }

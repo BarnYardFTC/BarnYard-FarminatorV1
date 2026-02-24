@@ -7,12 +7,10 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
-import org.firstinspires.ftc.teamcode.opmodes.auto.red.far.RedFarTemp;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
@@ -66,9 +64,11 @@ public class RF9 extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, true, RedFarTemp.goShootLoadZone),
 
+//                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectMid),
+
+//                AutoController.robotPathCommands(true, true, RedFarTemp.goShootMid),
+
                 AutoController.robotPathCommands(false, false, RedFarTemp.goFromLine)
-
-
 
         ).schedule();
     }

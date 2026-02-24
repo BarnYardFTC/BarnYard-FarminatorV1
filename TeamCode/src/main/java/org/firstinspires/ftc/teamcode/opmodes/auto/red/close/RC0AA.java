@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTraj
 import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootLeft;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootMid;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootPre;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootPreLeave;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
@@ -50,7 +51,7 @@ public class RC0AA extends CommandOpMode {
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.robotPathCommands(false, true, goShootPre)
+                AutoController.robotPathCommands(false, true, goShootPreLeave)
         ).schedule();
 
     }

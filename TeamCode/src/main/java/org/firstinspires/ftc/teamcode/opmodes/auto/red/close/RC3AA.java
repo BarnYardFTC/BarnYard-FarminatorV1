@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.auto.red.close;
 
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goCollectLeft;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootLeftLeave;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.goShootPre;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.red.close.RedCloseTrajs.*;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
@@ -17,8 +16,9 @@ import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 @Autonomous(name="RC3 AA", group="red close")
-
 public class RC3AA extends CommandOpMode {
+
+    /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
     private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.RED, AutoPars.posDistance.CLOSE);
@@ -28,7 +28,7 @@ public class RC3AA extends CommandOpMode {
             OpModeData.OpModeType.AUTONOMOUS,
             autoHub.positions.get(AutoPars.positions.START_CLOSE)
     );
-
+    //      I DONT KNOW WHY BUT WE MUST USE FOR START POSES POSES FROM AUTOHUB
     public static int SCORE_TIME = 2200;
 
     @Override
@@ -55,7 +55,7 @@ public class RC3AA extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectLeft),
 
-                AutoController.robotPathCommands(true, true,goShootLeftLeave)
+                AutoController.robotPathCommands(true, true, goShootLeftLeave)
         ).schedule();
     }
     @Override

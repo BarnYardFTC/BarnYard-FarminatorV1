@@ -82,15 +82,18 @@ public class RedCloseTrajs {
                 .setTangent(Math.toRadians(-120.0))
                 .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0), fastToShoot);
 
-//        goShootPreLeave = drive.actionBuilder(startPose)
-//                .strafeToLinearHeading(lastShootPose.component1(),lastShootPose.component2());
 
-//        goShootLeftLeave = goCollectLeft.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
-//                .setTangent(Math.toRadians(-120.0))
-//                .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
-//
-//        goShootMidLeave = goCollectMid.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
-//                .setTangent(Math.toRadians(-120.0))
-//                .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
+        //leave trajectories
+
+        goShootPreLeave = drive.actionBuilder(startPose)
+                .strafeToLinearHeading(lastShootPose.component1(),lastShootPose.component2());
+
+        goShootLeftLeave = goCollectLeft.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .setTangent(Math.toRadians(-120.0))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
+
+        goShootMidLeave = goCollectMid.endTrajectory().fresh                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ()
+                .setTangent(Math.toRadians(-120.0))
+                .splineToLinearHeading(lastShootPose, Math.toRadians(-198.0));
     }
 }

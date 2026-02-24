@@ -1,5 +1,6 @@
 package com.example.basicjavaworkspace.meepmeep.blue.far;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
@@ -13,27 +14,31 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class Blue_Far_ThreePlusSix   {
 
 
-    public static double START_POSE_X = 60;
-    public static double START_POSE_Y = -15;
-    public static double START_HEADING = Math.toRadians(180);
+    public static final Pose2d startPose = new Pose2d( 60, -15.0, Math.toRadians(-180.0));
+    public static final Pose2d shootPose = new Pose2d(54, -15.0, Math.toRadians(203.0));
+    public static final Pose2d lastPose = new Pose2d(37, -15.0, Math.toRadians(199.0));
+    public static final Pose2d rightCollectPose = new Pose2d(34.5, -60.0 , Math.toRadians(270.0));
 
-    public static double SHOOTING_POSE_X = 55;
-    public static double SHOOTING_POSE_Y = -10;
-    public static double SHOOT_HEADING = Math.toRadians(204);
-    public static double SHOOT_HEADING2 = Math.toRadians(205);
+    public static final Pose2d loadZoneReady = new Pose2d(34.5, -63.0, Math.toRadians(-0.0)); // Maybe y needs some changes
 
-    public static double PRECOLLECT_Y = -33;
-    public static int    SHOOTING_TIME_MS = 2000;
+    public static final Pose2d LoadZoneCollect = new Pose2d(63, -63.0, Math.toRadians(270.0));
 
-    public static double COLLECT_POSE_X = 52;
-    public static double COLLECT_POSE2_X =60;
-    public static double COLLECT_POSE_Y = -53;
-    public static double COLLECT_HEADING = Math.toRadians(270);
+//    private static final TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.4);
+//    private static final TranslationalVelConstraint fastToShoot2 = new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.2);
 
-    public static double RIGHT_COLLECT_POSE_X = 32;
+    // paths nigga ----------------------------------------------------------------- no ai stamp only rawdogging
+    public static TrajectoryActionBuilder goShootRight;
+    public static TrajectoryActionBuilder goShootMid;
 
-    public static double SOUTH_READY_POSE_Y = 0;
-    public static double SOUTH_COLLECT_POSE_Y = -53;
+    public static TrajectoryActionBuilder goShootLeftGate;
+
+    public static TrajectoryActionBuilder goShootPre;
+    public static TrajectoryActionBuilder goCollectRight;
+    public static TrajectoryActionBuilder goCollectMid;
+    public static TrajectoryActionBuilder goCollectLeft;
+    public static TrajectoryActionBuilder goCollectLeftGate;
+
+    public static TrajectoryActionBuilder goReadyCollectLoadZone, goCollectLoadZone, goShootLoadZone, goFromLine;
 
 
 
@@ -47,44 +52,43 @@ public class Blue_Far_ThreePlusSix   {
                 .build();
 
 
-        TrajectoryActionBuilder startToShoot = myBot.getDrive().actionBuilder(
-                        new Pose2d(START_POSE_X, START_POSE_Y, START_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING2);
+        goShootPre = myBot.getDrive().actionBuilder(startPose)
+                .strafeToLinearHeading(shootPose.component1(),shootPose.component2().toDouble());
 
+        goCollectRight = goShootPre.endTrajectory().fresh()
+                .setTangent(shootPose.component2())
+                .splineTo(rightCollectPose.component1(), new Rotation2d(-0.0,-1.1));
 
-        TrajectoryActionBuilder angleCollect = myBot.getDrive().actionBuilder(new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,PRECOLLECT_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE_X,COLLECT_POSE_Y ),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,PRECOLLECT_Y),COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(COLLECT_POSE2_X,COLLECT_POSE_Y ),COLLECT_HEADING );
+        goShootRight = goCollectRight.endTrajectory().fresh()
+                .setTangent(Math.toRadians(90.0))
+                .splineTo(shootPose.component1(), shootPose.component2().toDouble()-Math.toRadians(-180.0));
 
-        TrajectoryActionBuilder angleToShoot = myBot.getDrive().actionBuilder(
-                        new Pose2d(COLLECT_POSE2_X, COLLECT_POSE_Y,COLLECT_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+        goReadyCollectLoadZone = goShootRight.endTrajectory().fresh()
+                .setTangent(shootPose.component2())
+                .splineToLinearHeading(loadZoneReady, new Rotation2d(-0.0,-1.1));
 
-        TrajectoryActionBuilder rightCollect = myBot.getDrive().actionBuilder(
-                        new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_READY_POSE_Y), COLLECT_HEADING )
-                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y), COLLECT_HEADING, new TranslationalVelConstraint(30));
+        goCollectLoadZone = goReadyCollectLoadZone.endTrajectory().fresh()
+                .strafeToConstantHeading(LoadZoneCollect.component1());
 
-        TrajectoryActionBuilder rightToShoot   = myBot.getDrive().actionBuilder(
-                        new Pose2d(RIGHT_COLLECT_POSE_X, SOUTH_COLLECT_POSE_Y, COLLECT_HEADING))
-                .strafeToLinearHeading(new Vector2d(SHOOTING_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+        goShootLoadZone = goCollectLoadZone.endTrajectory().fresh()
+                .setTangent(Math.toRadians(180.0))
+                .splineToSplineHeading(shootPose, new Rotation2d(1.0,2));
 
-        TrajectoryActionBuilder finalPos   = myBot.getDrive().actionBuilder(
-                        new Pose2d(SHOOTING_POSE_X, SHOOTING_POSE_Y, SHOOT_HEADING))
-                .strafeToLinearHeading(new Vector2d(RIGHT_COLLECT_POSE_X, SHOOTING_POSE_Y), SHOOT_HEADING);
+        goFromLine = goShootLoadZone.endTrajectory().fresh()
+                .strafeToConstantHeading(lastPose.component1());
 
 
 
         // Run the trajectory
         myBot.runAction(
                 new SequentialAction(
-                startToShoot.build(),
-                angleCollect.build(),
-                angleToShoot.build()
+                        goShootPre.build(),
+                        goCollectRight.build(),
+                        goShootRight.build(),
+                        goReadyCollectLoadZone.build(),
+                        goCollectLoadZone.build(),
+                        goShootLoadZone.build(),
+                        goFromLine.build()
 //                path4.build(),
 //                path5.build()
         ));

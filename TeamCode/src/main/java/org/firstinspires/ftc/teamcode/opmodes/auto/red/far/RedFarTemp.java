@@ -23,6 +23,8 @@ public class RedFarTemp {
     public static final Pose2d midLoadZone = new Pose2d(52, 63, Math.toRadians(-270.0));
     public static final Pose2d rightLoadZone = new Pose2d(63, 63, Math.toRadians(-270.0));
 
+    public static final Pose2d midCollectPose = new Pose2d(10, 70.0, Math.toRadians(-270.0));
+
 
     public static final Pose2d loadZoneReady = new Pose2d(34.5, 63.0, Math.toRadians(0)); // Maybe y needs some changes
 
@@ -79,6 +81,15 @@ public class RedFarTemp {
         goShootLoadZone = goCollectLoadZone.endTrajectory().fresh()
                 .setTangent(Math.toRadians(-180))
                 .splineToSplineHeading(shootPose, new Rotation2d(1,-2));
+
+        //experimental
+        goCollectMid = goShootLoadZone.endTrajectory().fresh()
+                .setTangent(Math.toRadians(200))
+                .splineToSplineHeading(midCollectPose, midCollectPose.heading, fastToShoot);
+
+        goShootMid = goCollectMid.endTrajectory().fresh()
+                .setTangent(Math.toRadians(270))
+                .splineToLinearHeading(shootPose, Math.toRadians(150.0), fastToShoot);
 
         goFromLine = drive.actionBuilder(shootPose)
                 .strafeToConstantHeading(lastPose.component1());

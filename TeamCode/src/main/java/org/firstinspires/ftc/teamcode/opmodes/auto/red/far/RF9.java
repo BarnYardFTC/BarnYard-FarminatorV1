@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.auto.red.far;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-
+@Disabled
 @Autonomous(name="RF9", group="red far")
 public class RF9 extends CommandOpMode {
 
@@ -63,10 +64,10 @@ public class RF9 extends CommandOpMode {
                 AutoController.robotPathCommands(true, false, RedFarTemp.goCollectLoadZone),
 
                 AutoController.robotPathCommands(true, true, RedFarTemp.goShootLoadZone),
-//
-//                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectMid),
-//
-//                AutoController.robotPathCommands(true, true, RedFarTemp.goShootMid),
+
+                AutoController.robotPathCommands(true, false, RedFarTemp.goCollectMid),
+
+                AutoController.robotPathCommands(true, true, RedFarTemp.goShootMid),
 
                 AutoController.robotPathCommands(false, false, RedFarTemp.goFromLine)
 

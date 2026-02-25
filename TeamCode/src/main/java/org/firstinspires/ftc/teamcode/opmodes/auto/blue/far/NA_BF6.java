@@ -1,31 +1,34 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.blue.close;
-
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.close.BlueCloseTemp.*;
+package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTemp.*;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@Autonomous(name="BC6", group="blue close")
-public class BC6AA extends CommandOpMode {
+
+@Autonomous(name="BF6_NA", group="blue far")
+public class NA_BF6 extends CommandOpMode {
+
+
 
     /** Robot and drive system instances */
     private BarnRobot farminator;
     private RoadRunnerMecanumDrive drive;
-    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.CLOSE);
+    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.FAR);
 
     private final OpModeData opModeData = new OpModeData(
             OpModeData.AllianceColor.BLUE,
             OpModeData.OpModeType.AUTONOMOUS,
-            autoHub.positions.get(AutoPars.positions.START_CLOSE)
+            autoHub.positions.get(AutoPars.positions.START_FAR)
     );
 
     public static int SCORE_TIME = 2200;
@@ -37,8 +40,8 @@ public class BC6AA extends CommandOpMode {
         farminator = BarnRobot.getInstance();
         farminator.init(this, opModeData);
 
-        drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
-        BlueCloseTemp.createPath(drive);
+        drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
+        BlueFarTemp.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
@@ -46,19 +49,26 @@ public class BC6AA extends CommandOpMode {
 /**
  * robotPathCommands(boolean intake, boolean shoot, TrajectoryActionBuilder path)
  */
-
+//test
 
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
-                AutoController.robotPathCommands(false, true, goShootPre),
+                new WaitCommand(1500),
+                AutoController.robotPathCommands1(true, true, goShootPre),
 
-                AutoController.robotPathCommands(true, false, goCollectLeftGate),
+                AutoController.robotPathCommands1(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, goShootLeftGate),
+                AutoController.robotPathCommands1(true, true, goShootRight),
 
-                AutoController.robotPathCommands(true, false, goCollectMid),
+                AutoController.robotPathCommands1(false, false, goReadyCollectLoadZone),
 
-                AutoController.robotPathCommands(true, true, goShootMidLeave)
+                AutoController.robotPathCommands1(true, false, goCollectLoadZone),
+
+                AutoController.robotPathCommands1(true, true, goShootLoadZone),
+
+                AutoController.robotPathCommands1(false, false, goFromLine)
+
+
         ).schedule();
     }
     @Override
@@ -84,3 +94,5 @@ public class BC6AA extends CommandOpMode {
     }
 
 }
+
+

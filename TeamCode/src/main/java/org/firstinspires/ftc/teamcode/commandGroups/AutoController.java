@@ -44,6 +44,26 @@ public class AutoController extends SequentialCommandGroup {
         );
     }
 
+    public static Command robotPathCommands1(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+        return new SequentialCommandGroup(
+                new ConditionalCommand(
+                        intakeAndTransferGateCommand(),
+                        deactivateIntakeAndTransferCommand(),
+                        () -> intake
+                ),
+                new DriveActionCommand(path),
+                new ConditionalCommand(
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                shootCommandNoAlign()),
+                        new InstantCommand(),
+                        () -> shoot
+                ),
+                deactivateIntakeAndTransferCommand()
+        );
+    }
+
+
 //    public static Command shootCommand(TrajectoryActionBuilder path){
 //        return new SequentialCommandGroup(
 //                intakeAndTransferGateCommand(),
@@ -92,6 +112,21 @@ public class AutoController extends SequentialCommandGroup {
 //                CommandGroup.deactivateIntakeAndTransferCommand()
 //        );
     }
+
+    public static Command shootCommandNoAlign() {
+        return new ParallelRaceGroup(
+                new SequentialCommandGroup(
+                        BarnRobot.getInstance().gate.openCommand(),
+                        new ParallelRaceGroup(
+                                new WaitCommand(SHOOTING_TIME_MS),
+                                new RunCommand(() -> checkShooterReadiness())
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                )
+        );
+    }
+
 
     private static void checkShooterReadiness(){
         if (BarnRobot.getInstance().shooter.isReady()) {

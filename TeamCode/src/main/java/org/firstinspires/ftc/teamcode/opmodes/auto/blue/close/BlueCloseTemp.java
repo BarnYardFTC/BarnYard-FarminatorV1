@@ -12,7 +12,7 @@ public class BlueCloseTemp {
     public static final int SHOOT_TIME_MS = 1500;
 
     public static final Pose2d startPose = new Pose2d( -53.333, -45.5, Math.toRadians(225));
-    public static final Pose2d shootPose = new Pose2d(-23, -22, Math.toRadians(224));
+    public static final Pose2d shootPose = new Pose2d(-26, -25, Math.toRadians(224));
     public static final Pose2d lastShootPose = new Pose2d(-36, -8,Math.toRadians(247));
 
     public static final Pose2d lastShootLeave = new Pose2d(-39, -8,Math.toRadians(247));
@@ -29,7 +29,7 @@ public class BlueCloseTemp {
     public static final Pose2d midLoadZoneReady = new Pose2d(34.5, -20, Math.toRadians(270));
 
     public static final Pose2d parkPose = new Pose2d(-40, -22, Math.toRadians(227));
-    public static final Pose2d gateOpenPose = new Pose2d(0, -65, Math.toRadians(180));
+    public static final Pose2d gateOpenPose = new Pose2d(-2, -65, Math.toRadians(180));
     public static final Pose2d gateCollectPose = new Pose2d(10,-57, Math.toRadians(227));
 
     private static final TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.5);

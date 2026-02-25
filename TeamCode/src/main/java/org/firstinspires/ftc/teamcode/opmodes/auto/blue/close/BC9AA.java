@@ -62,9 +62,7 @@ public class BC9AA extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, false, goCollectRight),
 
-                AutoController.robotPathCommands(true, true, goShootLast)
-
-
+                AutoController.robotPathCommands(true, true, goShootLastLeave)
         ).schedule();
     }
     @Override

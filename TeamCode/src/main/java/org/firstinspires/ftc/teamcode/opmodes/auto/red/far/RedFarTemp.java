@@ -28,7 +28,7 @@ public class RedFarTemp {
 
     public static final Pose2d loadZoneReady = new Pose2d(34.5, 63.0, Math.toRadians(0)); // Maybe y needs some changes
 
-    public static final Pose2d LoadZoneCollect = new Pose2d(63, 63.0, Math.toRadians(-270.0));
+    public static final Pose2d LoadZoneCollect = new Pose2d(66, 63.0, Math.toRadians(-270.0));
 
     private static final TranslationalVelConstraint fastToShoot = new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.4);
     private static final TranslationalVelConstraint fastToShoot2 = new TranslationalVelConstraint(RoadRunnerMecanumDrive.PARAMS.maxWheelVel*1.2);

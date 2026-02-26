@@ -55,13 +55,13 @@ public class NA_RF3 extends CommandOpMode {
         new SequentialCommandGroup(
                 new WaitUntilCommand(this::opModeIsActive),
                 new WaitCommand(1500),
-                AutoController.robotPathCommands1(true, true, goShootPre),
+                AutoController.robotPathCommandsNA(true, true, goShootPre),
 
-                AutoController.robotPathCommands1(true, false, goStartToLoadZoneCollect),
+                AutoController.robotPathCommandsNA(true, false, goStartToLoadZoneCollect),
 
-                AutoController.robotPathCommands1(true, true, goLoadZoneShoot),
+                AutoController.robotPathCommandsNA(true, true, goLoadZoneShoot),
 
-                AutoController.robotPathCommands1(false, false, goFromLine)
+                AutoController.robotPathCommandsNA(false, false, goFromLine)
 
 
 

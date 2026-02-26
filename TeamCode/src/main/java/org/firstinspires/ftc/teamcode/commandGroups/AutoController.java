@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import android.content.ContentQueryMap;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -12,15 +9,11 @@ import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHood;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
-
-import java.sql.BatchUpdateException;
 
 @Config
 public class AutoController extends SequentialCommandGroup {
@@ -44,7 +37,7 @@ public class AutoController extends SequentialCommandGroup {
         );
     }
 
-    public static Command robotPathCommands1(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+    public static Command robotPathCommandsNA(boolean intake, boolean shoot, TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 new ConditionalCommand(
                         intakeAndTransferGateCommand(),

@@ -70,6 +70,11 @@ public class LimeLight extends SubsystemBase {
     private final int farBluePipeline = 6;
     private final int farRedPipeline = 5;
 
+    private static final double G = 981.0;            // gravity in cm/s^2
+    private static final double WHEEL_DIAMETER = 9.6; // cm
+
+    private static final double SHOOT_POINT_HEIGHT_AVERAGE = 35.9; // cm
+
     /**
      * Constructs the LimeLight subsystem and initializes default settings.
      */
@@ -250,6 +255,19 @@ public class LimeLight extends SubsystemBase {
         }
         return frsContainsGoalTag;
     }
+    public double[] optimalShot(double xCm) {
+
+        double R = Math.sqrt(xCm * xCm + SHOOT_POINT_HEIGHT_AVERAGE * SHOOT_POINT_HEIGHT_AVERAGE);
+
+        double phi = Math.atan((SHOOT_POINT_HEIGHT_AVERAGE + R) / xCm);
+
+        double v = Math.sqrt(G * (R + SHOOT_POINT_HEIGHT_AVERAGE));
+
+        double rpm = (60.0 * v) / (Math.PI * WHEEL_DIAMETER);
+
+        return new double[]{Math.toDegrees(phi), rpm};
+
+    }
 
     /** Updates Limelight results; should be called periodically. */
     @Override
@@ -283,6 +301,8 @@ public class LimeLight extends SubsystemBase {
         if (isGoalTagDetected()) {
             robot.telemetry.addData("Limelight distance", getGoalDistance());
             robot.telemetry.addData("Limelight yaw", getGoalYaw());
+            robot.telemetry.addData("Limelight optimal shoot speed: ", optimalShot(getGoalDistance())[1]);
+            robot.telemetry.addData("Limelight optimal hood angle: ", optimalShot(getGoalDistance())[0]);
         }
 
         poseUpdateTimer.reset();

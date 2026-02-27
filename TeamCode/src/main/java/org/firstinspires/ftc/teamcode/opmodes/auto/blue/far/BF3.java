@@ -47,9 +47,9 @@ public class BF3 extends CommandOpMode {
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
-/**
+ /**
  * robotPathCommands(boolean intake, boolean shoot, TrajectoryActionBuilder path)
- */
+ **/
 //test
 
         new SequentialCommandGroup(

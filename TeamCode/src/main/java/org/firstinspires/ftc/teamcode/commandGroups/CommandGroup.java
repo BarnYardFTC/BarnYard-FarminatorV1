@@ -24,8 +24,12 @@ public class CommandGroup extends SequentialCommandGroup {
 
     public static Command smartShootCommand() {
         return new SequentialCommandGroup(
-                new WaitUntilCommand(CommandGroup::isReadyToShoot),
                 new ParallelRaceGroup(
+                    new WaitUntilCommand(CommandGroup::isReadyToShoot),
+                    new WaitCommand(1300)
+                ),
+                new ParallelRaceGroup(
+                        BarnRobot.getInstance().drive.stopTagAlignment(),
                         new SequentialCommandGroup(
                                 intakeAndTransferActivateCommand(),
                                 BarnRobot.getInstance().gate.openCommand(),
@@ -55,8 +59,8 @@ public class CommandGroup extends SequentialCommandGroup {
     public static Command shootCommand() {
         return new ParallelRaceGroup(
                 new SequentialCommandGroup(
-                        BarnRobot.getInstance().gate.openCommand(),
                         new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                        BarnRobot.getInstance().gate.openCommand(),
                         intakeAndTransferActivateCommand(),
                         new WaitCommand(2000),
                         BarnRobot.getInstance().gate.closeCommand(),

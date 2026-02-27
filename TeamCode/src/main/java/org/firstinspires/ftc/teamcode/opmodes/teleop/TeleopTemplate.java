@@ -71,8 +71,6 @@ public class TeleopTemplate{
                         farminator.shooter.setAutoDistance(),
                         farminator.drive.alignToTagLamLamCommand(),
                         CommandGroup.smartShootCommand()
-//                        farminator.intake.customIntakeCommand(-1),
-//                        BarnRobot.getInstance().gate.closeCommand()
                 )).whenInactive(
                         farminator.drive.driveOneDriverCommand()
                 );

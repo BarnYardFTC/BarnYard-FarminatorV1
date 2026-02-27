@@ -447,11 +447,12 @@ public class DriveTrain extends SubsystemBase {
         );
     }
 
-    public Command alignToTagAutoCommand() {
+    public Command stopTagAlignment() {
         return new RunCommand(
-                () -> alignToGoal(
+                () -> drive(
                         BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
-                        BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY()
+                        BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY(),
+                        0
                 ),
                 this
         );

@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.RunCommand;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 /**
  * Contains complex command groups with commands from different classes.
@@ -154,17 +155,17 @@ public class RobotCommands {
 //        );
 //    }
 
-    private static DriveActionCommand rrDrive(double x, double y) {
+    public static DriveActionCommand rrDrive(double x, double y, RoadRunnerMecanumDrive drive) {
         BarnRobot.getInstance().telemetry.addData("DAC x:", x);
         BarnRobot.getInstance().telemetry.addData("DAC y:", y);
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
-        return new DriveActionCommand(BarnRobot.getInstance().roadRunnerMecanumDrive.actionBuilder(currentPose)
+        return new DriveActionCommand(drive.actionBuilder(currentPose)
                 .strafeToLinearHeading(new Vector2d(x, y), currentPose.heading));
     }
 
-    public static Command park() {
-        return rrDrive(PARKING_X, PARKING_BLUE_Y);
-    }
+//    public static Command park() {
+//        return rrDrive(PARKING_X, PARKING_BLUE_Y);
+//    }
 //    public static Command parkRun() {
 //        return new RunCommand(() -> rrDrive(PARKING_X, PARKING_BLUE_Y));
 //    }

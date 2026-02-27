@@ -7,12 +7,20 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.RobotCommands;
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
+import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
+import org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTemp;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
 @TeleOp(name = "Cmd", group = "test")
 public class GovnoTesting extends CommandOpMode {
     //WIP
     private BarnRobot farminator;
+    private final AutonomousPathController autoHub = new AutonomousPathController(AutoPars.side.BLUE, AutoPars.posDistance.FAR);
+
+    private final RoadRunnerMecanumDrive drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
+
     @Override
     public void initialize() {
         OpModeData opModeData = new OpModeData(
@@ -26,6 +34,7 @@ public class GovnoTesting extends CommandOpMode {
                 this,
                 opModeData
         );
+        BlueFarTemp.createPath(drive);
 
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.setCustomDashboardPos());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
@@ -33,7 +42,7 @@ public class GovnoTesting extends CommandOpMode {
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
                 .toggleWhenPressed(
-                        RobotCommands.park() //.alongWith(farminator.drive.stop())
+                        RobotCommands.rrDrive(0, 0, drive) //.alongWith(farminator.drive.stop())
                 );
 
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)

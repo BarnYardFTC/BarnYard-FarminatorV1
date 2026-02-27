@@ -52,9 +52,9 @@ public class BC6AA extends CommandOpMode {
                 new WaitUntilCommand(this::opModeIsActive),
                 AutoController.robotPathCommands(false, true, goShootPre),
 
-                AutoController.robotPathCommands(true, false, goCollectLeft),
+                AutoController.robotPathCommands(true, false, goCollectLeftGate),
 
-                AutoController.robotPathCommands(true, true, goShootLeft),
+                AutoController.robotPathCommands(true, true, goShootLeftGate),
 
                 AutoController.robotPathCommands(true, false, goCollectMid),
 

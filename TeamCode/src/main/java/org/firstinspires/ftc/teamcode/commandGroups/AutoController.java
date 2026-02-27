@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.commandGroups;
 
-import android.content.ContentQueryMap;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -12,15 +9,11 @@ import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.BarnRobot;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHood;
 import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
-
-import java.sql.BatchUpdateException;
 
 @Config
 public class AutoController extends SequentialCommandGroup {
@@ -43,6 +36,26 @@ public class AutoController extends SequentialCommandGroup {
                 deactivateIntakeAndTransferCommand()
         );
     }
+
+    public static Command robotPathCommandsNA(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+        return new SequentialCommandGroup(
+                new ConditionalCommand(
+                        intakeAndTransferGateCommand(),
+                        deactivateIntakeAndTransferCommand(),
+                        () -> intake
+                ),
+                new DriveActionCommand(path),
+                new ConditionalCommand(
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                shootCommandNoAlign()),
+                        new InstantCommand(),
+                        () -> shoot
+                ),
+                deactivateIntakeAndTransferCommand()
+        );
+    }
+
 
 //    public static Command shootCommand(TrajectoryActionBuilder path){
 //        return new SequentialCommandGroup(
@@ -92,6 +105,21 @@ public class AutoController extends SequentialCommandGroup {
 //                CommandGroup.deactivateIntakeAndTransferCommand()
 //        );
     }
+
+    public static Command shootCommandNoAlign() {
+        return new ParallelRaceGroup(
+                new SequentialCommandGroup(
+                        BarnRobot.getInstance().gate.openCommand(),
+                        new ParallelRaceGroup(
+                                new WaitCommand(SHOOTING_TIME_MS),
+                                new RunCommand(() -> checkShooterReadiness())
+                        ),
+                        BarnRobot.getInstance().gate.closeCommand(),
+                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                )
+        );
+    }
+
 
     private static void checkShooterReadiness(){
         if (BarnRobot.getInstance().shooter.isReady()) {

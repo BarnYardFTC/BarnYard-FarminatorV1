@@ -96,15 +96,16 @@ public class Shooter  extends SubsystemBase {
         setPower(-1);
     }
 
-    private void shooterFormulaBased(){
-        double distance = BarnRobot.getInstance().limelight.getGoalDistance();
+    private void shooterFormulaBased(double distance){
+        if (!isAutoOperated) distance = this.distance;
+        pidfController.setPIDF(p, 0, 0, f);
 
-        double shooterSpeed = BarnRobot.getInstance().limelight.optimalShot(distance)[1];
-        setPower(shooterSpeed);
+        targetVelocity = BarnRobot.getInstance().limelight.optimalShot(distance)[1];
+        setCustomVelocity();
     }
 
     public RunCommand runShooterFormulaBased(){
-        return new RunCommand(() -> shooterFormulaBased(), this);
+        return new RunCommand(() -> shooterBasedOnFormula(), this);
     }
 
     public RunCommand runShooterFar(){
@@ -137,6 +138,12 @@ public class Shooter  extends SubsystemBase {
 
     private void shooterSpeedOnDistance(){
         operateShooterDistanceBased(
+                BarnRobot.getInstance().limelight.getGoalDistance()
+        );
+    }
+
+    private void shooterBasedOnFormula(){
+        shooterFormulaBased(
                 BarnRobot.getInstance().limelight.getGoalDistance()
         );
     }

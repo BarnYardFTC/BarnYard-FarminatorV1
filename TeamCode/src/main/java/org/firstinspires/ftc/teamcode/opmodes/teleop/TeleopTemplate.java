@@ -26,9 +26,9 @@ public class TeleopTemplate{
 
         this.fieldOrientedReferenceHeading = fieldOrientedReferenceHeading;
 
-        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
+        farminator.shooterHood.setDefaultCommand(farminator.shooterHood.setHoodFormulaBased());
         farminator.drive.setDefaultCommand(farminator.drive.driveOneDriverCommand());
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterFormulaBased());
 
 
         // ==========================================================

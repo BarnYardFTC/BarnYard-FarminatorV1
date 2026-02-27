@@ -7,7 +7,7 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 
-@TeleOp(name = "Cmd", group = "test")
+@TeleOp(name = "Cmd1", group = "test")
 public class AccelerationTesting extends CommandOpMode {
     private BarnRobot farminator;
 

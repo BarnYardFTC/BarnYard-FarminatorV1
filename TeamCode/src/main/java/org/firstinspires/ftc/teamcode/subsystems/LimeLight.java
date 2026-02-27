@@ -265,7 +265,7 @@ public class LimeLight extends SubsystemBase {
 
         double v = Math.sqrt(G * (R + GOAL_SHOOT_HEIGHT));
 
-        double rpm = (60.0 * v) / (Math.PI * WHEEL_DIAMETER);
+        double rpm = (v) / (Math.PI * WHEEL_DIAMETER);
 
         return new double[]{Math.toDegrees(phi), rpm};
 

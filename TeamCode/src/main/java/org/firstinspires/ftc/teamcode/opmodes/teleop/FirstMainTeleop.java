@@ -62,5 +62,6 @@ public class FirstMainTeleop extends CommandOpMode{
 //        telemetry.addData("val", BarnRobot.getInstance().shooter.getTargetVelocity());
         farminator.shooterHood.HoodRunCommand(() -> pos).schedule();
         telemetry.update();
+        farminator.periodic();
     }
 }

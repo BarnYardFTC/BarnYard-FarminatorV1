@@ -136,6 +136,8 @@ public class TeleopTemplate{
                         () -> farminator.shooter.runShooterBasedOnDistance()
                 );
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.)
+
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
                         .whenPressed(() -> farminator.pinpointLocalizer.setPose(
                                 new Pose2d(

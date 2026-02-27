@@ -99,11 +99,22 @@ public class ShooterHood extends SubsystemBase {
         }
     }
 
-    public void shooterHoodFormulaBased(){
-        double distance = BarnRobot.getInstance().limelight.getGoalDistance();
-
+    public void shooterHoodFormulaBased(double distance){
         double hoodAngle = BarnRobot.getInstance().limelight.optimalShot(distance)[0];
-        setPosition(hoodAngle);
+
+        if (hoodAngle > MAX) hoodAngle = MAX;
+
+        servoPos = hoodAngle;
+    }
+
+    public void hoodFormulaBasedAlignment(){
+        if (BarnRobot.getInstance().shooter.isAutoOperated){
+            shooterHoodFormulaBased(
+                    BarnRobot.getInstance().limelight.getGoalDistance()
+            );
+        }
+
+        setPosition(servoPos);
     }
 
     public void shooterHoodOnDistance(){
@@ -117,9 +128,7 @@ public class ShooterHood extends SubsystemBase {
     }
 
 
-    public Command setHoodFormulaBased(){
-        return new InstantCommand(() -> shooterHoodFormulaBased(), this);
-    }
+
     public Command setHoodCloseToGoalPos(){
         return new RunCommand(() -> setPosition(MIN), this);
     }
@@ -135,6 +144,9 @@ public class ShooterHood extends SubsystemBase {
     public Command operateHood(){
         if(isAuto) return autoHoodAlignment();
         else return new RunCommand(() -> setHoodPosition(servoPos));
+    }
+    public Command setHoodFormulaBased(){
+        return new RunCommand(() -> hoodFormulaBasedAlignment(), this);
     }
 
     public RunCommand autoHoodAlignment(){

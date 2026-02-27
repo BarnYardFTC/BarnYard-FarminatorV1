@@ -79,7 +79,7 @@ public class AutoController extends SequentialCommandGroup {
         return new ParallelRaceGroup(
                 new SequentialCommandGroup(
                         new ParallelRaceGroup(
-                                BarnRobot.getInstance().drive.alignToTagAutoCommand().interruptOn(() -> BarnRobot.getInstance().limelight.isAlignedToGoal()),
+                                BarnRobot.getInstance().drive.alignToTagLamLamCommand().interruptOn(() -> BarnRobot.getInstance().limelight.isAlignedToGoal()),
                                 new WaitCommand(SHOOTING_TIME_MS)
                                 ),
                         BarnRobot.getInstance().gate.openCommand(),

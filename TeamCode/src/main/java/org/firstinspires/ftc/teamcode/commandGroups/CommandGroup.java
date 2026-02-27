@@ -29,7 +29,7 @@ public class CommandGroup extends SequentialCommandGroup {
                     new WaitCommand(1300)
                 ),
                 new ParallelRaceGroup(
-                        BarnRobot.getInstance().drive.stopTagAlignment(),
+//                        BarnRobot.getInstance().drive.stopTagAlignment(),
                         new SequentialCommandGroup(
                                 intakeAndTransferActivateCommand(),
                                 BarnRobot.getInstance().gate.openCommand(),

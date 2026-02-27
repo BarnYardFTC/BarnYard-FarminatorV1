@@ -58,8 +58,8 @@ public class FirstMainTeleop extends CommandOpMode{
     public void run() {
         super.run();
         farminator.limelight.displayTelemetry();
-        telemetry.addData("dis", BarnRobot.getInstance().limelight.getGoalDistance());
-        telemetry.addData("val", BarnRobot.getInstance().shooter.getTargetVelocity());
+//        telemetry.addData("dis", BarnRobot.getInstance().limelight.getGoalDistance());
+//        telemetry.addData("val", BarnRobot.getInstance().shooter.getTargetVelocity());
         farminator.shooterHood.HoodRunCommand(() -> pos).schedule();
         telemetry.update();
     }

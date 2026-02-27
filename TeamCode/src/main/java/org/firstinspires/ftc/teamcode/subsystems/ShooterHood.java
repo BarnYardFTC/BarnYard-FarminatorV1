@@ -99,6 +99,13 @@ public class ShooterHood extends SubsystemBase {
         }
     }
 
+    public void shooterHoodFormulaBased(){
+        double distance = BarnRobot.getInstance().limelight.getGoalDistance();
+
+        double hoodAngle = BarnRobot.getInstance().limelight.optimalShot(distance)[0];
+        setPosition(hoodAngle);
+    }
+
     public void shooterHoodOnDistance(){
         if (BarnRobot.getInstance().shooter.isAutoOperated){
             shooterHoodBasedOnDistance(
@@ -109,6 +116,10 @@ public class ShooterHood extends SubsystemBase {
         setPosition(servoPos);
     }
 
+
+    public Command setHoodFormulaBased(){
+        return new InstantCommand(() -> shooterHoodFormulaBased(), this);
+    }
     public Command setHoodCloseToGoalPos(){
         return new RunCommand(() -> setPosition(MIN), this);
     }

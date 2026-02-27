@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -97,6 +96,16 @@ public class Shooter  extends SubsystemBase {
         setPower(-1);
     }
 
+    private void shooterFormulaBased(){
+        double distance = BarnRobot.getInstance().limelight.getGoalDistance();
+
+        double shooterSpeed = BarnRobot.getInstance().limelight.optimalShot(distance)[1];
+        setPower(shooterSpeed);
+    }
+
+    public RunCommand runShooterFormulaBased(){
+        return new RunCommand(() -> shooterFormulaBased(), this);
+    }
 
     public RunCommand runShooterFar(){
         return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_RANGE_4), this);

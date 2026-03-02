@@ -291,6 +291,12 @@ public class DriveTrain extends SubsystemBase {
                                 double bx, double by) {
         return (px - bx) * (ay - by) - (ax - bx) * (py - by);
     }
+    private double diffToSpeedPinPoint(double yawDiff) {
+        double output = pidControllerClose.calculate(yawDiff, 0);
+        if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1)
+            output = Math.copySign(MIN_TURNING_SPEED, output);
+        return output;
+    }
 
     /** Main entry: aligns robot to the AprilTag or approximate direction */
     private void alignToGoal(double x, double y) {
@@ -365,7 +371,7 @@ public class DriveTrain extends SubsystemBase {
 
         // --- Control ---
         double diffYaw = desiredHeading - currentHeading;
-        double turnSpd = diffToSpeed(diffYaw);
+        double turnSpd = diffToSpeedPinPoint(diffYaw);
 
         // --- Telemetry ---
 //        robot.telemetry.addData("predictedX", predictedX);

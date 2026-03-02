@@ -36,8 +36,8 @@ public class FirstMainTeleop extends CommandOpMode{
         OpModeData opModeData = new OpModeData(
                 OpModeData.AllianceColor.RED,
                 OpModeData.OpModeType.TELEOP,
-                new Pose2d(0, 0, Math.toRadians(90)),
-                90
+                new Pose2d(0, 0, Math.toRadians(180)),
+                180
         );
 
         // ==========================================================

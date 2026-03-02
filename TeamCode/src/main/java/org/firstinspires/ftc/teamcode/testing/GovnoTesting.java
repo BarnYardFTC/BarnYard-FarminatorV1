@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTemp;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-@TeleOp(name = "Cmd", group = "test")
+@TeleOp(name = "Govno", group = "test")
 public class GovnoTesting extends CommandOpMode {
     //WIP
     private BarnRobot farminator;

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.CommandGroup;
 import org.firstinspires.ftc.teamcode.opmodes.teleop.TeleopTemplate;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
+
+@TeleOp(name = "align", group = "test")
 
 public class LocalzationAlignmentTest extends CommandOpMode {
     private double fieldOrientedReferenceHeading;
@@ -89,12 +92,10 @@ public class LocalzationAlignmentTest extends CommandOpMode {
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.CIRCLE)
-                .whenActive(farminator.drive.alignToTagLamLamCommand())
-                .whenInactive(farminator.drive.driveOneDriverCommand());
+                .toggleWhenPressed(farminator.drive.alignToTagLamLamCommand());
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenActive(farminator.drive.alignToTagCommand())
-                .whenInactive(farminator.drive.driveOneDriverCommand());
+                .toggleWhenPressed(farminator.drive.alignToTagCommand());
 
 
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05)
@@ -133,12 +134,6 @@ public class LocalzationAlignmentTest extends CommandOpMode {
 //                );
 
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenActive(
-                        new ParallelCommandGroup(
-                                farminator.intake.customIntakeCommand(-1),
-                                BarnRobot.getInstance().gate.closeCommand())
-                );
 
 
 //        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)
@@ -147,10 +142,7 @@ public class LocalzationAlignmentTest extends CommandOpMode {
 //                        farminator.shooter.runShooterBasedOnDistance()
 //                );
 
-        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .toggleWhenPressed(
-                        new RunCommand(() -> farminator.kickStand.activate()),
-                        new RunCommand(() -> farminator.kickStand.deactivate()));
+
 
         farminator.gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .toggleWhenPressed(

@@ -23,7 +23,7 @@ public class DriveTrain extends SubsystemBase {
 
     // Yaw PID (deg -> output turn)
     public static double closeP = 0.9, closeD = 0.05;
-    public static double farP = 0.6, farD = 0.2;
+    public static double farP = 0.34, farD = 0.2;
     public final static double FAR_PID_DISTANCE = 2;
     public static double farLimelightGoal = -0.1;
 
@@ -46,8 +46,8 @@ public class DriveTrain extends SubsystemBase {
 
 
     // Search / fallback turning speeds (when tag not visible)
-    public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.8;
-    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.3;
+    public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
+    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.32;
 
 
     private boolean searchingForTag = true;

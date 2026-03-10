@@ -22,8 +22,8 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     // Yaw PID (deg -> output turn)
-    public static double closeP = 0.9, closeD = 0.05;
-    public static double farP = 0.34, farD = 0.2;
+    public static double closeP = 0.5, closeD = 0.02;
+    public static double farP = 0.4, farD = 0.2;
     public final static double FAR_PID_DISTANCE = 2;
     public static double farLimelightGoal = -0.1;
 
@@ -46,7 +46,7 @@ public class DriveTrain extends SubsystemBase {
 
 
     // Search / fallback turning speeds (when tag not visible)
-    public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.6;
+    public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.8;
     public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.32;
 
 
@@ -64,8 +64,8 @@ public class DriveTrain extends SubsystemBase {
     /** Field coordinates for the target goal. (meters) */
     public static final double GOAL_X_1 = -1.72;
     public static final double GOAL_X_2 = -1.65;
-    public static final double BLUE_GOAL_Y = -1.45;
-    public static final double RED_GOAL_Y = 1.45;
+    public static final double BLUE_GOAL_Y = 1.45;
+    public static final double RED_GOAL_Y = -1.45;
 
     public static double GOAL_ROBOT_MIN_DISTANCE = 0.7;
 
@@ -292,9 +292,15 @@ public class DriveTrain extends SubsystemBase {
         return (px - bx) * (ay - by) - (ax - bx) * (py - by);
     }
     private double diffToSpeedPinPoint(double yawDiff) {
+        BarnRobot.getInstance().telemetry.addData("is pid'ed", true);
         double output = pidControllerClose.calculate(yawDiff, 0);
-        if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1)
+
+        if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1) {
+            BarnRobot.getInstance().telemetry.addData("is min", true);
             output = Math.copySign(MIN_TURNING_SPEED, output);
+        }
+        BarnRobot.getInstance().telemetry.addData("speed", output);
+
         return output;
     }
 
@@ -337,12 +343,9 @@ public class DriveTrain extends SubsystemBase {
         PinpointLocalizer localizer = robot.pinpointLocalizer;
 
         Pose2d pose = localizer.getPose();
-        Pose2d vel  = localizer.getPoseVelocity();
 
-        // --- Predict future position (meters) ---
-        double predictedX = (pose.position.x + vel.position.x * VELOCITY_LOOKAHEAD) * 0.0254;
-        double predictedY = (pose.position.y + vel.position.y * VELOCITY_LOOKAHEAD) * 0.0254;
-
+        double currentX = pose.position.x * 0.0254;
+        double currentY = pose.position.y * 0.0254;
         double currentHeading = getBotAbsoluteHeading();
 
         // --- Alliance-dependent constants ---
@@ -356,33 +359,19 @@ public class DriveTrain extends SubsystemBase {
                 : GOAL_X_1;
 
         // --- Geometry ---
-        double dx = goalX - predictedX;
-        double dy = goalY - predictedY;
+        double dx = goalX - currentX;
+        double dy = goalY - currentY;
 
         double tangentAngle = Math.toDegrees(Math.atan2(dx, dy));
 
-        // --- Shoot-while-driving lead ---
-        double shootWhileDriveCoef = 1.0; // tune
-        double velocityLead =
-                (vel.position.x * dx + vel.position.y * dy) * shootWhileDriveCoef;
-
         // --- Final desired heading ---
-        double desiredHeading = baseHeading - tangentAngle + velocityLead;
-
+        double desiredHeading = baseHeading + tangentAngle;
+        robot.telemetry.addData("desired heading", desiredHeading);
+        robot.telemetry.addData("base heading", baseHeading);
+        robot.telemetry.addData("tangent heading", tangentAngle);
         // --- Control ---
         double diffYaw = desiredHeading - currentHeading;
         double turnSpd = diffToSpeedPinPoint(diffYaw);
-
-        // --- Telemetry ---
-//        robot.telemetry.addData("predictedX", predictedX);
-//        robot.telemetry.addData("predictedY", predictedY);
-//        robot.telemetry.addData("dx", dx);
-//        robot.telemetry.addData("dy", dy);
-//        robot.telemetry.addData("tangentAngle", tangentAngle);
-//        robot.telemetry.addData("velocityLead", velocityLead);
-//        robot.telemetry.addData("desiredHeading", desiredHeading);
-//        robot.telemetry.addData("diffYaw", diffYaw);
-//        robot.telemetry.addData("vel", vel);
 
         // --- Drive ---
         if (robot.opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {

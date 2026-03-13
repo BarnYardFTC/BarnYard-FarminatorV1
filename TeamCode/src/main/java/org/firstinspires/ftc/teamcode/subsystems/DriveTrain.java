@@ -337,6 +337,10 @@ public class DriveTrain extends SubsystemBase {
      * - TELEOP: drive(spdX, spdY, turnSpd)
      * - AUTO:   turnOnly(turnSpd)
      */
+    private void smartAlignment(double spdX, double spdY){
+        if(BarnRobot.getInstance().limelight.isDataValid()) alignToGoal(spdX, spdY);
+        else localizationBasedGoalAlignment(spdX, spdY);
+    }
     private void localizationBasedGoalAlignment(double spdX, double spdY) {
 
         BarnRobot robot = BarnRobot.getInstance();
@@ -436,6 +440,16 @@ public class DriveTrain extends SubsystemBase {
     public Command alignToTagLamLamCommand() {
         return new RunCommand(
                 () -> alignToGoal(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY()
+                ),
+                this
+        );
+    }
+
+    public Command alignToTagSmart(){
+        return new RunCommand(
+                () -> smartAlignment(
                         BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
                         BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY()
                 ),
@@ -559,6 +573,7 @@ public class DriveTrain extends SubsystemBase {
         if (heading < 0) return heading + 360;
         return heading;
     }
+
 
     // ============================================================
     //                           STATIC DETECTION

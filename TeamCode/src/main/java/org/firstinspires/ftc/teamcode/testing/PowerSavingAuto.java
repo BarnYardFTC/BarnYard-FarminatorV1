@@ -67,13 +67,8 @@ public class PowerSavingAuto extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        telemetry.addData("aligned: ", farminator.limelight.isAlignedToGoal());
-        telemetry.addData("yaw: ", farminator.limelight.getGoalYaw());
-        telemetry.addData("tag detected: ", farminator.limelight.isGoalTagDetected());
-        if (farminator.limelight.isGoalTagDetected())
-            telemetry.addData("seen", true);
-        farminator.limelight.displayTelemetry();
-
+        telemetry.addData("shooter command: ", farminator.shooter.getDefaultCommand().getName());
+        telemetry.addData("shooter command: ", farminator.shooter.getCurrentCommand().getName());
         farminator.periodic();
     }
 

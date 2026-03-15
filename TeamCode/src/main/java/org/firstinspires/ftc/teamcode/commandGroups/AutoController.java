@@ -37,6 +37,32 @@ public class AutoController extends SequentialCommandGroup {
         );
     }
 
+
+    //power saving mode
+    public static Command robotPathCommandsPSM(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+        return new SequentialCommandGroup(
+                new ConditionalCommand(
+                        intakeAndTransferGateCommand(),
+                        deactivateIntakeAndTransferCommand(),
+                        () -> intake
+                ),
+                new ConditionalCommand(
+                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                        BarnRobot.getInstance().shooter.turnOffInstant(),
+                        () -> shoot
+                ),
+                new DriveActionCommand(path),
+                new ConditionalCommand(
+                        new SequentialCommandGroup(
+                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+                                shootCommand()),
+                        new InstantCommand(),
+                        () -> shoot
+                ),
+                deactivateIntakeAndTransferCommand()
+        );
+    }
+
     public static Command robotPathCommandsNA(boolean intake, boolean shoot, TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 new ConditionalCommand(

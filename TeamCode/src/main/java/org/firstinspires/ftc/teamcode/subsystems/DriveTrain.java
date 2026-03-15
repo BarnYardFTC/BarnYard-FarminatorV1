@@ -23,8 +23,10 @@ public class DriveTrain extends SubsystemBase {
 
     // Yaw PID (deg -> output turn)
     public static double closeP = 0.5, closeD = 0.02;
-    public static double farP = 0.4, farD = 0.2;
-    public final static double FAR_PID_DISTANCE = 2;
+    public static double farP = 0.2, farD = 0.3;
+    public static double pinPointP = 0, pinPointD = 0;
+
+    public final static double FAR_PID_DISTANCE = 2.6;
     public static double farLimelightGoal = -0.1;
 
     public double getFarLimelightGoal(){
@@ -97,6 +99,7 @@ public class DriveTrain extends SubsystemBase {
     // PID controller for yaw correction
     private final PIDController pidControllerClose;
     private final PIDController pidControllerFar;
+    private final PIDController pidPinPoint;
 
     // NOTE: currently unused, kept because you may want to reference initial alignment
     private final double initialBotHeading;
@@ -125,6 +128,7 @@ public class DriveTrain extends SubsystemBase {
         initialBotHeading = 270;
         pidControllerClose = new PIDController(closeP, 0, closeD);
         pidControllerFar = new PIDController(farP, 0, farD);
+        pidPinPoint = new PIDController(pinPointP, 0, pinPointD);
     }
 
     // ============================================================
@@ -292,8 +296,7 @@ public class DriveTrain extends SubsystemBase {
         return (px - bx) * (ay - by) - (ax - bx) * (py - by);
     }
     private double diffToSpeedPinPoint(double yawDiff) {
-        BarnRobot.getInstance().telemetry.addData("is pid'ed", true);
-        double output = pidControllerClose.calculate(yawDiff, 0);
+        double output = pidPinPoint.calculate(yawDiff, 0);
 
         if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1) {
             BarnRobot.getInstance().telemetry.addData("is min", true);

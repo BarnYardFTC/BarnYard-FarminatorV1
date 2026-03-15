@@ -6,6 +6,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.ParallelDeadlineGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -42,24 +43,11 @@ public class AutoController extends SequentialCommandGroup {
     public static Command robotPathCommandsPSM(boolean intake, boolean shoot, TrajectoryActionBuilder path){
         return new SequentialCommandGroup(
                 new ConditionalCommand(
-                        intakeAndTransferGateCommand(),
-                        deactivateIntakeAndTransferCommand(),
-                        () -> intake
-                ),
-                new ConditionalCommand(
-                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                        BarnRobot.getInstance().shooter.turnOffInstant(),
+                        new InstantCommand(() -> BarnRobot.getInstance().shooter.setDefaultCommand(BarnRobot.getInstance().shooter.runShooterBasedOnDistance())),
+                        new InstantCommand(() -> BarnRobot.getInstance().shooter.setDefaultCommand(BarnRobot.getInstance().shooter.turnOffInstant())),
                         () -> shoot
                 ),
-                new DriveActionCommand(path),
-                new ConditionalCommand(
-                        new SequentialCommandGroup(
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                shootCommand()),
-                        new InstantCommand(),
-                        () -> shoot
-                ),
-                deactivateIntakeAndTransferCommand()
+                robotPathCommands(intake, shoot, path)
         );
     }
 

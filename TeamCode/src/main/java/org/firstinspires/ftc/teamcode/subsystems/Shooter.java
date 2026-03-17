@@ -29,6 +29,8 @@ public class Shooter  extends SubsystemBase {
     public static double SHOOTER_VELOCITY_RANGE_2 = 1050;
     public static double SHOOTER_VELOCITY_RANGE_1 = 900;
 
+    public static double SHOOTER_VELOCITY_IDLE = 500;
+
 
     public static double SHOOTING_RANGE_1 = 1.26;
     public static double SHOOTING_RANGE_2 = 1.9;
@@ -87,6 +89,16 @@ public class Shooter  extends SubsystemBase {
         }
         setCustomVelocity();
     }
+
+    private void idleShooter() {
+        targetVelocity = SHOOTER_VELOCITY_RANGE_1;
+        setCustomVelocity();
+    }
+
+    public Command idleShooterCommand(){
+        return new RunCommand(() -> idleShooter(), this);
+    }
+
     private void setCustomVelocity(){
         double power = pidfController.calculate(targetVelocity, getVelocity());
         setPower(power);

@@ -44,7 +44,7 @@ public class AutoController extends SequentialCommandGroup {
         return new ParallelRaceGroup(
                 new ConditionalCommand(
                         BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
-                        BarnRobot.getInstance().shooter.turnOff(),
+                        BarnRobot.getInstance().shooter.idleShooterCommand(),
                         () -> shoot
                 ),
                 robotPathCommands(intake, shoot, path)
@@ -101,8 +101,7 @@ public class AutoController extends SequentialCommandGroup {
                                 new WaitCommand(SHOOTING_TIME_MS),
                                 new RunCommand(() -> checkShooterReadiness())
                         ),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                        BarnRobot.getInstance().gate.closeCommand()
                 )
         );
 //

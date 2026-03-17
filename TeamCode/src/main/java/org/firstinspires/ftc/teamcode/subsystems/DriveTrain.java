@@ -645,5 +645,7 @@ public class DriveTrain extends SubsystemBase {
     public void periodic() {
         // Keep PID values hot-reloadable from Dashboard
         pidControllerClose.setPID(closeP, 0, closeD);
+        pidControllerFar.setPID(farP, 0, farD);
+        pidPinPoint.setPID(pinPointP, 0, pinPointD);
     }
 }

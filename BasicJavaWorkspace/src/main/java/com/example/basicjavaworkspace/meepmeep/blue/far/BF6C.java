@@ -41,7 +41,7 @@ public class BF6C {
 
     public static TrajectoryActionBuilder goReadyCollectLoadZone, goCollectLoadZone, goShootLoadZone, goFromLine;
 
-    public static TrajectoryActionBuilder goHPSCycle;
+    public static TrajectoryActionBuilder goHPSCycle, goHPSCycleAlt;
     public static TrajectoryActionBuilder goShootCycle;
 
 
@@ -82,9 +82,13 @@ public class BF6C {
         goFromLine = goShootLoadZone.endTrajectory().fresh()
                 .strafeToConstantHeading(lastPose.component1());
 
-        goHPSCycle = goShootLoadZone.endTrajectory().fresh()
+        goHPSCycleAlt = goShootLoadZone.endTrajectory().fresh() //another variant just in case
                 .setTangent(Math.toRadians(45))
                 .splineToSplineHeading(HPS, new Rotation2d(0,-1));
+
+        goHPSCycle = goShootLoadZone.endTrajectory().fresh()
+                .setTangent(Math.toRadians(-135))
+                .splineToSplineHeading(HPS, new Rotation2d(-0.3,-2));
 
         goShootCycle = goHPSCycle.endTrajectory().fresh()
                 .setTangent(Math.toRadians(90))

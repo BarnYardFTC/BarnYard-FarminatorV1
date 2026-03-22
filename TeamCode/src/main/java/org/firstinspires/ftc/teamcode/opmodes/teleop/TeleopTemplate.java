@@ -69,7 +69,7 @@ public class TeleopTemplate{
         new Trigger(() -> farminator.gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.05)
                 .whenActive(new ParallelCommandGroup(
                         farminator.shooter.setAutoDistance(),
-                        farminator.drive.alignToTagLamLamCommand(),
+//                        farminator.drive.alignToTagLamLamCommand(),
                         CommandGroup.smartShootCommand()
                 )).whenInactive(
                         farminator.drive.driveOneDriverCommand()

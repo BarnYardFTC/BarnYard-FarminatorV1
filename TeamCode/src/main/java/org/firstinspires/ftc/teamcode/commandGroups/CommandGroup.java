@@ -25,7 +25,7 @@ public class CommandGroup extends SequentialCommandGroup {
     public static Command smartShootCommand() {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
-                    new WaitUntilCommand(CommandGroup::isReadyToShoot),
+                    new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                     new WaitCommand(1300)
                 ),
                 new ParallelRaceGroup(

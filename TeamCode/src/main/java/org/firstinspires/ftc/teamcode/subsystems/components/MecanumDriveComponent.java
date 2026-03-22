@@ -176,8 +176,15 @@ public class MecanumDriveComponent {
         Pose2d currentPose = BarnRobot.getInstance().pinpointLocalizer.getPose();
         double speedX = (stopPose.position.x - currentPose.position.x) * speedMultiplier;
         double speedY = (stopPose.position.y - currentPose.position.y) * speedMultiplier;
-        turn += Math.toDegrees(stopPose.heading.toDouble() - currentPose.heading.toDouble()) * turnMultiplier;
+        //turn += Math.toDegrees(stopPose.heading.toDouble() - currentPose.heading.toDouble()) * turnMultiplier;
         setSpeed(speedX, speedY, turn);
+        translateSpeedToPower();
+    }
+
+    public void maintainPosNew() {
+        setSpeed(-2*BarnRobot.getInstance().pinpointLocalizer.getPoseVelocity().position.x,
+                -2*BarnRobot.getInstance().pinpointLocalizer.getPoseVelocity().position.y,
+                -2*BarnRobot.getInstance().pinpointLocalizer.getPoseVelocity().heading.toDouble());
         translateSpeedToPower();
     }
 }

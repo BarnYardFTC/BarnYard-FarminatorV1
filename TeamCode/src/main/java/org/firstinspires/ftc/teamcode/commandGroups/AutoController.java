@@ -6,6 +6,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.ParallelDeadlineGroup;
 import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -34,6 +35,19 @@ public class AutoController extends SequentialCommandGroup {
                         () -> shoot
                 ),
                 deactivateIntakeAndTransferCommand()
+        );
+    }
+
+
+    //power saving mode
+    public static Command robotPathCommandsPSM(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+        return new ParallelRaceGroup(
+                new ConditionalCommand(
+                        BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
+                        BarnRobot.getInstance().shooter.idleShooterCommand(),
+                        () -> shoot
+                ),
+                robotPathCommands(intake, shoot, path)
         );
     }
 
@@ -87,8 +101,7 @@ public class AutoController extends SequentialCommandGroup {
                                 new WaitCommand(SHOOTING_TIME_MS),
                                 new RunCommand(() -> checkShooterReadiness())
                         ),
-                        BarnRobot.getInstance().gate.closeCommand(),
-                        new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
+                        BarnRobot.getInstance().gate.closeCommand()
                 )
         );
 //

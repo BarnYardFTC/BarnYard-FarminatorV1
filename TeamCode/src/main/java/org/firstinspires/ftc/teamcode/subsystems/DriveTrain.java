@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.controller.PIDController;
 import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.subsystems.components.MecanumDriveComponent;
 import org.firstinspires.ftc.teamcode.util.OpModeData;
+import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.PinpointLocalizer;
 
 @Config
 public class DriveTrain extends SubsystemBase {
@@ -21,9 +22,11 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     // Yaw PID (deg -> output turn)
-    public static double closeP = 0.9, closeD = 0.05;
-    public static double farP = 0.6, farD = 0.2;
-    public final static double FAR_PID_DISTANCE = 2;
+    private double closeP = 0.5, closeD = 0.02;
+    public static double farP = 0.2, farD = 0.3;
+    public static double pinPointP = 0.002, pinPointD = 0.0005;
+
+    public final static double FAR_PID_DISTANCE = 2.6;
     public static double farLimelightGoal = -0.1;
 
     public double getFarLimelightGoal(){
@@ -46,7 +49,7 @@ public class DriveTrain extends SubsystemBase {
 
     // Search / fallback turning speeds (when tag not visible)
     public static double ALIGNMENT_TURNING_SPEED_OUTZONE = 0.8;
-    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.3;
+    public static double ALIGNMENT_TURNING_SPEED_INZONE = 0.32;
 
 
     private boolean searchingForTag = true;
@@ -63,8 +66,8 @@ public class DriveTrain extends SubsystemBase {
     /** Field coordinates for the target goal. (meters) */
     public static final double GOAL_X_1 = -1.72;
     public static final double GOAL_X_2 = -1.65;
-    public static final double BLUE_GOAL_Y = -1.45;
-    public static final double RED_GOAL_Y = 1.45;
+    public static final double BLUE_GOAL_Y = 1.45;
+    public static final double RED_GOAL_Y = -1.45;
 
     public static double GOAL_ROBOT_MIN_DISTANCE = 0.7;
 
@@ -96,6 +99,7 @@ public class DriveTrain extends SubsystemBase {
     // PID controller for yaw correction
     private final PIDController pidControllerClose;
     private final PIDController pidControllerFar;
+    private final PIDController pidPinPoint;
 
     // NOTE: currently unused, kept because you may want to reference initial alignment
     private final double initialBotHeading;
@@ -124,6 +128,7 @@ public class DriveTrain extends SubsystemBase {
         initialBotHeading = 270;
         pidControllerClose = new PIDController(closeP, 0, closeD);
         pidControllerFar = new PIDController(farP, 0, farD);
+        pidPinPoint = new PIDController(pinPointP, 0, pinPointD);
     }
 
     // ============================================================
@@ -290,6 +295,17 @@ public class DriveTrain extends SubsystemBase {
                                 double bx, double by) {
         return (px - bx) * (ay - by) - (ax - bx) * (py - by);
     }
+    private double diffToSpeedPinPoint(double yawDiff) {
+        double output = pidPinPoint.calculate(yawDiff, 0);
+
+        if (Math.abs(output) < MIN_TURNING_SPEED && Math.abs(yawDiff) > 1) {
+            BarnRobot.getInstance().telemetry.addData("is min", true);
+            output = Math.copySign(MIN_TURNING_SPEED, output);
+        }
+        BarnRobot.getInstance().telemetry.addData("speed", output);
+
+        return output;
+    }
 
     /** Main entry: aligns robot to the AprilTag or approximate direction */
     private void alignToGoal(double x, double y) {
@@ -324,66 +340,53 @@ public class DriveTrain extends SubsystemBase {
      * - TELEOP: drive(spdX, spdY, turnSpd)
      * - AUTO:   turnOnly(turnSpd)
      */
-//    private void localizationBasedGoalAlignment(double spdX, double spdY) {
-//
-//        BarnRobot robot = BarnRobot.getInstance();
-//        PinpointLocalizer localizer = robot.pinpointLocalizer;
-//
-//        Pose2d pose = localizer.getPose();
-//        Pose2d vel  = localizer.getPoseVelocity();
-//
-//        // --- Predict future position (meters) ---
-//        double predictedX = (pose.position.x + vel.position.x * VELOCITY_LOOKAHEAD) * 0.0254;
-//        double predictedY = (pose.position.y + vel.position.y * VELOCITY_LOOKAHEAD) * 0.0254;
-//
-//        double currentHeading = getBotAbsoluteHeading();
-//
-//        // --- Alliance-dependent constants ---
-//        boolean isRed = robot.opmodeData.allianceColor == OpModeData.AllianceColor.RED;
-//
-//        double goalY = isRed ? RED_GOAL_Y : BLUE_GOAL_Y;
-//        double baseHeading = isRed ? 90.0 : 270.0;
-//
-//        double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
-//                ? GOAL_X_2
-//                : GOAL_X_1;
-//
-//        // --- Geometry ---
-//        double dx = goalX - predictedX;
-//        double dy = goalY - predictedY;
-//
-//        double tangentAngle = Math.toDegrees(Math.atan2(dx, dy));
-//
-//        // --- Shoot-while-driving lead ---
-//        double shootWhileDriveCoef = 1.0; // tune
-//        double velocityLead =
-//                (vel.position.x * dx + vel.position.y * dy) * shootWhileDriveCoef;
-//
-//        // --- Final desired heading ---
-//        double desiredHeading = baseHeading - tangentAngle + velocityLead;
-//
-//        // --- Control ---
-//        double diffYaw = desiredHeading - currentHeading;
-//        double turnSpd = diffToSpeed(diffYaw);
-//
-//        // --- Telemetry ---
-////        robot.telemetry.addData("predictedX", predictedX);
-////        robot.telemetry.addData("predictedY", predictedY);
-////        robot.telemetry.addData("dx", dx);
-////        robot.telemetry.addData("dy", dy);
-////        robot.telemetry.addData("tangentAngle", tangentAngle);
-////        robot.telemetry.addData("velocityLead", velocityLead);
-////        robot.telemetry.addData("desiredHeading", desiredHeading);
-////        robot.telemetry.addData("diffYaw", diffYaw);
-////        robot.telemetry.addData("vel", vel);
-//
-//        // --- Drive ---
-//        if (robot.opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
-//            drive(spdX, spdY, turnSpd);
-//        } else {
-//            turnOnly(turnSpd);
-//        }
-//    }
+    private void smartAlignment(double spdX, double spdY){
+        if(BarnRobot.getInstance().limelight.isDataValid()) alignToGoal(spdX, spdY);
+        else localizationBasedGoalAlignment(spdX, spdY);
+    }
+    private void localizationBasedGoalAlignment(double spdX, double spdY) {
+
+        BarnRobot robot = BarnRobot.getInstance();
+        PinpointLocalizer localizer = robot.pinpointLocalizer;
+
+        Pose2d pose = localizer.getPose();
+
+        double currentX = pose.position.x * 0.0254;
+        double currentY = pose.position.y * 0.0254;
+        double currentHeading = getBotAbsoluteHeading();
+
+        // --- Alliance-dependent constants ---
+        boolean isRed = robot.opmodeData.allianceColor == OpModeData.AllianceColor.RED;
+
+        double goalY = isRed ? RED_GOAL_Y : BLUE_GOAL_Y;
+        double baseHeading = isRed ? 90.0 : 270.0;
+
+        double goalX = (getDistanceFromGoal() < Shooter.SHOOTING_RANGE_2)
+                ? GOAL_X_2
+                : GOAL_X_1;
+
+        // --- Geometry ---
+        double dx = goalX - currentX;
+        double dy = goalY - currentY;
+
+        double tangentAngle = Math.toDegrees(Math.atan2(dx, dy));
+
+        // --- Final desired heading ---
+        double desiredHeading = baseHeading + tangentAngle;
+        robot.telemetry.addData("desired heading", desiredHeading);
+        robot.telemetry.addData("base heading", baseHeading);
+        robot.telemetry.addData("tangent heading", tangentAngle);
+        // --- Control ---
+        double diffYaw = desiredHeading - currentHeading;
+        double turnSpd = diffToSpeedPinPoint(diffYaw);
+
+        // --- Drive ---
+        if (robot.opmodeData.opModeType == OpModeData.OpModeType.TELEOP) {
+            drive(spdX, spdY, turnSpd);
+        } else {
+            turnOnly(turnSpd);
+        }
+    }
 
     // ============================================================
     //                           COMMANDS (in a clean order)
@@ -426,20 +429,30 @@ public class DriveTrain extends SubsystemBase {
     }
 
     /** Continuous alignment using localization-based aiming */
-//    public Command alignToTagCommand() {
-//        return new RunCommand(
-//                () -> localizationBasedGoalAlignment(
-//                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
-//                        BarnRobot.getInstance().gamepadEx1.getLeftY()
-//                ),
-//                this
-//        );
-//    }
+    public Command alignToTagCommand() {
+        return new RunCommand(
+                () -> localizationBasedGoalAlignment(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY()
+                ),
+                this
+        );
+    }
 
     /** Continuous alignment using Limelight tag yaw (fallback search when tag lost) */
     public Command alignToTagLamLamCommand() {
         return new RunCommand(
                 () -> alignToGoal(
+                        BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
+                        BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY()
+                ),
+                this
+        );
+    }
+
+    public Command alignToTagSmart(){
+        return new RunCommand(
+                () -> smartAlignment(
                         BarnRobot.getInstance().gamepadEx1.getLeftX() + BarnRobot.getInstance().gamepadEx2.getLeftX(),
                         BarnRobot.getInstance().gamepadEx1.getLeftY() + BarnRobot.getInstance().gamepadEx2.getLeftY()
                 ),
@@ -564,6 +577,7 @@ public class DriveTrain extends SubsystemBase {
         return heading;
     }
 
+
     // ============================================================
     //                           STATIC DETECTION
     // ============================================================
@@ -631,5 +645,7 @@ public class DriveTrain extends SubsystemBase {
     public void periodic() {
         // Keep PID values hot-reloadable from Dashboard
         pidControllerClose.setPID(closeP, 0, closeD);
+        pidControllerFar.setPID(farP, 0, farD);
+        pidPinPoint.setPID(pinPointP, 0, pinPointD);
     }
 }

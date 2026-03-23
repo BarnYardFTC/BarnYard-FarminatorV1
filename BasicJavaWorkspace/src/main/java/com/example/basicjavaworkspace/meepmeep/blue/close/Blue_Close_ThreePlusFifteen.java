@@ -75,6 +75,11 @@ public class Blue_Close_ThreePlusFifteen {
         goCollectLeft = goShootPre.endTrajectory().fresh()
                 .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2));
 
+        goCollectLeftGate = goShootPre.endTrajectory().fresh()
+                .splineToLinearHeading(leftCollectPose, new Rotation2d(-.1, -2))
+                .setTangent(new Rotation2d(1, 1))
+                .splineToLinearHeading(gateOpenPose, Math.toRadians(-100));
+
         goShootLeftGate = goCollectLeftGate.endTrajectory().fresh()
                 .strafeToLinearHeading(shootPose.component1(), shootPose.component2());
 
@@ -135,7 +140,7 @@ public class Blue_Close_ThreePlusFifteen {
                 new SleepAction(1.5),
                 goCollectRight.build(),
                 goShootLast.build(),
-                new SleepAction(1.5)
+               new SleepAction(1.5)
 
 
 

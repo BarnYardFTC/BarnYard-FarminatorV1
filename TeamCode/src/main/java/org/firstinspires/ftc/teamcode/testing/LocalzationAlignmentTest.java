@@ -46,19 +46,19 @@ public class LocalzationAlignmentTest extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        farminator.shooterHood.displayTelemetry();
+//        farminator.shooterHood.displayTelemetry();
         farminator.drive.displayPinpointDataTelemetry();
-        farminator.shooter.displayTelemetry();
-//        telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
-        telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
-//        telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
-//        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
-        telemetry.addData("Is smart functions ON? ", farminator.colorSensor.getIntakeMode());
-        farminator.colorSensor.displayTelemetry(telemetry);
-        telemetry.addData("is in zone", farminator.drive.isInsideLaunchZone());
-
-        telemetry.addData("gate left pos", farminator.gate.getLeftPos());
-        farminator.limelight.displayTelemetry();
+//        farminator.shooter.displayTelemetry();
+////        telemetry.addData("ang", farminator.pinpointLocalizer.getPose().heading.toDouble());
+//        telemetry.addData("ang", Math.toDegrees(farminator.pinpointLocalizer.getPose().heading.toDouble()));
+////        telemetry.addData("Loop Time (ms)", getRuntime() * 1000);
+////        telemetry.addData("default drive command: ", farminator.drive.getDefaultCommand());
+//        telemetry.addData("Is smart functions ON? ", farminator.colorSensor.getIntakeMode());
+//        farminator.colorSensor.displayTelemetry(telemetry);
+//        telemetry.addData("is in zone", farminator.drive.isInsideLaunchZone());
+//
+//        telemetry.addData("gate left pos", farminator.gate.getLeftPos());
+//        farminator.limelight.displayTelemetry();
         farminator.periodic();
     }
 

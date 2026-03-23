@@ -22,9 +22,9 @@ public class DriveTrain extends SubsystemBase {
     // ============================================================
 
     // Yaw PID (deg -> output turn)
-    private double closeP = 0.5, closeD = 0.02;
+    public static double closeP = 0.5, closeD = 0.02;
     public static double farP = 0.2, farD = 0.3;
-    public static double pinPointP = 0.00, pinPointD = 0.000;
+    public static double pinPointP = 0.02, pinPointD = 0.003;
 
     public final static double FAR_PID_DISTANCE = 2.6;
     public static double farLimelightGoal = -0.1;
@@ -303,6 +303,8 @@ public class DriveTrain extends SubsystemBase {
             output = Math.copySign(MIN_TURNING_SPEED, output);
         }
         BarnRobot.getInstance().telemetry.addData("speed", output);
+        BarnRobot.getInstance().telemetry.addData("P", pinPointP);
+        BarnRobot.getInstance().telemetry.addData("D", pinPointD);
 
         return output;
     }
@@ -645,11 +647,11 @@ public class DriveTrain extends SubsystemBase {
     //                           PERIODIC
     // ============================================================
 
-//    @Override
-//    public void periodic() {
-//        // Keep PID values hot-reloadable from Dashboard
-//        pidControllerClose.setPID(closeP, 0, closeD);
-//        pidControllerFar.setPID(farP, 0, farD);
-//        pidPinPoint.setPID(pinPointP, 0, pinPointD);
-//    }
+    @Override
+    public void periodic() {
+        // Keep PID values hot-reloadable from Dashboard
+        pidControllerClose.setPID(closeP, 0, closeD);
+        pidControllerFar.setPID(farP, 0, farD);
+        pidPinPoint.setPID(pinPointP, 0, pinPointD);
+    }
 }

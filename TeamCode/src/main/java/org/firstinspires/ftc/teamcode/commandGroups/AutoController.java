@@ -92,7 +92,7 @@ public class AutoController extends SequentialCommandGroup {
     public static Command shootCommand() {
         return new SequentialCommandGroup(
                 BarnRobot.getInstance().gate.openCommand(),
-                new WaitCommand(1500),
+                new WaitCommand(SHOOTING_TIME_MS),
                 BarnRobot.getInstance().gate.closeCommand(),
                 BarnRobot.getInstance().colorSensor.setCheckFalse(),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())

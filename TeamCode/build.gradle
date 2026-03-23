@@ -47,8 +47,9 @@ dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 
-    // SolversLib
-    implementation "org.solverslib:core:SNAPSHOT-7cdcc66" // core
+
+    // implementation "org.ftclib.ftclib:core:2.1.1" remove FTCLib core
+    implementation "org.solverslib:core:0.3.4" // core
 
     implementation "com.acmerobotics.dashboard:dashboard:0.5.0" // FTC Dashboard
 

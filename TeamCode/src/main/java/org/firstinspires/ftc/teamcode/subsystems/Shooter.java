@@ -112,7 +112,7 @@ public class Shooter  extends SubsystemBase {
         double distance = BarnRobot.getInstance().limelight.getGoalDistance();
 
         double shooterSpeed = BarnRobot.getInstance().limelight.optimalShot(distance)[1];
-        setPower(shooterSpeed);
+        setCustomVelocity(shooterSpeed);
     }
 
     public RunCommand runShooterFormulaBased(){

@@ -88,21 +88,14 @@ public class AutoController extends SequentialCommandGroup {
 //    }
 
     // Command for shoot
-    public static int SHOOTING_TIME_MS = 1200;
+    public static int SHOOTING_TIME_MS = 1500;
     public static Command shootCommand() {
-        return new ParallelRaceGroup(
-                new SequentialCommandGroup(
-                        new ParallelRaceGroup(
-                                BarnRobot.getInstance().drive.alignToTagLamLamCommand().interruptOn(() -> BarnRobot.getInstance().limelight.isAlignedToGoal()),
-                                new WaitCommand(SHOOTING_TIME_MS)
-                                ),
-                        BarnRobot.getInstance().gate.openCommand(),
-                        new ParallelRaceGroup(
-                                new WaitCommand(SHOOTING_TIME_MS),
-                                new RunCommand(() -> checkShooterReadiness())
-                        ),
-                        BarnRobot.getInstance().gate.closeCommand()
-                )
+        return new SequentialCommandGroup(
+                BarnRobot.getInstance().gate.openCommand(),
+                new WaitCommand(1500),
+                BarnRobot.getInstance().gate.closeCommand(),
+                BarnRobot.getInstance().colorSensor.setCheckFalse(),
+                new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
         );
 //
 //        return new SequentialCommandGroup(

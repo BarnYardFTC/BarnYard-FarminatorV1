@@ -10,7 +10,10 @@ import org.firstinspires.ftc.teamcode.BarnRobot;
 import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
-import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTemp.*;
+import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTempTest.*;
+//import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTempTest.goHPSCycle;
+//import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTempTest.goShootCycle;
+
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
@@ -42,6 +45,7 @@ public class BFC6 extends CommandOpMode {
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
         BlueFarTemp.createPath(drive);
+        BlueFarTempTest.createPath(drive);
 
         farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
@@ -56,17 +60,17 @@ public class BFC6 extends CommandOpMode {
                 new WaitCommand(1500),
                 AutoController.robotPathCommands(true, true, goShootPre),
 
-                AutoController.robotPathCommands(true, false, goCollectRight)
+                AutoController.robotPathCommands(true, false, goCollectRight),
 
-//                AutoController.robotPathCommands(true, true, goShootRight),
-//
-//                AutoController.robotPathCommands(true, false, goCollectLoadZone),
-//
-//                AutoController.robotPathCommands(true, true, goShootLoadZone),
-//
-//                AutoController.robotPathCommands(true, false, goHPSCycle),
-//
-//                AutoController.robotPathCommands(true, true, goShootCycle),
+                AutoController.robotPathCommands(true, true, goShootRight),
+
+                AutoController.robotPathCommands(true, false, goCollectLoadZone),
+
+                AutoController.robotPathCommands(true, true, goShootLoadZone),
+
+                AutoController.robotPathCommands(true, false, goHPSCycle),
+
+                AutoController.robotPathCommands(true, true, goShootCycle)
 //
 //                AutoController.robotPathCommands(true, false, goHPSCycle),
 //

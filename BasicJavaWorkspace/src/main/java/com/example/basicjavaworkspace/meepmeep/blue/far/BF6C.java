@@ -106,9 +106,9 @@ public class BF6C {
                         //goReadyCollectLoadZone.build(),
                         goCollectLoadZone.build(),
                         goShootLoadZone.build(),
-                        goHPSCycle.build(),
+                        goHPSCycleAlt.build(),
                         goShootCycle.build(),
-                        goHPSCycle.build(),
+                        goHPSCycleAlt.build(),
                         goShootCycle.build(),
                         goFromLine.build()
 //                path4.build(),

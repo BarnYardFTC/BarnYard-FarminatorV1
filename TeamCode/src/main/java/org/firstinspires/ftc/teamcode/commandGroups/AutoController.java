@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.util.DriveActionCommand;
 @Config
 public class AutoController extends SequentialCommandGroup {
 
-    public static Command robotPathCommands(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+    public static Command robotPathCommands(boolean intake, boolean shoot, TrajectoryActionBuilder path) {
         return new SequentialCommandGroup(
                 new ConditionalCommand(
                         intakeAndTransferGateCommand(),
@@ -28,9 +28,7 @@ public class AutoController extends SequentialCommandGroup {
                 ),
                 new DriveActionCommand(path),
                 new ConditionalCommand(
-                        new SequentialCommandGroup(
-                            new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                            shootCommand()),
+                        shootCommand(),
                         new InstantCommand(),
                         () -> shoot
                 ),
@@ -40,7 +38,7 @@ public class AutoController extends SequentialCommandGroup {
 
 
     //power saving mode
-    public static Command robotPathCommandsPSM(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+    public static Command robotPathCommandsPSM(boolean intake, boolean shoot, TrajectoryActionBuilder path) {
         return new ParallelRaceGroup(
                 new ConditionalCommand(
                         BarnRobot.getInstance().shooter.runShooterBasedOnDistance(),
@@ -51,7 +49,7 @@ public class AutoController extends SequentialCommandGroup {
         );
     }
 
-    public static Command robotPathCommandsNA(boolean intake, boolean shoot, TrajectoryActionBuilder path){
+    public static Command robotPathCommandsNA(boolean intake, boolean shoot, TrajectoryActionBuilder path) {
         return new SequentialCommandGroup(
                 new ConditionalCommand(
                         intakeAndTransferGateCommand(),
@@ -75,7 +73,7 @@ public class AutoController extends SequentialCommandGroup {
 //        return new SequentialCommandGroup(
 //                intakeAndTransferGateCommand(),
 //                new DriveActionCommand(path)
-////                deactivateIntakeAndTransferCommand()
+    /// /                deactivateIntakeAndTransferCommand()
 //        );
 //    }
 //
@@ -89,28 +87,17 @@ public class AutoController extends SequentialCommandGroup {
 
     // Command for shoot
     public static int SHOOTING_TIME_MS = 1500;
+
     public static Command shootCommand() {
         return new SequentialCommandGroup(
+                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                 BarnRobot.getInstance().gate.openCommand(),
                 new WaitCommand(SHOOTING_TIME_MS),
                 BarnRobot.getInstance().gate.closeCommand(),
-                BarnRobot.getInstance().colorSensor.setCheckFalse(),
                 new WaitUntilCommand(() -> BarnRobot.getInstance().gate.isClosed())
         );
-//
-//        return new SequentialCommandGroup(
-//                new ParallelRaceGroup(
-//                        BarnRobot.getInstance().drive.alignToTagLamLamCommand(),
-//                        new WaitCommand(250)
-//                ),
-//                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-//                BarnRobot.getInstance().gate.openCommand(),
-//                CommandGroup.intakeAndTransferActivateCommand(),
-//                new WaitCommand(SHOOTING_TIME_MS),
-//                BarnRobot.getInstance().gate.closeCommand(),
-//                CommandGroup.deactivateIntakeAndTransferCommand()
-//        );
     }
+
 
     public static Command shootCommandNoAlign() {
         return new ParallelRaceGroup(

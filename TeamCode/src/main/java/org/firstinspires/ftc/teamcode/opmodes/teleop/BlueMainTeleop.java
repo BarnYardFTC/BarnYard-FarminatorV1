@@ -50,6 +50,9 @@ public class BlueMainTeleop extends CommandOpMode{
         template = new TeleopTemplate();
         template.initControls(270);
 
+        farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.CIRCLE)
+                .toggleWhenPressed(farminator.drive.alignToTagLamLamCommand());
+
     }
 
 

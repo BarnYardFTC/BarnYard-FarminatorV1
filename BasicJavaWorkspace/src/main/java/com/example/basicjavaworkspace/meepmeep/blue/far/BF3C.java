@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.opmodes.auto.blue.far;
-
+package com.example.basicjavaworkspace.meepmeep.blue.far;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.TranslationalVelConstraint;
+import com.noahbres.meepmeep.MeepMeep;
+import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
+import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
 
-public class BlueFarTempTest {
+public class BF3C {
 
-    public static final int SHOOT_TIME_MS = 1500;
 
     public static final Pose2d startPose = new Pose2d( 60, -15.0, Math.toRadians(-180.0));
     public static final Pose2d shootPose = new Pose2d(54, -15.0, Math.toRadians(203.0));
@@ -18,10 +18,9 @@ public class BlueFarTempTest {
 
     public static final Pose2d loadZoneReady = new Pose2d(34.5, -63.0, Math.toRadians(-0.0)); // Maybe y needs some changes
 
-    public static final Pose2d HPS = new Pose2d(64.5, -64.5, Math.toRadians(270));
+    public static final Pose2d LoadZoneCollect = new Pose2d(63, -63.0, Math.toRadians(360));
 
-    public static final Pose2d LoadZoneCollect = new Pose2d(63, -65.0, Math.toRadians(270));
-
+    public static final Pose2d HPS = new Pose2d(63, -63.0, Math.toRadians(270));
 
 
 
@@ -45,8 +44,19 @@ public class BlueFarTempTest {
     public static TrajectoryActionBuilder goHPSCycle, goHPSCycleAlt;
     public static TrajectoryActionBuilder goShootCycle;
 
-    public static void createPath(RoadRunnerMecanumDrive drive) {
-        goShootPre = drive.actionBuilder(startPose)
+
+
+    public static void main(String[] args) {
+
+        MeepMeep meepMeep = new MeepMeep(800);
+
+        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setDimensions(13.157, 18.03044)
+                .build();
+
+
+        goShootPre = myBot.getDrive().actionBuilder(startPose)
                 .strafeToLinearHeading(shootPose.component1(),shootPose.component2().toDouble());
 
         goCollectRight = goShootPre.endTrajectory().fresh()
@@ -84,5 +94,35 @@ public class BlueFarTempTest {
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(shootPose, new Rotation2d(0,1));
 
+
+
+
+        // Run the trajectory
+        myBot.runAction(
+                new SequentialAction(
+                        goShootPre.build(),
+                        goCollectRight.build(),
+                        goShootRight.build(),
+                        //goReadyCollectLoadZone.build(),
+                        goCollectLoadZone.build(),
+                        goShootLoadZone.build(),
+                        goHPSCycle.build(),
+                        goShootCycle.build(),
+                        goHPSCycle.build(),
+                        goShootCycle.build(),
+                        goFromLine.build()
+//                path4.build(),
+//                path5.build()
+        ));
+
+        // MeepMeep visualization
+        meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
+                .setDarkMode(true)
+                .setBackgroundAlpha(0.95f)
+                .addEntity(myBot)
+                .start();
     }
+
 }
+
+

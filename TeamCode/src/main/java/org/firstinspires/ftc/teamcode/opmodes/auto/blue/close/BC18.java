@@ -39,7 +39,7 @@ public class BC18 extends CommandOpMode{
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_CLOSE));
         BlueCloseTemp.createPath(drive);
 
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterFormulaBased());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
 /**

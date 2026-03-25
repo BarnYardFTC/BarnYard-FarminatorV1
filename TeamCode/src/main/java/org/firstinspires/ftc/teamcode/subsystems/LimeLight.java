@@ -74,7 +74,7 @@ public class LimeLight extends SubsystemBase {
     private static final double WHEEL_DIAMETER = 9.6; // cm
 
     private static final double SHOOT_POINT_HEIGHT_AVERAGE = 35.9; // cm
-    private final double GOAL_HEIGHT = 105; //cm
+    private final double GOAL_HEIGHT = 95; //cm
     private final double GOAL_WEIGHT = 30; //cm
     private final double GOAL_SHOOT_HEIGHT = GOAL_HEIGHT - SHOOT_POINT_HEIGHT_AVERAGE  ; //cm
 
@@ -258,12 +258,13 @@ public class LimeLight extends SubsystemBase {
         }
         return frsContainsGoalTag;
     }
-    public double[] optimalShot(double xCm) {
+    public double[] optimalShot(double xM) {
+        double xCm = xM * 100;
         double xCmReady = xCm + GOAL_WEIGHT;
 
         double xMReady = xCmReady / 100;
 
-        double spdPercent = 1 * (xMReady * 0.05);
+        double spdPercent = 1 + (xMReady * 0.01);
 
         double R = Math.sqrt(xCmReady * xCmReady + GOAL_SHOOT_HEIGHT * GOAL_SHOOT_HEIGHT);
 

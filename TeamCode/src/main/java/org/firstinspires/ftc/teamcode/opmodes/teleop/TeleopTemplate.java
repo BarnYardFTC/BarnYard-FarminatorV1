@@ -133,7 +133,7 @@ public class TeleopTemplate{
                                 farminator.shooter.turnOff(),
                                 farminator.intake.deactivateIntakeRunCommandZeroPower()
                         ),
-                        () -> farminator.shooter.runShooterBasedOnDistance()
+                        () -> farminator.shooter.runShooterFormulaBased()
                 );
 
 
@@ -249,7 +249,7 @@ public class TeleopTemplate{
                                 farminator.shooter.turnOff(),
                                 farminator.intake.deactivateIntakeRunCommandZeroPower()
                         ),
-                        farminator.shooter.runShooterBasedOnDistance()
+                        farminator.shooter.runShooterFormulaBased()
                 );
 
         farminator.gamepadEx1.getGamepadButton(GamepadKeys.Button.Y)

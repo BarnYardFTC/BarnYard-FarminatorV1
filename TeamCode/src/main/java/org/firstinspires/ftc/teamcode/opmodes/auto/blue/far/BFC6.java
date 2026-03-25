@@ -11,8 +11,6 @@ import org.firstinspires.ftc.teamcode.commandGroups.AutoController;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutoPars;
 import org.firstinspires.ftc.teamcode.opmodes.auto.AutonomousPathController;
 import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTempTest.*;
-//import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTempTest.goHPSCycle;
-//import static org.firstinspires.ftc.teamcode.opmodes.auto.blue.far.BlueFarTempTest.goShootCycle;
 
 import org.firstinspires.ftc.teamcode.util.OpModeData;
 import org.firstinspires.ftc.teamcode.util.libraries.roadrunner.RoadRunnerMecanumDrive;
@@ -44,10 +42,9 @@ public class BFC6 extends CommandOpMode {
         farminator.init(this, opModeData);
 
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
-        BlueFarTemp.createPath(drive);
         BlueFarTempTest.createPath(drive);
 
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterFormulaBased());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
 /**

@@ -181,7 +181,6 @@ public class DriveTrain extends SubsystemBase {
         if (Math.abs(output) < MIN_TURNING_SPEED) {
             output = Math.copySign(MIN_TURNING_SPEED, output);
         }
-
         return output;
     }
 

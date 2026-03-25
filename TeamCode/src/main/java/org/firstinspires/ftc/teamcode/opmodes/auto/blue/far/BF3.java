@@ -44,7 +44,7 @@ public class BF3 extends CommandOpMode {
         drive = new RoadRunnerMecanumDrive(hardwareMap, autoHub.positions.get(AutoPars.positions.START_FAR));
         BlueFarTemp.createPath(drive);
 
-        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterBasedOnDistance());
+        farminator.shooter.setDefaultCommand(farminator.shooter.runShooterFormulaBased());
         farminator.shooterHood.setDefaultCommand(farminator.shooterHood.autoHoodAlignment());
 
  /**

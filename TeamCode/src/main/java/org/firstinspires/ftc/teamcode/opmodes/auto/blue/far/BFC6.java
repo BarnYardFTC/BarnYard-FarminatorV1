@@ -65,7 +65,7 @@ public class BFC6 extends CommandOpMode {
 
                 AutoController.robotPathCommands(true, true, goShootLoadZone),
 
-                AutoController.robotPathCommands(true, false, goHPSCycleAlt),
+                AutoController.robotPathCommands(true, false, goHPSCycle),
 
                 AutoController.robotPathCommands(true, true, goShootCycle)
 //

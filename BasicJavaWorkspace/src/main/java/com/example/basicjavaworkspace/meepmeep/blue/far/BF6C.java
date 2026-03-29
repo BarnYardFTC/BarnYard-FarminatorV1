@@ -18,9 +18,9 @@ public class BF6C {
 
     public static final Pose2d loadZoneReady = new Pose2d(34.5, -63.0, Math.toRadians(-0.0)); // Maybe y needs some changes
 
-    public static final Pose2d LoadZoneCollect = new Pose2d(63, -63.0, Math.toRadians(360));
+    public static final Pose2d LoadZoneCollect = new Pose2d(63, -65, Math.toRadians(360));
 
-    public static final Pose2d HPS = new Pose2d(63, -63.0, Math.toRadians(270));
+    public static final Pose2d HPS = new Pose2d(62, -65, Math.toRadians(270));
 
 
 
@@ -106,7 +106,7 @@ public class BF6C {
                         //goReadyCollectLoadZone.build(),
                         goCollectLoadZone.build(),
                         goShootLoadZone.build(),
-                        goHPSCycleAlt.build(),
+                        goHPSCycle.build(),
                         goShootCycle.build(),
                         goHPSCycleAlt.build(),
                         goShootCycle.build(),

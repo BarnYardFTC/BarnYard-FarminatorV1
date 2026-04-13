@@ -74,8 +74,9 @@ public class LimeLight extends SubsystemBase {
     private static final double WHEEL_DIAMETER = 9.6; // cm
 
     private static final double SHOOT_POINT_HEIGHT_AVERAGE = 35.9; // cm
-    private final double GOAL_HEIGHT = 98; //cm
-    private final double GOAL_SHOOT_HEIGHT = SHOOT_POINT_HEIGHT_AVERAGE - GOAL_HEIGHT; //cm
+    private final double GOAL_HEIGHT = 95; //cm
+    private final double GOAL_WEIGHT = 30; //cm
+    private final double GOAL_SHOOT_HEIGHT = GOAL_HEIGHT - SHOOT_POINT_HEIGHT_AVERAGE  ; //cm
 
     /**
      * Constructs the LimeLight subsystem and initializes default settings.
@@ -257,15 +258,23 @@ public class LimeLight extends SubsystemBase {
         }
         return frsContainsGoalTag;
     }
-    public double[] optimalShot(double xCm) {
+    public double[] optimalShot(double xM) {
+        double xCm = xM * 100;
+        double xCmReady = xCm + GOAL_WEIGHT;
 
-        double R = Math.sqrt(xCm * xCm + GOAL_SHOOT_HEIGHT * GOAL_SHOOT_HEIGHT);
+        double xMReady = xCmReady / 100;
 
-        double phi = Math.atan((GOAL_SHOOT_HEIGHT + R) / xCm);
+        double spdPercent = 1 + (xMReady * 0.01);
+
+        double R = Math.sqrt(xCmReady * xCmReady + GOAL_SHOOT_HEIGHT * GOAL_SHOOT_HEIGHT);
+
+        double phi = Math.atan((GOAL_SHOOT_HEIGHT + R) / xCmReady);
 
         double v = Math.sqrt(G * (R + GOAL_SHOOT_HEIGHT));
 
         double rpm = ( v) / (Math.PI * WHEEL_DIAMETER);
+
+        rpm *= spdPercent;
 
         return new double[]{Math.toDegrees(phi), rpm};
 

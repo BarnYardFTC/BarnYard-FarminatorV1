@@ -108,17 +108,29 @@ public class Shooter  extends SubsystemBase {
         setPower(-1);
     }
 
-    private void shooterFormulaBased(double distance){
-        if (!isAutoOperated) distance = this.distance;
-        pidfController.setPIDF(p, 0, 0, f);
+    private void shooterFormulaBased(){
+        double distance = BarnRobot.getInstance().limelight.getGoalDistance();
 
         targetVelocity = BarnRobot.getInstance().limelight.optimalShot(distance)[1];
+
         setCustomVelocity();
     }
 
     public RunCommand runShooterFormulaBased(){
-        return new RunCommand(() -> shooterBasedOnFormula(), this);
+        return new RunCommand(() -> shooterFormulaBased(), this);
     }
+
+    private void shooterSpeedOnDistance(){
+        operateShooterDistanceBased(
+                BarnRobot.getInstance().limelight.getGoalDistance()
+        );
+    }
+
+    public Command runShooterBasedOnDistance(){
+        return new RunCommand(() -> shooterSpeedOnDistance(), this);
+    }
+
+
 
     public RunCommand runShooterFar(){
         return new RunCommand(() -> operateShooter(SHOOTER_VELOCITY_RANGE_4), this);
@@ -148,17 +160,7 @@ public class Shooter  extends SubsystemBase {
         return new RunCommand(() -> operateShooter(velocity), this);
     }
 
-    private void shooterSpeedOnDistance(){
-        operateShooterDistanceBased(
-                BarnRobot.getInstance().limelight.getGoalDistance()
-        );
-    }
 
-    private void shooterBasedOnFormula(){
-        shooterFormulaBased(
-                BarnRobot.getInstance().limelight.getGoalDistance()
-        );
-    }
 
     public boolean isAutoOperated(){
         return isAutoOperated;
@@ -189,9 +191,6 @@ public class Shooter  extends SubsystemBase {
         );
     }
 
-    public Command runShooterBasedOnDistance(){
-        return new RunCommand(() -> shooterSpeedOnDistance(), this);
-    }
 
 
     public Command runShooterBasedOnConstantDistance(){
@@ -206,6 +205,7 @@ public class Shooter  extends SubsystemBase {
         Telemetry telemetry = BarnRobot.getInstance().telemetry;
         telemetry.addData("shooter velocity", shooterRight.getVelocity());
         telemetry.addData("left shooter power", shooterLeft.getPower());
+        telemetry.addData("target velocity: ", targetVelocity);
     }
 
     public double getVelocity() {

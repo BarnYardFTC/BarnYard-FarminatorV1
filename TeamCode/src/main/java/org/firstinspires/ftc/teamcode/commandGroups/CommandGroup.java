@@ -28,23 +28,26 @@ public class CommandGroup extends SequentialCommandGroup {
                     new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
                     new WaitCommand(1300)
                 ),
-                new ParallelRaceGroup(
-//                        BarnRobot.getInstance().drive.stopTagAlignment(),
-                        new SequentialCommandGroup(
-                                intakeAndTransferActivateCommand(),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.closeCommand(),
-                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
-                                BarnRobot.getInstance().gate.openCommand(),
-                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
-                        ),
-                        new WaitCommand(1500)
-                ),
+                intakeAndTransferActivateCommand(),
+                BarnRobot.getInstance().gate.openCommand(),
+//                new ParallelRaceGroup(
+////                        BarnRobot.getInstance().drive.stopTagAlignment(),
+//                        new SequentialCommandGroup(
+//                                intakeAndTransferActivateCommand(),
+//                                BarnRobot.getInstance().gate.openCommand(),
+//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.closeCommand(),
+//                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.openCommand(),
+//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.closeCommand(),
+//                                new WaitUntilCommand(() -> BarnRobot.getInstance().shooter.isReady()),
+//                                BarnRobot.getInstance().gate.openCommand(),
+//                                new WaitUntilCommand(() -> !BarnRobot.getInstance().shooter.isReady())
+//                        ),
+//                        new WaitCommand(1500)
+//                ),
+                new WaitCommand(1500),
                 BarnRobot.getInstance().gate.closeCommand(),
                 deactivateIntakeAndTransferCommand(),
                 BarnRobot.getInstance().colorSensor.setCheckFalse(),

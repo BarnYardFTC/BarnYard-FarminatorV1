@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -14,8 +16,8 @@ public class ServoWheel extends SubsystemBase {
         private final double MIN = 0.1;
         public double pos = 0;
 
-        public ServoWheel(){
-            wheel = hardwareMap.get(Servo.class, "servo_wheel");
+        public ServoWheel(HardwareMap hw){
+            wheel = hw.get(Servo.class, "servo_wheel");
             wheel.setDirection(Servo.Direction.FORWARD);
         }
 
@@ -27,6 +29,6 @@ public class ServoWheel extends SubsystemBase {
         }
 
         public Command turnCommand(double ang) {
-            return new RunCommand(() -> turn(ang), this);
+            return new InstantCommand(() -> turn(ang), this);
         }
 }

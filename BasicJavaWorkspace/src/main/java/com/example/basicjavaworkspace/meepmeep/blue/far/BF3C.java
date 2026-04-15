@@ -8,7 +8,7 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 
-public class BF6C {
+public class BF3C {
 
 
     public static final Pose2d startPose = new Pose2d( 60, -15.0, Math.toRadians(-180.0));
@@ -18,9 +18,9 @@ public class BF6C {
 
     public static final Pose2d loadZoneReady = new Pose2d(34.5, -63.0, Math.toRadians(-0.0)); // Maybe y needs some changes
 
-    public static final Pose2d LoadZoneCollect = new Pose2d(63, -65, Math.toRadians(360));
+    public static final Pose2d LoadZoneCollect = new Pose2d(63, -63.0, Math.toRadians(360));
 
-    public static final Pose2d HPS = new Pose2d(62, -65, Math.toRadians(270));
+    public static final Pose2d HPS = new Pose2d(63, -63.0, Math.toRadians(270));
 
 
 
@@ -108,7 +108,7 @@ public class BF6C {
                         goShootLoadZone.build(),
                         goHPSCycle.build(),
                         goShootCycle.build(),
-                        goHPSCycleAlt.build(),
+                        goHPSCycle.build(),
                         goShootCycle.build(),
                         goFromLine.build()
 //                path4.build(),

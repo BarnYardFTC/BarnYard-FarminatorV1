@@ -14,13 +14,12 @@ public class BlueFarTempTest {
     public static final Pose2d startPose = new Pose2d( 60, -15.0, Math.toRadians(-180.0));
     public static final Pose2d shootPose = new Pose2d(54, -15.0, Math.toRadians(203.0));
     public static final Pose2d lastPose = new Pose2d(37, -15.0, Math.toRadians(199.0));
-    public static final Pose2d rightCollectPose = new Pose2d(34.5, -60.0 , Math.toRadians(270.0));
+    public static final Pose2d rightCollectPose = new Pose2d(34.5, -66.0 , Math.toRadians(270.0));
 
     public static final Pose2d loadZoneReady = new Pose2d(34.5, -63.0, Math.toRadians(-0.0)); // Maybe y needs some changes
 
-    public static final Pose2d HPS = new Pose2d(63, -63.0, Math.toRadians(270));
-
-    public static final Pose2d LoadZoneCollect = new Pose2d(63, -65.0, Math.toRadians(270));
+    public static final Pose2d HPS = new Pose2d(60, -68, Math.toRadians(270));
+    public static final Pose2d LoadZoneCollect = new Pose2d(61, -70, Math.toRadians(360));
 
 
 

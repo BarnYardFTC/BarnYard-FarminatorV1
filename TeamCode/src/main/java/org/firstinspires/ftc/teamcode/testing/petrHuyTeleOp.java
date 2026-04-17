@@ -24,7 +24,7 @@ public class petrHuyTeleOp extends LinearOpMode {
         double LFPower = 0, spd = 0, turn = 0;
 
         while (opModeIsActive()) {
-            wheel.setPosition(0.9);
+            wheel.setServoPos(0.9);
 //            double servoPos = (turn + 1.0) / 2.0;
 //            wheel.turn(servoPos);
 

@@ -31,8 +31,8 @@ public class ServoWheel extends SubsystemBase {
             if (pos < MIN) pos = MIN;
         }
 
-        public void setServoPos(){
-            wheel.setPosition(pos);
+        public void setServoPos(double a){
+            wheel.setPosition(a);
         }
 
         public void turn(double angle){

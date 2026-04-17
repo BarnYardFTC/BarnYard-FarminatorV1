@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -26,12 +24,12 @@ public class petrHuyTeleOp extends LinearOpMode {
         double LFPower = 0, spd = 0, turn = 0;
 
         while (opModeIsActive()) {
-
-            double servoPos = (turn + 1.0) / 2.0;
-            wheel.turn(servoPos);
+            wheel.setPosition(0.9);
+//            double servoPos = (turn + 1.0) / 2.0;
+//            wheel.turn(servoPos);
 
             spd = gamepad1.left_stick_y;
-            turn = gamepad1.right_stick_x;
+//            turn = gamepad1.right_stick_x;
 
             LFPower = spd;
 

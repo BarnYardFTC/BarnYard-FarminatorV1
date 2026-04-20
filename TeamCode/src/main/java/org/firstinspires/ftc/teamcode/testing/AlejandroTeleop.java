@@ -19,37 +19,20 @@ public class AlejandroTeleop extends LinearOpMode {
         LF.setDirection(DcMotor.Direction.REVERSE);
         LB.setDirection(DcMotor.Direction.REVERSE);
 
+        double x, y, z, LFPower, RFPower, LBPower, RBPower, max;
         waitForStart();
 
-        double max = 0, LFPower = 0, RFPower = 0, LBPower = 0, RBPower = 0;
-        double str = 0, spd = 0, trn =0;
-
         while (opModeIsActive()) {
+            y = -gamepad1.left_stick_y;
+            x = gamepad1.left_stick_x;
+            z = gamepad1.right_stick_x;
 
-            str = -gamepad1.left_stick_x;
-            spd = -gamepad1.left_stick_y;
-            trn = gamepad1.right_stick_x;
+            LFPower = y + x + z;
+            RFPower = y - x - z;
+            LBPower = y - x + z;
+            RBPower = y + x - z;
 
-            LFPower = spd-str+trn; //power
-            LBPower = spd+str+trn;
-            RFPower = spd+str-trn;
-            RBPower = spd-str-trn;
-
-            max = Math.abs(Math.max(Math.max(LFPower, LBPower), Math.max(RFPower, RBPower)));
-
-            if (max>1){
-
-                LFPower /= max;
-                LBPower /= max;
-                RFPower /= max;
-                RBPower /= max;
-
-            }
-
-            LF.setPower(LFPower);
-            RF.setPower(RFPower);
-            LB.setPower(LBPower);
-            RB.setPower(RBPower);
+            max = Math.max(LFPower, RFPower);
         }
     }
 }

@@ -1,89 +1,68 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+
 import androidx.annotation.NonNull;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ServoPulseWidthParameters;
+
 
 @TeleOp(name = "AlejandroTeleop", group = "Aboba")
 public class AlejandroTeleop extends LinearOpMode {
     DcMotor LF, RF, LB, RB;
-    IMU imu;
-
+    Servo servo1;
+    GamepadEx gamepad;
+    public double servoPos = 0.5;
+    public double MIN = 0.35;
+    public double MAX = 0.9;
     @Override
     public void runOpMode() {
         LF = hardwareMap.get(DcMotor.class, "leftFrontDrivetrain");
         RF = hardwareMap.get(DcMotor.class, "rightFrontDrivetrain");
         LB = hardwareMap.get(DcMotor.class, "leftBackDrivetrain");
         RB = hardwareMap.get(DcMotor.class, "rightBackDrivetrain");
-        imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-        ));
-        imu.initialize(parameters);
+
+        servo1 = hardwareMap.get(Servo.class, "shooterHood");
+
+        gamepad = new GamepadEx(this.gamepad1);
+
+
+        servo1.setDirection(Servo.Direction.REVERSE);
+        servo1.scaleRange(0,1);
+
         LF.setDirection(DcMotor.Direction.REVERSE);
         LB.setDirection(DcMotor.Direction.REVERSE);
 
-        waitForStart();
+        double x, y, z, LFPower, RFPower, LBPower, RBPower, max;
 
-        double max = 0, LFPower = 0, RFPower = 0, LBPower = 0, RBPower = 0;
-        double str = 0, spd = 0, trn = 0;
+        waitForStart();
 
         while (opModeIsActive()) {
 
-            str = gamepad1.left_stick_x; // lx - str
-            spd = -gamepad1.left_stick_y; // ly - spd
-            trn = gamepad1.right_stick_x;
-
-            if (gamepad1.x) {
-                imu.resetYaw();
-                
+            if (gamepad.wasJustPressed(GamepadKeys.Button.X)) {
+                servoUp();
+            } else if (gamepad.wasJustPressed(GamepadKeys.Button.Y)) {
+                servoDown();
             }
 
-            double heading = -imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-            double adjustedStr = -spd * Math.sin(heading) + str * Math.cos(heading);
-            double adjustedSpd = spd * Math.cos(heading) - str * Math.sin(heading);
-
-
-            LFPower = adjustedSpd + adjustedStr + trn; //power
-            LBPower = adjustedSpd - adjustedStr + trn;
-            RFPower = adjustedSpd - adjustedStr - trn;
-            RBPower = adjustedSpd + adjustedStr - trn;
-
-            max = Math.abs(Math.max(Math.max(LFPower, LBPower), Math.max(RFPower, RBPower)));
-
-            if (max > 1) {
-
-                LFPower /= max;
-                LBPower /= max;
-                RFPower /= max;
-                RBPower /= max;
-
-            }
-
-            LF.setPower(LFPower);
-            RF.setPower(RFPower);
-            LB.setPower(LBPower);
-            RB.setPower(RBPower);
-//-----------------
-            telemetry.addData("heading (deg)", Math.toDegrees(heading));
-            telemetry.addData("adjSpd", adjustedSpd);
-            telemetry.addData("adjStr", adjustedStr);
-
-            telemetry.addData("LF", LFPower);
-            telemetry.addData("LB", LBPower);
-            telemetry.addData("RF", RFPower);
-            telemetry.addData("RB", RBPower);
-
-
-            telemetry.update();
-
+            gamepad.readButtons();
         }
+    }
+
+    public void servoUp() {
+        servoPos += 0.15;
+        if (servoPos > MAX) servoPos = MAX;
+        servo1.setPosition(servoPos);
+    }
+    public void servoDown() {
+        servoPos -= 0.15;
+        if (servoPos < MIN) servoPos = MIN;
+        servo1.setPosition(servoPos);
     }
 }

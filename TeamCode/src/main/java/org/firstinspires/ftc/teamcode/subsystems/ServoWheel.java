@@ -12,9 +12,9 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 public class ServoWheel extends SubsystemBase {
         private Servo wheel;
 
-        private final double MAX = 0.99;
-        private final double MIN = 0.01;
-        public double pos = 0.5;
+        private final double MAX = 1;
+        private final double MIN = -1;
+        public double pos = 0;
 
         public ServoWheel(HardwareMap hw){
             wheel = hw.get(Servo.class, "servo_wheel");
@@ -22,13 +22,13 @@ public class ServoWheel extends SubsystemBase {
         }
 
         public void turnRight(){
-            pos += 0.15;
-            if (pos > MAX) pos = MAX;
+            pos += 0.05;
+            wheel.setPosition(pos);
         }
 
         public void turnLeft(){
-            pos -= 0.15;
-            if (pos < MIN) pos = MIN;
+            pos -= 0.05;
+            wheel.setPosition(pos);
         }
 
         public void setServoPos(double a){

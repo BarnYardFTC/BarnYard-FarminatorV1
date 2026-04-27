@@ -35,6 +35,7 @@ public class petrHuyTeleOp extends LinearOpMode {
 
 
 
+
             if (LFPower>1){
 
                 LFPower /= LFPower;

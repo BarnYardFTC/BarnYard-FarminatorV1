@@ -7,6 +7,16 @@ package org.firstinspires.ftc.teamcode.util.pedroPathingTuners;
 //import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.stopRobot;
 //import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.telemetryM;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.configurables.annotations.IgnoreConfigurable;
+import com.bylazar.configurables.PanelsConfigurables;
+import com.bylazar.field.FieldManager;
+import com.bylazar.field.PanelsField;
+import com.bylazar.field.Style;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
+
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
@@ -41,17 +51,18 @@ import java.util.List;
  * @version 1.0, 6/26/2025
  */
 //@Configurable
+@Config
 @TeleOp(name = "Tuning", group = "Pedro Pathing")
 public class Tuning extends SelectableOpMode {
     public static Follower follower;
 
-    @IgnoreConfigurable
+//    @IgnoreConfigurable
     static PoseHistory poseHistory;
 
-    @IgnoreConfigurable
+//    @IgnoreConfigurable
     static TelemetryManager telemetryM;
 
-    @IgnoreConfigurable
+//    @IgnoreConfigurable
     static ArrayList<String> changes = new ArrayList<>();
 
     public Tuning() {

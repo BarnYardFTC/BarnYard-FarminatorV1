@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.opencv.core.Mat;
 
 
@@ -28,6 +32,25 @@ public class Lesson2Itamar extends LinearOpMode {
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
+        IMU imu = hardwareMap.get(IMU.class, "imu"); // Field Centric Drive
+
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+
+            RevHubOrientationOnRobot.LogoFacingDirection.UP,
+
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+
+        ));
+
+        imu.initialize(parameters);
+
+
+
+
+
+
+
         waitForStart();
 
         double speed = -gamepad1.left_stick_y;   // i am coll guy   1
@@ -39,12 +62,23 @@ public class Lesson2Itamar extends LinearOpMode {
         double rightFront = speed - turn - strafe; // | 0
         double rightRear = speed - turn + strafe; //Bear = back | 1
 
+        double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); //Field Centric Drive F
 
-        Math.max(Math.abs(leftRear), Math.abs(leftFront));
-        Math.max(Math.abs(rightRear), Math.abs(rightFront));
+        double adjustedLx = speed * Math.sin(heading) + strafe * Math.sin(heading);
+        double adjustedLy = speed * Math.cos(heading) + strafe * Math.sin(heading);
+
 
         double leftMax = Math.max(Math.abs(leftRear), Math.abs(leftFront));
         double rightMax = Math.max(Math.abs(rightRear), Math.abs(rightFront));
+
+
+
+
+
+
+
+
+
 
         double max = Math.max(leftMax, rightMax);
 

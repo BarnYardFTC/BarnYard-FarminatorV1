@@ -30,6 +30,11 @@ public class SashaPriborTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        if(MIN_SHOOTER_STRENGTH < 0) telemetry.addLine("ПОЧЕМУ МИНИМУМ МЕНЬШЕ НУЛЯ, БЫСТРО ИСПРАВЛЯЙ");
+        if(MAX_SHOOTER_STRENGTH > 1) telemetry.addLine("ПОЧЕМУ МАКСИМУМ БОЛЬШЕ ОДНОГО, БЫСТРО ИСПРАВЛЯЙ");
+        if(MAX_SHOOTER_STRENGTH <= MIN_SHOOTER_STRENGTH) telemetry.addLine("СДЕЛАЙ МАКСИМУМ БОЛЬШЕ МИНИМУМА, ПРИДУРОК");
+
         initHardware();
 
         waitForStart();
@@ -46,9 +51,6 @@ public class SashaPriborTesting extends LinearOpMode {
     }
 
     private void initHardware() {
-        if(MIN_SHOOTER_STRENGTH < 0) telemetry.addLine("ПОЧЕМУ МИНИМУМ МЕНЬШЕ НУЛЯ, БЫСТРО ИСПРАВЛЯЙ");
-        if(MAX_SHOOTER_STRENGTH > 1) telemetry.addLine("ПОЧЕМУ МАКСИМУМ БОЛЬШЕ ОДНОГО, БЫСТРО ИСПРАВЛЯЙ");
-        if(MAX_SHOOTER_STRENGTH <= MIN_SHOOTER_STRENGTH) telemetry.addLine("СДЕЛАЙ МАКСИМУМ БОЛЬШЕ МИНИМУМА, ПРИДУРОК");
 
         shooterLeft = hardwareMap.get(DcMotor.class, "shooterLeft");
         shooterRight = hardwareMap.get(DcMotor.class, "shooterRight");
@@ -60,30 +62,39 @@ public class SashaPriborTesting extends LinearOpMode {
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        gamepad = new GamepadEx(this.gamepad1);
     }
 
     private void updateInput() {
+
+        gamepad.readButtons();
+
         if(gamepad.wasJustPressed(GamepadKeys.Button.X)) shooterEnabled = !shooterEnabled;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-            if (shooterStrength++ > SHOOTER_STRENGTH_STAGES) shooterStrength = SHOOTER_STRENGTH_STAGES;
-            else ++shooterStrength;
+            if (shooterStrength + 1 > SHOOTER_STRENGTH_STAGES) shooterStrength = SHOOTER_STRENGTH_STAGES - 1;
+            else shooterStrength++;
         } else if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-            if (shooterStrength-- < 0) shooterStrength = 0;
-            else --shooterStrength;
+            if (shooterStrength < 0) shooterStrength = 0;
+            else shooterStrength--;
         }
+
+
     }
 
     private void updateDriver() {
+
         double shooterRange = MAX_SHOOTER_STRENGTH - MIN_SHOOTER_STRENGTH;
 
-        shooterPower = MIN_SHOOTER_STRENGTH + ((shooterRange / SHOOTER_STRENGTH_STAGES) * shooterStrength);
+        shooterPower = MIN_SHOOTER_STRENGTH + ((shooterRange / (SHOOTER_STRENGTH_STAGES - 1)) * shooterStrength);
 
         shooterLeft.setPower(shooterEnabled ? shooterPower : 0);
         shooterRight.setPower(shooterEnabled ? shooterPower : 0);
     }
 
     private void telemetryUpdate() {
+
         telemetry.addData("Shooter Enabled", shooterEnabled);
         telemetry.addLine("Shooter Strength: " + shooterStrength + "/" + SHOOTER_STRENGTH_STAGES);
         telemetry.addData("Shooter Power", shooterPower);

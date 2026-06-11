@@ -122,6 +122,7 @@ public class Lesson4Ami extends LinearOpMode {
                     gateRight.setPosition(CLOSE_GATE_POSITION);
                 }
             }
+
             if (gamepadEx.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
                 if (kickstandLeft.getPosition() == CLOSE_KICKSTAND_POSITION){
                     kickstandLeft.setPosition(OPEN_KICKSTAND_POSITION);

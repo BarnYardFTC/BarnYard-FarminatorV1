@@ -73,10 +73,10 @@ public class SashaPriborTesting extends LinearOpMode {
         if(gamepad.wasJustPressed(GamepadKeys.Button.X)) shooterEnabled = !shooterEnabled;
 
         if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-            if (shooterStrength + 1 > SHOOTER_STRENGTH_STAGES) shooterStrength = SHOOTER_STRENGTH_STAGES - 1;
+            if (shooterStrength + 1 > SHOOTER_STRENGTH_STAGES) shooterStrength = SHOOTER_STRENGTH_STAGES;
             else shooterStrength++;
         } else if (gamepad.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-            if (shooterStrength < 0) shooterStrength = 0;
+            if (shooterStrength < 2) shooterStrength = 1;
             else shooterStrength--;
         }
 
@@ -87,7 +87,7 @@ public class SashaPriborTesting extends LinearOpMode {
 
         double shooterRange = MAX_SHOOTER_STRENGTH - MIN_SHOOTER_STRENGTH;
 
-        shooterPower = MIN_SHOOTER_STRENGTH + ((shooterRange / (SHOOTER_STRENGTH_STAGES - 1)) * shooterStrength);
+        shooterPower = MIN_SHOOTER_STRENGTH + ((shooterRange / (SHOOTER_STRENGTH_STAGES - 1)) * (shooterStrength - 1));
 
         shooterLeft.setPower(shooterEnabled ? shooterPower : 0);
         shooterRight.setPower(shooterEnabled ? shooterPower : 0);
